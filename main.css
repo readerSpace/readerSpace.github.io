@@ -1,0 +1,26 @@
+/*テーブルCSS Firefox でborderが表示されなかったりする事の対策を込みで。*/
+.table{
+    border-collapse: separate; /* 枠線の表示方法  間隔をあけて表示 */
+    border-spacing: 0; /* 隣合うセルのボーダーにできた隙間の幅を指定 */
+    border-top: 1px solid #b0c4de; /* 枠線 borderプロパティ: 太さ 種類 色 */
+    border-right: 1px solid #b0c4de;
+    }
+.table th,td{
+    padding: 5px 15px;
+    border-bottom: 1px solid #b0c4de;
+    border-left: 1px solid #b0c4de;
+    }
+.table th{
+color: #000;
+background: #d7ffd7;
+    }
+.table td{
+text-align: right;
+    }
+.table p{
+margin: 0; /* contenteditable属性 IE対策 */
+    }
+.table span{
+padding-left:1px; /* firefoxキャレット位置調整 */
+color: #f02406;
+}
