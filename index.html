@@ -10,31 +10,32 @@
        アナウンス 
     </h2>
     <ul>
-        <li>ボタンを押すとお題が出る</li>
+        <li>ボタンを押すとワードが出る</li>
         <li>エロあるよ</li>
         <li>インスピレーションを得る用なので、文章にならない。</li>
     </ul>
-    <div>
-        1枚イラスト用。形式：｛誰｝が、｛状況｝×２、in ｛場所｝
-        <form>
-            <input
-              type="button"
-              id="myCheck1"
-              onclick="generate1()" />
-          </form>
-          <div id="result1"></div>
+    <div>1:キャラクリ 2:シチュエーション 3:プル虐 4:ストーリー 5:科学
+        <input
+              type="number"
+              id="thema"
+              value="1"
+              min="1"
+              max="5" />
     </div>
     <br>
     <div>
-        シチュエーション用。形式：｛誰｝が、｛どこで｝、｛状況｝、with ｛誰｝
         <form>
             <input
-              type="button"
-              id="myCheck2"
-              onclick="generate2()" />
+              type="number"
+              id="count"
+              value="3"
+              min="1"
+              />
+            <input type="button" onclick="generate()">
           </form>
-          <div id="result2"></div>
+          <div id="result1"></div>
     </div>
+    
       
 </body>
 <script src="main.js"></script>
