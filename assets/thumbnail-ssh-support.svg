@@ -1,0 +1,108 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="88" y1="52" x2="1117" y2="591" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F0E2"/>
+      <stop offset="0.48" stop-color="#FBF7F0"/>
+      <stop offset="1" stop-color="#EEF5F5"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(174 512) rotate(9.55653) scale(354.469 228.147)">
+      <stop stop-color="#0F7B7B" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#0F7B7B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(985 123) rotate(136.503) scale(255.162 240.967)">
+      <stop stop-color="#F4B860" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#F4B860" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="573" y="37" width="559" height="554" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0941176 0 0 0 0 0.133333 0 0 0 0 0.180392 0 0 0 0.12 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" rx="40" fill="url(#bg)"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#glowA)"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#glowB)"/>
+  <g opacity="0.2">
+    <path d="M60 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M132 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M204 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M276 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M348 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M420 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M492 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M564 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M636 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M708 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M780 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M852 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M924 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M996 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M1068 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M1140 0V630" stroke="#18222E" stroke-width="1"/>
+    <path d="M0 74H1200" stroke="#18222E" stroke-width="1"/>
+    <path d="M0 146H1200" stroke="#18222E" stroke-width="1"/>
+    <path d="M0 218H1200" stroke="#18222E" stroke-width="1"/>
+    <path d="M0 290H1200" stroke="#18222E" stroke-width="1"/>
+    <path d="M0 362H1200" stroke="#18222E" stroke-width="1"/>
+    <path d="M0 434H1200" stroke="#18222E" stroke-width="1"/>
+    <path d="M0 506H1200" stroke="#18222E" stroke-width="1"/>
+    <path d="M0 578H1200" stroke="#18222E" stroke-width="1"/>
+  </g>
+  <rect x="48" y="42" width="516" height="546" rx="34" fill="#FFFCF7" fill-opacity="0.82" stroke="white" stroke-opacity="0.72"/>
+  <text fill="#084C61" font-family="IBM Plex Sans JP, sans-serif" font-size="20" font-weight="700" letter-spacing="0.24em">
+    <tspan x="86" y="104">SSH / PHYSICS / MATH / PYTHON</tspan>
+  </text>
+  <text fill="#18222E" font-family="Shippori Mincho, serif" font-size="66" font-weight="700">
+    <tspan x="84" y="192">SSH課題研究を、</tspan>
+    <tspan x="84" y="279">評価される研究に</tspan>
+    <tspan x="84" y="366">仕上げる。</tspan>
+  </text>
+  <text fill="#596474" font-family="IBM Plex Sans JP, sans-serif" font-size="26" font-weight="500">
+    <tspan x="86" y="438">テーマ設計、数式の理解、Pythonシミュレーション、</tspan>
+    <tspan x="86" y="478">発表改善まで一貫して支援。</tspan>
+  </text>
+  <rect x="86" y="516" width="216" height="54" rx="27" fill="#0F7B7B"/>
+  <text fill="white" font-family="IBM Plex Sans JP, sans-serif" font-size="24" font-weight="700">
+    <tspan x="119" y="551">研究を最後まで伴走</tspan>
+  </text>
+  <g filter="url(#shadow)">
+    <rect x="613" y="53" width="479" height="474" rx="36" fill="#FFF9F0" fill-opacity="0.88"/>
+    <rect x="646" y="87" width="413" height="136" rx="26" fill="white" fill-opacity="0.82" stroke="#E4DDD1"/>
+    <text fill="#084C61" font-family="IBM Plex Sans JP, sans-serif" font-size="20" font-weight="700">
+      <tspan x="678" y="132">対応領域</tspan>
+    </text>
+    <text fill="#18222E" font-family="IBM Plex Sans JP, sans-serif" font-size="42" font-weight="700">
+      <tspan x="678" y="184">設計から発表まで</tspan>
+    </text>
+    <path d="M681 331C726.822 283.841 764.385 283.462 803.5 324.5C835.5 358.5 872 395.5 925.5 356.5C968.3 325.3 1010.67 297.167 1053 272" stroke="#0F7B7B" stroke-width="8" stroke-linecap="round"/>
+    <path d="M681 377C734.5 397.5 770 378 808 334.5C860.5 275 916 272.5 968 318.5C1004 350.34 1033.67 377.34 1057 399.5" stroke="#F4B860" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="682" cy="331" r="12" fill="#084C61"/>
+    <circle cx="804" cy="324" r="12" fill="#0F7B7B"/>
+    <circle cx="926" cy="356" r="12" fill="#0F7B7B"/>
+    <circle cx="1053" cy="272" r="12" fill="#084C61"/>
+    <circle cx="681" cy="377" r="12" fill="#C68425"/>
+    <circle cx="808" cy="334" r="12" fill="#F4B860"/>
+    <circle cx="968" cy="318" r="12" fill="#F4B860"/>
+    <circle cx="1057" cy="399" r="12" fill="#C68425"/>
+    <rect x="646" y="425" width="176" height="66" rx="22" fill="white" fill-opacity="0.82" stroke="#E4DDD1"/>
+    <text fill="#084C61" font-family="IBM Plex Sans JP, sans-serif" font-size="18" font-weight="700">
+      <tspan x="673" y="463">テーマ設計</tspan>
+    </text>
+    <rect x="846" y="425" width="213" height="66" rx="22" fill="white" fill-opacity="0.82" stroke="#E4DDD1"/>
+    <text fill="#084C61" font-family="IBM Plex Sans JP, sans-serif" font-size="18" font-weight="700">
+      <tspan x="875" y="463">数式と理論整理</tspan>
+    </text>
+    <rect x="728" y="505" width="245" height="66" rx="22" fill="#0F7B7B"/>
+    <text fill="white" font-family="IBM Plex Sans JP, sans-serif" font-size="18" font-weight="700">
+      <tspan x="755" y="543">Python / 発表改善まで</tspan>
+    </text>
+  </g>
+  <text fill="#18222E" fill-opacity="0.7" font-family="IBM Plex Sans JP, sans-serif" font-size="20" font-weight="600" letter-spacing="0.08em">
+    <tspan x="900" y="594">Reader Space</tspan>
+  </text>
+</svg>

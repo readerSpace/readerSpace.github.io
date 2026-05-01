@@ -1,42 +1,310 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SSH課題研究サポート | 物理・数学・Python対応</title>
+    <meta name="description" content="SSH課題研究を対象に、テーマ設計から理論整理、Pythonによるシミュレーション、発表準備まで一貫して支援する出品ページです。">
+    <meta name="theme-color" content="#0f7b7b">
+    <link rel="canonical" href="https://readerspace.github.io/index.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="SSH課題研究サポート | 物理・数学・Python対応">
+    <meta property="og:description" content="テーマ設計、数式の理解、Pythonシミュレーション、発表改善まで。SSH課題研究を最後まで伴走するサポートです。">
+    <meta property="og:url" content="https://readerspace.github.io/index.html">
+    <meta property="og:image" content="https://readerspace.github.io/assets/thumbnail-ssh-support.svg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SSH課題研究サポート | 物理・数学・Python対応">
+    <meta name="twitter:description" content="物理・数学・Pythonを横断して、SSH課題研究のテーマ設計から発表まで一貫支援します。">
+    <meta name="twitter:image" content="https://readerspace.github.io/assets/thumbnail-ssh-support.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>
-       アナウンス 
-    </h2>
-    <ul>
-        <li>ボタンを押すとワードが出る</li>
-        <li>エロあるよ</li>
-        <li>インスピレーションを得る用なので、文章にならない。</li>
-    </ul>
-    <div>1:キャラクリ 2:シチュエーション 3:プル虐 4:ストーリー 5:科学
-        <input
-              type="number"
-              id="thema"
-              value="1"
-              min="1"
-              max="5" />
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="#top">Reader Space</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#services">対応内容</a>
+                <a href="#examples">研究テーマ例</a>
+                <a href="#pricing">料金</a>
+                <a href="#contact">相談方法</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">SSH / 物理 / 数学 / Python</p>
+                    <h1>SSH課題研究を、<br>評価される研究に仕上げる。</h1>
+                    <p class="hero-lead">
+                        テーマ設計、数式の理解、シミュレーション、発表改善まで。<br>
+                        「途中で詰まる」を前提に、研究を最後まで走り切るための外部サポートです。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#contact">相談の流れを見る</a>
+                        <button class="button button-secondary" id="copyTemplate" type="button">相談テンプレをコピー</button>
+                    </div>
+                    <p class="helper-text" id="copyStatus" aria-live="polite">初回相談用のメッセージをすぐ使える形で用意しています。</p>
+                </div>
+
+                <div class="hero-panel">
+                    <figure class="hero-visual">
+                        <img src="assets/header-visual-ssh-support.svg" width="1600" height="900" alt="SSH課題研究サポートの告知ビジュアル">
+                    </figure>
+                    <div class="metric-card">
+                        <span class="metric-label">対応範囲</span>
+                        <strong>設計から発表まで</strong>
+                        <p>高校生の課題研究で詰まりやすいポイントを一気通貫で整理します。</p>
+                    </div>
+                    <div class="hero-grid">
+                        <article>
+                            <span>01</span>
+                            <h2>テーマ設計</h2>
+                            <p>面白さと実現可能性の両方を満たすテーマに絞ります。</p>
+                        </article>
+                        <article>
+                            <span>02</span>
+                            <h2>理論整理</h2>
+                            <p>数式や物理法則を、発表で説明できる粒度まで分解します。</p>
+                        </article>
+                        <article>
+                            <span>03</span>
+                            <h2>Python支援</h2>
+                            <p>シミュレーション、解析、グラフ化まで研究に必要なコードを支援します。</p>
+                        </article>
+                        <article>
+                            <span>04</span>
+                            <h2>発表改善</h2>
+                            <p>考察の弱さや伝わりにくさを、資料と話し方の両面から整えます。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="highlight-band reveal">
+                <div>
+                    <p class="band-title">こんな悩みに対応します</p>
+                    <ul class="problem-list">
+                        <li>研究テーマが決まらない</li>
+                        <li>数式や物理法則が理解できない</li>
+                        <li>Pythonで手が止まる</li>
+                        <li>発表や論文の説得力が弱い</li>
+                    </ul>
+                </div>
+                <div class="band-note">
+                    <p>ただ説明するだけではなく、研究として成立させるところまで一緒に設計します。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="services">
+                <div class="section-heading">
+                    <p class="eyebrow">Service</p>
+                    <h2>対応できる内容</h2>
+                    <p>授業では埋めにくい研究設計の穴を、外部の視点で補います。</p>
+                </div>
+
+                <div class="service-grid">
+                    <article class="service-card accent-a">
+                        <h3>テーマ設計</h3>
+                        <ul>
+                            <li>評価されやすい切り口の提案</li>
+                            <li>実現可能な研究計画の作成</li>
+                            <li>数学・物理・シミュレーション系テーマに対応</li>
+                        </ul>
+                    </article>
+                    <article class="service-card accent-b">
+                        <h3>理論サポート</h3>
+                        <ul>
+                            <li>数式と物理法則の整理</li>
+                            <li>高校範囲を超える内容の噛み砕き説明</li>
+                            <li>論文や参考資料の読み方の整理</li>
+                        </ul>
+                    </article>
+                    <article class="service-card accent-c">
+                        <h3>プログラミング支援</h3>
+                        <ul>
+                            <li>Pythonによるシミュレーション作成</li>
+                            <li>データ解析とグラフ作成</li>
+                            <li>コードの添削と改善</li>
+                        </ul>
+                    </article>
+                    <article class="service-card accent-d">
+                        <h3>研究の進め方</h3>
+                        <ul>
+                            <li>仮説・検証・考察の構造化</li>
+                            <li>詰まった原因の言語化</li>
+                            <li>研究として成立させるための軌道修正</li>
+                        </ul>
+                    </article>
+                    <article class="service-card accent-e">
+                        <h3>発表・論文サポート</h3>
+                        <ul>
+                            <li>スライド添削</li>
+                            <li>発表構成の改善</li>
+                            <li>論理の通った説明の組み立て</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section split-section reveal">
+                <div class="section-heading compact">
+                    <p class="eyebrow">Value</p>
+                    <h2>このサービスの強み</h2>
+                </div>
+                <div class="value-columns">
+                    <article class="value-card">
+                        <h3>分野をまたいで支援</h3>
+                        <p>物理・数学・Pythonをまたぐテーマでも、研究全体のつながりを意識して支援します。</p>
+                    </article>
+                    <article class="value-card">
+                        <h3>研究として成立させる視点</h3>
+                        <p>単なる知識提供ではなく、仮説・方法・考察が通るかまで一緒に確認します。</p>
+                    </article>
+                    <article class="value-card">
+                        <h3>初心者向けに分解して説明</h3>
+                        <p>専門的な内容でも、なぜその式や方法を使うのかを段階的に説明します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="examples">
+                <div class="section-heading">
+                    <p class="eyebrow">Examples</p>
+                    <h2>相談しやすい研究テーマ例</h2>
+                    <p>テーマが未定でも問題ありません。方向性を決める段階から支援できます。</p>
+                </div>
+                <div class="tag-cloud" aria-label="研究テーマ例">
+                    <span>力学シミュレーション</span>
+                    <span>N体問題</span>
+                    <span>波動現象の可視化</span>
+                    <span>電磁気の数理モデル</span>
+                    <span>統計物理</span>
+                    <span>確率過程</span>
+                    <span>カオス現象</span>
+                    <span>データ解析</span>
+                    <span>最適化</span>
+                    <span>数値計算</span>
+                    <span>統計モデル</span>
+                    <span>発表資料改善</span>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-heading">
+                    <p class="eyebrow">Before / After</p>
+                    <h2>サポートで変わるポイント</h2>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card before">
+                        <h3>Before</h3>
+                        <ul>
+                            <li>面白そうだが、何を検証するか曖昧</li>
+                            <li>数式の意味がわからず手が止まる</li>
+                            <li>結果は出たが考察に説得力がない</li>
+                        </ul>
+                    </article>
+                    <article class="comparison-card after">
+                        <h3>After</h3>
+                        <ul>
+                            <li>目的・仮説・方法が筋道立っている</li>
+                            <li>式やコードの役割を説明できる</li>
+                            <li>発表で伝わるストーリーに整う</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="pricing">
+                <div class="section-heading">
+                    <p class="eyebrow">Pricing</p>
+                    <h2>料金イメージ</h2>
+                    <p>内容や難易度に応じて柔軟に調整できます。</p>
+                </div>
+                <div class="pricing-grid">
+                    <article class="price-card">
+                        <p class="price-label">単発相談</p>
+                        <h3>60分 / 3,000円</h3>
+                        <p>テーマ相談、数式のつまずき、コードの添削など単発の悩みに。</p>
+                    </article>
+                    <article class="price-card featured">
+                        <p class="price-label">継続サポート</p>
+                        <h3>月4回 / 10,000円</h3>
+                        <p>研究の進捗確認と改善を定期的に回し、最後まで並走します。</p>
+                    </article>
+                    <article class="price-card">
+                        <p class="price-label">本格サポート</p>
+                        <h3>研究完成まで / 応相談</h3>
+                        <p>研究計画、実装、発表準備までまとめて伴走するプランです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-heading">
+                    <p class="eyebrow">Flow</p>
+                    <h2>進め方</h2>
+                </div>
+                <ol class="flow-list">
+                    <li>
+                        <strong>現状ヒアリング</strong>
+                        <p>テーマ、進捗、困っている点を整理します。</p>
+                    </li>
+                    <li>
+                        <strong>サポート方針の提案</strong>
+                        <p>何を優先して解決するか、短期の改善方針を決めます。</p>
+                    </li>
+                    <li>
+                        <strong>オンライン指導</strong>
+                        <p>ZoomやDiscordなどで内容を確認しながら進めます。</p>
+                    </li>
+                    <li>
+                        <strong>必要に応じた資料提供</strong>
+                        <p>コード、参考資料、説明メモを状況に応じて共有します。</p>
+                    </li>
+                </ol>
+            </section>
+
+            <section class="section notes-section reveal">
+                <div class="section-heading compact">
+                    <p class="eyebrow">Notes</p>
+                    <h2>注意事項</h2>
+                </div>
+                <ul class="notes-list">
+                    <li>学校課題の代行ではなく、理解と研究支援を目的としたサービスです。</li>
+                    <li>内容によっては対応できないテーマもあります。</li>
+                    <li>テーマ未定の段階から相談できます。</li>
+                </ul>
+            </section>
+
+            <section class="cta-section reveal" id="contact">
+                <div>
+                    <p class="eyebrow">Contact</p>
+                    <h2>まずは現状を整理するところから。</h2>
+                    <p>
+                        SSHの課題研究は、テーマの設計、理解の深さ、まとめ方で大きく差が出ます。<br>
+                        今の進捗や詰まりポイントが曖昧でも、そのまま相談して大丈夫です。
+                    </p>
+                </div>
+                <div class="cta-card">
+                    <p class="cta-card-title">相談時にあるとスムーズな情報</p>
+                    <ul>
+                        <li>研究テーマまたは候補</li>
+                        <li>現在の進捗</li>
+                        <li>困っている点</li>
+                        <li>使っている資料やコードの有無</li>
+                    </ul>
+                    <button class="button button-primary full" id="copyTemplateBottom" type="button">相談テンプレをコピー</button>
+                </div>
+            </section>
+        </main>
     </div>
-    <br>
-    <div>
-        <form>
-            <input
-              type="number"
-              id="count"
-              value="3"
-              min="1"
-              />
-            <input type="button" onclick="generate()">
-          </form>
-          <div id="result1"></div>
-    </div>
-    
-      
+
+    <script src="main.js"></script>
 </body>
-<script src="main.js"></script>
 </html>
