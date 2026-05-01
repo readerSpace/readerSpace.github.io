@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>なぜ単純な運動が予測不能になるのか | カオス入門</title>
+    <meta name="description" content="高校生向けに、カオスの本質を直感・具体例・数学の順で説明する解説ページです。初期条件鋭敏性、バタフライ効果、ロジスティック写像、リャプノフ指数まで扱います。">
+    <meta name="theme-color" content="#0e6f74">
+    <link rel="canonical" href="https://readerspace.github.io/chaos.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="なぜ単純な運動が予測不能になるのか | カオス入門">
+    <meta property="og:description" content="直感、例、本質の順でカオスをわかりやすく整理した高校生向け解説ページ。">
+    <meta property="og:url" content="https://readerspace.github.io/chaos.html">
+    <meta property="og:image" content="https://readerspace.github.io/assets/thumbnail-chaos-explainer.svg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="なぜ単純な運動が予測不能になるのか | カオス入門">
+    <meta name="twitter:description" content="初期条件への超敏感さ、バタフライ効果、ロジスティック写像を高校生向けに整理。">
+    <meta name="twitter:image" content="https://readerspace.github.io/assets/thumbnail-chaos-explainer.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="chaos.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#intuition">直感</a>
+                <a href="#demo">実演</a>
+                <a href="#examples">例</a>
+                <a href="#math">数学</a>
+                <a href="#compare">比較</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Chaos / Butterfly Effect / Nonlinearity</p>
+                    <h1>なぜ単純な運動が<br>予測不能になるのか。</h1>
+                    <p class="hero-lead">
+                        カオスは「ぐちゃぐちゃだから難しい」のではなく、<br>
+                        ごく単純な法則でも、ほんの小さな違いが時間とともに爆発的に広がるために予測が壊れる現象です。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">まず実演を見る</a>
+                        <a class="button button-secondary" href="#math">数式も見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>直感から入る</li>
+                        <li>二重振り子とロジスティック写像で具体化する</li>
+                        <li>最後にリャプノフ指数までつなぐ</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <figure class="hero-visual">
+                        <img src="assets/chaos-hero-visual.svg" width="1600" height="900" alt="カオスの広がりを表す告知ビジュアル">
+                    </figure>
+                    <div class="hero-note">
+                        <span class="note-label">まず結論</span>
+                        <p>原因は <strong>初期条件への超敏感さ</strong>。<br>つまり、ごくわずかなズレが将来の大きな差になることです。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">一言でいうと</p>
+                <p class="signal-main">「決まっているのに予測できない」</p>
+                <p class="signal-sub">法則はあるのに、測定できる精度に限界があるため未来予測が崩れます。</p>
+            </section>
+
+            <section class="section reveal" id="intuition">
+                <div class="section-heading">
+                    <p class="eyebrow">Intuition</p>
+                    <h2>ズレは雪だるま式に増える</h2>
+                    <p>最初は同じに見える運動でも、出発点にほんの少し差があれば、時間が経つにつれて全く別の軌道に分かれていきます。</p>
+                </div>
+                <div class="intuition-grid">
+                    <article class="feature-card emphasis-card">
+                        <span class="card-index">01</span>
+                        <h3>たとえばボールの投げ方</h3>
+                        <p>投げる角度が 0.0001° だけ違っても、最初は同じに見えます。でも時間が経つと着地点は大きくずれます。</p>
+                    </article>
+                    <article class="feature-card quote-card">
+                        <span class="card-index">02</span>
+                        <h3>バタフライ効果</h3>
+                        <blockquote>
+                            <p>現在は未来を決めるが、少し違う現在は、全く違う未来になる。</p>
+                            <footer>Edward Lorenz</footer>
+                        </blockquote>
+                        <p>現実では初期状態を完全には測れないので、時間がたつほど予測が壊れます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>ロジスティック写像で、ズレの増幅を見る</h2>
+                    <p>同じ法則 <span class="inline-equation">x<sub>n+1</sub> = a x<sub>n</sub> (1 - x<sub>n</sub>)</span> を2本とも使っています。違うのは最初の値だけです。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <label class="control" for="deltaPower">
+                            <span>初期差の大きさ</span>
+                            <input id="deltaPower" type="range" min="3" max="8" value="6">
+                            <strong id="deltaValue">10^-6</strong>
+                        </label>
+                        <label class="control" for="parameterA">
+                            <span>パラメータ a</span>
+                            <input id="parameterA" type="range" min="35" max="40" value="39">
+                            <strong id="parameterValue">3.9</strong>
+                        </label>
+                        <div class="stat-grid">
+                            <article>
+                                <span>開始値</span>
+                                <strong id="initialPair">0.321000 / 0.321001</strong>
+                            </article>
+                            <article>
+                                <span>差が 0.1 を超える段</span>
+                                <strong id="divergenceStep">n = 15</strong>
+                            </article>
+                            <article>
+                                <span>40段後の差</span>
+                                <strong id="finalDifference">0.000</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note">カオスはランダムではありません。同じ式を繰り返しているのに、初期差が増幅されるから読めなくなります。</p>
+                    </div>
+                    <div class="chart-panel">
+                        <div class="chart-frame">
+                            <canvas id="chaosCanvas" aria-label="ロジスティック写像の2軌道を比較するグラフ"></canvas>
+                        </div>
+                        <div class="chart-legend" aria-hidden="true">
+                            <span><i class="swatch swatch-a"></i>軌道 A</span>
+                            <span><i class="swatch swatch-b"></i>軌道 B</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="examples">
+                <div class="section-heading">
+                    <p class="eyebrow">Examples</p>
+                    <h2>単純なのにカオスになる系</h2>
+                </div>
+                <div class="example-grid">
+                    <article class="example-card">
+                        <p class="example-label">Example A</p>
+                        <h3>二重振り子</h3>
+                        <p>振り子が2つつながっただけなのに、少し条件を変えるだけで動きが大きく変わります。見た目はランダムでも、裏では決定論的な法則に従っています。</p>
+                    </article>
+                    <article class="example-card example-card-strong">
+                        <p class="example-label">Example B</p>
+                        <h3>ロジスティック写像</h3>
+                        <div class="equation-block">
+                            <span>x<sub>n+1</sub> = a x<sub>n</sub> (1 - x<sub>n</sub>)</span>
+                        </div>
+                        <p>これほど短い式でも、パラメータと初期値しだいで、予測しにくい振る舞いが現れます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="essence">
+                <div class="section-heading">
+                    <p class="eyebrow">Essence</p>
+                    <h2>なぜそんなことが起こるのか</h2>
+                </div>
+                <div class="essence-grid">
+                    <article class="essence-card">
+                        <h3>1. 非線形性</h3>
+                        <p>等速運動のような線形な世界では、差は足し算的に増えます。カオス系では掛け算や曲がった関係が入るため、差が一気に増幅されます。</p>
+                    </article>
+                    <article class="essence-card">
+                        <h3>2. フィードバック</h3>
+                        <p>今の状態が次の状態を決め、その次もまた前の結果で決まります。この繰り返しが、小さな誤差を何度も増やします。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section math-section reveal" id="math">
+                <div class="section-heading">
+                    <p class="eyebrow">Math</p>
+                    <h2>数学でいうと、差は指数関数的に広がる</h2>
+                    <p>初期の小さな差 <span class="inline-equation">δ<sub>0</sub></span> が時間とともにどう増えるかを見ると、カオスの本質がつかめます。</p>
+                </div>
+                <div class="math-grid">
+                    <div class="equation-panel">
+                        <div class="equation-block equation-large">
+                            <span>δ(t) ≈ δ<sub>0</sub> e<sup>λt</sup></span>
+                        </div>
+                        <p><span class="inline-equation">λ &gt; 0</span> なら、ズレは指数関数的に増えます。この <span class="inline-equation">λ</span> をリャプノフ指数と呼びます。</p>
+                    </div>
+                    <div class="math-notes">
+                        <article>
+                            <h3>リャプノフ指数</h3>
+                            <p>未来予測の壊れやすさを測る尺度です。大きいほど、少しの誤差がすぐ大きな差になります。</p>
+                        </article>
+                        <article>
+                            <h3>だから天気予報には限界がある</h3>
+                            <p>法則がわかっていても、初期状態を完全に観測できないなら、長期予測は崩れていきます。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="compare">
+                <div class="section-heading">
+                    <p class="eyebrow">Comparison</p>
+                    <h2>カオスはランダムとは違う</h2>
+                </div>
+                <div class="table-card">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>観点</th>
+                                <th>カオス</th>
+                                <th>ランダム</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>法則</td>
+                                <td>ある</td>
+                                <td>ない</td>
+                            </tr>
+                            <tr>
+                                <td>仕組み</td>
+                                <td>決定論</td>
+                                <td>確率的</td>
+                            </tr>
+                            <tr>
+                                <td>予測困難の理由</td>
+                                <td>初期差の増幅</td>
+                                <td>本質的な不確定さ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="table-note">カオスは「決まっているのに予測できない」。ここがいちばん重要です。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>この先につながる話題</h2>
+                    <p>カオスは単発の雑学ではなく、さまざまな分野にそのままつながります。</p>
+                </div>
+                <div class="next-grid">
+                    <article class="next-card">
+                        <h3>天気予報の限界</h3>
+                        <p>大気は法則に従っていても、初期値の誤差が長期予測を壊します。</p>
+                    </article>
+                    <article class="next-card">
+                        <h3>惑星運動と3体問題</h3>
+                        <p>単純な重力相互作用でも、複数体になると長期的なふるまいが読みにくくなります。</p>
+                    </article>
+                    <article class="next-card">
+                        <h3>株価や脳活動</h3>
+                        <p>完全に同じではありませんが、複雑な系の予測限界を考える入り口になります。</p>
+                    </article>
+                </div>
+                <div class="closing-card">
+                    <p class="closing-title">高校生向けに一言でまとめるなら</p>
+                    <p class="closing-copy">カオスとは、ほんの小さな違いが時間とともに爆発的に広がるため、法則があっても予測が難しくなる現象です。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <a class="footer-link" href="index.html">トップページへ戻る</a>
+        </footer>
+    </div>
+
+    <script src="chaos.js"></script>
+</body>
+</html>

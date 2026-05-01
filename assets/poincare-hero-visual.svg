@@ -1,0 +1,91 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="148" y1="33" x2="1493" y2="854" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081922"/>
+      <stop offset="0.52" stop-color="#11384A"/>
+      <stop offset="1" stop-color="#18526A"/>
+    </linearGradient>
+    <radialGradient id="amberGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1260 154) rotate(136.935) scale(416.66 309.728)">
+      <stop stop-color="#E7A44B" stop-opacity="0.56"/>
+      <stop offset="1" stop-color="#E7A44B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cyanGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(264 702) rotate(-13.1126) scale(495.551 225.369)">
+      <stop stop-color="#1D708A" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#1D708A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" rx="56" fill="url(#bg)"/>
+  <rect x="34" y="34" width="1532" height="832" rx="42" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
+  <path d="M0 0H1600V900H0V0Z" fill="url(#amberGlow)"/>
+  <path d="M0 0H1600V900H0V0Z" fill="url(#cyanGlow)"/>
+  <g opacity="0.22">
+    <path d="M88 0V900" stroke="white"/>
+    <path d="M180 0V900" stroke="white"/>
+    <path d="M272 0V900" stroke="white"/>
+    <path d="M364 0V900" stroke="white"/>
+    <path d="M456 0V900" stroke="white"/>
+    <path d="M548 0V900" stroke="white"/>
+    <path d="M640 0V900" stroke="white"/>
+    <path d="M732 0V900" stroke="white"/>
+    <path d="M824 0V900" stroke="white"/>
+    <path d="M916 0V900" stroke="white"/>
+    <path d="M1008 0V900" stroke="white"/>
+    <path d="M1100 0V900" stroke="white"/>
+    <path d="M1192 0V900" stroke="white"/>
+    <path d="M1284 0V900" stroke="white"/>
+    <path d="M1376 0V900" stroke="white"/>
+    <path d="M1468 0V900" stroke="white"/>
+    <path d="M0 84H1600" stroke="white"/>
+    <path d="M0 176H1600" stroke="white"/>
+    <path d="M0 268H1600" stroke="white"/>
+    <path d="M0 360H1600" stroke="white"/>
+    <path d="M0 452H1600" stroke="white"/>
+    <path d="M0 544H1600" stroke="white"/>
+    <path d="M0 636H1600" stroke="white"/>
+    <path d="M0 728H1600" stroke="white"/>
+    <path d="M0 820H1600" stroke="white"/>
+  </g>
+  <rect x="88" y="82" width="604" height="734" rx="40" fill="#FFF8EA" fill-opacity="0.9"/>
+  <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="24" font-weight="700" letter-spacing="0.24em">
+    <tspan x="140" y="150">POINCARE SECTION / POINT CLOUD</tspan>
+  </text>
+  <text fill="#10252D" font-family="Shippori Mincho, serif" font-size="84" font-weight="700">
+    <tspan x="136" y="264">連続運動を</tspan>
+    <tspan x="136" y="366">断面で切って</tspan>
+    <tspan x="136" y="468">点列で見る</tspan>
+  </text>
+  <text fill="#5A7179" font-family="IBM Plex Sans JP, sans-serif" font-size="31" font-weight="500">
+    <tspan x="140" y="554">軌道そのものではなく、ある面を通る瞬間だけ記録する。</tspan>
+    <tspan x="140" y="600">すると、周期・準周期・カオスの構造が見えてくる。</tspan>
+  </text>
+  <rect x="140" y="660" width="242" height="70" rx="35" fill="#16526A"/>
+  <text fill="white" font-family="IBM Plex Sans JP, sans-serif" font-size="26" font-weight="700">
+    <tspan x="188" y="705">連続 → 離散へ</tspan>
+  </text>
+  <rect x="410" y="660" width="184" height="70" rx="35" fill="#FFFFFF" fill-opacity="0.78"/>
+  <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="26" font-weight="700">
+    <tspan x="446" y="705">構造が見える</tspan>
+  </text>
+  <rect x="844" y="116" width="468" height="196" rx="34" fill="#FFF8EA" fill-opacity="0.9"/>
+  <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="22" font-weight="700">
+    <tspan x="884" y="166">ポアンカレ写像</tspan>
+  </text>
+  <text fill="#10252D" font-family="IBM Plex Sans JP, sans-serif" font-size="48" font-weight="700">
+    <tspan x="884" y="232">運動を「特定の瞬間</tspan>
+    <tspan x="884" y="286">の点列」に変換する</tspan>
+  </text>
+  <rect x="840" y="376" width="636" height="362" rx="36" fill="#FFF8EA" fill-opacity="0.18" stroke="rgba(255,255,255,0.18)"/>
+  <rect x="888" y="424" width="232" height="232" rx="24" fill="#FFF8EA" fill-opacity="0.86"/>
+  <path d="M916 612C940 480 980 450 1008 520C1032 576 1070 592 1090 454" stroke="#16526A" stroke-width="8" stroke-linecap="round"/>
+  <line x1="1006" y1="446" x2="1006" y2="634" stroke="#E7A44B" stroke-width="5" stroke-dasharray="10 10"/>
+  <circle cx="1006" cy="520" r="9" fill="#E7A44B"/>
+  <rect x="1172" y="424" width="256" height="232" rx="24" fill="#FFF8EA" fill-opacity="0.86"/>
+  <circle cx="1210" cy="600" r="6" fill="#16526A"/>
+  <circle cx="1242" cy="545" r="6" fill="#1D708A"/>
+  <circle cx="1278" cy="502" r="6" fill="#E7A44B"/>
+  <circle cx="1312" cy="578" r="6" fill="#16526A"/>
+  <circle cx="1356" cy="520" r="6" fill="#1D708A"/>
+  <circle cx="1390" cy="470" r="6" fill="#E7A44B"/>
+  <line x1="1128" y1="540" x2="1160" y2="540" stroke="#FFFFFF" stroke-width="4"/>
+  <polygon points="1160,540 1148,532 1148,548" fill="#FFFFFF"/>
+</svg>

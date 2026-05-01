@@ -1,0 +1,83 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="102" y1="28" x2="1126" y2="592" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081922"/>
+      <stop offset="0.54" stop-color="#11384A"/>
+      <stop offset="1" stop-color="#18526A"/>
+    </linearGradient>
+    <radialGradient id="amberGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(934 130) rotate(136.722) scale(307.833 239.589)">
+      <stop stop-color="#E7A44B" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#E7A44B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cyanGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(214 510) rotate(-19.0329) scale(350.32 183.654)">
+      <stop stop-color="#1D708A" stop-opacity="0.46"/>
+      <stop offset="1" stop-color="#1D708A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" rx="40" fill="url(#bg)"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#amberGlow)"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#cyanGlow)"/>
+  <g opacity="0.2">
+    <path d="M60 0V630" stroke="white"/>
+    <path d="M132 0V630" stroke="white"/>
+    <path d="M204 0V630" stroke="white"/>
+    <path d="M276 0V630" stroke="white"/>
+    <path d="M348 0V630" stroke="white"/>
+    <path d="M420 0V630" stroke="white"/>
+    <path d="M492 0V630" stroke="white"/>
+    <path d="M564 0V630" stroke="white"/>
+    <path d="M636 0V630" stroke="white"/>
+    <path d="M708 0V630" stroke="white"/>
+    <path d="M780 0V630" stroke="white"/>
+    <path d="M852 0V630" stroke="white"/>
+    <path d="M924 0V630" stroke="white"/>
+    <path d="M996 0V630" stroke="white"/>
+    <path d="M1068 0V630" stroke="white"/>
+    <path d="M1140 0V630" stroke="white"/>
+    <path d="M0 74H1200" stroke="white"/>
+    <path d="M0 146H1200" stroke="white"/>
+    <path d="M0 218H1200" stroke="white"/>
+    <path d="M0 290H1200" stroke="white"/>
+    <path d="M0 362H1200" stroke="white"/>
+    <path d="M0 434H1200" stroke="white"/>
+    <path d="M0 506H1200" stroke="white"/>
+    <path d="M0 578H1200" stroke="white"/>
+  </g>
+  <rect x="48" y="44" width="532" height="540" rx="34" fill="#FFF8EA" fill-opacity="0.9"/>
+  <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="20" font-weight="700" letter-spacing="0.24em">
+    <tspan x="84" y="104">POINCARE MAP / FOR STUDENTS</tspan>
+  </text>
+  <text fill="#10252D" font-family="Shippori Mincho, serif" font-size="62" font-weight="700">
+    <tspan x="82" y="188">ポアンカレ写像とは</tspan>
+    <tspan x="82" y="272">運動を点列で見る方法</tspan>
+  </text>
+  <text fill="#5A7179" font-family="IBM Plex Sans JP, sans-serif" font-size="25" font-weight="500">
+    <tspan x="84" y="356">連続運動を断面で切り出し、周期・準周期・</tspan>
+    <tspan x="84" y="396">カオスの構造を見える形にする。</tspan>
+  </text>
+  <rect x="84" y="458" width="198" height="56" rx="28" fill="#16526A"/>
+  <text fill="white" font-family="IBM Plex Sans JP, sans-serif" font-size="24" font-weight="700">
+    <tspan x="116" y="495">連続 → 離散</tspan>
+  </text>
+  <rect x="298" y="458" width="210" height="56" rx="28" fill="#FFFFFF" fill-opacity="0.8"/>
+  <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="24" font-weight="700">
+    <tspan x="334" y="495">構造が見える</tspan>
+  </text>
+  <rect x="706" y="80" width="404" height="162" rx="30" fill="#FFF8EA" fill-opacity="0.88"/>
+  <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="19" font-weight="700">
+    <tspan x="736" y="126">一言でいうと</tspan>
+  </text>
+  <text fill="#10252D" font-family="IBM Plex Sans JP, sans-serif" font-size="42" font-weight="700">
+    <tspan x="736" y="184">運動を</tspan>
+    <tspan x="736" y="228">「特定の瞬間の点列」に変換する</tspan>
+  </text>
+  <rect x="710" y="304" width="404" height="232" rx="30" fill="#FFF8EA" fill-opacity="0.84"/>
+  <path d="M740 496C770 390 818 372 846 426C874 484 922 498 952 374" stroke="#16526A" stroke-width="8" stroke-linecap="round"/>
+  <line x1="848" y1="336" x2="848" y2="510" stroke="#E7A44B" stroke-width="4" stroke-dasharray="8 8"/>
+  <circle cx="848" cy="426" r="8" fill="#E7A44B"/>
+  <circle cx="1016" cy="468" r="5" fill="#16526A"/>
+  <circle cx="1048" cy="420" r="5" fill="#1D708A"/>
+  <circle cx="1080" cy="376" r="5" fill="#E7A44B"/>
+  <circle cx="1040" cy="510" r="5" fill="#16526A"/>
+  <circle cx="1094" cy="454" r="5" fill="#1D708A"/>
+</svg>

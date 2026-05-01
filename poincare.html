@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポアンカレ写像とは何か | 連続運動を点列で見る入門</title>
+    <meta name="description" content="ポアンカレ写像を高校生向けに直感から解説するページです。連続運動を離散的な点列に変える考え方、周期・準周期・カオスの見え方、標準写像の実演までまとめています。">
+    <meta name="theme-color" content="#16526a">
+    <link rel="canonical" href="https://readerspace.github.io/poincare.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="ポアンカレ写像とは何か | 連続運動を点列で見る入門">
+    <meta property="og:description" content="連続運動を断面で切り出し、点列として構造を見る方法を高校生向けに整理した解説ページ。">
+    <meta property="og:url" content="https://readerspace.github.io/poincare.html">
+    <meta property="og:image" content="https://readerspace.github.io/assets/thumbnail-poincare-explainer.svg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ポアンカレ写像とは何か | 連続運動を点列で見る入門">
+    <meta name="twitter:description" content="ポアンカレ写像、標準写像、カオスの見え方を直感から理解するための解説ページです。">
+    <meta name="twitter:image" content="https://readerspace.github.io/assets/thumbnail-poincare-explainer.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="poincare.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#concept">考え方</a>
+                <a href="#patterns">見える構造</a>
+                <a href="#demo">標準写像</a>
+                <a href="#mechanism">カオス発生</a>
+                <a href="#next">次の話題</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Poincare Section / Standard Map / Chaos</p>
+                    <h1>ポアンカレ写像は、<br>運動を点列に変える。</h1>
+                    <p class="hero-lead">
+                        連続的に動く軌道をそのまま眺めると、複雑な系では構造が見えにくくなります。<br>
+                        そこで「ある断面を通る瞬間だけ」を記録し、運動を離散的な点の並びとして見るのがポアンカレ写像です。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">標準写像を動かす</a>
+                        <a class="button button-secondary" href="#patterns">どんな形に見えるか見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>連続時間の運動を、離散時間の写像へ変える</li>
+                        <li>周期・準周期・カオスの違いが見やすくなる</li>
+                        <li>標準写像はポアンカレ写像の代表例として使える</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <figure class="hero-visual">
+                        <img src="assets/poincare-hero-visual.svg" width="1600" height="900" alt="ポアンカレ写像の概念を表すビジュアル">
+                    </figure>
+                    <div class="hero-note">
+                        <span class="note-label">一言でいうと</span>
+                        <p><strong>連続運動を、特定の瞬間の点列に変換する方法</strong>です。複雑な運動でも、断面で見ると構造が見えます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">連続運動 → 断面で抜き出す → 点の反復</p>
+                <p class="signal-sub">軌道そのものではなく、選んだ断面を通過する瞬間だけを見ると、数学的にも視覚的にも扱いやすくなります。</p>
+            </section>
+
+            <section class="section reveal" id="concept">
+                <div class="section-heading">
+                    <p class="eyebrow">Concept</p>
+                    <h2>普通の運動は連続だが、見たいのは構造</h2>
+                    <p>位置や速度などをまとめた「状態」は時間とともに連続的に変化します。けれども複雑な系では、軌道をそのまま追うだけでは全体像が見えません。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card concept-card-soft">
+                        <span class="card-index">01</span>
+                        <h3>連続運動を追う</h3>
+                        <p>状態は時間とともに滑らかに変化し、軌道として空間を動きます。ここではまだ情報が多すぎて、規則性が見えにくい状態です。</p>
+                        <div class="mini-stage" aria-hidden="true">
+                            <svg viewBox="0 0 220 120" class="mini-svg">
+                                <rect x="0" y="0" width="220" height="120" rx="20" fill="#F8FCFD"/>
+                                <path d="M16 95C49 21 85 17 111 57C136 95 168 104 204 24" stroke="#16526A" stroke-width="6" stroke-linecap="round"/>
+                                <circle cx="47" cy="39" r="6" fill="#1D708A"/>
+                                <circle cx="110" cy="56" r="6" fill="#E7A44B"/>
+                                <circle cx="170" cy="100" r="6" fill="#1D708A"/>
+                            </svg>
+                        </div>
+                    </article>
+                    <article class="concept-card concept-card-highlight">
+                        <span class="card-index">02</span>
+                        <h3>断面を決める</h3>
+                        <p>たとえば振り子なら「真ん中を通る瞬間だけ」を見る、と決めます。その瞬間の速度や角度だけを毎回記録します。</p>
+                        <div class="mini-stage" aria-hidden="true">
+                            <svg viewBox="0 0 220 120" class="mini-svg">
+                                <rect x="0" y="0" width="220" height="120" rx="20" fill="#FFF9F1"/>
+                                <path d="M16 95C49 21 85 17 111 57C136 95 168 104 204 24" stroke="#16526A" stroke-width="6" stroke-linecap="round"/>
+                                <line x1="110" y1="12" x2="110" y2="108" stroke="#E7A44B" stroke-width="4" stroke-dasharray="8 8"/>
+                                <circle cx="110" cy="57" r="8" fill="#E7A44B"/>
+                            </svg>
+                        </div>
+                    </article>
+                    <article class="concept-card concept-card-strong">
+                        <span class="card-index">03</span>
+                        <h3>点列として並べる</h3>
+                        <p>すると連続時間の運動は、離散時間の写像として扱えます。軌道そのものではなく、点の反復としてパターンが見えるようになります。</p>
+                        <div class="mini-stage" aria-hidden="true">
+                            <svg viewBox="0 0 220 120" class="mini-svg">
+                                <rect x="0" y="0" width="220" height="120" rx="20" fill="#FFF8EA"/>
+                                <circle cx="52" cy="72" r="5" fill="#16526A"/>
+                                <circle cx="78" cy="47" r="5" fill="#16526A"/>
+                                <circle cx="110" cy="62" r="5" fill="#16526A"/>
+                                <circle cx="142" cy="34" r="5" fill="#16526A"/>
+                                <circle cx="168" cy="79" r="5" fill="#16526A"/>
+                                <circle cx="190" cy="53" r="5" fill="#16526A"/>
+                            </svg>
+                        </div>
+                    </article>
+                </div>
+                <div class="flow-card">
+                    <p class="flow-expression">連続運動 ↓ あるタイミングだけ抜き出す ↓ 離散的な写像になる</p>
+                    <p>これがポアンカレ写像の本質です。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="patterns">
+                <div class="section-heading">
+                    <p class="eyebrow">Patterns</p>
+                    <h2>ポアンカレ写像で見える3つの典型パターン</h2>
+                    <p>最大の強みは、運動の種類が点の並びとしてはっきり見えてくることです。</p>
+                </div>
+                <div class="pattern-grid">
+                    <article class="pattern-card">
+                        <p class="pattern-label">Periodicity</p>
+                        <h3>周期運動</h3>
+                        <div class="pattern-figure" aria-hidden="true">
+                            <svg viewBox="0 0 200 140" class="pattern-svg">
+                                <rect x="0" y="0" width="200" height="140" rx="22" fill="#F8FCFD"/>
+                                <circle cx="48" cy="88" r="7" fill="#16526A"/>
+                                <circle cx="88" cy="48" r="7" fill="#16526A"/>
+                                <circle cx="132" cy="82" r="7" fill="#16526A"/>
+                                <circle cx="164" cy="42" r="7" fill="#16526A"/>
+                            </svg>
+                        </div>
+                        <p>同じ状態を繰り返すので、点は有限個に集まります。</p>
+                    </article>
+                    <article class="pattern-card pattern-card-middle">
+                        <p class="pattern-label">Quasi-Periodicity</p>
+                        <h3>準周期運動</h3>
+                        <div class="pattern-figure" aria-hidden="true">
+                            <svg viewBox="0 0 200 140" class="pattern-svg">
+                                <rect x="0" y="0" width="200" height="140" rx="22" fill="#FFF9F1"/>
+                                <circle cx="100" cy="28" r="5" fill="#E7A44B"/>
+                                <circle cx="134" cy="38" r="5" fill="#E7A44B"/>
+                                <circle cx="160" cy="66" r="5" fill="#E7A44B"/>
+                                <circle cx="163" cy="100" r="5" fill="#E7A44B"/>
+                                <circle cx="138" cy="125" r="5" fill="#E7A44B"/>
+                                <circle cx="100" cy="132" r="5" fill="#E7A44B"/>
+                                <circle cx="62" cy="124" r="5" fill="#E7A44B"/>
+                                <circle cx="37" cy="99" r="5" fill="#E7A44B"/>
+                                <circle cx="40" cy="66" r="5" fill="#E7A44B"/>
+                                <circle cx="66" cy="38" r="5" fill="#E7A44B"/>
+                            </svg>
+                        </div>
+                        <p>点が閉じた曲線や輪のように並び、規則はあるが同じ点には戻りません。</p>
+                    </article>
+                    <article class="pattern-card pattern-card-strong">
+                        <p class="pattern-label">Chaos</p>
+                        <h3>カオス</h3>
+                        <div class="pattern-figure" aria-hidden="true">
+                            <svg viewBox="0 0 200 140" class="pattern-svg">
+                                <rect x="0" y="0" width="200" height="140" rx="22" fill="#F4F8FA"/>
+                                <circle cx="35" cy="41" r="4" fill="#16526A"/>
+                                <circle cx="51" cy="93" r="4" fill="#E7A44B"/>
+                                <circle cx="74" cy="64" r="4" fill="#16526A"/>
+                                <circle cx="86" cy="111" r="4" fill="#E7A44B"/>
+                                <circle cx="102" cy="28" r="4" fill="#16526A"/>
+                                <circle cx="118" cy="88" r="4" fill="#E7A44B"/>
+                                <circle cx="134" cy="55" r="4" fill="#16526A"/>
+                                <circle cx="146" cy="116" r="4" fill="#E7A44B"/>
+                                <circle cx="162" cy="37" r="4" fill="#16526A"/>
+                                <circle cx="175" cy="79" r="4" fill="#E7A44B"/>
+                            </svg>
+                        </div>
+                        <p>点はバラバラに見えますが、完全にランダムではなく、背後に力学の構造があります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="history">
+                <div class="section-heading">
+                    <p class="eyebrow">Why It Matters</p>
+                    <h2>なぜ重要なのか</h2>
+                    <p>三体問題のような複雑な力学では、軌道そのものを直接見るだけでは全体構造がつかめません。ポアンカレ写像はその突破口でした。</p>
+                </div>
+                <div class="history-grid">
+                    <article class="history-card">
+                        <h3>ポアンカレの発見</h3>
+                        <p>ポアンカレは三体問題を研究する中で、軌道をそのまま追うのではなく、断面で切り出して見れば構造が表れることに気づきました。</p>
+                        <p>ここから、カオス研究の流れが大きく開かれていきます。</p>
+                    </article>
+                    <article class="history-card analogy-card">
+                        <h3>たとえでいえば「動画 → スクショ」</h3>
+                        <div class="analogy-strip">
+                            <div>
+                                <span>動画</span>
+                                <p>連続運動</p>
+                            </div>
+                            <div>
+                                <span>スクショ</span>
+                                <p>ある瞬間だけ</p>
+                            </div>
+                            <div>
+                                <span>並べる</span>
+                                <p>動きの本質が見える</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>標準写像で、ポアンカレ写像を実際に見る</h2>
+                    <p>標準写像は「一定時間ごとにキックを受ける回転系」を、キックの瞬間だけ切り出したものです。つまり、ポアンカレ写像の代表例です。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="equation-stack">
+                            <div class="equation-block"><span>p<sub>n+1</sub> = p<sub>n</sub> + K sin &theta;<sub>n</sub></span></div>
+                            <div class="equation-block"><span>&theta;<sub>n+1</sub> = &theta;<sub>n</sub> + p<sub>n+1</sub></span></div>
+                        </div>
+                        <p class="demo-caption">ここで <strong>K</strong> は非線形の強さです。K を上げるほど、規則的な構造が壊れやすくなります。</p>
+
+                        <label class="control" for="kStrength">
+                            <span>K の大きさ</span>
+                            <input id="kStrength" type="range" min="2" max="35" value="11">
+                            <strong id="kValue">1.1</strong>
+                        </label>
+
+                        <div class="preset-row" aria-label="代表値の切り替え">
+                            <button type="button" class="preset-button is-active" data-k="1.1">島と海</button>
+                            <button type="button" class="preset-button" data-k="0.4">ほぼ規則</button>
+                            <button type="button" class="preset-button" data-k="2.8">広いカオス</button>
+                        </div>
+
+                        <div class="stat-grid">
+                            <article>
+                                <span>見え方</span>
+                                <strong id="regimeLabel">島と海が共存</strong>
+                            </article>
+                            <article>
+                                <span>何が見えるか</span>
+                                <strong id="patternLabel">曲線と散乱点が混ざる</strong>
+                            </article>
+                            <article>
+                                <span>意味</span>
+                                <strong id="insightLabel">共鳴が重なり始める</strong>
+                            </article>
+                        </div>
+
+                        <p class="demo-note">描いているのは、連続軌道ではなく「キックの瞬間だけの点列」です。まさにポアンカレ写像の見方そのものです。</p>
+                    </div>
+
+                    <div class="chart-panel">
+                        <div class="chart-frame">
+                            <canvas id="poincareCanvas" aria-label="標準写像のポアンカレ断面"></canvas>
+                        </div>
+                        <div class="chart-caption">
+                            <span>&theta; を横軸、p を縦軸に取ったトーラス上の断面</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>標準写像でカオスが生まれる仕組み</h2>
+                    <p>キーワードは <strong>共鳴の重なり</strong> です。K を上げると規則的な構造が壊れ、点が混ざり始めます。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card">
+                        <h3>1. K が小さい</h3>
+                        <p>トーラスに沿った滑らかな曲線が残りやすく、運動はほぼ規則的です。</p>
+                    </article>
+                    <article class="mechanism-card mechanism-card-accent">
+                        <h3>2. 共鳴が重なる</h3>
+                        <p>周期運動の島が増え、それぞれの影響範囲が広がると、規則と不規則が混ざり始めます。</p>
+                    </article>
+                    <article class="mechanism-card mechanism-card-strong">
+                        <h3>3. トーラスが壊れる</h3>
+                        <p>共鳴どうしがぶつかると軌道が広く混ざり、カオス的な海が現れます。</p>
+                    </article>
+                </div>
+                <div class="closing-card">
+                    <p class="closing-title">一言でまとめると</p>
+                    <p class="closing-copy">標準写像でのカオスとは、規則的な運動を支えていた構造が壊れ、軌道が混ざる現象です。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>この先につながる話題</h2>
+                    <p>ポアンカレ写像と標準写像を理解すると、より深いカオス理論へ進みやすくなります。</p>
+                </div>
+                <div class="next-grid">
+                    <article class="next-card">
+                        <h3>KAM理論</h3>
+                        <p>なぜ一部のトーラスは壊れずに残るのかを説明する理論です。</p>
+                    </article>
+                    <article class="next-card">
+                        <h3>Lyapunov指数</h3>
+                        <p>どれくらい速く軌道が離れていくか、予測可能性の壊れやすさを定量化します。</p>
+                    </article>
+                    <article class="next-card">
+                        <h3>Arnold拡散</h3>
+                        <p>多自由度系で軌道がゆっくり混ざっていく現象へ話がつながります。</p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>関連ページでは、カオスそのものの直感とロジスティック写像も解説しています。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="chaos.html">カオス入門へ</a>
+                <a class="footer-link" href="index.html">トップページへ戻る</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="poincare.js"></script>
+</body>
+</html>

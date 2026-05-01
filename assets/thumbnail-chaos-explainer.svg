@@ -1,0 +1,84 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="102" y1="28" x2="1126" y2="592" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081B21"/>
+      <stop offset="0.54" stop-color="#103038"/>
+      <stop offset="1" stop-color="#16424C"/>
+    </linearGradient>
+    <radialGradient id="amberGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(936 128) rotate(136.636) scale(307.554 239.364)">
+      <stop stop-color="#F0B665" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#F0B665" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tealGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(216 508) rotate(-19.3339) scale(350.988 184.126)">
+      <stop stop-color="#0E6F74" stop-opacity="0.46"/>
+      <stop offset="1" stop-color="#0E6F74" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" rx="40" fill="url(#bg)"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#amberGlow)"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#tealGlow)"/>
+  <g opacity="0.2">
+    <path d="M60 0V630" stroke="white"/>
+    <path d="M132 0V630" stroke="white"/>
+    <path d="M204 0V630" stroke="white"/>
+    <path d="M276 0V630" stroke="white"/>
+    <path d="M348 0V630" stroke="white"/>
+    <path d="M420 0V630" stroke="white"/>
+    <path d="M492 0V630" stroke="white"/>
+    <path d="M564 0V630" stroke="white"/>
+    <path d="M636 0V630" stroke="white"/>
+    <path d="M708 0V630" stroke="white"/>
+    <path d="M780 0V630" stroke="white"/>
+    <path d="M852 0V630" stroke="white"/>
+    <path d="M924 0V630" stroke="white"/>
+    <path d="M996 0V630" stroke="white"/>
+    <path d="M1068 0V630" stroke="white"/>
+    <path d="M1140 0V630" stroke="white"/>
+    <path d="M0 74H1200" stroke="white"/>
+    <path d="M0 146H1200" stroke="white"/>
+    <path d="M0 218H1200" stroke="white"/>
+    <path d="M0 290H1200" stroke="white"/>
+    <path d="M0 362H1200" stroke="white"/>
+    <path d="M0 434H1200" stroke="white"/>
+    <path d="M0 506H1200" stroke="white"/>
+    <path d="M0 578H1200" stroke="white"/>
+  </g>
+  <rect x="48" y="44" width="520" height="540" rx="34" fill="#FFF8EA" fill-opacity="0.9"/>
+  <text fill="#0E6F74" font-family="IBM Plex Sans JP, sans-serif" font-size="20" font-weight="700" letter-spacing="0.24em">
+    <tspan x="84" y="104">CHAOS / FOR STUDENTS</tspan>
+  </text>
+  <text fill="#102329" font-family="Shippori Mincho, serif" font-size="64" font-weight="700">
+    <tspan x="82" y="188">なぜ単純な運動が</tspan>
+    <tspan x="82" y="272">予測不能になるのか</tspan>
+  </text>
+  <text fill="#58717A" font-family="IBM Plex Sans JP, sans-serif" font-size="25" font-weight="500">
+    <tspan x="84" y="356">初期条件への超敏感さ、バタフライ効果、</tspan>
+    <tspan x="84" y="396">ロジスティック写像を直感から解説。</tspan>
+  </text>
+  <rect x="84" y="460" width="210" height="56" rx="28" fill="#0E6F74"/>
+  <text fill="white" font-family="IBM Plex Sans JP, sans-serif" font-size="24" font-weight="700">
+    <tspan x="121" y="497">決まっているのに</tspan>
+  </text>
+  <rect x="310" y="460" width="176" height="56" rx="28" fill="#FFFFFF" fill-opacity="0.8"/>
+  <text fill="#0E6F74" font-family="IBM Plex Sans JP, sans-serif" font-size="24" font-weight="700">
+    <tspan x="351" y="497">予測できない</tspan>
+  </text>
+  <path d="M678 467C733 421 782.5 401.5 835.5 439C869.5 463 918 522 997 462C1059.79 414.312 1092.58 332.426 1146 234" stroke="#F0B665" stroke-width="10" stroke-linecap="round"/>
+  <path d="M678 538C727.5 548 789 526 833.5 474.5C888.097 411.31 962.5 404 1037.5 455C1090 490.5 1128 544 1156 582" stroke="#0E6F74" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="678" cy="467" r="12" fill="#C47B24"/>
+  <circle cx="835.5" cy="439" r="12" fill="#F0B665"/>
+  <circle cx="997" cy="462" r="12" fill="#F0B665"/>
+  <circle cx="1146" cy="234" r="12" fill="#C47B24"/>
+  <circle cx="678" cy="538" r="12" fill="#0A5A60"/>
+  <circle cx="833.5" cy="474.5" r="12" fill="#0E6F74"/>
+  <circle cx="1037.5" cy="455" r="12" fill="#0E6F74"/>
+  <circle cx="1156" cy="582" r="12" fill="#0A5A60"/>
+  <rect x="726" y="80" width="402" height="160" rx="30" fill="#FFF8EA" fill-opacity="0.88"/>
+  <text fill="#0E6F74" font-family="IBM Plex Sans JP, sans-serif" font-size="19" font-weight="700">
+    <tspan x="756" y="126">まず結論</tspan>
+  </text>
+  <text fill="#102329" font-family="IBM Plex Sans JP, sans-serif" font-size="42" font-weight="700">
+    <tspan x="756" y="184">原因は初期条件への</tspan>
+    <tspan x="756" y="228">超敏感さ</tspan>
+  </text>
+</svg>
