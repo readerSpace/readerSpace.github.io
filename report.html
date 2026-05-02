@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レポートの作成法 | SSH課題研究向けガイド</title>
+    <meta name="description" content="高校生向けに、課題研究レポートの書き方を問い・仮説・方法・結果・考察・結論の流れで整理した解説ページです。再現性と論理性、PREP、よくある失敗までまとめています。">
+    <meta name="theme-color" content="#1c6a63">
+    <link rel="canonical" href="https://readerspace.github.io/report.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="レポートの作成法 | SSH課題研究向けガイド">
+    <meta property="og:description" content="レポートを『問いに証拠で答える文章』として組み立てるための高校生向け解説ページ。">
+    <meta property="og:url" content="https://readerspace.github.io/report.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="レポートの作成法 | SSH課題研究向けガイド">
+    <meta name="twitter:description" content="再現性と論理性を軸に、レポートの基本構成と書き方のコツを整理した解説ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="report.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#essence">本質</a>
+                <a href="#structure">構成</a>
+                <a href="#writing">書き方</a>
+                <a href="#mistakes">失敗例</a>
+                <a href="#advanced">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Report Writing / SSH / Logic</p>
+                    <h1>レポートは、<br>問いに証拠で答える文章。</h1>
+                    <p class="hero-lead">
+                        レポートは「思いついたことを書くもの」ではなく、<br>
+                        他人に自分の考えを再現できる形で伝える技術です。大事なのは、問い・根拠・結論が一本の筋でつながっていることです。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#structure">基本構成を見る</a>
+                        <a class="button button-secondary" href="#writing">書き方のコツへ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>本質は「問い → 調べる → 考える → 伝える」</li>
+                        <li>再現性と論理性がレポートの軸になる</li>
+                        <li>考察では自分の頭で因果関係を言語化する</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="flow-board" aria-hidden="true">
+                        <div class="flow-step">
+                            <span>01</span>
+                            <strong>問い</strong>
+                            <p>何を明らかにしたいか</p>
+                        </div>
+                        <div class="flow-step">
+                            <span>02</span>
+                            <strong>証拠</strong>
+                            <p>調査・実験・データ</p>
+                        </div>
+                        <div class="flow-step">
+                            <span>03</span>
+                            <strong>考察</strong>
+                            <p>なぜそう言えるのか</p>
+                        </div>
+                        <div class="flow-step">
+                            <span>04</span>
+                            <strong>結論</strong>
+                            <p>問いへの答え</p>
+                        </div>
+                    </div>
+
+                    <div class="core-grid">
+                        <article class="core-card emphasis">
+                            <p class="card-label">Core 1</p>
+                            <h2>再現性</h2>
+                            <p>同じ条件なら、他の人も同じ結論をたどれること。方法や根拠が曖昧だと成立しません。</p>
+                        </article>
+                        <article class="core-card">
+                            <p class="card-label">Core 2</p>
+                            <h2>論理性</h2>
+                            <p>結論だけでなく、その結論に至る理由が筋道立っていること。飛躍がないかが見られます。</p>
+                        </article>
+                    </div>
+
+                    <div class="hero-note">
+                        <p class="note-title">最重要</p>
+                        <p>レポートとは、<strong>問いに対して、証拠を使って答える文章</strong>です。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Essential Line</p>
+                <p class="signal-main">問い → 根拠 → 解釈 → 結論</p>
+                <p class="signal-sub">この流れが崩れると、読者は「なぜそう言えるのか」を追えなくなります。レポートは感想文ではなく、検証可能な説明文です。</p>
+            </section>
+
+            <section class="section reveal" id="essence">
+                <div class="section-heading">
+                    <p class="eyebrow">Essence</p>
+                    <h2>レポートとは何か</h2>
+                    <p>高校の課題研究で求められるのは、知っていることを並べることではなく、問いに対して自分がどう確かめ、どう考えたかを他人が追える形で示すことです。</p>
+                </div>
+                <div class="essence-grid">
+                    <article class="panel-card">
+                        <p class="card-label">Definition</p>
+                        <h3>一貫した思考の記録</h3>
+                        <p>レポートは「問い → 調べる → 考える → 伝える」を一つにつないだ文章です。どこか一つでも抜けると、研究の筋が見えません。</p>
+                    </article>
+                    <article class="panel-card warm-card">
+                        <p class="card-label">Why It Matters</p>
+                        <h3>読む人は再現したい</h3>
+                        <p>先生や審査員は、結論そのものより「その結論にどう到達したか」を見ています。方法と根拠が再現できるほど、説得力が上がります。</p>
+                    </article>
+                    <article class="panel-card strong-card">
+                        <p class="card-label">Mindset</p>
+                        <h3>感想ではなく検証</h3>
+                        <p>「面白かった」だけでは評価されません。事実として何が得られ、そこから何が言えるのかを切り分ける必要があります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="structure">
+                <div class="section-heading">
+                    <p class="eyebrow">Structure</p>
+                    <h2>全体構成はこの 7 つで考える</h2>
+                    <p>迷ったら、各段階で「自分はこの項目に何を書けばよいか」を確認します。構成が決まるだけで、書く難しさはかなり減ります。</p>
+                </div>
+                <div class="structure-grid">
+                    <article class="step-card">
+                        <span class="step-index">01</span>
+                        <h3>問題提起</h3>
+                        <p class="step-question">何を明らかにしたいのか。</p>
+                        <p>テーマと問いを明確にします。「なぜ重要か」まで書けると、読み手が目的を理解しやすくなります。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="step-index">02</span>
+                        <h3>仮説</h3>
+                        <p class="step-question">自分はどうなると予想するか。</p>
+                        <p>まだ証明していない段階での予想を書きます。後の結果・考察と照らし合わせる基準になります。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="step-index">03</span>
+                        <h3>方法</h3>
+                        <p class="step-question">どうやって確かめたか。</p>
+                        <p>文献調査、シミュレーション、実験など、他の人が追試できる粒度で書きます。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="step-index">04</span>
+                        <h3>結果</h3>
+                        <p class="step-question">何が観測されたか。</p>
+                        <p>ここでは事実だけを書きます。「思った」は入れず、「どんなデータが得られたか」に徹します。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="step-index">05</span>
+                        <h3>考察</h3>
+                        <p class="step-question">なぜその結果になったか。</p>
+                        <p>仮説と一致するか、理論と合うか、どこに限界があるかを言語化します。ここが最も評価されやすい部分です。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="step-index">06</span>
+                        <h3>結論</h3>
+                        <p class="step-question">最終的に何が言えるか。</p>
+                        <p>問いに対する答えを短くまとめます。新しい話を増やさず、ここまでの内容を圧縮します。</p>
+                    </article>
+                    <article class="step-card accent-card">
+                        <span class="step-index">07</span>
+                        <h3>参考文献</h3>
+                        <p class="step-question">何を根拠にしたか。</p>
+                        <p>使った本・論文・サイトを明記します。信頼性の証明であり、読み手が出典を確認するための入口です。</p>
+                    </article>
+                </div>
+                <div class="template-card">
+                    <p class="card-label">Template</p>
+                    <h3>まずはこの骨組みで下書きする</h3>
+                    <ol class="template-list">
+                        <li>この研究で明らかにしたい問いは何か。</li>
+                        <li>自分の仮説は何か。</li>
+                        <li>それを確かめる方法は何か。</li>
+                        <li>得られた結果は何か。</li>
+                        <li>その結果から、なぜそう言えるのか。</li>
+                        <li>問いに対する答えを一文で言うと何か。</li>
+                        <li>根拠にした文献は何か。</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="section reveal" id="writing">
+                <div class="section-heading">
+                    <p class="eyebrow">Writing Tips</p>
+                    <h2>書き方のコツは「読み手が迷わない」こと</h2>
+                    <p>文章力より先に大事なのは、主張と根拠の配置です。読み手が迷う箇所を減らすだけで、レポートはかなり強くなります。</p>
+                </div>
+                <div class="tips-grid">
+                    <article class="tip-card prep-card">
+                        <p class="card-label">Tip 1</p>
+                        <h3>PREPで並べる</h3>
+                        <p>主張 → 理由 → 具体例の順で書くと、短い段落でも論理が通りやすくなります。</p>
+                        <div class="mini-stack">
+                            <span>Point</span>
+                            <span>Reason</span>
+                            <span>Example</span>
+                        </div>
+                    </article>
+                    <article class="tip-card">
+                        <p class="card-label">Tip 2</p>
+                        <h3>結果と考察を分ける</h3>
+                        <p>結果では「何が出たか」、考察では「なぜそうなったか」を書きます。この混同が一番よくある崩れ方です。</p>
+                    </article>
+                    <article class="tip-card">
+                        <p class="card-label">Tip 3</p>
+                        <h3>図・グラフを使う</h3>
+                        <p>文章だけよりも、比較や傾向が一気に伝わります。図を置くなら、何を示す図かを必ず文で補います。</p>
+                    </article>
+                    <article class="tip-card">
+                        <p class="card-label">Tip 4</p>
+                        <h3>1文を短くする</h3>
+                        <p>読みにくい文の多くは、1文に情報を詰め込みすぎています。読点が続く文は分割した方が伝わります。</p>
+                    </article>
+                </div>
+                <div class="compare-board">
+                    <article class="compare-card bad">
+                        <p class="card-label">Bad</p>
+                        <h3>面白かったので重要だと思った。</h3>
+                        <p>感想だけで、なぜ重要なのかの根拠が書かれていません。</p>
+                    </article>
+                    <article class="compare-card good">
+                        <p class="card-label">Better</p>
+                        <h3>この結果は既存理論と一致し、仮説を支持する。</h3>
+                        <p>結果と理論の関係が明示されていて、読み手が判断しやすくなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="mistakes">
+                <div class="section-heading">
+                    <p class="eyebrow">Common Mistakes</p>
+                    <h2>よくある失敗は 3 パターンに集約できる</h2>
+                    <p>書けないのではなく、論点が広すぎるか、調べただけで止まっているか、結論が曖昧なことが多いです。</p>
+                </div>
+                <div class="mistake-grid">
+                    <article class="mistake-card">
+                        <h3>テーマが広すぎる</h3>
+                        <p>「宇宙について」のように広いテーマでは、問いがぼやけます。何を検証したいかまで絞る必要があります。</p>
+                        <p class="fix-line">修正: 範囲を狭めて、答えられる問いにする。</p>
+                    </article>
+                    <article class="mistake-card">
+                        <h3>調べただけで終わる</h3>
+                        <p>情報を集めるだけでは、レポートではなく要約になります。資料から何を読み取り、自分はどう判断したかが必要です。</p>
+                        <p class="fix-line">修正: 「この結果から何が言えるか」を一段追加する。</p>
+                    </article>
+                    <article class="mistake-card">
+                        <h3>結論が曖昧</h3>
+                        <p>「よくわからなかった」で終えると、問いへの答えが消えてしまいます。分かったことと分からなかったことを分けて書きます。</p>
+                        <p class="fix-line">修正: 言える範囲を限定して、未解明部分を残す。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="advanced">
+                <div class="section-heading">
+                    <p class="eyebrow">SSH Level Up</p>
+                    <h2>SSHらしいレポートに近づける 3 つの視点</h2>
+                    <p>理系の課題研究では、数式・モデル・限界の書き方が入るだけで、研究としての輪郭がかなりはっきりします。</p>
+                </div>
+                <div class="advanced-grid">
+                    <article class="advanced-card">
+                        <h3>数式やモデルを使う</h3>
+                        <p>現象を言葉だけでなくモデルで説明すると、議論の精度が上がります。式は飾りではなく、何を表しているかを言葉で補います。</p>
+                    </article>
+                    <article class="advanced-card highlight-card">
+                        <h3>仮説を検証可能にする</h3>
+                        <p>「面白そう」ではなく、「この条件ならこの傾向が出るはず」と書けると、研究として強くなります。</p>
+                    </article>
+                    <article class="advanced-card">
+                        <h3>限界を書く</h3>
+                        <p>測定精度、データ量、仮定の単純化など、研究の弱点を自分で示せると、考察の深さが伝わります。</p>
+                    </article>
+                </div>
+                <div class="closing-card">
+                    <p class="closing-title">最後に一言でまとめるなら</p>
+                    <p class="closing-copy">レポートは、問いを立てて、証拠を集めて、理由を示しながら答えを書く技術です。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>課題研究の進め方や関連テーマは、ほかのガイドページでも整理しています。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="index.html">トップページへ戻る</a>
+                <a class="footer-link" href="chaos.html">カオス解説を見る</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="report.js"></script>
+</body>
+</html>
