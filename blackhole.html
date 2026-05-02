@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブラックホールとは何か | 未来が中心を向く時空の入門</title>
+    <meta name="description" content="高校生向けに、ブラックホール内部で何が起きるか、事象の地平線、特異点、スパゲッティ化、ペンローズ図、情報パラドックス、ホワイトホールとワームホールまでを直感から整理した解説ページです。">
+    <meta name="theme-color" content="#0f1725">
+    <link rel="canonical" href="https://readerspace.github.io/blackhole.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="ブラックホールとは何か | 未来が中心を向く時空の入門">
+    <meta property="og:description" content="事象の地平線、未来＝中心、特異点、情報パラドックスまでを高校生向けに整理したブラックホール解説ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/blackhole.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ブラックホールとは何か | 未来が中心を向く時空の入門">
+    <meta name="twitter:description" content="ブラックホールの内部、ペンローズ図、情報パラドックス、ワームホールまでをつなげて読むためのページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="blackhole.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#concept">境界</a>
+                <a href="#inside">内部</a>
+                <a href="#penrose">ペンローズ図</a>
+                <a href="#demo">実演</a>
+                <a href="#paradox">情報</a>
+                <a href="#beyond">拡張</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Black Hole / Horizon / Singularity</p>
+                    <h1>ブラックホールの中では、<br>未来が中心を向く。</h1>
+                    <p class="hero-lead">
+                        ブラックホールの核心は、「重力が強い」だけではありません。<br>
+                        事象の地平線を越えると、外へ出る方向そのものが消え、中心へ進むことが未来になります。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#inside">内部で何が起きるかを見る</a>
+                        <a class="button button-secondary" href="#paradox">情報パラドックスへ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>事象の地平線は「光でも戻れない」境界</li>
+                        <li>内側では中心へ進むことが避けられない未来になる</li>
+                        <li>特異点、情報パラドックス、ワームホールは最先端の未解決問題につながる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="horizon-window" aria-hidden="true">
+                        <div class="star star-a"></div>
+                        <div class="star star-b"></div>
+                        <div class="star star-c"></div>
+                        <div class="star star-d"></div>
+                        <div class="orbit orbit-one"></div>
+                        <div class="orbit orbit-two"></div>
+                        <div class="horizon-ring"></div>
+                        <div class="horizon-glow"></div>
+                        <div class="singularity-core"></div>
+                        <div class="falling-body"></div>
+                        <div class="infall-arrow infall-one"></div>
+                        <div class="infall-arrow infall-two"></div>
+                        <div class="window-label horizon-label">Event Horizon</div>
+                        <div class="window-label singularity-label">Singularity</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Outside View</p>
+                            <h2>外から見えるのは境界まで</h2>
+                            <p>事象の地平線の内側からは光も戻れないので、外の観測者は中の様子を直接見ることができません。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">Inside View</p>
+                            <h2>内側では「中心」が未来になる</h2>
+                            <p>地平線の内側では、どの未来方向も特異点に向かいます。ここが普通の直感と決定的に違う部分です。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">ブラックホール内部では、未来そのものが特異点を向く。</p>
+                <p class="signal-sub">「脱出できない」のは、エンジンが弱いからではありません。因果構造そのものが、外へ向かう未来を許していないからです。</p>
+            </section>
+
+            <section class="section reveal" id="concept">
+                <div class="section-heading">
+                    <p class="eyebrow">Concept</p>
+                    <h2>外から見たブラックホール</h2>
+                    <p>ブラックホールは、ただの真っ黒な星ではありません。一般相対論では、時空が極端に曲がった結果として自然に現れる構造です。鍵になるのは、事象の地平線という境界です。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Boundary</p>
+                        <h3>事象の地平線</h3>
+                        <p>ここを越えると、光ですら外に戻れません。だから外の観測者から見ると、中の情報は直接取り出せなくなります。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Geometry</p>
+                        <h3>ブラックホールは時空の構造</h3>
+                        <p>一般相対論では、重力は力というより時空の曲がりです。ブラックホールは、その曲がりが極端になった極限です。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Observation</p>
+                        <h3>外からは中が見えない</h3>
+                        <p>落ちる物体の詳細は、外からは地平線の内側に隠れます。ここが後で情報パラドックスにつながります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <p class="card-label">Horizon Scale</p>
+                        <div class="formula-block">r<sub>s</sub> = 2GM / c<sup>2</sup></div>
+                        <p>事象の地平線の半径は、質量が大きいほど大きくなります。これがシュワルツシルト半径です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Key Word</p>
+                        <div class="formula-block">光より速く出る経路がない</div>
+                        <p>「光も戻れない」とは、局所的な速度ではなく、外へ向かう因果的経路そのものが閉じていることを意味します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="inside">
+                <div class="section-heading">
+                    <p class="eyebrow">Inside</p>
+                    <h2>中に入ると何が起きるのか</h2>
+                    <p>ブラックホール内部で本当に重要なのは、「重力に負ける」ことではなく、「逃げる方向が存在しない」ことです。そこでは、未来に進むこと自体が中心への落下と同じ意味になります。</p>
+                </div>
+                <div class="inside-grid">
+                    <article class="inside-card strong-card">
+                        <p class="card-label">Point 1</p>
+                        <h3>外へ出る方向が消える</h3>
+                        <p>地平線の内側では、どの方向に進んでも中心へ近づきます。普通の意味での「脱出ルート」がなくなります。</p>
+                    </article>
+                    <article class="inside-card warm-card">
+                        <p class="card-label">Point 2</p>
+                        <h3>半径方向が時間的になる</h3>
+                        <p>外側では t が時間ですが、内側では r が時間のように振る舞います。中心に向かうことは、未来へ進むことと同じになります。</p>
+                    </article>
+                    <article class="inside-card">
+                        <p class="card-label">Point 3</p>
+                        <h3>特異点に到達する</h3>
+                        <p>一般相対論の範囲では、最後には特異点へ向かいます。そこでは密度や曲率が無限大になり、理論そのものが破綻します。</p>
+                    </article>
+                    <article class="inside-card strong-card">
+                        <p class="card-label">Point 4</p>
+                        <h3>スパゲッティ化</h3>
+                        <p>足と頭で受ける引力の差が大きいと、体は引き伸ばされます。これは潮汐力によるもので、質量や位置によって強さが変わります。</p>
+                    </article>
+                </div>
+
+                <div class="contrast-panel">
+                    <article class="contrast-card">
+                        <p class="card-label">Outside</p>
+                        <h3>外側の世界</h3>
+                        <ul>
+                            <li>時間は上方向に進む</li>
+                            <li>空間は比較的自由に選べる</li>
+                            <li>中心から離れる未来も存在する</li>
+                        </ul>
+                    </article>
+                    <article class="contrast-card night-card">
+                        <p class="card-label">Inside</p>
+                        <h3>内側の世界</h3>
+                        <ul>
+                            <li>中心へ進むことが未来になる</li>
+                            <li>外向きの未来は存在しない</li>
+                            <li>特異点は避けられない未来として現れる</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="penrose">
+                <div class="section-heading">
+                    <p class="eyebrow">Penrose Diagram</p>
+                    <h2>描き方に沿って、ブラックホールのペンローズ図を読む</h2>
+                    <p>ブラックホールの図だけをいきなり見るより、普通の時空図からどう変形してきたかを追ったほうが理解しやすくなります。ここでは「光を 45 度に保つ」「無限遠を有限に押し込む」「地平線と特異点を足す」という順番で読みます。</p>
+                </div>
+                <div class="penrose-grid">
+                    <div class="diagram-panel">
+                        <svg viewBox="0 0 640 360" class="penrose-reading-figure" aria-hidden="true">
+                            <rect x="16" y="16" width="608" height="328" rx="28" fill="rgba(6,16,29,0.98)" stroke="rgba(255,255,255,0.08)"></rect>
+
+                            <g transform="translate(56,52)">
+                                <text x="0" y="18" fill="rgba(247,239,225,0.92)" font-family="Shippori Mincho, serif" font-size="20">1. 通常の時空図</text>
+                                <line x1="72" y1="208" x2="72" y2="34" stroke="rgba(255,255,255,0.5)" stroke-width="2"></line>
+                                <line x1="8" y1="136" x2="160" y2="136" stroke="rgba(255,255,255,0.5)" stroke-width="2"></line>
+                                <line x1="72" y1="136" x2="136" y2="72" stroke="rgba(125,179,255,0.95)" stroke-width="3" stroke-linecap="round"></line>
+                                <line x1="72" y1="136" x2="8" y2="72" stroke="rgba(125,179,255,0.95)" stroke-width="3" stroke-linecap="round"></line>
+                                <polygon points="72,136 102,106 42,106" fill="rgba(125,179,255,0.18)"></polygon>
+                                <text x="80" y="42" fill="rgba(247,239,225,0.82)" font-family="IBM Plex Sans JP, sans-serif" font-size="14">t</text>
+                                <text x="148" y="130" fill="rgba(247,239,225,0.82)" font-family="IBM Plex Sans JP, sans-serif" font-size="14">x</text>
+                                <text x="2" y="248" fill="rgba(247,239,225,0.72)" font-family="IBM Plex Sans JP, sans-serif" font-size="13">光を 45° に保つ</text>
+                            </g>
+
+                            <g transform="translate(222,156)">
+                                <line x1="0" y1="0" x2="70" y2="0" stroke="rgba(125,179,255,0.92)" stroke-width="4" stroke-linecap="round"></line>
+                                <polygon points="70,0 56,-8 56,8" fill="rgba(125,179,255,0.92)"></polygon>
+                                <text x="4" y="-14" fill="rgba(247,239,225,0.76)" font-family="IBM Plex Sans JP, sans-serif" font-size="13">u, v と arctan</text>
+                            </g>
+
+                            <g transform="translate(320,48)">
+                                <text x="54" y="18" text-anchor="middle" fill="rgba(247,239,225,0.92)" font-family="Shippori Mincho, serif" font-size="20">2. ダイヤ形に圧縮</text>
+                                <polygon points="54,34 122,124 54,214 -14,124" fill="rgba(125,179,255,0.14)"></polygon>
+                                <line x1="54" y1="34" x2="122" y2="124" stroke="rgba(255,255,255,0.66)" stroke-width="2.4" stroke-linecap="round"></line>
+                                <line x1="122" y1="124" x2="54" y2="214" stroke="rgba(255,255,255,0.66)" stroke-width="2.4" stroke-linecap="round"></line>
+                                <line x1="54" y1="214" x2="-14" y2="124" stroke="rgba(255,255,255,0.66)" stroke-width="2.4" stroke-linecap="round"></line>
+                                <line x1="-14" y1="124" x2="54" y2="34" stroke="rgba(255,255,255,0.66)" stroke-width="2.4" stroke-linecap="round"></line>
+                                <text x="54" y="20" text-anchor="middle" fill="rgba(247,239,225,0.86)" font-family="IBM Plex Sans JP, sans-serif" font-size="14">i+</text>
+                                <text x="54" y="234" text-anchor="middle" fill="rgba(247,239,225,0.86)" font-family="IBM Plex Sans JP, sans-serif" font-size="14">i-</text>
+                                <text x="-40" y="128" text-anchor="middle" fill="rgba(247,239,225,0.86)" font-family="IBM Plex Sans JP, sans-serif" font-size="14">I-</text>
+                                <text x="148" y="128" text-anchor="middle" fill="rgba(247,239,225,0.86)" font-family="IBM Plex Sans JP, sans-serif" font-size="14">I+</text>
+                                <text x="54" y="266" text-anchor="middle" fill="rgba(247,239,225,0.72)" font-family="IBM Plex Sans JP, sans-serif" font-size="13">無限遠が境界になる</text>
+                            </g>
+
+                            <g transform="translate(470,156)">
+                                <line x1="0" y1="0" x2="70" y2="0" stroke="rgba(243,178,106,0.92)" stroke-width="4" stroke-linecap="round"></line>
+                                <polygon points="70,0 56,-8 56,8" fill="rgba(243,178,106,0.92)"></polygon>
+                                <text x="10" y="-14" fill="rgba(247,239,225,0.76)" font-family="IBM Plex Sans JP, sans-serif" font-size="13">地平線と特異点を追加</text>
+                            </g>
+
+                            <g transform="translate(494,50)">
+                                <text x="54" y="18" text-anchor="middle" fill="rgba(247,239,225,0.92)" font-family="Shippori Mincho, serif" font-size="20">3. ブラックホール図</text>
+                                <polygon points="54,34 118,124 54,214 -10,124" fill="rgba(125,179,255,0.08)"></polygon>
+                                <line x1="54" y1="34" x2="118" y2="124" stroke="rgba(255,255,255,0.66)" stroke-width="2.2" stroke-linecap="round"></line>
+                                <line x1="118" y1="124" x2="54" y2="214" stroke="rgba(255,255,255,0.66)" stroke-width="2.2" stroke-linecap="round"></line>
+                                <line x1="54" y1="214" x2="-10" y2="124" stroke="rgba(255,255,255,0.66)" stroke-width="2.2" stroke-linecap="round"></line>
+                                <line x1="-10" y1="124" x2="54" y2="34" stroke="rgba(255,255,255,0.66)" stroke-width="2.2" stroke-linecap="round"></line>
+                                <line x1="34" y1="58" x2="74" y2="58" stroke="rgba(243,178,106,0.96)" stroke-width="8" stroke-linecap="round"></line>
+                                <line x1="54" y1="124" x2="34" y2="58" stroke="rgba(125,179,255,0.94)" stroke-width="3.6" stroke-linecap="round"></line>
+                                <line x1="54" y1="124" x2="74" y2="58" stroke="rgba(125,179,255,0.94)" stroke-width="3.6" stroke-linecap="round"></line>
+                                <line x1="66" y1="154" x2="52" y2="106" stroke="rgba(243,178,106,0.94)" stroke-width="4" stroke-linecap="round"></line>
+                                <line x1="66" y1="154" x2="78" y2="106" stroke="rgba(243,178,106,0.94)" stroke-width="4" stroke-linecap="round"></line>
+                                <circle cx="66" cy="154" r="6" fill="rgba(243,178,106,0.96)"></circle>
+                                <text x="54" y="46" text-anchor="middle" fill="rgba(247,239,225,0.82)" font-family="IBM Plex Sans JP, sans-serif" font-size="13">特異点</text>
+                                <text x="8" y="104" fill="rgba(247,239,225,0.76)" font-family="IBM Plex Sans JP, sans-serif" font-size="13">地平線</text>
+                                <text x="54" y="244" text-anchor="middle" fill="rgba(247,239,225,0.72)" font-family="IBM Plex Sans JP, sans-serif" font-size="13">内側の未来は特異点へ</text>
+                            </g>
+                        </svg>
+                        <p class="canvas-caption">普通の時空図をそのまま押しつぶした結果がペンローズ図で、ブラックホールではそこに地平線と特異点を足します。すると、内側で未来方向がどこへ向くかを図として読めるようになります。</p>
+                        <div class="penrose-link-row">
+                            <a class="button button-secondary" href="penrose.html">ペンローズ図の描き方を詳しく読む</a>
+                        </div>
+                    </div>
+                    <div class="step-grid">
+                        <article class="step-card">
+                            <p class="card-label">Step 1</p>
+                            <h3>まず光を 45 度の基準にする</h3>
+                            <p>普通の時空図でも、光は t = ±x の 45 度です。ペンローズ図は、このルールだけは最後まで守って描きます。</p>
+                        </article>
+                        <article class="step-card strong-card">
+                            <p class="card-label">Step 2</p>
+                            <h3>光座標と arctan で無限遠を押し込む</h3>
+                            <p>u = t - x, v = t + x を入れ、さらに U = arctan(u), V = arctan(v) とすると、無限遠が図の端に収まります。</p>
+                        </article>
+                        <article class="step-card warm-card">
+                            <p class="card-label">Step 3</p>
+                            <h3>ダイヤ形の境界に意味を読む</h3>
+                            <p>i+ と i- は時間的未来・過去無限、I+ と I- は光的未来・過去無限です。ここで初めて、時空全体を一枚で見渡せます。</p>
+                        </article>
+                        <article class="step-card">
+                            <p class="card-label">Step 4</p>
+                            <h3>ブラックホールでは地平線と特異点を足す</h3>
+                            <p>地平線は 45 度の境界として現れ、内側では未来方向そのものが特異点へ向きます。これが「未来が中心を向く」の図的な意味です。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>質量と位置を変えて、地平線・未来・潮汐力の見え方を確かめる</h2>
+                    <p>この実演では、ブラックホールの質量と現在位置を変えて、事象の地平線の大きさ、外へ出られるか、中心が未来になる感覚、潮汐力の強さをまとめて見られるようにしています。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="control-grid">
+                            <label class="control" for="massRange">
+                                <span>ブラックホール質量</span>
+                                <input id="massRange" type="range" min="0" max="90" value="54">
+                                <strong id="massValue">20,000 M☉</strong>
+                            </label>
+                            <label class="control" for="positionRange">
+                                <span>現在位置 r / r<sub>s</sub></span>
+                                <input id="positionRange" type="range" min="60" max="260" value="145">
+                                <strong id="positionValue">1.45 r<sub>s</sub></strong>
+                            </label>
+                        </div>
+                        <div class="stat-grid">
+                            <article>
+                                <span>事象の地平線半径</span>
+                                <strong id="horizonRadiusValue">59,000 km</strong>
+                            </article>
+                            <article>
+                                <span>現在の領域</span>
+                                <strong id="regionValue">地平線の外側</strong>
+                            </article>
+                            <article>
+                                <span>脱出の可否</span>
+                                <strong id="escapeValue">外向きの未来が残る</strong>
+                            </article>
+                            <article>
+                                <span>未来の向き</span>
+                                <strong id="futureValue">外にも横にも広がる</strong>
+                            </article>
+                            <article>
+                                <span>時間と空間の役割</span>
+                                <strong id="timeRoleValue">t が時間として優勢</strong>
+                            </article>
+                            <article>
+                                <span>潮汐力の印象</span>
+                                <strong id="tidalValue">まだ穏やか</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note" id="demoNote">地平線の外側では、まだ未来の選択肢があります。スライダーを左へ動かして地平線を越えると、説明が一気に変わります。</p>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="blackholeCanvas" width="640" height="420" aria-label="ブラックホールの位置と未来方向の概念図"></canvas>
+                        <p class="canvas-caption">外側では未来方向が広く開きますが、地平線の内側では矢印が中心へ収束していきます。中心に近づくほど潮汐力も急激に強くなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="paradox">
+                <div class="section-heading">
+                    <p class="eyebrow">Information Paradox</p>
+                    <h2>ブラックホールの情報パラドックスとは何か</h2>
+                    <p>ブラックホールの問題が最先端につながるのは、内部が見えないからだけではありません。ホーキング放射を考えると、「中に落ちた情報は消えるのか」という、量子力学の根本に触れる問題が立ち上がります。</p>
+                </div>
+                <div class="paradox-grid">
+                    <article class="paradox-card strong-card">
+                        <p class="card-label">Step 1</p>
+                        <h3>量子力学では情報は消えない</h3>
+                        <p>粒子の状態や位置などの情報は、形を変えても原理的には消えないと考えます。これがユニタリ性です。</p>
+                    </article>
+                    <article class="paradox-card">
+                        <p class="card-label">Step 2</p>
+                        <h3>ホーキング放射はランダムに見える</h3>
+                        <p>ブラックホールは蒸発しますが、その放射は一見すると中の情報を持っていないように見えます。</p>
+                    </article>
+                    <article class="paradox-card warm-card">
+                        <p class="card-label">Step 3</p>
+                        <h3>消えたら量子力学と矛盾する</h3>
+                        <p>ブラックホールが蒸発し切ったあとに情報が失われるなら、量子力学の根本原理と衝突します。これが情報パラドックスです。</p>
+                    </article>
+                </div>
+                <div class="resolution-grid">
+                    <article class="resolution-card">
+                        <h3>情報は放射に含まれる</h3>
+                        <p>現在の主流は、情報は消えず、ホーキング放射の非常に微妙な相関の中に回収されるという見方です。</p>
+                    </article>
+                    <article class="resolution-card strong-card">
+                        <h3>ホログラフィー原理</h3>
+                        <p>情報は内部ではなく表面に保存されるという考え方です。ブラックホールのエントロピーが面積に比例することとも結びつきます。</p>
+                    </article>
+                    <article class="resolution-card warm-card">
+                        <h3>ファイアウォール仮説</h3>
+                        <p>地平線に高温の壁があるという案ですが、一般相対論の滑らかな地平線像とぶつかるため議論が続いています。</p>
+                    </article>
+                    <article class="resolution-card night-card">
+                        <h3>ER = EPR</h3>
+                        <p>ワームホールと量子もつれを同一視する大胆な考え方です。空間の幾何と情報が深く結びついている可能性を示します。</p>
+                    </article>
+                </div>
+                <div class="callout-card">
+                    <p class="card-label">One Sentence</p>
+                    <h3>ブラックホールは「消しゴム」ではなく、極端に複雑な暗号化装置かもしれない</h3>
+                    <p>情報パラドックスが面白いのは、重力の問題がそのまま「情報とは何か」という問いに変わるからです。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="beyond">
+                <div class="section-heading">
+                    <p class="eyebrow">Beyond</p>
+                    <h2>ホワイトホールとワームホールまで広げる</h2>
+                    <p>ブラックホール内部の時間の向きを理解すると、ホワイトホールやワームホールが数学的にどう現れるかも見えてきます。ここはまだ理論色が強い領域です。</p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">Black Hole</p>
+                        <h3>入ることしかできない</h3>
+                        <p>未来が内側を向くため、どの未来経路も中心へ収束します。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">White Hole</p>
+                        <h3>出ることしかできない</h3>
+                        <p>ブラックホールを時間反転したような解で、理論上は現れますが、現実には極めて不安定と考えられています。</p>
+                    </article>
+                    <article class="comparison-card night-card">
+                        <p class="card-label">Wormhole</p>
+                        <h3>時空のショートカット</h3>
+                        <p>ブラックホールとホワイトホールをつなぐような構造として現れますが、普通はすぐ閉じて通れません。</p>
+                    </article>
+                </div>
+                <div class="beyond-grid">
+                    <article class="beyond-card">
+                        <h3>アインシュタイン＝ローゼン橋</h3>
+                        <p>シュワルツシルト解を最大拡張すると、ブラックホールとホワイトホールが橋でつながったような構造が現れます。</p>
+                    </article>
+                    <article class="beyond-card strong-card">
+                        <h3>通れるワームホールには何が必要か</h3>
+                        <p>理論上は、負のエネルギーのようなエキゾチック物質で喉を開き続ける必要がありますが、現実には未確認です。</p>
+                    </article>
+                    <article class="beyond-card warm-card">
+                        <h3>情報とのつながり</h3>
+                        <p>ER = EPR のような考え方では、ワームホールと量子もつれが同じ幾何学的構造の別表現かもしれないとされます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Step</p>
+                    <h2>ブラックホールから、他のテーマへつなげる</h2>
+                    <p>ブラックホールは、相対論だけでなく、シミュレーション、情報、研究テーマ設計まで横につながる話題です。次にどこへ進むかで見え方が変わります。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="simulation.html">
+                        <p class="card-label">Related</p>
+                        <h3>シミュレーションの見方へ</h3>
+                        <p>直接見えない時空構造をどうモデルで扱うか、近似や可視化の考え方とつなげて整理できます。</p>
+                    </a>
+                    <a class="link-card strong-card" href="research.html">
+                        <p class="card-label">Related</p>
+                        <h3>研究テーマとして考える</h3>
+                        <p>情報パラドックス、ワームホール、潮汐力など、問いの立て方しだいで多様な研究テーマに発展できます。</p>
+                    </a>
+                    <a class="link-card warm-card" href="physics.html">
+                        <p class="card-label">Guide Hub</p>
+                        <h3>物理解説トップへ戻る</h3>
+                        <p>他の解説ページと読み順を一覧で見たい場合は、物理解説トップに戻ると全体像をたどれます。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>ブラックホールの核心は、「強い重力」だけでなく、「未来の向きそのものが変わる時空」にあります。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">トップページへ戻る</a>
+                <a class="footer-link" href="penrose.html">ペンローズ図の描き方へ</a>
+                <a class="footer-link" href="simulation.html">シミュレーション解説を見る</a>
+                <a class="footer-link" href="research.html">研究とは何かを見る</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="blackhole.js"></script>
+</body>
+</html>
