@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シミュレーションとは何か | 現実との違いと誤差評価の入門</title>
+    <meta name="description" content="高校生向けに、シミュレーションと現実の違い、モデル化、近似、誤差評価、収束テストの考え方を直感から整理した解説ページです。">
+    <meta name="theme-color" content="#285f73">
+    <link rel="canonical" href="https://readerspace.github.io/simulation.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="シミュレーションとは何か | 現実との違いと誤差評価の入門">
+    <meta property="og:description" content="シミュレーションを『現実の地図』として理解し、誤差をどう評価するかまで整理した高校生向けページ。">
+    <meta property="og:url" content="https://readerspace.github.io/simulation.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="シミュレーションとは何か | 現実との違いと誤差評価の入門">
+    <meta name="twitter:description" content="現実のコピーではなく、重要な部分を残したモデルとしてシミュレーションを理解するための解説ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="simulation.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#difference">違い</a>
+                <a href="#essence">本質</a>
+                <a href="#limits">限界</a>
+                <a href="#errors">誤差</a>
+                <a href="#demo">収束</a>
+                <a href="#evaluation">評価</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Simulation / Model / Convergence</p>
+                    <h1>シミュレーションは、<br>現実の地図である。</h1>
+                    <p class="hero-lead">
+                        シミュレーションは現実そのもののコピーではなく、<br>
+                        現実の重要な部分だけを残して、計算できる形にしたモデルです。完璧ではありませんが、世界を理解するための強力な道具になります。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#difference">現実との違いを見る</a>
+                        <a class="button button-secondary" href="#demo">収束の実演を見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>シミュレーションは現実を単純化したモデル</li>
+                        <li>完全再現はできないが、重要部分はかなり再現できる</li>
+                        <li>大事なのは誤差ゼロより、どれだけ信用できるか</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="model-board" aria-hidden="true">
+                        <div class="model-step reality-step">
+                            <span>Reality</span>
+                            <strong>現実</strong>
+                            <!-- <p>高解像度で複雑</p> -->
+                        </div>
+                        <div class="model-arrow">抽出する</div>
+                        <div class="model-step model-step-accent">
+                            <span>Model</span>
+                            <strong>モデル</strong>
+                            <!-- <p>重要な要素だけ残す</p> -->
+                        </div>
+                        <div class="model-arrow">計算する</div>
+                        <div class="model-step output-step">
+                            <span>Output</span>
+                            <strong>結果</strong>
+                            <!-- <p>理論と観測をつなぐ</p> -->
+                        </div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="note-label">現実</p>
+                            <h2>超高解像度で全部が絡む</h2>
+                            <p>空気、摩擦、熱、材料、電磁気など、多くの要素が同時に影響します。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="note-label">シミュレーション</p>
+                            <h2>必要な部分だけを残す</h2>
+                            <p>物理法則と近似を使って、再現したい現象を計算可能な形に変換します。</p>
+                        </article>
+                    </div>
+
+                    <div class="hero-summary">
+                        <p class="summary-title">一言でいうと</p>
+                        <p><strong>シミュレーションは現実の「地図」</strong>です。完璧ではなくても、進む方向は教えてくれます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">現実そのままではなく、再現できる形に変換する</p>
+                <p class="signal-sub">シミュレーションは、現実を削っているのではなく、計算して理解できる形に翻訳しています。だからズレはあるが、使う価値があります。</p>
+            </section>
+
+            <section class="section reveal" id="difference">
+                <div class="section-heading">
+                    <p class="eyebrow">Difference</p>
+                    <h2>現実とシミュレーションは何が違うのか</h2>
+                    <p>違いは「本物か偽物か」ではなく、どれだけ要素を残しているかです。ゲームの車と本物の車を比べると感覚がつかみやすくなります。</p>
+                </div>
+                <div class="difference-grid">
+                    <div class="table-card">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>項目</th>
+                                    <th>ゲームの車</th>
+                                    <th>本物の車</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>動き</td>
+                                    <td>数式で計算</td>
+                                    <td>空気、摩擦、エンジンなど全部が影響</td>
+                                </tr>
+                                <tr>
+                                    <td>事故</td>
+                                    <td>簡単な破壊表現</td>
+                                    <td>材料の変形、熱、音まで複雑</td>
+                                </tr>
+                                <tr>
+                                    <td>再現度</td>
+                                    <td>必要な部分だけ</td>
+                                    <td>すべての物理が関係</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <article class="point-card strong-card">
+                        <p class="card-label">Point</p>
+                        <h3>重要な部分だけ再現している</h3>
+                        <p>シミュレーションは現実をそのまま作るのではなく、「この現象を見るには何を残せばよいか」を選んでいます。そこが本質です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="essence">
+                <div class="section-heading">
+                    <p class="eyebrow">Essence</p>
+                    <h2>シミュレーションの本質は「法則 + 近似」</h2>
+                    <p>宇宙でも流体でも、シミュレーションはまず物理法則を置き、そのうえで計算可能になるよう近似とモデル化を加えて作られます。</p>
+                </div>
+                <div class="essence-grid">
+                    <article class="panel-card">
+                        <p class="card-label">Law</p>
+                        <h3>物理法則を使う</h3>
+                        <p>重力や運動方程式のように、現象を支配するルールを土台にします。</p>
+                    </article>
+                    <article class="panel-card warm-card">
+                        <p class="card-label">Approximation</p>
+                        <h3>近似して軽くする</h3>
+                        <p>細かすぎる要素はまとめたり無視したりして、計算可能な規模に落とします。</p>
+                    </article>
+                    <article class="panel-card strong-card">
+                        <p class="card-label">Modeling</p>
+                        <h3>再現できる形に変換する</h3>
+                        <p>星形成、乱流、衝突など、現実そのままでは扱えない部分をモデルとして置き換えます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="limits">
+                <div class="section-heading">
+                    <p class="eyebrow">Limits</p>
+                    <h2>なぜ現実を完全再現できないのか</h2>
+                    <p>できない理由は「技術が足りない」だけではありません。そもそも現実が複雑すぎるため、全部をそのまま計算する発想自体が現実的でないことが多いです。</p>
+                </div>
+                <div class="limits-grid">
+                    <article class="limit-card">
+                        <h3>1. 計算量が大きすぎる</h3>
+                        <p>現実世界の粒子数や自由度は膨大です。宇宙全体をそのまま粒子 1 個ずつ計算するのは不可能です。</p>
+                    </article>
+                    <article class="limit-card warm-card">
+                        <h3>2. 物理が絡みすぎる</h3>
+                        <p>重力、流体、電磁気、量子効果など、多くの物理が同時に関係します。必要なものだけ選ぶ必要があります。</p>
+                    </article>
+                    <article class="limit-card strong-card">
+                        <h3>3. 近似が必須になる</h3>
+                        <p>遠くの星をまとめたり、小さい衝突を無視したりして、計算を回せる形に変えます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="value">
+                <div class="section-heading">
+                    <p class="eyebrow">Why It Matters</p>
+                    <h2>それでもシミュレーションが重要な理由</h2>
+                    <p>ズレがあるからといって価値がないわけではありません。むしろ、理論と観測をつなぐ橋として、研究では不可欠な場面が多くあります。</p>
+                </div>
+                <div class="value-grid">
+                    <article class="value-card">
+                        <h3>理論を動かせる</h3>
+                        <p>数式だけでは見えにくい振る舞いを、時間発展として具体的に観察できます。</p>
+                    </article>
+                    <article class="value-card strong-card">
+                        <h3>観測と比べられる</h3>
+                        <p>望遠鏡や実験のデータと並べることで、理論がどこまで現実に合うかを検証できます。</p>
+                    </article>
+                    <article class="value-card warm-card">
+                        <h3>危険・巨大・長時間を試せる</h3>
+                        <p>現実には直接試せない条件でも、モデルの中なら比較や予測ができます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="errors">
+                <div class="section-heading">
+                    <p class="eyebrow">Errors</p>
+                    <h2>誤差には種類がある</h2>
+                    <p>シミュレーションのズレはひとまとめではありません。どの誤差が支配的かを見ると、改善すべき場所が分かります。</p>
+                </div>
+                <div class="error-grid">
+                    <article class="error-card">
+                        <p class="card-label">Model Error</p>
+                        <h3>モデル誤差</h3>
+                        <p>そもそも入れたルールが現実を十分に表していない誤差です。空気抵抗無視や星形成の簡略化などがこれに当たります。</p>
+                    </article>
+                    <article class="error-card warm-card">
+                        <p class="card-label">Numerical Error</p>
+                        <h3>数値誤差</h3>
+                        <p>時間刻みや丸め誤差など、計算の近似そのものから生じるズレです。</p>
+                    </article>
+                    <article class="error-card strong-card">
+                        <p class="card-label">Discretization Error</p>
+                        <h3>離散化誤差</h3>
+                        <p>本来は連続なものを格子や粒子に分けて扱うことで生じる誤差です。解像度が粗いほど大きくなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>時間刻みを変えると、結果はどう近づくか</h2>
+                    <p>ここでは単純な自由落下 <span class="inline-equation">x(t) = 1/2gt²</span> を、オイラー法で近似します。現実の複雑さではなく、数値誤差と収束だけを見ています。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <label class="control" for="timeStep">
+                            <span>時間刻み Δt</span>
+                            <input id="timeStep" type="range" min="1" max="50" value="10">
+                            <strong id="timeStepValue">0.10 s</strong>
+                        </label>
+                        <div class="stat-grid">
+                            <article>
+                                <span>理論値 x(2s)</span>
+                                <strong id="exactValue">19.60 m</strong>
+                            </article>
+                            <article>
+                                <span>シミュレーション値</span>
+                                <strong id="simValue">18.62 m</strong>
+                            </article>
+                            <article>
+                                <span>絶対誤差</span>
+                                <strong id="errorValue">0.98 m</strong>
+                            </article>
+                            <article>
+                                <span>ステップ数</span>
+                                <strong id="stepsValue">20</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note" id="demoNote">時間刻みを粗くすると誤差が大きくなり、細かくすると理論値に近づきます。これが収束の基本イメージです。</p>
+                    </div>
+                    <div class="visual-panel">
+                        <div class="equation-panel">
+                            <div class="equation-block"><span>誤差 = |シミュレーション − 理論|</span></div>
+                            <p>この例では理論解が分かっているので、誤差を直接比較できます。現実の大きな問題でも、まずはこうした簡単な系で方法を検証します。</p>
+                        </div>
+                        <div class="convergence-board">
+                            <p class="convergence-title">粗い → 細かい の収束テスト</p>
+                            <div class="convergence-grid" id="convergenceGrid"></div>
+                            <p class="convergence-caption">刻み幅を半分にしていったとき、結果がどれくらい安定するかを見ています。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="evaluation">
+                <div class="section-heading">
+                    <p class="eyebrow">Evaluation</p>
+                    <h2>誤差評価は「どれだけ信用できるか」を測る</h2>
+                    <p>誤差ゼロは目指せません。だから実際には、いくつかの観点を組み合わせて、その結果をどこまで信じてよいかを判断します。</p>
+                </div>
+                <div class="evaluation-grid">
+                    <article class="evaluation-card">
+                        <h3>理論と比較する</h3>
+                        <p>正解が分かる単純な問題で、理論値との誤差を見ます。最初の検証として強い方法です。</p>
+                    </article>
+                    <article class="evaluation-card strong-card">
+                        <h3>収束テストをする</h3>
+                        <p>粒子数や時間刻みを変えて、結果がほぼ変わらなくなるかを見ます。これが最重要の一つです。</p>
+                    </article>
+                    <article class="evaluation-card warm-card">
+                        <h3>保存量を確認する</h3>
+                        <p>エネルギー、運動量、角運動量など、物理的に保たれる量が大きく崩れていないかを見ます。</p>
+                    </article>
+                    <article class="evaluation-card">
+                        <h3>実験・観測と比べる</h3>
+                        <p>現実のデータと一致するかを見れば、モデルが妥当かどうかの強い手がかりになります。</p>
+                    </article>
+                    <article class="evaluation-card strong-card">
+                        <h3>別の方法でも解いてみる</h3>
+                        <p>粒子法や格子法など、異なる方法で同じ問題を解いて結果が一致するかを確かめます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="trust">
+                <div class="section-heading">
+                    <p class="eyebrow">Trust</p>
+                    <h2>大事なのは「ズレの大きさ」だけではない</h2>
+                    <p>研究で本当に見たいのは、誤差がゼロかどうかではなく、その結果が安定していて、問いに答えるために十分信用できるかどうかです。</p>
+                </div>
+                <div class="trust-grid">
+                    <article class="trust-card strong-card">
+                        <p class="card-label">Map Analogy</p>
+                        <h3>地図は完璧ではなくても使える</h3>
+                        <p>地図が現実のすべてを描かなくても進路を示せるように、シミュレーションも重要な構造が分かれば十分に役立ちます。</p>
+                    </article>
+                    <article class="trust-card warm-card">
+                        <p class="card-label">Research Use</p>
+                        <h3>理論と観測の間を埋める</h3>
+                        <p>シミュレーションは、理論が現実でどう見えるかを確かめる橋として使われます。だから誤差評価がとても重要です。</p>
+                    </article>
+                </div>
+                <div class="closing-card">
+                    <p class="closing-title">最後に一言でまとめるなら</p>
+                    <p class="closing-copy">シミュレーションとは、現実の重要な部分を残した地図であり、誤差を評価しながら使うことで強力な研究道具になります。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>シミュレーションの考え方は、研究の進め方やレポートでの説明ともそのままつながります。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="index.html">トップページへ戻る</a>
+                <a class="footer-link" href="research.html">研究とは何かを見る</a>
+                <a class="footer-link" href="report.html">レポート作成法を見る</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+</html>

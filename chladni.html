@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クラドニ図形とは？ | 音が形になる波動現象の入門</title>
+    <meta name="description" content="クラドニ図形を高校生向けに解説。振動する板、節、定常波、波動方程式、周波数で模様が変わる理由を、動くシミュレーション付きで整理します。">
+    <meta name="theme-color" content="#2c3f63">
+    <link rel="canonical" href="https://readerspace.github.io/chladni.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="クラドニ図形とは？ | 音が形になる波動現象の入門">
+    <meta property="og:description" content="砂が節に集まり、板の上に模様が浮かび上がるクラドニ図形を、波と固有値問題の視点からやさしく解説します。">
+    <meta property="og:url" content="https://readerspace.github.io/chladni.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="クラドニ図形とは？ | 音が形になる波動現象の入門">
+    <meta name="twitter:description" content="節、定常波、周波数、波動方程式が一つにつながるクラドニ図形の解説ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="chladni.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#what">現象</a>
+                <a href="#mechanism">仕組み</a>
+                <a href="#math">数学</a>
+                <a href="#demo">デモ</a>
+                <a href="#change">変化</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Wave / Node / Pattern</p>
+                    <h1>音が、<br>形になって見えてくる。</h1>
+                    <p class="hero-lead">
+                        クラドニ図形は、振動する板の上で砂が節に集まり、
+                        幾何学模様として波の構造が可視化される現象です。
+                        音、波、定常波、固有値問題が一つにつながる、とても美しい実験です。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#mechanism">仕組みを見る</a>
+                        <a class="button button-secondary" href="#demo">模様を動かしてみる</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>よく動く場所では砂が跳ね、動かない場所に集まる</li>
+                        <li>見えている線は、板の節の位置を表している</li>
+                        <li>周波数やモードを変えると模様も大きく変わる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="pattern-window" aria-hidden="true">
+                        <img class="pattern-image" src="assets/chladni-simulation-shot.png" alt="">
+                    </div>
+
+                    <div class="signal-steps">
+                        <article class="signal-card strong-card">
+                            <p class="card-label">Step 1</p>
+                            <h2>板を振動させる</h2>
+                            <p>金属板や薄い板を弓やスピーカーで振動させると、板全体に波が広がります。</p>
+                        </article>
+                        <article class="signal-card warm-card">
+                            <p class="card-label">Step 2</p>
+                            <h2>動かない線ができる</h2>
+                            <p>全部が同じように動くのではなく、振幅が 0 に近い節の線が現れます。</p>
+                        </article>
+                        <article class="signal-card night-card">
+                            <p class="card-label">Step 3</p>
+                            <h2>砂が節に集まる</h2>
+                            <p>よく揺れる場所の砂は飛ばされ、動かない節の上にだけ砂が残ります。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">クラドニ図形は、見えない波を見える模様に変える実験</p>
+                <p class="signal-sub">白い線や砂の筋は、板が静かな場所に現れます。つまり、模様そのものが波の節の地図になっています。</p>
+            </section>
+
+            <section class="section reveal" id="what">
+                <div class="section-heading">
+                    <p class="eyebrow">What Is It</p>
+                    <h2>クラドニ図形とは何か</h2>
+                    <p>18 世紀の物理学者エルンスト・クラドニが広めた実験で、振動する板の上にまいた砂が幾何学模様を作る現象です。音や振動が「形」として目に見えるところが魅力です。</p>
+                </div>
+                <div class="overview-grid">
+                    <article class="overview-card">
+                        <p class="card-label">Observation</p>
+                        <h3>模様が急に浮かび上がる</h3>
+                        <p>ある周波数に合うと、板の上に線や曲線がはっきり現れます。これは偶然の模様ではなく、振動モードごとの固有のパターンです。</p>
+                    </article>
+                    <article class="overview-card strong-card">
+                        <p class="card-label">Meaning</p>
+                        <h3>線は節を表している</h3>
+                        <p>見えている線の場所では板がほとんど動いていません。逆によく動く場所では砂が留まれません。</p>
+                    </article>
+                    <article class="overview-card warm-card">
+                        <p class="card-label">Connection</p>
+                        <h3>波と数学がつながる</h3>
+                        <p>定常波、周波数、境界条件、固有値問題が、実験一つで同時に見えてきます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>何が起きているのか</h2>
+                    <p>鍵になるのは「振動」と「動かない場所」です。砂は模様を描いているのではなく、揺れが弱い場所に押しやられて集まっています。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card">
+                        <span class="step-index">1</span>
+                        <h3>板の中を波が伝わる</h3>
+                        <p>板を振動させると、波が表面を走り、反射し、互いに重なります。板の形や固定条件がここで効きます。</p>
+                    </article>
+                    <article class="mechanism-card strong-card">
+                        <span class="step-index">2</span>
+                        <h3>定常波ができる</h3>
+                        <p>進む波と反射波が重なり、時間がたっても位置だけは固定されたパターンができます。これが定常波です。</p>
+                    </article>
+                    <article class="mechanism-card warm-card">
+                        <span class="step-index">3</span>
+                        <h3>節に砂が残る</h3>
+                        <p>振幅が大きい場所では砂が跳ね飛ばされ、振幅が 0 に近い節だけが砂の居場所になります。</p>
+                    </article>
+                </div>
+                <div class="comparison-board">
+                    <div class="comparison-card">
+                        <p class="card-label">よく動く場所</p>
+                        <h3>腹</h3>
+                        <p>板が大きく振れるので、砂は落ち着いて残れません。</p>
+                    </div>
+                    <div class="comparison-card strong-card">
+                        <p class="card-label">動かない場所</p>
+                        <h3>節</h3>
+                        <p>振幅がほぼ 0 のため、砂が線状に集まり、模様として見えるようになります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="math">
+                <div class="section-heading">
+                    <p class="eyebrow">Math</p>
+                    <h2>数学的には波動方程式と固有値問題</h2>
+                    <p>板の振れ方は連続体の波として記述でき、定常なモードを探すと固有値問題の形になります。模様はその解の節線です。</p>
+                </div>
+                <div class="math-grid">
+                    <article class="equation-card">
+                        <p class="card-label">Equation</p>
+                        <div class="equation-block">∇²u(x, y) = -λu(x, y)</div>
+                        <p>ここで u(x, y) は板の振れ方、λ は振動モードや周波数に対応する量です。どの解が許されるかは板の形と境界条件で決まります。</p>
+                    </article>
+                    <div class="definition-grid">
+                        <article class="definition-card">
+                            <h3>u(x, y)</h3>
+                            <p>板の各点がどれだけ振れるかを表す関数です。0 になる場所が節です。</p>
+                        </article>
+                        <article class="definition-card strong-card">
+                            <h3>λ</h3>
+                            <p>どのモードの振動かを区別する量で、周波数が変わると対応する模様も変わります。</p>
+                        </article>
+                        <article class="definition-card warm-card">
+                            <h3>境界条件</h3>
+                            <p>板の端の固定の仕方で許される波の形が変わり、節の配置も変わります。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>モードを変えて、模様がどう変わるか見る</h2>
+                    <p>下の図は、添付資料の式をもとにクラドニ図形を描く簡易シミュレーションです。白い線が「節」で、m と n を変えると振動モードに応じて線の形が変わります。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="control-grid">
+                            <label class="control" for="mMode">
+                                <span>m モード</span>
+                                <input id="mMode" type="range" min="1" max="12" value="4">
+                                <strong id="mModeValue">4</strong>
+                            </label>
+                            <label class="control" for="nMode">
+                                <span>n モード</span>
+                                <input id="nMode" type="range" min="1" max="12" value="7">
+                                <strong id="nModeValue">7</strong>
+                            </label>
+                            <label class="control" for="contrastRange">
+                                <span>線の鋭さ</span>
+                                <input id="contrastRange" type="range" min="16" max="80" value="38">
+                                <strong id="contrastValue">38</strong>
+                            </label>
+                        </div>
+                        <div class="stat-grid">
+                            <article>
+                                <span>節線の複雑さ</span>
+                                <strong id="complexityValue">中程度</strong>
+                            </article>
+                            <article>
+                                <span>対称性の印象</span>
+                                <strong id="symmetryValue">高め</strong>
+                            </article>
+                            <article>
+                                <span>モード差 |m - n|</span>
+                                <strong id="differenceValue">3</strong>
+                            </article>
+                            <article>
+                                <span>観察メモ</span>
+                                <strong id="modeNoteValue">節線が増えて模様が細かい</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note" id="demoNote">m と n の差が大きいほど、節線が増えて模様が入り組んで見えやすくなります。</p>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="chladniCanvas" width="560" height="560" aria-label="クラドニ図形シミュレーション"></canvas>
+                        <p class="canvas-caption">白い線が節です。板のその場所では振幅が小さいため、砂が集まりやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="change">
+                <div class="section-heading">
+                    <p class="eyebrow">Why Patterns Change</p>
+                    <h2>なぜ模様が変わるのか</h2>
+                    <p>クラドニ図形は一つではありません。板の形、固定の仕方、周波数が変わると、許される定常波の形そのものが変わります。</p>
+                </div>
+                <div class="change-grid">
+                    <article class="change-card">
+                        <h3>板の形</h3>
+                        <p>四角形か円形かで、反射の仕方も節の配置も変わります。図形の幾何学性はここに強く依存します。</p>
+                    </article>
+                    <article class="change-card strong-card">
+                        <h3>固定の仕方</h3>
+                        <p>どこを押さえるか、端が自由か固定かで境界条件が変わり、同じ周波数でも別の模様になります。</p>
+                    </article>
+                    <article class="change-card warm-card">
+                        <h3>周波数</h3>
+                        <p>周波数を変えると別の固有モードが励起されます。その結果、まったく違う幾何学模様が出現します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Why It Matters</p>
+                    <h2>面白いポイントと発展</h2>
+                    <p>クラドニ図形はきれいな模様の実験に見えますが、実際には波の可視化、固有値問題、音響設計までつながっています。</p>
+                </div>
+                <div class="next-grid">
+                    <article class="next-card">
+                        <h3>物理と数学が同時に見える</h3>
+                        <p>波の干渉、定常波、境界条件、固有値問題という抽象的な概念が、一枚の板の模様として直感的に見えます。</p>
+                    </article>
+                    <article class="next-card strong-card">
+                        <h3>音が形になる</h3>
+                        <p>周波数という見えない量が、線や対称性のある形として現れるため、音と幾何のつながりが理解しやすくなります。</p>
+                    </article>
+                    <article class="next-card warm-card">
+                        <h3>さらに広い分野へ</h3>
+                        <p>ドラム膜の振動、量子の波動関数、建築や音響設計など、さまざまな分野に同じ考え方が現れます。</p>
+                    </article>
+                </div>
+                <div class="link-board">
+                    <a class="link-card" href="simulation.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>シミュレーションの見方につなげる</h3>
+                        <p>クラドニ図形のデモが「現実を計算で近似する」例としてどう見えるかを整理できます。</p>
+                    </a>
+                    <a class="link-card" href="research.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>研究テーマとして考える</h3>
+                        <p>周波数と模様の関係を測る、板の形で比較するなど、研究の問いに発展させる入口になります。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>クラドニ図形は、波がどこで動かず、どこで強く振れるかを、模様そのもので見せてくれる実験です。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="index.html">トップページへ戻る</a>
+                <a class="footer-link" href="simulation.html">シミュレーション解説を見る</a>
+                <a class="footer-link" href="research.html">研究とは何かを見る</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="chladni.js"></script>
+</body>
+</html>
