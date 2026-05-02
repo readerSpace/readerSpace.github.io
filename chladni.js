@@ -115,8 +115,6 @@ const resizeCanvas = () => {
     canvas.height = Math.round(displayHeight * ratio);
     canvas.style.width = `${displayWidth}px`;
     canvas.style.height = `${displayHeight}px`;
-
-    context?.setTransform(ratio, 0, 0, ratio, 0, 0);
 };
 
 const draw = () => {
@@ -124,8 +122,8 @@ const draw = () => {
         return;
     }
 
-    const width = Number(canvas.style.width.replace("px", "")) || 560;
-    const height = Number(canvas.style.height.replace("px", "")) || 560;
+    const width = canvas.width || 560;
+    const height = canvas.height || 560;
     const m = Number(mMode.value);
     const n = Number(nMode.value);
     const contrast = Number(contrastRange.value);
