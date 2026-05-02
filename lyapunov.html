@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyapunov指数とは何か | カオスを数値で測る入門</title>
+    <meta name="description" content="高校生向けに、Lyapunov指数を『誤差がどれくらい速く広がるか』という直感から解説するページです。ロジスティック写像での計算例や予測可能時間の見方まで整理しています。">
+    <meta name="theme-color" content="#1f5c49">
+    <link rel="canonical" href="https://readerspace.github.io/lyapunov.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="Lyapunov指数とは何か | カオスを数値で測る入門">
+    <meta property="og:description" content="Lyapunov指数を、誤差の広がる速さとして直感から理解するための高校生向け解説ページ。">
+    <meta property="og:url" content="https://readerspace.github.io/lyapunov.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lyapunov指数とは何か | カオスを数値で測る入門">
+    <meta name="twitter:description" content="誤差がどれだけの速さで広がるかを数値で見る、Lyapunov指数の解説ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lyapunov.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#intuition">直感</a>
+                <a href="#sign">判定</a>
+                <a href="#demo">実演</a>
+                <a href="#math">数式</a>
+                <a href="#example">計算例</a>
+                <a href="#chaos-link">カオス</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Lyapunov Exponent / Chaos / Prediction</p>
+                    <h1>Lyapunov指数は、<br>誤差の広がる速さを測る。</h1>
+                    <p class="hero-lead">
+                        カオスでは、最初はほとんど同じに見える 2 つの状態が、時間とともに大きくずれていきます。<br>
+                        その「どれくらい速くズレが広がるか」を数値で表したものが Lyapunov 指数です。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">ロジスティック写像で見る</a>
+                        <a class="button button-secondary" href="#math">式の意味を見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>Lyapunov指数は誤差の広がる速さを表す</li>
+                        <li>λ &gt; 0 なら平均的にズレが指数関数的に増える</li>
+                        <li>正の λ は、予測可能性が壊れやすいことを意味する</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="spread-board" aria-hidden="true">
+                        <div class="spread-stage">
+                            <span>t = 0</span>
+                            <div class="dot-pair close-pair">
+                                <i></i>
+                                <i></i>
+                            </div>
+                            <p>ほとんど同じ</p>
+                        </div>
+                        <div class="arrow-chip">時間が進む</div>
+                        <div class="spread-stage">
+                            <span>t = 後</span>
+                            <div class="dot-pair far-pair">
+                                <i></i>
+                                <i></i>
+                            </div>
+                            <p>大きく離れる</p>
+                        </div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note soft-note">
+                            <p class="note-label">一言でいうと</p>
+                            <h2>どれくらい速く未来が壊れるか</h2>
+                            <p>Lyapunov 指数は、初期のわずかな誤差が将来どれくらい速く大きな差になるかを見る尺度です。</p>
+                        </article>
+                        <article class="hero-note strong-note">
+                            <p class="note-label">カオスとの関係</p>
+                            <h2>正ならカオスの有力サイン</h2>
+                            <p>平均的にズレが指数関数的に増えるなら、長期予測は急速に壊れます。</p>
+                        </article>
+                    </div>
+
+                    <div class="hero-summary">
+                        <p class="summary-title">最重要</p>
+                        <p>Lyapunov 指数とは、<strong>「誤差がどれだけの速さで広がるか」を表す指数</strong>です。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">小さなズレ × 時間 → 大きな差</p>
+                <p class="signal-sub">カオスが厄介なのは、誤差があること自体ではなく、その誤差が時間とともに指数関数的に増えることです。Lyapunov 指数はその増え方を測ります。</p>
+            </section>
+
+            <section class="section reveal" id="intuition">
+                <div class="section-heading">
+                    <p class="eyebrow">Intuition</p>
+                    <h2>まずは「ズレが広がる速さ」をイメージする</h2>
+                    <p>最初の差が 0.0001 のようにごく小さくても、ある系では時間がたつほど差が急速に広がります。その速さを 1 つの数にまとめたのが Lyapunov 指数です。</p>
+                </div>
+                <div class="intuition-grid">
+                    <article class="panel-card">
+                        <p class="card-label">Start</p>
+                        <h3>最初のズレはとても小さい</h3>
+                        <p>測定誤差や初期値のわずかな違いは、最初はほとんど無視できるように見えます。</p>
+                    </article>
+                    <article class="panel-card warm-card">
+                        <p class="card-label">Later</p>
+                        <h3>時間がたつと差が大きくなる</h3>
+                        <p>カオス系では、その小さな違いが繰り返し増幅され、将来には全く違う軌道になります。</p>
+                    </article>
+                    <article class="panel-card strong-card">
+                        <p class="card-label">Measure</p>
+                        <h3>その増幅率を数で表す</h3>
+                        <p>「どれくらい速く離れるか」を平均的な指数で表したのが λ です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="sign">
+                <div class="section-heading">
+                    <p class="eyebrow">Sign</p>
+                    <h2>λ の符号で何が分かるか</h2>
+                    <p>Lyapunov 指数は、正・ゼロ付近・負で意味がはっきり変わります。ここを見ると、その系が予測しやすいかどうかが直感的に分かります。</p>
+                </div>
+                <div class="sign-grid">
+                    <article class="sign-card positive-card">
+                        <p class="card-label">λ &gt; 0</p>
+                        <h3>カオス</h3>
+                        <p>平均的に誤差が指数関数的に増えます。未来予測は急速に壊れやすくなります。</p>
+                    </article>
+                    <article class="sign-card boundary-card">
+                        <p class="card-label">λ ≈ 0</p>
+                        <h3>境界・中間</h3>
+                        <p>ズレはすぐには増えも縮みもしません。規則と不規則の境目のようなふるまいです。</p>
+                    </article>
+                    <article class="sign-card negative-card">
+                        <p class="card-label">λ &lt; 0</p>
+                        <h3>安定</h3>
+                        <p>ズレが縮み、近い状態は再び近づきます。長期予測も比較的保たれます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>ロジスティック写像で λ をその場で見る</h2>
+                    <p>ロジスティック写像 <span class="inline-equation">x<sub>n+1</sub> = r x<sub>n</sub> (1 - x<sub>n</sub>)</span> を何回も回し、各点での伸び率を平均すると Lyapunov 指数を近似できます。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <label class="control" for="parameterR">
+                            <span>パラメータ r</span>
+                            <input id="parameterR" type="range" min="250" max="400" value="400">
+                            <strong id="parameterRValue">4.00</strong>
+                        </label>
+                        <label class="control" for="initialX">
+                            <span>初期値 x<sub>0</sub></span>
+                            <input id="initialX" type="range" min="5" max="95" value="20">
+                            <strong id="initialXValue">0.20</strong>
+                        </label>
+                        <div class="stat-grid">
+                            <article>
+                                <span>近似 λ</span>
+                                <strong id="lambdaValue">0.693</strong>
+                            </article>
+                            <article>
+                                <span>判定</span>
+                                <strong id="regimeValue">カオス</strong>
+                            </article>
+                            <article>
+                                <span>1ステップ平均倍率</span>
+                                <strong id="stretchValue">2.00 倍</strong>
+                            </article>
+                            <article>
+                                <span>誤差 10^-6 が 1 になる目安</span>
+                                <strong id="horizonValue">約 20 ステップ</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note" id="regimeNote">r = 4 では λ ≈ log 2 となり、誤差は平均的に 1 ステップごとに約 2 倍ずつ広がります。</p>
+                    </div>
+                    <div class="visual-panel">
+                        <div class="equation-panel">
+                            <div class="equation-block"><span>λ ≈ (1 / N) Σ log |r (1 - 2x<sub>n</sub>)|</span></div>
+                            <p>各点で「ズレが何倍に伸びるか」を表す <span class="inline-equation">|f'(x)|</span> の対数平均を取っています。</p>
+                        </div>
+                        <div class="growth-board" aria-live="polite">
+                            <p class="growth-title">誤差の増え方イメージ</p>
+                            <div class="growth-bars" id="growthBars"></div>
+                            <p class="growth-caption">左から右へ 8 ステップ分の誤差の大きさを模式的に表示しています。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="math">
+                <div class="section-heading">
+                    <p class="eyebrow">Math</p>
+                    <h2>式の意味は「指数関数的な広がり」</h2>
+                    <p>Lyapunov 指数の核心は、誤差が時間とともにどれくらいの速さで増えるかを指数関数で表すことです。</p>
+                </div>
+                <div class="math-grid">
+                    <div class="equation-card">
+                        <div class="equation-block equation-large">
+                            <span>δ(t) ≈ δ(0) e<sup>λt</sup></span>
+                        </div>
+                        <p><span class="inline-equation">δ(0)</span> は最初のズレ、<span class="inline-equation">δ(t)</span> は時間後のズレ、<span class="inline-equation">λ</span> が Lyapunov 指数です。</p>
+                    </div>
+                    <div class="meaning-grid">
+                        <article class="meaning-card">
+                            <h3>δ(0)</h3>
+                            <p>最初の誤差です。測定の限界や初期値のずれを表します。</p>
+                        </article>
+                        <article class="meaning-card">
+                            <h3>δ(t)</h3>
+                            <p>時間がたった後の誤差です。未来予測がどれくらい崩れたかを見ます。</p>
+                        </article>
+                        <article class="meaning-card strong-card">
+                            <h3>λ</h3>
+                            <p>ズレが指数関数的に増える速さです。未来の予測可能性がどれだけ早く壊れるかを表します。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="example">
+                <div class="section-heading">
+                    <p class="eyebrow">Example</p>
+                    <h2>ロジスティック写像での計算例</h2>
+                    <p><span class="inline-equation">r = 4</span>、<span class="inline-equation">x<sub>0</sub> = 0.2</span> のとき、Lyapunov 指数は十分大きい反復回数で <span class="inline-equation">λ ≈ 0.693</span> に近づきます。</p>
+                </div>
+                <div class="example-grid">
+                    <article class="example-card strong-card">
+                        <p class="card-label">Formula</p>
+                        <h3>λ ≈ log 2 ≈ 0.693</h3>
+                        <p>これは <span class="inline-equation">e<sup>0.693</sup> ≈ 2</span> を意味します。つまり、誤差は平均的に 1 ステップごとに約 2 倍です。</p>
+                    </article>
+                    <article class="example-card warm-card">
+                        <p class="card-label">Prediction Horizon</p>
+                        <h3>予測可能時間は約 20 ステップ</h3>
+                        <p>初期誤差が <span class="inline-equation">10<sup>-6</sup></span> なら、<span class="inline-equation">10<sup>-6</sup> e<sup>0.693n</sup> ≈ 1</span> から <span class="inline-equation">n ≈ 20</span> と見積もれます。</p>
+                    </article>
+                </div>
+                <div class="walkthrough-card">
+                    <p class="card-label">Interpretation</p>
+                    <h3>未来予測の壊れやすさを数で言う</h3>
+                    <p>Lyapunov 指数が大きいほど、同じ初期誤差でも早く予測が壊れます。だから λ は、カオスの「読めなさ」を定量化する道具として重要です。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="chaos-link">
+                <div class="section-heading">
+                    <p class="eyebrow">Chaos Link</p>
+                    <h2>なぜ λ &gt; 0 がカオスの有力サインなのか</h2>
+                    <p>カオスの本質は「初期条件への鋭敏性」です。Lyapunov 指数が正であることは、その鋭敏性を数値で示していることに対応します。</p>
+                </div>
+                <div class="chaos-grid">
+                    <article class="chaos-card">
+                        <h3>天気予報</h3>
+                        <p>今日の誤差がごく小さくても、1週間後には全く違う天気予報になります。これは λ &gt; 0 の世界の典型例です。</p>
+                    </article>
+                    <article class="chaos-card">
+                        <h3>3体問題</h3>
+                        <p>少し違う初期位置・速度から出発した軌道が、長期では大きく異なるふるまいを見せることがあります。</p>
+                    </article>
+                    <article class="chaos-card strong-card">
+                        <h3>カオスを「数で測る」</h3>
+                        <p>見た目が複雑というだけではなく、ズレの増幅率が正であると示せるところに Lyapunov 指数の強さがあります。</p>
+                    </article>
+                </div>
+                <div class="closing-card">
+                    <p class="closing-title">最後に一言でまとめるなら</p>
+                    <p class="closing-copy">Lyapunov 指数とは、誤差がどれだけの速さで広がるかを表し、カオスの予測不能さを数値で示す指数です。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>この話がつながるページ</h2>
+                    <p>Lyapunov 指数は単独の話題ではなく、カオスの直感的理解と、研究全体の見方の両方につながります。</p>
+                </div>
+                <div class="example-grid">
+                    <article class="example-card strong-card">
+                        <p class="card-label">Related Page</p>
+                        <h3>カオス現象を直感から振り返る</h3>
+                        <p>Lyapunov 指数が正になる意味を、初期条件鋭敏性やロジスティック写像の文脈からもう一度つかみ直せます。</p>
+                        <div class="hero-actions">
+                            <a class="button button-primary" href="chaos.html">カオス解説へ</a>
+                        </div>
+                    </article>
+                    <article class="example-card warm-card">
+                        <p class="card-label">Related Page</p>
+                        <h3>そもそも研究とは何かを整理する</h3>
+                        <p>「問いを立て、根拠を持って答えを作る」という研究の全体像から見ると、Lyapunov 指数はモデルで世界を測る具体例として理解しやすくなります。</p>
+                        <div class="hero-actions">
+                            <a class="button button-primary" href="research.html">研究とは何かへ</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>Lyapunov 指数は、カオスの直感とロジスティック写像の理解を土台にすると一気につかみやすくなります。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="index.html">トップページへ戻る</a>
+                <a class="footer-link" href="chaos.html">カオス解説を見る</a>
+                <a class="footer-link" href="research.html">研究とは何かを見る</a>
+                <a class="footer-link" href="poincare.html">ポアンカレ写像を見る</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="lyapunov.js"></script>
+</body>
+</html>
