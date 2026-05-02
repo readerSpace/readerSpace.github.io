@@ -55,18 +55,20 @@
     <tspan x="136" y="468">点列で見る</tspan>
   </text>
   <text fill="#5A7179" font-family="IBM Plex Sans JP, sans-serif" font-size="31" font-weight="500">
-    <tspan x="140" y="554">軌道そのものではなく、ある面を通る瞬間だけ記録する。</tspan>
-    <tspan x="140" y="600">すると、周期・準周期・カオスの構造が見えてくる。</tspan>
+    <tspan x="140" y="554">軌道そのものではなく、ある面を通る</tspan>
+    <tspan x="140" y="600">瞬間だけ記録する。</tspan>
+    <tspan x="140" y="646">すると、周期・準周期・カオスの構造</tspan>
+    <tspan x="140" y="692">が見えてくる。</tspan>
   </text>
-  <rect x="140" y="660" width="242" height="70" rx="35" fill="#16526A"/>
+  <rect x="140" y="724" width="242" height="70" rx="35" fill="#16526A"/>
   <text fill="white" font-family="IBM Plex Sans JP, sans-serif" font-size="26" font-weight="700">
-    <tspan x="188" y="705">連続 → 離散へ</tspan>
+    <tspan x="188" y="769">連続 → 離散へ</tspan>
   </text>
-  <rect x="410" y="660" width="184" height="70" rx="35" fill="#FFFFFF" fill-opacity="0.78"/>
+  <rect x="410" y="724" width="224" height="70" rx="35" fill="#FFFFFF" fill-opacity="0.78"/>
   <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="26" font-weight="700">
-    <tspan x="446" y="705">構造が見える</tspan>
+    <tspan x="446" y="769">構造が見える</tspan>
   </text>
-  <rect x="844" y="116" width="468" height="196" rx="34" fill="#FFF8EA" fill-opacity="0.9"/>
+  <rect x="844" y="116" width="508" height="196" rx="34" fill="#FFF8EA" fill-opacity="0.9"/>
   <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="22" font-weight="700">
     <tspan x="884" y="166">ポアンカレ写像</tspan>
   </text>

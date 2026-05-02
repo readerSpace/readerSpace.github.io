@@ -45,7 +45,7 @@
     <path d="M0 728H1600" stroke="white"/>
     <path d="M0 820H1600" stroke="white"/>
   </g>
-  <rect x="88" y="86" width="584" height="728" rx="38" fill="#FFF8EA" fill-opacity="0.9"/>
+  <rect x="88" y="86" width="700" height="728" rx="38" fill="#FFF8EA" fill-opacity="0.9"/>
   <text fill="#0E6F74" font-family="IBM Plex Sans JP, sans-serif" font-size="24" font-weight="700" letter-spacing="0.24em">
     <tspan x="140" y="154">CHAOS / INTUITION / MATH</tspan>
   </text>
@@ -58,13 +58,13 @@
     <tspan x="140" y="550">カオスは、ほんの小さな違いが時間とともに</tspan>
     <tspan x="140" y="596">爆発的に広がるために予測が壊れる現象。</tspan>
   </text>
-  <rect x="140" y="654" width="258" height="70" rx="35" fill="#0E6F74"/>
+  <rect x="140" y="654" width="308" height="70" rx="35" fill="#0E6F74"/>
   <text fill="white" font-family="IBM Plex Sans JP, sans-serif" font-size="26" font-weight="700">
-    <tspan x="190" y="699">初期差が増幅される</tspan>
+    <tspan x="170" y="699">初期差が増幅される</tspan>
   </text>
-  <rect x="423" y="654" width="155" height="70" rx="35" fill="#FFFFFF" fill-opacity="0.78"/>
+  <rect x="493" y="654" width="155" height="70" rx="35" fill="#FFFFFF" fill-opacity="0.78"/>
   <text fill="#0E6F74" font-family="IBM Plex Sans JP, sans-serif" font-size="26" font-weight="700">
-    <tspan x="460" y="699">決定論</tspan>
+    <tspan x="530" y="699">決定論</tspan>
   </text>
   <path d="M806 637C874.986 585.538 938.522 574.372 1001.5 620C1042.5 649.5 1090.5 726 1190.5 652.5C1250.79 608.195 1310.96 507.388 1416 343" stroke="#F0B665" stroke-width="12" stroke-linecap="round"/>
   <path d="M806 725C857 737.5 930 713.5 987 638C1046.78 558.832 1147.35 534.472 1234 597.5C1300.87 646.15 1358.54 708.824 1422 788" stroke="#0E6F74" stroke-width="12" stroke-linecap="round"/>
@@ -77,7 +77,7 @@
   <circle cx="987" cy="638" r="14" fill="#0E6F74"/>
   <circle cx="1234" cy="597.5" r="14" fill="#0E6F74"/>
   <circle cx="1422" cy="788" r="14" fill="#0A5A60"/>
-  <rect x="868" y="116" width="492" height="184" rx="34" fill="#FFF8EA" fill-opacity="0.88"/>
+  <rect x="868" y="116" width="552" height="254" rx="34" fill="#FFF8EA" fill-opacity="0.88"/>
   <text fill="#0E6F74" font-family="IBM Plex Sans JP, sans-serif" font-size="22" font-weight="700">
     <tspan x="910" y="168">まず結論</tspan>
   </text>

@@ -43,7 +43,7 @@
     <path d="M0 506H1200" stroke="white"/>
     <path d="M0 578H1200" stroke="white"/>
   </g>
-  <rect x="48" y="44" width="532" height="540" rx="34" fill="#FFF8EA" fill-opacity="0.9"/>
+  <rect x="48" y="44" width="672" height="540" rx="34" fill="#FFF8EA" fill-opacity="0.9"/>
   <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="20" font-weight="700" letter-spacing="0.24em">
     <tspan x="84" y="104">POINCARE MAP / FOR STUDENTS</tspan>
   </text>
@@ -63,15 +63,16 @@
   <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="24" font-weight="700">
     <tspan x="334" y="495">構造が見える</tspan>
   </text>
-  <rect x="706" y="80" width="404" height="162" rx="30" fill="#FFF8EA" fill-opacity="0.88"/>
+  <rect x="726" y="80" width="404" height="202" rx="30" fill="#FFF8EA" fill-opacity="0.88"/>
   <text fill="#16526A" font-family="IBM Plex Sans JP, sans-serif" font-size="19" font-weight="700">
     <tspan x="736" y="126">一言でいうと</tspan>
   </text>
   <text fill="#10252D" font-family="IBM Plex Sans JP, sans-serif" font-size="42" font-weight="700">
     <tspan x="736" y="184">運動を</tspan>
-    <tspan x="736" y="228">「特定の瞬間の点列」に変換する</tspan>
+    <tspan x="736" y="228">「特定の瞬間の点列」</tspan>
+    <tspan x="736" y="272">に変換する</tspan>
   </text>
-  <rect x="710" y="304" width="404" height="232" rx="30" fill="#FFF8EA" fill-opacity="0.84"/>
+  <rect x="726" y="304" width="404" height="232" rx="30" fill="#FFF8EA" fill-opacity="0.84"/>
   <path d="M740 496C770 390 818 372 846 426C874 484 922 498 952 374" stroke="#16526A" stroke-width="8" stroke-linecap="round"/>
   <line x1="848" y1="336" x2="848" y2="510" stroke="#E7A44B" stroke-width="4" stroke-dasharray="8 8"/>
   <circle cx="848" cy="426" r="8" fill="#E7A44B"/>
