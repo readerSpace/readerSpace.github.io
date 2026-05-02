@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二重振り子とは？ | 力学シミュレーションで見るカオス入門</title>
+    <meta name="description" content="二重振り子を高校生向けに解説。普通の振り子との違い、自由度、非線形、初期値敏感性、Lyapunov 指数、ポアンカレ写像まで、動くシミュレーション付きで整理します。">
+    <meta name="theme-color" content="#34566f">
+    <link rel="canonical" href="https://readerspace.github.io/double-pendulum.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="二重振り子とは？ | 力学シミュレーションで見るカオス入門">
+    <meta property="og:description" content="二重振り子を例に、非線形、初期値敏感性、Lyapunov 指数、ポアンカレ写像をつなげて理解するためのページです。">
+    <meta property="og:url" content="https://readerspace.github.io/double-pendulum.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="二重振り子とは？ | 力学シミュレーションで見るカオス入門">
+    <meta name="twitter:description" content="法則に従うのに長期予測が崩れる二重振り子を、動くデモ付きで直感から解説します。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="double-pendulum.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#what">概要</a>
+                <a href="#why">難しさ</a>
+                <a href="#chaos">カオス</a>
+                <a href="#demo">実演</a>
+                <a href="#map">断面</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Double Pendulum / Chaos / Mechanics</p>
+                    <h1>二重振り子は、<br>法則に従うのに読めなくなる。</h1>
+                    <p class="hero-lead">
+                        二重振り子は、振り子の先にさらに振り子がついた単純な装置です。<br>
+                        それなのに、少しの初期差で未来が大きくずれ、カオスを直感的に理解できる代表例になります。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">シミュレーションを見る</a>
+                        <a class="button button-secondary" href="#map">ポアンカレ写像を見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>角度が 2 つあるので自由度が増え、状態が一気に複雑になる</li>
+                        <li>上下の振り子が互いに影響し合うため、非線形になる</li>
+                        <li>ごく小さな初期差が将来に大きく広がるのがカオスの本質</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="pendulum-board" aria-hidden="true">
+                        <article class="pendulum-stage single-stage">
+                            <span>単振り子</span>
+                            <strong>角度は 1 つ</strong>
+                            <p>周期的で予測しやすい</p>
+                            <div class="pendulum-figure single-figure">
+                                <i class="pivot"></i>
+                                <i class="rod rod-one"></i>
+                                <i class="bob bob-one"></i>
+                            </div>
+                        </article>
+                        <div class="pendulum-chip">自由度 + 相互作用</div>
+                        <article class="pendulum-stage double-stage">
+                            <span>二重振り子</span>
+                            <strong>角度は 2 つ</strong>
+                            <p>回転や急変が混ざって読みにくい</p>
+                            <div class="pendulum-figure double-figure">
+                                <i class="pivot"></i>
+                                <i class="rod rod-one"></i>
+                                <i class="bob bob-one"></i>
+                                <i class="rod rod-two"></i>
+                                <i class="bob bob-two"></i>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-card">
+                            <p class="card-label">Chaos</p>
+                            <h2>少しの差が未来を壊す</h2>
+                            <p>角度をほんの少し変えただけで、数秒後には別の運動に見えるほど差が広がります。</p>
+                        </article>
+                        <article class="hero-note warm-card">
+                            <p class="card-label">Simulation</p>
+                            <h2>数値計算が主役になる</h2>
+                            <p>一般には簡単な解析解がないため、時間ごとに微分方程式を数値的に解いて動きを追います。</p>
+                        </article>
+                    </div>
+
+                    <div class="hero-summary">
+                        <p class="summary-title">一言でいうと</p>
+                        <p><strong>二重振り子は、カオスを直感的に見せる力学シミュレーションの代表例</strong>です。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">単純な装置でも、非線形になると未来は一気に読みにくくなる</p>
+                <p class="signal-sub">二重振り子はランダムに見えますが、法則が消えたわけではありません。法則はあるのに長期予測が崩れる、その構造を見る教材です。</p>
+            </section>
+
+            <section class="section reveal" id="what">
+                <div class="section-heading">
+                    <p class="eyebrow">What Is It</p>
+                    <h2>二重振り子とは何か</h2>
+                    <p>二重振り子は「振り子の先に、さらに振り子がついたもの」です。見た目は少し複雑になるだけですが、運動の性質は普通の振り子と大きく変わります。</p>
+                </div>
+                <div class="what-grid">
+                    <div class="table-card">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>項目</th>
+                                    <th>単振り子</th>
+                                    <th>二重振り子</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>角度</td>
+                                    <td>1 つ</td>
+                                    <td>2 つ</td>
+                                </tr>
+                                <tr>
+                                    <td>運動</td>
+                                    <td>周期的で規則的</td>
+                                    <td>複雑で急変しやすい</td>
+                                </tr>
+                                <tr>
+                                    <td>予測</td>
+                                    <td>比較的しやすい</td>
+                                    <td>長期では崩れやすい</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <article class="point-card strong-card">
+                        <p class="card-label">Point</p>
+                        <h3>増えたのは棒 1 本ではなく、自由度 1 つ</h3>
+                        <p>角度が 1 つから 2 つになるだけで、状態空間は一気に広がります。そこに相互作用が乗るため、単振り子とは別物の難しさになります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="why">
+                <div class="section-heading">
+                    <p class="eyebrow">Why It Gets Hard</p>
+                    <h2>なぜ二重振り子は難しくなるのか</h2>
+                    <p>難しさは「部品が 1 つ増えた」ことではありません。自由度、相互作用、エネルギー交換が同時に入ることで、単純な足し算では追えない運動になります。</p>
+                </div>
+                <div class="reason-grid">
+                    <article class="reason-card">
+                        <p class="card-label">Freedom</p>
+                        <h3>自由度が増える</h3>
+                        <p>単振り子は角度 θ 1 つで状態が決まりますが、二重振り子では θ₁ と θ₂ の 2 つを同時に追う必要があります。</p>
+                    </article>
+                    <article class="reason-card strong-card">
+                        <p class="card-label">Interaction</p>
+                        <h3>上下が互いに引っ張り合う</h3>
+                        <p>上の振り子が下を動かし、下の振り子も上に戻りの影響を与えます。この相互作用が非線形性の中心です。</p>
+                    </article>
+                    <article class="reason-card warm-card">
+                        <p class="card-label">Energy</p>
+                        <h3>エネルギーが行き来する</h3>
+                        <p>上と下でエネルギーが移り、揺れと回転が混ざります。そのため途中で急に運動の印象が変わります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="chaos">
+                <div class="section-heading">
+                    <p class="eyebrow">Chaos</p>
+                    <h2>一番重要なのは初期値敏感性</h2>
+                    <p>二重振り子の核心は、ごく小さな初期差が時間とともに大きく広がることです。これは「初期条件への鋭敏な依存」と呼ばれ、カオスの代表的な特徴です。</p>
+                </div>
+                <div class="chaos-grid">
+                    <article class="chaos-card strong-card">
+                        <p class="card-label">Sensitive Dependence</p>
+                        <h3>0.001 の差でも未来が変わる</h3>
+                        <p>最初の角度や速度をほんの少しだけ変えると、数秒後には全く別の軌道のように見えることがあります。</p>
+                    </article>
+                    <article class="chaos-card warm-card">
+                        <p class="card-label">Motion</p>
+                        <h3>揺れだけで終わらない</h3>
+                        <p>最初は普通に揺れていても、途中で回転したり、急に逆方向へ折り返したりして、単純な周期パターンから外れます。</p>
+                    </article>
+                    <article class="chaos-card">
+                        <p class="card-label">Not Random</p>
+                        <h3>ランダムではなく、法則がある読みにくさ</h3>
+                        <p>完全に無秩序なのではなく、非線形微分方程式に従っています。だからこそ、シミュレーションで追う意味があります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>二重振り子と Lyapunov 指数の推定を同時に見る</h2>
+                    <p>白が本体、赤がほんの少しだけ違う影の振り子です。両者の差の広がりを追いながら、Lyapunov 指数をその場でざっくり推定しています。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="visual-panel">
+                        <canvas id="doublePendulumCanvas" width="560" height="520" aria-label="二重振り子シミュレーション"></canvas>
+                        <p class="canvas-caption">白が本体、赤がごく近い影、青が下端質点の軌跡です。</p>
+                    </div>
+                    <div class="demo-panel">
+                        <div class="control-card">
+                            <label class="control" for="initialOffset">
+                                <span>初期角度のずれ（下の振り子）</span>
+                                <input id="initialOffset" type="range" min="1" max="40" value="12">
+                                <strong id="initialOffsetValue">0.12 rad / 6.9°</strong>
+                            </label>
+                            <div class="button-row">
+                                <button class="button button-secondary" id="toggleMainButton" type="button">一時停止</button>
+                                <button class="button button-primary" id="resetMainButton" type="button">初期状態に戻す</button>
+                            </div>
+                        </div>
+                        <div class="stat-grid">
+                            <article>
+                                <span>推定 λ</span>
+                                <strong id="lambdaEstimateValue">0.000</strong>
+                            </article>
+                            <article>
+                                <span>e^λ の目安</span>
+                                <strong id="stretchValue">1.00</strong>
+                            </article>
+                            <article>
+                                <span>今の運動</span>
+                                <strong id="motionValue">観測開始</strong>
+                            </article>
+                            <article>
+                                <span>予測可能時間</span>
+                                <strong id="forecastValue">計測中</strong>
+                            </article>
+                        </div>
+                        <div class="equation-card compact-card">
+                            <p class="card-label">Lyapunov Estimate</p>
+                            <div class="equation-block">λ ≈ (1 / t) Σ log (δ / δ0)</div>
+                            <p>近い 2 本の振り子の差がどれだけ速く増えるかを、時間平均で見ています。正ならカオス的な発散が起きやすいという目安になります。</p>
+                        </div>
+                        <p class="demo-note" id="mainNote">最初の数秒は推定が揺れます。時間がたつほど、差が広がる傾向が見えてきます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="math">
+                <div class="section-heading">
+                    <p class="eyebrow">Math And Method</p>
+                    <h2>数式の特徴は「非線形」そして「数値計算が必要」</h2>
+                    <p>二重振り子の運動方程式には sin(θ)、角速度の二乗、分母の複雑な組み合わせが現れます。一般には簡単な解析解で閉じず、数値シミュレーションが中心になります。</p>
+                </div>
+                <div class="math-grid">
+                    <article class="math-card strong-card">
+                        <p class="card-label">Equation Type</p>
+                        <h3>非線形微分方程式</h3>
+                        <p>角度そのものだけでなく、角速度や 2 本の差角が複雑に絡みます。だから単純な足し算や重ね合わせで扱えません。</p>
+                    </article>
+                    <div class="method-grid">
+                        <article class="method-card">
+                            <p class="card-label">Euler</p>
+                            <h3>オイラー法</h3>
+                            <p>考え方は分かりやすいですが、長時間では誤差が蓄積しやすく、エネルギーのずれも目立ちやすくなります。</p>
+                        </article>
+                        <article class="method-card warm-card">
+                            <p class="card-label">Runge-Kutta</p>
+                            <h3>4 次の RK 法</h3>
+                            <p>1 ステップの中で複数回評価するので、同じ刻み幅でもかなり安定して運動を追えます。このページの実演でも使っています。</p>
+                        </article>
+                        <article class="method-card">
+                            <p class="card-label">Meaning</p>
+                            <h3>シミュレーションが主役になる例</h3>
+                            <p>理論をそのまま閉じた式で書き切るより、時間ごとに数値的に前へ進めて現象を見るのが自然なタイプの問題です。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="map">
+                <div class="section-heading">
+                    <p class="eyebrow">Poincare Map</p>
+                    <h2>ポアンカレ写像で「散らばり方」を見る</h2>
+                    <p>二重振り子本体の時間変化をそのまま追うだけでなく、ある断面条件で点を記録すると、運動の規則性やカオス性が別の形で見えてきます。</p>
+                </div>
+                <div class="map-panel">
+                    <div class="map-header">
+                        <div class="crossing-chip">記録条件: θ₂ = 0 を正方向に通過した瞬間に (θ₁, ω₁) を打つ</div>
+                        <button class="button button-primary" id="resetMapButton" type="button">点群をリセット</button>
+                    </div>
+                    <div class="map-board">
+                        <div class="canvas-card">
+                            <canvas id="poincareSimCanvas" width="460" height="460" aria-label="ポアンカレ写像用の二重振り子シミュレーション"></canvas>
+                            <p class="canvas-caption">左: 二重振り子本体</p>
+                        </div>
+                        <div class="canvas-card">
+                            <canvas id="poincareMapCanvas" width="460" height="460" aria-label="二重振り子のポアンカレ写像"></canvas>
+                            <p class="canvas-caption">右: (θ₁, ω₁) の断面</p>
+                        </div>
+                    </div>
+                    <div class="map-stats-grid">
+                        <article>
+                            <span>記録点数</span>
+                            <strong id="pointCountValue">0</strong>
+                        </article>
+                        <article>
+                            <span>点群の印象</span>
+                            <strong id="mapSpreadValue">形成中</strong>
+                        </article>
+                        <article>
+                            <span>見方</span>
+                            <strong id="mapInterpretationValue">点が散るほどカオス寄り</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Why It Matters</p>
+                    <h2>なぜ二重振り子が重要なのか</h2>
+                    <p>二重振り子は、単なる面白い装置ではありません。カオス、天気予報、N 体問題、情報生成といった広いテーマにつながる入門モデルです。</p>
+                </div>
+                <div class="importance-grid">
+                    <article class="importance-card">
+                        <h3>カオスの入門モデル</h3>
+                        <p>ロジスティック写像と並んで、初期値敏感性を直感的に見せる代表例です。</p>
+                    </article>
+                    <article class="importance-card strong-card">
+                        <h3>天気予報と同じ構造</h3>
+                        <p>小さな初期誤差が将来に大きな差として現れるという意味で、予測の限界を考える練習になります。</p>
+                    </article>
+                    <article class="importance-card warm-card">
+                        <h3>宇宙の運動にもつながる</h3>
+                        <p>N 体問題のように、複数の物体が互いに影響し合う系では同じ読みづらさが現れます。</p>
+                    </article>
+                    <article class="importance-card">
+                        <h3>情報とエントロピーにも関係</h3>
+                        <p>予測不能性や情報の増え方を考える入口としても使われ、物理と情報の橋になります。</p>
+                    </article>
+                </div>
+                <div class="link-board">
+                    <a class="link-card" href="chaos.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>カオスの直感につなげる</h3>
+                        <p>なぜ単純な法則でも予測不能になるのかを、もう少し広い視点で整理できます。</p>
+                    </a>
+                    <a class="link-card" href="lyapunov.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>Lyapunov 指数を詳しく見る</h3>
+                        <p>このページで使った λ 推定の意味を、別の簡単な系でもう一度確認できます。</p>
+                    </a>
+                    <a class="link-card" href="poincare.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>ポアンカレ写像の考え方を見る</h3>
+                        <p>断面を取って連続運動を離散化する発想を、別の説明ページで整理できます。</p>
+                    </a>
+                    <a class="link-card" href="simulation.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>シミュレーション全体の意味に戻る</h3>
+                        <p>なぜ解けない系を数値計算で追うのか、モデルと誤差の観点から振り返れます。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>二重振り子は、力学、カオス、Lyapunov 指数、ポアンカレ写像を 1 つの装置でまとめて見せてくれる教材です。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="index.html">トップページへ戻る</a>
+                <a class="footer-link" href="chaos.html">カオス解説を見る</a>
+                <a class="footer-link" href="lyapunov.html">Lyapunov 指数を見る</a>
+                <a class="footer-link" href="poincare.html">ポアンカレ写像を見る</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="double-pendulum.js"></script>
+</body>
+</html>

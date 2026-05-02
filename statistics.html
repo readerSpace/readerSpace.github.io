@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計とは何か | 実験データと誤差の見方入門</title>
+    <meta name="description" content="高校生向けに、物理実験でなぜ統計が必要か、平均、標準偏差、ランダム誤差と系統誤差、正規分布、誤差伝播までを直感から整理した解説ページです。">
+    <meta name="theme-color" content="#1f6b73">
+    <link rel="canonical" href="https://readerspace.github.io/statistics.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="統計とは何か | 実験データと誤差の見方入門">
+    <meta property="og:description" content="1 回の測定で終わらず、分布で考えるための高校生向け統計ページ。平均、標準偏差、誤差の種類、正規分布、誤差伝播までを整理します。">
+    <meta property="og:url" content="https://readerspace.github.io/statistics.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="統計とは何か | 実験データと誤差の見方入門">
+    <meta name="twitter:description" content="平均と標準偏差だけで終わらず、正規分布と誤差伝播まで直感でつなぐ高校生向け解説ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="statistics.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#why">必要性</a>
+                <a href="#core">基本量</a>
+                <a href="#errors">誤差</a>
+                <a href="#demo">実演</a>
+                <a href="#propagation">誤差伝播</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Statistics / Measurement / Error</p>
+                    <h1>統計は、<br>測定のゆらぎを読むための言語。</h1>
+                    <p class="hero-lead">
+                        物理実験では、同じものを測っても毎回ぴったり同じ値にはなりません。<br>
+                        だからこそ、1 回の値ではなく、どこに集まり、どれくらい散っているかを読むために統計が必要になります。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">測定の実演を見る</a>
+                        <a class="button button-secondary" href="#propagation">誤差伝播を見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>平均は中心を見るための値</li>
+                        <li>標準偏差はばらつきの大きさを見るための値</li>
+                        <li>系統誤差は平均しても消えない</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="measurement-window" aria-hidden="true">
+                        <div class="window-head">
+                            <span>Repeated Measurements</span>
+                            <strong>同じ長さを 8 回測る</strong>
+                        </div>
+                        <div class="sample-ribbon">
+                            <span>10.17</span>
+                            <span>10.24</span>
+                            <span>10.19</span>
+                            <span>10.28</span>
+                            <span>10.14</span>
+                            <span>10.21</span>
+                            <span>10.23</span>
+                            <span>10.16</span>
+                        </div>
+                        <div class="distribution-board">
+                            <div class="distribution-axis">
+                                <span class="axis-label axis-left">10.0</span>
+                                <span class="axis-label axis-right">10.4</span>
+                                <span class="distribution-dot dot-a"></span>
+                                <span class="distribution-dot dot-b"></span>
+                                <span class="distribution-dot dot-c"></span>
+                                <span class="distribution-dot dot-d"></span>
+                                <span class="distribution-dot dot-e"></span>
+                                <span class="distribution-dot dot-f"></span>
+                                <span class="distribution-dot dot-g"></span>
+                                <span class="distribution-dot dot-h"></span>
+                                <span class="mean-pill">平均 10.20 cm</span>
+                            </div>
+                            <p>平均の位置だけでなく、点の広がり方を見ると、その測定がどれくらい安定しているかがわかります。</p>
+                        </div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="note-label">Center</p>
+                            <h2>平均で中心をつかむ</h2>
+                            <p>複数回の測定を 1 つの代表値にまとめる最初のステップです。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="note-label">Spread</p>
+                            <h2>標準偏差で広がりを読む</h2>
+                            <p>同じ平均でも、散らばりが違えば信頼感はまったく変わります。</p>
+                        </article>
+                    </div>
+
+                    <div class="hero-summary">
+                        <p class="summary-title">一番大事な考え方</p>
+                        <p><strong>「1 回の測定ではなく、分布で考える」</strong>ことが、物理実験の統計の出発点です。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">測定値は点ではなく、中心と広がりを持つ集団として読む</p>
+                <p class="signal-sub">統計は、たまたまのズレと本質的なズレを区別しながら、「本当の値にどれくらい近いか」を判断するための道具です。</p>
+            </section>
+
+            <section class="section reveal" id="why">
+                <div class="section-heading">
+                    <p class="eyebrow">Why Statistics</p>
+                    <h2>なぜ統計が必要なのか</h2>
+                    <p>長さ、時間、電圧、周期。どの実験でも、同じ条件で測っても値は少しずつ揺れます。その揺れを無視すると、結果を過信してしまいます。</p>
+                </div>
+                <div class="why-grid">
+                    <article class="point-card strong-card">
+                        <p class="card-label">Key Point</p>
+                        <h3>1 回だけでは信用できない</h3>
+                        <p>たまたま高く出たか、低く出たかは 1 回では分かりません。繰り返し測定して、どのあたりに集まるかを見る必要があります。</p>
+                    </article>
+                    <div class="reason-stack">
+                        <article class="reason-card">
+                            <h3>手のブレ</h3>
+                            <p>ストップウォッチの押し方や視線のズレで、毎回わずかに値が変わります。</p>
+                        </article>
+                        <article class="reason-card warm-card">
+                            <h3>測定器の精度</h3>
+                            <p>目盛りの細かさやセンサーの分解能には限界があり、小さな揺れが残ります。</p>
+                        </article>
+                        <article class="reason-card">
+                            <h3>環境の影響</h3>
+                            <p>温度、摩擦、空気の流れ、机の傾きなど、完全にはそろえられない条件が結果に乗ります。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="core">
+                <div class="section-heading">
+                    <p class="eyebrow">Core Tools</p>
+                    <h2>まず見るべき 3 つの量</h2>
+                    <p>平均だけでは不十分です。代表値、ばらつき、そして「どこまで本当の値を含みそうか」をセットで考えると、測定の見え方が変わります。</p>
+                </div>
+                <div class="core-grid">
+                    <article class="formula-card">
+                        <p class="card-label">Average</p>
+                        <h3>平均</h3>
+                        <div class="formula-block" aria-label="平均の式">平均 = (x<sub>1</sub> + x<sub>2</sub> + ... + x<sub>n</sub>) / n</div>
+                        <p>「だいたいこの辺の値だよね」を決める、いちばん基本の代表値です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Spread</p>
+                        <h3>標準偏差</h3>
+                        <div class="formula-block" aria-label="標準偏差の式">σ = √[(1 / n) Σ (x<sub>i</sub> - 平均)<sup>2</sup>]</div>
+                        <p>データが平均のまわりにどれくらい広がっているかを表します。</p>
+                    </article>
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Notation</p>
+                        <h3>誤差つきの書き方</h3>
+                        <div class="formula-block" aria-label="誤差つき測定値">L = 10.2 ± 0.1 cm</div>
+                        <p>真の値はこの範囲の近くにありそうだ、という意味をコンパクトに書いています。</p>
+                    </article>
+                </div>
+
+                <div class="contrast-panel">
+                    <div class="contrast-copy">
+                        <p class="card-label">Same Mean, Different Trust</p>
+                        <h3>平均が同じでも、信頼度は同じではない</h3>
+                        <p>A も B も平均は 10.2 cm でも、点の散り方が違えば「この測定は安定しているか」の印象は変わります。そこで標準偏差が効いてきます。</p>
+                    </div>
+                    <div class="spread-comparison" aria-hidden="true">
+                        <div class="spread-case narrow-case">
+                            <span class="case-label">A: 狭い分布</span>
+                            <div class="spread-line">
+                                <span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <div class="spread-case wide-case">
+                            <span class="case-label">B: 広い分布</span>
+                            <div class="spread-line">
+                                <span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="errors">
+                <div class="section-heading">
+                    <p class="eyebrow">Error Types</p>
+                    <h2>ランダム誤差と系統誤差は別物</h2>
+                    <p>統計で扱いやすいのは、毎回揺れるランダム誤差です。一方で、ずっと同じ方向にずれる系統誤差は、平均しても消えません。</p>
+                </div>
+                <div class="error-grid">
+                    <article class="error-card">
+                        <p class="card-label">Random Error</p>
+                        <h3>ランダム誤差</h3>
+                        <p>人の反応のブレやノイズのように、プラスにもマイナスにも揺れる誤差です。回数を増やすと、平均は安定しやすくなります。</p>
+                        <p class="error-conclusion">平均すると減りやすい</p>
+                    </article>
+                    <article class="error-card warm-card">
+                        <p class="card-label">Systematic Error</p>
+                        <h3>系統誤差</h3>
+                        <p>定規のゼロ点ずれや装置の傾きのように、ずっと同じ方向へ押し出す誤差です。何回測っても、中心そのものがずれます。</p>
+                        <p class="error-conclusion">平均しても消えない</p>
+                    </article>
+                    <article class="error-card strong-card">
+                        <p class="card-label">Practice</p>
+                        <h3>実験でやるべきこと</h3>
+                        <p>繰り返し測定でランダム誤差を見つつ、器具の校正やゼロ点確認で系統誤差を疑う。この 2 本立てで考えます。</p>
+                        <p class="error-conclusion">両方を分けて考える</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="distribution">
+                <div class="section-heading">
+                    <p class="eyebrow">Graph & Distribution</p>
+                    <h2>グラフで見えること、正規分布で見えること</h2>
+                    <p>物理では、数値をただ並べるより、散布図、近似直線、誤差棒、分布の形で見た方がずっと多くの情報が読めます。</p>
+                </div>
+                <div class="distribution-grid">
+                    <article class="distribution-card strong-card">
+                        <p class="card-label">Normal Distribution</p>
+                        <h3>真ん中に集まり、端は少ない</h3>
+                        <div class="bell-curve" aria-hidden="true">
+                            <div class="curve-fill"></div>
+                            <span class="curve-marker marker-minus-two">-2σ</span>
+                            <span class="curve-marker marker-minus-one">-1σ</span>
+                            <span class="curve-marker marker-zero">平均</span>
+                            <span class="curve-marker marker-plus-one">+1σ</span>
+                            <span class="curve-marker marker-plus-two">+2σ</span>
+                        </div>
+                        <div class="coverage-grid">
+                            <article>
+                                <span>約 68%</span>
+                                <strong>±1σ に入る</strong>
+                            </article>
+                            <article>
+                                <span>約 95%</span>
+                                <strong>±2σ に入る</strong>
+                            </article>
+                        </div>
+                    </article>
+                    <div class="tool-grid">
+                        <article class="tool-card">
+                            <p class="card-label">Scatter Plot</p>
+                            <h3>散布図</h3>
+                            <p>データの並び方や、外れ値があるかを直感的に見つけやすくなります。</p>
+                        </article>
+                        <article class="tool-card warm-card">
+                            <p class="card-label">Least Squares</p>
+                            <h3>近似直線</h3>
+                            <p>理論と実験がどれくらい同じ傾向かを比べるときに使います。</p>
+                        </article>
+                        <article class="tool-card">
+                            <p class="card-label">Error Bar</p>
+                            <h3>誤差棒</h3>
+                            <p>点 1 個ではなく、「このくらいの幅がある」と伝えるための重要な表示です。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>測定回数とばらつきを変えると、平均の見え方はどう変わるか</h2>
+                    <p>下の実演では、同じ長さを何回も測ったことにしてサンプルを作ります。測定回数やノイズの大きさを変えると、平均と標準偏差の読み方がつかみやすくなります。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <label class="control" for="trueValue">
+                            <span>本当の値</span>
+                            <input id="trueValue" type="range" min="980" max="1040" value="1020">
+                            <strong id="trueValueValue">10.20 cm</strong>
+                        </label>
+                        <label class="control" for="noiseLevel">
+                            <span>ばらつきの強さ</span>
+                            <input id="noiseLevel" type="range" min="2" max="20" value="8">
+                            <strong id="noiseLevelValue">0.08 cm</strong>
+                        </label>
+                        <label class="control" for="sampleCount">
+                            <span>測定回数</span>
+                            <input id="sampleCount" type="range" min="4" max="48" value="16">
+                            <strong id="sampleCountValue">16 回</strong>
+                        </label>
+                        <div class="button-row">
+                            <button class="button button-primary" id="resampleButton" type="button">もう一度測る</button>
+                        </div>
+                        <div class="stat-grid">
+                            <article>
+                                <span>平均</span>
+                                <strong id="meanValue">10.20 cm</strong>
+                            </article>
+                            <article>
+                                <span>標準偏差</span>
+                                <strong id="stdValue">0.08 cm</strong>
+                            </article>
+                            <article>
+                                <span>最大値 - 最小値</span>
+                                <strong id="rangeValue">0.24 cm</strong>
+                            </article>
+                            <article>
+                                <span>平均 ±1σ に入る割合</span>
+                                <strong id="withinOneSigmaValue">68%</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note" id="demoNote">測定回数を増やすと、偶然の揺れに左右されにくくなり、平均の位置が安定して見えてきます。</p>
+                    </div>
+                    <div class="chart-panel">
+                        <canvas id="measurementCanvas" width="640" height="320" aria-label="測定値のヒストグラム"></canvas>
+                        <p class="canvas-caption">青の線が本当の値、黄の線が今回の平均です。下の点は各回の測定値です。</p>
+                        <div class="sample-list" id="sampleList" aria-live="polite"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="propagation">
+                <div class="section-heading">
+                    <p class="eyebrow">Error Propagation</p>
+                    <h2>計算すると、誤差も一緒に動く</h2>
+                    <p>測定値に誤差があるなら、その値から作った面積や速度にも誤差が乗ります。ここでは「微分が誤差の変換係数になる」という見方で整理します。</p>
+                </div>
+                <div class="propagation-grid">
+                    <div class="formula-ladder">
+                        <article class="formula-card">
+                            <p class="card-label">One Variable</p>
+                            <h3>1 変数の誤差伝播</h3>
+                            <div class="formula-block multiline" aria-label="1変数の誤差伝播">
+                                <span>y = f(x)</span>
+                                <span>Δy ≈ |df/dx| Δx</span>
+                            </div>
+                            <p>入力が少しずれると、出力はその場所での傾きだけ増幅または縮小されます。</p>
+                        </article>
+                        <article class="formula-card warm-card">
+                            <p class="card-label">Many Variables</p>
+                            <h3>独立な誤差の合成</h3>
+                            <div class="formula-block multiline" aria-label="多変数の誤差伝播">
+                                <span>σ<sub>y</sub> = √[Σ (∂f/∂x<sub>i</sub>)<sup>2</sup> σ<sub>i</sub><sup>2</sup>]</span>
+                            </div>
+                            <p>ランダム誤差は符号がそろわないので、単純な足し算ではなく二乗和で合成します。</p>
+                        </article>
+                        <article class="formula-card strong-card">
+                            <p class="card-label">Rule of Thumb</p>
+                            <h3>掛け算・割り算では相対誤差を見る</h3>
+                            <div class="formula-block multiline" aria-label="相対誤差の式">
+                                <span>σ<sub>S</sub> / S = √[(σ<sub>a</sub> / a)<sup>2</sup> + (σ<sub>b</sub> / b)<sup>2</sup>]</span>
+                            </div>
+                            <p>面積、速度、密度など、掛け算や割り算の量では相対誤差で見ると整理しやすくなります。</p>
+                        </article>
+                    </div>
+
+                    <div class="prop-demo-panel">
+                        <div class="prop-controls">
+                            <label class="control" for="lengthA">
+                                <span>a の長さ</span>
+                                <input id="lengthA" type="range" min="20" max="80" value="40">
+                                <strong id="lengthAValue">4.0 cm</strong>
+                            </label>
+                            <label class="control" for="sigmaA">
+                                <span>a の誤差 σa</span>
+                                <input id="sigmaA" type="range" min="1" max="30" value="5">
+                                <strong id="sigmaAValue">0.05 cm</strong>
+                            </label>
+                            <label class="control" for="lengthB">
+                                <span>b の長さ</span>
+                                <input id="lengthB" type="range" min="20" max="80" value="30">
+                                <strong id="lengthBValue">3.0 cm</strong>
+                            </label>
+                            <label class="control" for="sigmaB">
+                                <span>b の誤差 σb</span>
+                                <input id="sigmaB" type="range" min="1" max="30" value="8">
+                                <strong id="sigmaBValue">0.08 cm</strong>
+                            </label>
+                        </div>
+
+                        <div class="prop-results">
+                            <div class="stat-grid">
+                                <article>
+                                    <span>面積 S = ab</span>
+                                    <strong id="areaValue">12.00 cm²</strong>
+                                </article>
+                                <article>
+                                    <span>面積の誤差 σS</span>
+                                    <strong id="sigmaAreaValue">0.34 cm²</strong>
+                                </article>
+                                <article>
+                                    <span>相対誤差</span>
+                                    <strong id="relativeErrorValue">2.8%</strong>
+                                </article>
+                            </div>
+
+                            <div class="formula-panel">
+                                <p class="card-label">Current Formula</p>
+                                <div class="formula-block multiline" id="propagationFormula" aria-live="polite">
+                                    <span>σ<sub>S</sub> = √[(bσ<sub>a</sub>)<sup>2</sup> + (aσ<sub>b</sub>)<sup>2</sup>]</span>
+                                </div>
+                            </div>
+
+                            <div class="contribution-grid">
+                                <div class="contribution-row">
+                                    <span>a 側の寄与</span>
+                                    <div class="contribution-bar"><span id="contribABar"></span></div>
+                                    <strong id="contribAValue">44%</strong>
+                                </div>
+                                <div class="contribution-row">
+                                    <span>b 側の寄与</span>
+                                    <div class="contribution-bar warm-bar"><span id="contribBBar"></span></div>
+                                    <strong id="contribBValue">56%</strong>
+                                </div>
+                            </div>
+
+                            <p class="demo-note" id="propagationNote">誤差が大きい方、または係数が大きい方が、面積の誤差を強く支配します。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Step</p>
+                    <h2>統計を、研究の文章と評価につなげる</h2>
+                    <p>統計は単独で終わる知識ではありません。シミュレーションの誤差評価、研究の問いの立て方、レポートでの結果の書き方にそのままつながります。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="simulation.html">
+                        <p class="card-label">Related</p>
+                        <h3>シミュレーションとは</h3>
+                        <p>数値誤差や収束をどう評価するかを、統計の視点とつないで整理できます。</p>
+                    </a>
+                    <a class="link-card strong-card" href="report.html">
+                        <p class="card-label">Related</p>
+                        <h3>レポート作成法</h3>
+                        <p>平均、標準偏差、誤差棒をどう文章と図に落とし込むかを考える次の段階です。</p>
+                    </a>
+                    <a class="link-card warm-card" href="research.html">
+                        <p class="card-label">Related</p>
+                        <h3>研究とは何か</h3>
+                        <p>どの量を測り、どの誤差を管理するかという設計そのものが研究の質を左右します。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>統計は、測定のばらつきを「ノイズ」で終わらせず、根拠に変えるための道具です。</p>
+            <div class="footer-links">
+                <a href="index.html">トップへ戻る</a>
+                <a href="simulation.html">シミュレーションへ</a>
+                <a href="report.html">レポート作成法へ</a>
+                <a href="research.html">研究とは何かへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="statistics.js"></script>
+</body>
+</html>
