@@ -508,6 +508,17 @@ h1 {
     align-content: start;
 }
 
+.support-note {
+    margin: 0 0 4px;
+    line-height: 1.8;
+    color: rgba(15, 28, 43, 0.86);
+}
+
+.support-note a {
+    color: inherit;
+    font-weight: 700;
+}
+
 .site-footer {
     margin-top: 64px;
     padding: 24px 30px;

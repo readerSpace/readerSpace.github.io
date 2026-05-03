@@ -593,7 +593,9 @@ h1 {
 }
 
 .penrose-reading-figure {
+    display: block;
     width: 100%;
+    height: auto;
     border-radius: 26px;
     overflow: hidden;
     background: linear-gradient(180deg, rgba(5, 9, 16, 0.98), rgba(18, 27, 39, 0.98));
