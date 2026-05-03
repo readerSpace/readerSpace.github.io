@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雪の結晶はどう育つ？ | 拡散・結晶化・六角対称の入門</title>
+    <meta name="description" content="雪の結晶の成長を高校生向けに解説。拡散、結晶化、六角対称、Mullins-Sekerka 不安定性、DLA、フェーズフィールド法までを、動く簡易シミュレーション付きで整理します。">
+    <meta name="theme-color" content="#14344e">
+    <link rel="canonical" href="https://readerspace.github.io/snowflake.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="雪の結晶はどう育つ？ | 拡散・結晶化・六角対称の入門">
+    <meta property="og:description" content="雪の枝分かれは、拡散・界面不安定・六角対称が組み合わさって生まれます。DLA やフェーズフィールド法までつなげて読むための解説ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/snowflake.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="雪の結晶はどう育つ？ | 拡散・結晶化・六角対称の入門">
+    <meta name="twitter:description" content="雪の結晶が六角形と枝分かれを作る理由を、拡散と不安定性から直感的に整理したページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="snowflake.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#mechanism">仕組み</a>
+                <a href="#models">モデル</a>
+                <a href="#instability">不安定性</a>
+                <a href="#demo">実演</a>
+                <a href="#environment">環境</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Snowflake / Diffusion / Pattern Formation</p>
+                    <h1>雪の結晶は、<br>ゆらぎを増幅しながら育つ。</h1>
+                    <p class="hero-lead">
+                        雪の結晶は、ただ水が凍っただけの形ではありません。<br>
+                        水蒸気の拡散、表面での結晶化、そして六角対称の成長しやすさが重なって、枝分かれした模様が生まれます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#mechanism">成長の仕組みを見る</a>
+                        <a class="button button-secondary" href="#demo">簡易シミュレーションを見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>六角形の骨格は、水分子の結晶構造の対称性から生まれる</li>
+                        <li>出っ張った場所ほど水蒸気を集めやすく、枝がさらに伸びる</li>
+                        <li>雪の形は、拡散・不安定性・異方性が組み合わさった非平衡パターン形成である</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="crystal-window" aria-hidden="true">
+                        <div class="glow-ring glow-one"></div>
+                        <div class="glow-ring glow-two"></div>
+                        <div class="crystal-core"></div>
+                        <div class="arm arm-a"></div>
+                        <div class="arm arm-b"></div>
+                        <div class="arm arm-c"></div>
+                        <div class="arm arm-d"></div>
+                        <div class="arm arm-e"></div>
+                        <div class="arm arm-f"></div>
+                        <div class="branch branch-a"></div>
+                        <div class="branch branch-b"></div>
+                        <div class="branch branch-c"></div>
+                        <div class="branch branch-d"></div>
+                        <div class="branch branch-e"></div>
+                        <div class="branch branch-f"></div>
+                        <div class="vapor vapor-a"></div>
+                        <div class="vapor vapor-b"></div>
+                        <div class="vapor vapor-c"></div>
+                        <div class="window-label label-core">Hexagonal Seed</div>
+                        <div class="window-label label-growth">Diffusion + Anisotropy</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-card">
+                            <p class="card-label">Structure</p>
+                            <h2>六角形の土台</h2>
+                            <p>水分子が作る氷の結晶構造には 6 回対称があり、それが雪の腕の基本方向を決めます。</p>
+                        </article>
+                        <article class="hero-note warm-card">
+                            <p class="card-label">Growth</p>
+                            <h2>均一には育たない</h2>
+                            <p>平らな面より、少し出っ張った場所の方が蒸気を集めやすいので、ゆらぎが枝分かれとして増幅されます。</p>
+                        </article>
+                        <article class="hero-note night-card">
+                            <p class="card-label">Modeling</p>
+                            <h2>シミュレーションと相性が良い</h2>
+                            <p>拡散、結晶化、方向依存というルールが明確なので、DLA やフェーズフィールド法の題材としても扱いやすいテーマです。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">雪の枝は、出っ張りがさらに有利になる不安定性から生まれる。</p>
+                <p class="signal-sub">単純に外側から固まるのではなく、水蒸気がどこへ集まりやすいかが毎瞬変わるため、わずかな差が形として拡大されます。</p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>雪の結晶はどうやって六角形と枝分かれを作るのか</h2>
+                    <p>雪の結晶の成長は、氷の対称性だけでは説明できません。水蒸気が空気中を拡散してきて、結晶表面に付着し、しかも方向によって伸びやすさが違うことで、平坦な形ではなく複雑な枝の構造が現れます。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card">
+                        <p class="card-label">Step 1</p>
+                        <h3>氷の骨格は六角対称</h3>
+                        <p>水分子が並ぶ氷の結晶には 6 回対称があるため、成長の基本方向も 60 度ごとに現れやすくなります。</p>
+                    </article>
+                    <article class="mechanism-card strong-card">
+                        <p class="card-label">Step 2</p>
+                        <h3>水蒸気が拡散して集まる</h3>
+                        <p>周囲の水蒸気はランダムに運ばれ、表面に到達すると氷に取り込まれます。供給のしかたは一様ではありません。</p>
+                    </article>
+                    <article class="mechanism-card warm-card">
+                        <p class="card-label">Step 3</p>
+                        <h3>出っ張りほど有利になる</h3>
+                        <p>少し前に出た部分は周囲から蒸気を集めやすく、より速く成長します。これが枝分かれの起点です。</p>
+                    </article>
+                    <article class="mechanism-card night-card">
+                        <p class="card-label">Step 4</p>
+                        <h3>方向依存が形を選ぶ</h3>
+                        <p>どの面が伸びやすいかは温度や湿度でも変わります。だから板状、柱状、樹枝状のように形が切り替わります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Growth Rule</p>
+                        <div class="formula-block">成長しやすさ ≈ 拡散の流れ × 表面での付きやすさ × 方向依存</div>
+                        <p>雪の形は、1 つの要因だけで決まるのではなく、空気中の輸送と表面の結晶化が一緒に決めています。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Why Branches</p>
+                        <div class="formula-block">小さな出っ張り → 蒸気集中 → さらに成長</div>
+                        <p>ここで起きているのは「少しの差がそのまま広がる」不安定成長で、非線形なパターン形成の典型例です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="models">
+                <div class="section-heading">
+                    <p class="eyebrow">Models</p>
+                    <h2>雪の結晶をどうモデル化するか</h2>
+                    <p>雪の結晶の形を再現する方法はいくつかあります。目的が「構造を直感的につかむ」のか、「現実の形に近づける」のかで、選ぶモデルが変わります。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">Model 1</p>
+                        <h3>DLA</h3>
+                        <p>粒子をランダムウォークさせて、既に凍った結晶に触れたら固定するモデルです。枝分かれやフラクタルらしさが自然に現れます。</p>
+                        <ul>
+                            <li>軽量で実装しやすい</li>
+                            <li>拡散律速の雰囲気を掴みやすい</li>
+                            <li>JS のリアルタイム実演に向いている</li>
+                        </ul>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Model 2</p>
+                        <h3>フェーズフィールド法</h3>
+                        <p>固体か気体かを表す場と、温度や濃度の場を同時に解く方法です。界面を滑らかに扱えるので、より物理に近い再現ができます。</p>
+                        <ul>
+                            <li>現実の雪にかなり近い</li>
+                            <li>温度・湿度依存を入れやすい</li>
+                            <li>PDE を数値的に解く必要がある</li>
+                        </ul>
+                    </article>
+                    <article class="model-card night-card">
+                        <p class="card-label">Model 3</p>
+                        <h3>セルオートマトン</h3>
+                        <p>格子上で「近くに氷があれば凍りやすい」「ある方向に伸びやすい」といったルールを回す簡易モデルです。</p>
+                        <ul>
+                            <li>ルールの意味が見えやすい</li>
+                            <li>軽量で教育向けに使いやすい</li>
+                            <li>細かい物理量はかなり省略される</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">最初の一歩</p>
+                        <h3>DLA</h3>
+                        <p>「なぜ枝が伸びるのか」を見るには、まず DLA が一番分かりやすい入口です。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">物理に近づく</p>
+                        <h3>フェーズフィールド法</h3>
+                        <p>温度場や界面エネルギーまで入れるなら、こちらが本格的な選択肢になります。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">軽量実装</p>
+                        <h3>セルオートマトン</h3>
+                        <p>授業やウェブ実演でルールの違いを比較したいときに向いています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="instability">
+                <div class="section-heading">
+                    <p class="eyebrow">Instability</p>
+                    <h2>なぜ枝が勝手に生えてくるのか</h2>
+                    <p>雪の結晶の核心は、少しの凸凹がそのまま消えず、むしろ広がることです。平らな界面は一見安定に見えますが、拡散が支配すると小さなゆらぎが成長の起点になります。</p>
+                </div>
+                <div class="instability-layout">
+                    <article class="instability-lead strong-card">
+                        <p class="card-label">Key Word</p>
+                        <h3>Mullins-Sekerka 不安定性</h3>
+                        <p>平らな界面に小さな凸部ができると、その部分に拡散が集中し、さらに成長が進む現象です。雪の枝分かれは、この「出っ張りが有利になる」ループで理解できます。</p>
+                    </article>
+                    <div class="step-grid">
+                        <article class="step-card">
+                            <span class="step-index">1</span>
+                            <h3>最初はほぼ平ら</h3>
+                            <p>界面が完全に平らなら、蒸気はほぼ均等に届きます。</p>
+                        </article>
+                        <article class="step-card warm-card">
+                            <span class="step-index">2</span>
+                            <h3>小さなゆらぎが生まれる</h3>
+                            <p>熱ゆらぎや局所的な条件差で、わずかな凸部ができます。</p>
+                        </article>
+                        <article class="step-card strong-card">
+                            <span class="step-index">3</span>
+                            <h3>凸部に流れが集中する</h3>
+                            <p>前に出ている場所ほど周囲から蒸気を集めやすくなります。</p>
+                        </article>
+                        <article class="step-card night-card">
+                            <span class="step-index">4</span>
+                            <h3>枝が自己強化される</h3>
+                            <p>結果として、凸部はさらに成長し、枝としてはっきり見える形になります。</p>
+                        </article>
+                    </div>
+                </div>
+                <div class="growth-grid">
+                    <article class="growth-card">
+                        <p class="card-label">Flat Front</p>
+                        <h3>平らな面</h3>
+                        <p>供給が均一に近いので、大きな枝には育ちにくい。</p>
+                    </article>
+                    <article class="growth-card warm-card">
+                        <p class="card-label">Perturbation</p>
+                        <h3>わずかな出っ張り</h3>
+                        <p>この差が消えずに残ると、成長速度の差へ変わります。</p>
+                    </article>
+                    <article class="growth-card strong-card">
+                        <p class="card-label">Dendrite</p>
+                        <h3>樹枝状成長</h3>
+                        <p>非線形な増幅が続くと、雪らしい枝分かれの構造になります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>粒子をランダムに飛ばして、DLA で雪片の枝を育てる</h2>
+                    <p>下の実演は、資料にあった「DLA（拡散律速凝集）」モデルの簡易版です。中心の種に向かってランダムウォークする粒子を次々に放ち、氷に隣接した瞬間に確率で付着させます。六角対称に複製することで、雪片らしい枝が浮かび上がってきます。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="preset-row" aria-label="環境プリセット">
+                            <button class="preset-chip is-active" data-preset="dendrite" type="button">-15℃ 付近 / 樹枝状</button>
+                            <button class="preset-chip" data-preset="plate" type="button">-2℃ 付近 / 板状</button>
+                            <button class="preset-chip" data-preset="column" type="button">-5℃ 付近 / 柱状</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="diffusionRange">
+                                <span>粒子の歩数</span>
+                                <input id="diffusionRange" type="range" min="8" max="36" value="22">
+                                <strong id="diffusionValue">22 歩</strong>
+                            </label>
+                            <label class="control" for="supplyRange">
+                                <span>同時粒子数</span>
+                                <input id="supplyRange" type="range" min="4" max="40" value="10">
+                                <strong id="supplyValue">10 個</strong>
+                            </label>
+                            <label class="control" for="thresholdRange">
+                                <span>付着確率</span>
+                                <input id="thresholdRange" type="range" min="35" max="99" value="90">
+                                <strong id="thresholdValue">0.90</strong>
+                            </label>
+                            <label class="control" for="anisotropyRange">
+                                <span>六角バイアス</span>
+                                <input id="anisotropyRange" type="range" min="0" max="45" value="28">
+                                <strong id="anisotropyValue">0.28</strong>
+                            </label>
+                        </div>
+                        <div class="stat-grid">
+                            <article>
+                                <span>形の印象</span>
+                                <strong id="morphologyValue">樹枝状</strong>
+                            </article>
+                            <article>
+                                <span>六角対称の見え方</span>
+                                <strong id="symmetryValue">かなりはっきり</strong>
+                            </article>
+                            <article>
+                                <span>成長の進みやすさ</span>
+                                <strong id="branchingValue">高い</strong>
+                            </article>
+                            <article>
+                                <span>成長半径</span>
+                                <strong id="radiusValue">0 セル</strong>
+                            </article>
+                            <article>
+                                <span>凍結セル数</span>
+                                <strong id="frozenValue">1</strong>
+                            </article>
+                            <article>
+                                <span>想定環境</span>
+                                <strong id="environmentValue">-15℃ 付近</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note" id="demoNote">樹枝状のプリセットでは、付着確率を高めにして粒子を六角方向に偏らせ、枝先が伸びやすい条件にしています。リセットすると、その条件から成長を見直せます。</p>
+                        <div class="demo-actions">
+                            <button class="button button-secondary" id="resetButton" type="button">成長をリセット</button>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="snowflakeCanvas" width="640" height="640" aria-label="雪の結晶成長シミュレーションの DLA 版"></canvas>
+                        <p class="canvas-caption">小さな点はランダムウォーク中の粒子、明るい水色は氷に付着したセルです。氷の隣に来た粒子が確率で凍り、結果を六角対称に複製することで、雪片らしい枝が育っていきます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="environment">
+                <div class="section-heading">
+                    <p class="eyebrow">Environment</p>
+                    <h2>温度や湿度で、どんな形になりやすいか</h2>
+                    <p>雪の結晶は毎回同じ形にはなりません。温度や湿度が変わると、どの結晶面が速く伸びるかが変わるため、板のような形にも、柱のような形にも、典型的な樹枝状にもなります。</p>
+                </div>
+                <div class="environment-grid">
+                    <article class="environment-card warm-card">
+                        <p class="card-label">Around -2°C</p>
+                        <h3>板状</h3>
+                        <p>面が広がる方向の成長が優勢になると、薄いプレートのような雪片になりやすくなります。</p>
+                    </article>
+                    <article class="environment-card">
+                        <p class="card-label">Around -5°C</p>
+                        <h3>柱状</h3>
+                        <p>軸方向の成長が目立つと、細長い柱や針のような形に近づきます。</p>
+                    </article>
+                    <article class="environment-card strong-card">
+                        <p class="card-label">Around -15°C</p>
+                        <h3>樹枝状</h3>
+                        <p>枝先の成長が強く増幅されやすく、いわゆる雪の結晶らしい樹枝状パターンが現れやすくなります。</p>
+                    </article>
+                </div>
+                <div class="callout-card">
+                    <p class="card-label">One Sentence</p>
+                    <h3>温度と湿度は、雪が「どの方向にどれだけ速く伸びるか」を選んでいる</h3>
+                    <p>見た目の違いは偶然ではなく、表面エネルギーや蒸気供給の条件が変わった結果です。だから雪の形を逆に読むと、成長した環境のヒントにもなります。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Step</p>
+                    <h2>雪の結晶から、他のテーマへつなげる</h2>
+                    <p>この題材は、模様の見え方、非線形な増幅、数値シミュレーション、研究テーマ設計と相性が良い話題です。どこを深掘りしたいかで次のページが変わります。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="simulation.html">
+                        <p class="card-label">Related</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>現実をそのまま写すのではなく、どのルールを残すかでモデルの役割が変わることを整理できます。</p>
+                    </a>
+                    <a class="link-card strong-card" href="chaos.html">
+                        <p class="card-label">Related</p>
+                        <h3>ゆらぎの増幅をカオスと比べる</h3>
+                        <p>初期の小さな差が大きな違いになるという見方は、カオスや非線形系ともつながっています。</p>
+                    </a>
+                    <a class="link-card warm-card" href="chladni.html">
+                        <p class="card-label">Related</p>
+                        <h3>模様の見え方をクラドニ図形と比べる</h3>
+                        <p>雪は成長の模様、クラドニ図形は定常波の模様ですが、見えない構造が形に現れる点で並べて読めます。</p>
+                    </a>
+                    <a class="link-card night-card" href="research.html">
+                        <p class="card-label">Research</p>
+                        <h3>研究テーマとして発展させる</h3>
+                        <p>DLA の改良、六角格子化、温度依存の導入など、課題研究にしやすい拡張先が多いテーマです。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>雪の結晶は、拡散・不安定性・六角対称が組み合わさって生まれる、美しい非平衡パターン形成です。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理解説トップへ</a>
+                <a class="footer-link" href="simulation.html">シミュレーションへ</a>
+                <a class="footer-link" href="chladni.html">クラドニ図形へ</a>
+                <a class="footer-link" href="research.html">研究とは何かへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="snowflake.js"></script>
+</body>
+</html>
