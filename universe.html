@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇宙はどこまで広がっているのか | 観測可能宇宙・外側・時間の始まり</title>
+    <meta name="description" content="宇宙の広がりを高校生向けに解説。観測可能宇宙、宇宙に端はあるのか、宇宙の外側はあるのか、時間の始まりはあるのかを、宇宙論の基本と模式図でつなげます。">
+    <meta name="theme-color" content="#0c1e34">
+    <link rel="canonical" href="https://readerspace.github.io/universe.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="universe.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#observable">観測範囲</a>
+                <a href="#shape">端と形</a>
+                <a href="#outside">外側</a>
+                <a href="#time">時間</a>
+                <a href="#demo">模式図</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Cosmology / Observable Universe / Horizon / Time</p>
+                    <h1>宇宙は、<br>どこまで広がっているのか</h1>
+                    <p class="hero-lead">
+                        ここでまず大事なのは、<strong>見えている宇宙</strong>と<strong>宇宙全体</strong>を分けて考えることです。
+                        私たちが観測できる範囲は有限ですが、宇宙全体が有限なのか無限なのかはまだ決まっていません。
+                        さらに「宇宙の外はあるのか」「時間はいつ始まったのか」という問いは、観測と理論の境界そのものに触れます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#observable">見える範囲から読む</a>
+                        <a class="button button-secondary" href="#demo">模式図でつかむ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>観測可能宇宙の直径は約 930 億光年で、見える範囲は有限です</li>
+                        <li>宇宙全体には端も中心もない可能性が高く、有限でも端なしはあり得ます</li>
+                        <li>「宇宙の外」や「時間の前」は、日常語のままでは定義が崩れる問いです</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="cosmic-window" aria-hidden="true">
+                        <div class="deep-field"></div>
+                        <div class="observable-ring ring-inner"></div>
+                        <div class="observable-ring ring-outer"></div>
+                        <div class="grid-shell"></div>
+                        <div class="signal-wave wave-a"></div>
+                        <div class="signal-wave wave-b"></div>
+                        <span class="mini-galaxy galaxy-a"></span>
+                        <span class="mini-galaxy galaxy-b"></span>
+                        <span class="mini-galaxy galaxy-c"></span>
+                        <span class="mini-galaxy galaxy-d"></span>
+                        <span class="mini-galaxy galaxy-e"></span>
+                        <span class="mini-galaxy galaxy-f"></span>
+                        <span class="mini-galaxy galaxy-g"></span>
+                        <span class="mini-galaxy galaxy-h"></span>
+                        <div class="window-label label-observable">Observable</div>
+                        <div class="window-label label-beyond">Beyond The Horizon</div>
+                        <div class="window-label label-time">Time?</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Observable</p>
+                            <h2>見える範囲は有限</h2>
+                            <p>光の速さに上限があり、しかも空間自体が膨張しているため、観測には地平線が生まれます。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">Shape</p>
+                            <h2>有限でも端は要らない</h2>
+                            <p>地球表面のように、空間が曲がっていれば「広さは有限、でも端はない」という形があり得ます。</p>
+                        </article>
+                        <article class="hero-note night-note">
+                            <p class="card-label">Time</p>
+                            <h2>始まりは未解決</h2>
+                            <p>ビッグバンは強い手がかりですが、特異点は理論の限界かもしれず、量子重力では別の始まり方も候補です。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">分かっているのは「見えている範囲まで」。その外は、広いが未確定。</p>
+                <p class="signal-sub">宇宙論では、観測可能宇宙の外があるかどうかよりも、むしろ「ほぼ確実にその外まで続いている」「ただし全体の大きさは原理的に測れない」という点が本質です。</p>
+            </section>
+
+            <section class="section reveal" id="observable">
+                <div class="section-heading">
+                    <p class="eyebrow">Observable Universe</p>
+                    <h2>見える宇宙はなぜ有限なのか</h2>
+                    <p>宇宙は約 138 億年の歴史を持ちますが、見える範囲は半径 約 460 億光年です。これは空間そのものが伸びてきたためで、時間の長さそのものと見える距離は一致しません。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Observed Bubble</p>
+                        <h3>直径は約 930 億光年</h3>
+                        <p>現在の宇宙論では、私たちが観測できる範囲は直径でおよそ 930 億光年と見積もられます。これは「宇宙全体の大きさ」ではなく、「今ここから光が届く範囲」です。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Speed Limit</p>
+                        <h3>光速が情報の上限</h3>
+                        <p>どんな情報も光より速くは届きません。だから宇宙が始まって以来、まだ情報が届いていない領域が残ります。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Expansion</p>
+                        <h3>遠いほど離れるのが速い</h3>
+                        <p>宇宙膨張のもとでは、遠い銀河ほど私たちから速く遠ざかります。遠すぎる場所の光は、出発しても追いつけません。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Horizon</p>
+                        <h3>地平線は「観測の限界」</h3>
+                        <p>宇宙論の地平線は壁や殻ではなく、「その先からの情報は原理的に届かない」という境目です。見えないことと存在しないことは別です。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <p class="card-label">Observable Scale</p>
+                        <div class="formula-block">観測可能宇宙の半径 ≈ 460 億光年</div>
+                        <p>宇宙年齢が 138 億年でも、途中で空間が伸びたため、いま見える範囲はもっと大きくなります。</p>
+                    </article>
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Hubble Flow</p>
+                        <div class="formula-block">v = H<sub>0</sub>d</div>
+                        <p>遠いほど後退速度が大きい、というハッブルの法則が、見える範囲に地平線を作る重要な要素です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Why Finite?</p>
+                        <div class="formula-block">光速有限 + 宇宙膨張 → 観測限界</div>
+                        <p>見える宇宙が有限なのは、宇宙全体が小さいからではなく、情報が届く範囲が有限だからです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="shape">
+                <div class="section-heading">
+                    <p class="eyebrow">Shape & Edge</p>
+                    <h2>宇宙に端や中心はあるのか</h2>
+                    <p>「宇宙の端に壁があるのか」と考えたくなりますが、現代宇宙論ではその見方はあまり有力ではありません。端なしの宇宙は、無限でも有限でも作れます。</p>
+                </div>
+                <div class="case-grid">
+                    <article class="case-card strong-card">
+                        <p class="card-label">Case 1</p>
+                        <h3>宇宙は無限</h3>
+                        <p>最もシンプルなのは、宇宙がどこまでも続いていて、端も中心もないという像です。観測上も大規模にはかなり平坦に見えています。</p>
+                    </article>
+                    <article class="case-card warm-card">
+                        <p class="card-label">Case 2</p>
+                        <h3>有限だが端はない</h3>
+                        <p>地球表面が有限でも端を持たないように、3 次元空間そのものが曲がっていれば、宇宙も有限なのに端なしであり得ます。</p>
+                    </article>
+                    <article class="case-card">
+                        <p class="card-label">Case 3</p>
+                        <h3>有限で端がある</h3>
+                        <p>境界の向こうに「外」があるような素朴な宇宙像は、現代の標準的な宇宙論ではあまり支持されていません。</p>
+                    </article>
+                    <article class="case-card night-card">
+                        <p class="card-label">Observation</p>
+                        <h3>中心らしい場所は見えていない</h3>
+                        <p>宇宙は大規模には一様で等方的に見えます。つまり、少なくとも観測できる範囲では「ここが中心だ」という特別な場所は見つかっていません。</p>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">Analogy</p>
+                        <h3>地球表面のたとえ</h3>
+                        <p>2 次元の住人が地球表面だけに住んでいると考えると、「有限だけど端なし」が直感しやすくなります。宇宙はその 3 次元版かもしれません。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">Inflation</p>
+                        <h3>観測範囲の外はかなり広そう</h3>
+                        <p>インフレーションは、観測可能宇宙の外にも同じような空間がずっと広がっている可能性を強く示唆します。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">Limit</p>
+                        <h3>全体の大きさは原理的に測りにくい</h3>
+                        <p>観測は地平線で切られるので、「宇宙全体のサイズ」を直接測ることはできません。だから無限か有限かは未決着です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="outside">
+                <div class="section-heading">
+                    <p class="eyebrow">Outside?</p>
+                    <h2>宇宙の外側はあるのか</h2>
+                    <p>ここで日常感覚がいちばん裏切られます。部屋や箱には外がありますが、宇宙論では「宇宙 = 空間そのもの」なので、ふつうの意味での外は不要です。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">Point 1</p>
+                        <h3>宇宙は何かの中にあるわけではない</h3>
+                        <p>私たちはふつう、物体が空間の中にあると考えます。しかし宇宙論では、空間そのものが宇宙です。だから「空間の外」は最初から定義されていません。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Point 2</p>
+                        <h3>膨張は箱の中への広がりではない</h3>
+                        <p>銀河が空間の中を飛び去っているというより、銀河どうしの距離を測る物差しそのものが伸びています。風船表面のたとえは、この点だけを伝えるために便利です。</p>
+                    </article>
+                    <article class="model-card night-card">
+                        <p class="card-label">Point 3</p>
+                        <h3>高次元理論なら「外っぽいもの」はあり得る</h3>
+                        <p>弦理論やブレーン宇宙論のように、3 次元空間がより高次元の空間に埋め込まれている仮説もあります。ただし現在の観測で確定しているわけではありません。</p>
+                    </article>
+                    <article class="model-card">
+                        <p class="card-label">Point 4</p>
+                        <h3>マルチバースはさらに先の仮説</h3>
+                        <p>永遠インフレーションの延長では、宇宙が泡のように多数生まれる図もあり得ます。これは「外がある」感覚に近いですが、まだかなり仮説的です。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Key Idea</p>
+                        <div class="formula-block">宇宙 = 空間そのもの</div>
+                        <p>だから「宇宙は何に入っているのか」という問いは、日常語のままだと少しズレています。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Expansion</p>
+                        <div class="formula-block">距離(t) ∝ a(t)</div>
+                        <p>膨張は空間のスケール因子 a(t) が増えることとして書かれます。外側の容器は方程式に出てきません。</p>
+                    </article>
+                    <article class="formula-card night-card">
+                        <p class="card-label">Ordinary Answer</p>
+                        <div class="formula-block">「外側」は通常の意味では定義されない</div>
+                        <p>ただし高次元理論やマルチバースでは、外側に似た構造を考える余地は残っています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="time">
+                <div class="section-heading">
+                    <p class="eyebrow">Origin Of Time</p>
+                    <h2>時間の始まりはあるのか</h2>
+                    <p>標準的なビッグバン宇宙論では、宇宙は約 138 億年前に非常に高温高密度の状態から始まります。ただし、数式が壊れる特異点をそのまま「本当の始まり」と受け取ってよいかは別問題です。</p>
+                </div>
+                <div class="timeline-grid">
+                    <article class="timeline-card strong-card">
+                        <p class="card-label">Standard Picture</p>
+                        <h3>ビッグバンは強い手がかり</h3>
+                        <p>宇宙背景放射や軽元素合成、宇宙膨張の観測は、宇宙が高温高密度の過去を持つことを強く支持しています。</p>
+                    </article>
+                    <article class="timeline-card warm-card">
+                        <p class="card-label">Singularity</p>
+                        <h3>特異点は理論の限界かもしれない</h3>
+                        <p>一般相対論をそのまま過去へ押し戻すと、密度や曲率が発散します。これは自然が無限大を作るというより、理論の使える範囲が尽きた印かもしれません。</p>
+                    </article>
+                    <article class="timeline-card night-card">
+                        <p class="card-label">Quantum Gravity</p>
+                        <h3>量子重力では別の始まり方もある</h3>
+                        <p>ビッグバウンス、無境界仮説、永遠インフレーションなど、特異点をなだらかに置き換える候補がいくつも提案されています。</p>
+                    </article>
+                    <article class="timeline-card">
+                        <p class="card-label">Deep Question</p>
+                        <h3>「前」は定義できないかもしれない</h3>
+                        <p>時間が宇宙と一体なら、「宇宙の前」という言い方自体が意味を失う可能性があります。北極より北がない、というたとえがここで効きます。</p>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">What We Know</p>
+                        <h3>膨張史のかなりの部分は分かる</h3>
+                        <p>少なくともビッグバン後の進化は、かなり精密に測れてきました。138 億年という年齢もその成果です。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">What Breaks</p>
+                        <h3>t = 0 の近くで古典理論が壊れる</h3>
+                        <p>時間の始まりを問うには、一般相対論だけでは足りず、量子重力が必要です。ここがいまの研究最前線です。</p>
+                    </article>
+                    <article class="comparison-card night-card">
+                        <p class="card-label">Current Status</p>
+                        <h3>始まりの形はまだ未決着</h3>
+                        <p>本当に一点から始まったのか、跳ね返りがあったのか、そもそも境界がないのか。ここはまだ答えが一つに定まっていません。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Diagram</p>
+                    <h2>4 つの論点を模式図で切り替える</h2>
+                    <p>観測可能宇宙、端のない空間、宇宙の外側、時間の始まりを 1 枚のキャンバスで切り替えます。縮尺どおりの計算ではなく、何が本質なのかをつかむための定性的な図です。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="mode-row" id="modeRow">
+                            <button class="mode-chip is-active" data-mode="observable" type="button">観測可能宇宙</button>
+                            <button class="mode-chip" data-mode="shape" type="button">端と形</button>
+                            <button class="mode-chip" data-mode="outside" type="button">宇宙の外側</button>
+                            <button class="mode-chip" data-mode="time" type="button">時間の始まり</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="primaryRange">
+                                <span id="primaryLabel">観測の届き方</span>
+                                <input id="primaryRange" type="range" min="20" max="100" value="64" step="1">
+                                <strong id="primaryValue">64%</strong>
+                            </label>
+                            <label class="control" for="secondaryRange">
+                                <span id="secondaryLabel">膨張の効き</span>
+                                <input id="secondaryRange" type="range" min="0" max="100" value="56" step="1">
+                                <strong id="secondaryValue">56%</strong>
+                            </label>
+                        </div>
+                        <div class="canvas-frame">
+                            <canvas id="universeCanvas" width="900" height="520" aria-label="宇宙論の模式図"></canvas>
+                        </div>
+                        <p class="canvas-caption"><strong>注意:</strong> これは定性的な模式図です。スライダーは厳密な宇宙論パラメータではなく、考え方の違いを見やすくするためのものです。</p>
+                        <p class="demo-note" id="demoNarration" aria-live="polite">見える宇宙は有限でも、宇宙全体が有限とは限りません。まずは観測可能宇宙モードで、地平線が「壁」ではなく観測限界であることを見てください。</p>
+                    </div>
+
+                    <aside class="status-panel">
+                        <article class="status-card strong-card">
+                            <p class="card-label">Scale</p>
+                            <h3>いまの焦点</h3>
+                            <p id="scopeValue">観測可能宇宙は有限。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Boundary</p>
+                            <h3>境界の意味</h3>
+                            <p id="boundaryValue">地平線は観測限界。</p>
+                        </article>
+                        <article class="status-card warm-card">
+                            <p class="card-label">Outside</p>
+                            <h3>外側の扱い</h3>
+                            <p id="outsideValue">見えないことと存在しないことは別。</p>
+                        </article>
+                        <article class="status-card night-card">
+                            <p class="card-label">Time</p>
+                            <h3>時間の見方</h3>
+                            <p id="timeValue">138 億年の歴史だけでは全体は決まらない。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Reading Memo</p>
+                            <h3>読み取りメモ</h3>
+                            <p id="statusValue">宇宙論では、日常語の「端」「外」「前」がそのまま通用しないことが多いです。</p>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Reads</p>
+                    <h2>時空の話を、別の角度から読む</h2>
+                    <p>宇宙論の問いは、因果構造、光による観測、極端な重力、そして研究の問い立てにそのままつながります。</p>
+                </div>
+                <div class="link-grid">
+                    <article class="link-card strong-card">
+                        <p class="card-label">Causal Structure</p>
+                        <h3>ペンローズ図で「届く / 届かない」を描く</h3>
+                        <p>地平線や無限遠を有限の図に押し込むと、因果構造が一気に見やすくなります。</p>
+                        <a class="button button-primary" href="penrose.html">ペンローズ図へ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Extreme Horizon</p>
+                        <h3>ブラックホールで地平線を極端化する</h3>
+                        <p>宇宙論の地平線と、ブラックホールの事象の地平線は別物ですが、「情報が届かない境界」という感覚でつながります。</p>
+                        <a class="button button-secondary" href="blackhole.html">ブラックホールへ</a>
+                    </article>
+                    <article class="link-card">
+                        <p class="card-label">Observation</p>
+                        <h3>空が青いのも、観測が光だから</h3>
+                        <p>私たちが宇宙を知る手がかりは最終的に光です。散乱やスペクトルの理解は、宇宙観測の入口でもあります。</p>
+                        <a class="button button-secondary" href="sky.html">空の青へ</a>
+                    </article>
+                    <article class="link-card night-card">
+                        <p class="card-label">Research</p>
+                        <h3>この問いを研究テーマに育てる</h3>
+                        <p>「どこまで分かっていて、どこから未解決か」を整理すると、宇宙論の読み物はそのまま良い研究テーマ候補になります。</p>
+                        <a class="button button-secondary" href="research.html">研究の入口へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>宇宙の大きさは、見えている範囲だけでは決まりません。だからこそ、地平線・外側・時間の始まりを区別して考える必要があります。</p>
+            <div class="footer-links">
+                <a href="physics.html">物理学トップへ</a>
+                <a href="penrose.html">ペンローズ図へ</a>
+                <a href="blackhole.html">ブラックホールへ</a>
+                <a href="sky.html">空の青へ</a>
+                <a href="index.html">研究サポートへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="universe.js"></script>
+</body>
+</html>

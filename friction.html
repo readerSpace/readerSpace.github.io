@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摩擦力って何者？ | くっつき・熱・散逸の物理</title>
+    <meta name="description" content="摩擦力の正体を高校生向けに解説。表面の凸凹、分子レベルの電磁気的な引力、静止摩擦と動摩擦、摩擦熱、エントロピー、超流動・超伝導までを動くデモ付きでつなげます。">
+    <meta name="theme-color" content="#6e2f18">
+    <link rel="canonical" href="https://readerspace.github.io/friction.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="friction.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#identity">正体</a>
+                <a href="#types">種類</a>
+                <a href="#heat">熱</a>
+                <a href="#demo">実演</a>
+                <a href="#quantum">量子</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Friction / Dissipation / Entropy / Quantum Coherence</p>
+                    <h1>摩擦力って、<br>何者？</h1>
+                    <p class="hero-lead">
+                        摩擦は「ザラザラしているから引っかかる力」と思われがちですが、本質はもっと深い。
+                        表面の凸凹に加えて、接触した分子同士の<strong>電磁気的なくっつき</strong>があり、
+                        それを引きはがすたびに運動エネルギーが熱へ散っていきます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#identity">摩擦の正体を見る</a>
+                        <a class="button button-secondary" href="#demo">シミュレーションを見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>摩擦力の核は「表面の凸凹 + 分子どうしの引力」</li>
+                        <li>静止摩擦は最大値まで増え、動摩擦はほぼ一定になる</li>
+                        <li>摩擦は秩序ある運動を熱へ変える、典型的な散逸現象</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="friction-window" aria-hidden="true">
+                        <div class="mini-track"></div>
+                        <div class="mini-block"></div>
+                        <div class="mini-arrow arrow-force"></div>
+                        <div class="mini-arrow arrow-friction"></div>
+                        <div class="contact-strip">
+                            <span class="contact-node node-a"></span>
+                            <span class="contact-node node-b"></span>
+                            <span class="contact-node node-c"></span>
+                            <span class="contact-node node-d"></span>
+                            <span class="contact-node node-e"></span>
+                            <span class="contact-node node-f"></span>
+                            <span class="contact-node node-g"></span>
+                        </div>
+                        <div class="heat-wave wave-a"></div>
+                        <div class="heat-wave wave-b"></div>
+                        <div class="window-label label-adhesion">くっつく</div>
+                        <div class="window-label label-heat">熱になる</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-card">
+                            <p class="card-label">Static</p>
+                            <h2>静止摩擦</h2>
+                            <p>押す力に合わせて増え、限界までは物体を止め続けます。だから少し押しただけでは動きません。</p>
+                        </article>
+                        <article class="hero-note warm-card">
+                            <p class="card-label">Heat</p>
+                            <h2>熱化</h2>
+                            <p>滑る運動のエネルギーは、接触面の分子振動に崩れて熱へ変わります。摩擦は散逸そのものです。</p>
+                        </article>
+                        <article class="hero-note night-card">
+                            <p class="card-label">Quantum</p>
+                            <h2>摩擦ゼロの極限</h2>
+                            <p>超流動や超伝導では、エネルギーがランダム化しにくくなり、抵抗ゼロに近い世界が現れます。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">摩擦 = くっつく力を引きはがすための抵抗。</p>
+                <p class="signal-sub">表面の凸凹だけではなく、分子同士の電磁気的な結合が鍵です。その結合を壊す仕事が、熱として失われていきます。</p>
+            </section>
+
+            <section class="section reveal" id="identity">
+                <div class="section-heading">
+                    <p class="eyebrow">Identity</p>
+                    <h2>摩擦力の正体は何か</h2>
+                    <p>摩擦力は、マクロには「滑りを邪魔する力」、ミクロには「接触面で生じる結合を切るための力」です。粗さと分子の引力が重なって、抵抗として観測されます。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card">
+                        <p class="card-label">Step 1</p>
+                        <h3>表面は完全には平らでない</h3>
+                        <p>どんな物体でも表面には細かな凸凹があります。実際に接触するのはその一部だけです。</p>
+                    </article>
+                    <article class="mechanism-card strong-card">
+                        <p class="card-label">Step 2</p>
+                        <h3>接触点で分子がくっつく</h3>
+                        <p>電子と原子核の相互作用により、接触面では分子レベルの電磁気的な引力が働きます。</p>
+                    </article>
+                    <article class="mechanism-card warm-card">
+                        <p class="card-label">Step 3</p>
+                        <h3>動かすには引きはがす必要がある</h3>
+                        <p>滑らせるには、くっついた微小接合を次々に壊さなければならず、その分だけ力が要ります。</p>
+                    </article>
+                    <article class="mechanism-card night-card">
+                        <p class="card-label">Step 4</p>
+                        <h3>重いほど接触が増える</h3>
+                        <p>押し付ける力が大きいほど実接触面積が増え、くっつきも増えるので、摩擦力は大きくなります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Macroscopic Law</p>
+                        <div class="formula-block">F<sub>f</sub> = μN</div>
+                        <p>摩擦力 F<sub>f</sub> は、摩擦係数 μ と垂直抗力 N に比例します。式は単純でも、中身はミクロな接合の集まりです。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Energy Flow</p>
+                        <div class="formula-block">運動エネルギー → 分子振動 → 熱</div>
+                        <p>摩擦はエネルギーを消すのではなく、まとまった運動をランダムな分子運動へ変換しているだけです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="types">
+                <div class="section-heading">
+                    <p class="eyebrow">Types</p>
+                    <h2>静止摩擦・動摩擦・粘性</h2>
+                    <p>摩擦には少なくとも 3 つの見方があります。固体どうしの「止める摩擦」、滑っている最中の「削る摩擦」、流体内部で起きる「粘性」です。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">Type 1</p>
+                        <h3>静止摩擦</h3>
+                        <p>押す力に合わせて最大値まで増え、物体を動き出させないように頑張ります。</p>
+                        <ul>
+                            <li>大きさは必要なだけ増える</li>
+                            <li>上限は μ<sub>s</sub>N</li>
+                            <li>動き始める瞬間が臨界</li>
+                        </ul>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Type 2</p>
+                        <h3>動摩擦</h3>
+                        <p>滑り始めると、微小接合が「くっつく→はがれる」を繰り返し、ほぼ一定の抵抗になります。</p>
+                        <ul>
+                            <li>大きさはだいたい一定</li>
+                            <li>F ≈ μ<sub>k</sub>N</li>
+                            <li>普通は μ<sub>k</sub> &lt; μ<sub>s</sub></li>
+                        </ul>
+                    </article>
+                    <article class="model-card night-card">
+                        <p class="card-label">Type 3</p>
+                        <h3>粘性</h3>
+                        <p>流体では分子が運動量をやりとりし、速度差をならそうとする「内部摩擦」が生まれます。</p>
+                        <ul>
+                            <li>流体の摩擦版</li>
+                            <li>速度勾配に比例</li>
+                            <li>ナビエ・ストークス方程式の核心</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">Question</p>
+                        <h3>なぜ重いほど摩擦が大きい？</h3>
+                        <p>重いほど押し付ける力 N が大きくなり、実際に接触している面積と接合数が増えるからです。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">Question</p>
+                        <h3>なぜ動き出すと軽くなる？</h3>
+                        <p>静止中は接合を保ち続けますが、動き始めると接合が連続的に壊れて、平均的な抵抗は少し下がります。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">Question</p>
+                        <h3>摩擦係数 μ は何を表す？</h3>
+                        <p>粗さ、材質、汚れ、表面の変形しやすさなどをひとまとめにした「滑りにくさ」の指標です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="heat">
+                <div class="section-heading">
+                    <p class="eyebrow">Heat & Entropy</p>
+                    <h2>なぜ摩擦で熱が出るのか</h2>
+                    <p>摩擦は、秩序だった運動をバラバラな分子振動へ崩す過程です。だから熱が出て、一度熱になったエネルギーは簡単には元の運動へ戻りません。</p>
+                </div>
+                <div class="growth-grid">
+                    <article class="growth-card">
+                        <p class="card-label">Stage 1</p>
+                        <h3>秩序ある運動</h3>
+                        <p>滑っている物体の運動は、向きと速さが揃った「きれいなエネルギー」です。</p>
+                    </article>
+                    <article class="growth-card warm-card">
+                        <p class="card-label">Stage 2</p>
+                        <h3>接触面で結合が壊れる</h3>
+                        <p>接触点の分子がひきちぎられるたびに、局所的な振動が激しくなり、音や熱のもとになります。</p>
+                    </article>
+                    <article class="growth-card night-card">
+                        <p class="card-label">Stage 3</p>
+                        <h3>熱へ広がる</h3>
+                        <p>分子のランダム運動へ変換されたエネルギーは、自由度の多い状態へ散り、不可逆性を生みます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Dissipation</p>
+                        <div class="formula-block">Q ≈ F<sub>k</sub> d</div>
+                        <p>物体が距離 d だけ滑ると、動摩擦のした仕事はほぼそのまま熱 Q へ変わります。</p>
+                    </article>
+                    <article class="formula-card night-card">
+                        <p class="card-label">Irreversibility</p>
+                        <div class="formula-block">低エントロピー → 高エントロピー</div>
+                        <p>運動エネルギーが熱へ変わるのは簡単ですが、熱がまとまった運動へ戻るのは極めて起こりにくい。これが熱力学第二法則の顔です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo</p>
+                    <h2>押す力・摩擦・熱化を 1 枚で見る</h2>
+                    <p>木・ゴム・氷・超流動のプリセットを切り替えながら、静止摩擦のしきい値、動摩擦、発熱の違いを確かめます。超流動プリセットでは「ひと押し」で散逸ゼロの極限も観察できます。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="preset-row" id="presetRow">
+                            <button class="preset-chip is-active" data-preset="wood" type="button">木</button>
+                            <button class="preset-chip" data-preset="rubber" type="button">ゴム</button>
+                            <button class="preset-chip" data-preset="ice" type="button">氷</button>
+                            <button class="preset-chip" data-preset="superfluid" type="button">超流動</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="forceRange">
+                                <span>押す力</span>
+                                <input id="forceRange" type="range" min="0" max="30" value="11" step="0.5">
+                                <strong id="forceValue">11.0 N</strong>
+                            </label>
+                            <label class="control" for="massRange">
+                                <span>重さ</span>
+                                <input id="massRange" type="range" min="1" max="10" value="4" step="0.5">
+                                <strong id="massValue">4.0 kg</strong>
+                            </label>
+                            <label class="control" for="muSRange">
+                                <span>静止摩擦係数 μs</span>
+                                <input id="muSRange" type="range" min="0" max="1.4" value="0.55" step="0.01">
+                                <strong id="muSValue">0.55</strong>
+                            </label>
+                            <label class="control" for="muKRange">
+                                <span>動摩擦係数 μk</span>
+                                <input id="muKRange" type="range" min="0" max="1.2" value="0.32" step="0.01">
+                                <strong id="muKValue">0.32</strong>
+                            </label>
+                        </div>
+                        <div class="demo-actions">
+                            <button class="button button-primary" id="impulseButton" type="button">ひと押し</button>
+                            <button class="button button-secondary" id="resetButton" type="button">リセット</button>
+                        </div>
+                        <p class="demo-note" id="demoNarration">押す力が静止摩擦の最大値を超えるまでは、箱はその場にとどまります。</p>
+                        <div class="stat-grid">
+                            <article>
+                                <span>状態</span>
+                                <strong id="stateValue">静止摩擦</strong>
+                            </article>
+                            <article>
+                                <span>摩擦力</span>
+                                <strong id="frictionValue">11.0 N</strong>
+                            </article>
+                            <article>
+                                <span>加速度</span>
+                                <strong id="accValue">0.00 m/s²</strong>
+                            </article>
+                            <article>
+                                <span>熱化したエネルギー</span>
+                                <strong id="heatValue">0.0 J</strong>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="frictionCanvas" class="demo-canvas" width="720" height="460" aria-label="箱を粗い面の上で押したときに静止摩擦、動摩擦、熱化がどう現れるかを示すシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>橙の矢印が押す力、青の矢印が摩擦です。箱が止まっている間は静止摩擦がちょうどつり合い、動き出すと動摩擦に切り替わって熱バーが伸びます。超流動では散逸がほぼ消えます。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="quantum">
+                <div class="section-heading">
+                    <p class="eyebrow">Quantum Limit</p>
+                    <h2>摩擦ゼロはありえるのか</h2>
+                    <p>日常の古典系では、完全な意味での摩擦ゼロはほぼ実現できません。ただし量子凝縮系では、散逸先が消えることで「抵抗ゼロ」の極限が現れます。</p>
+                </div>
+                <div class="environment-grid">
+                    <article class="environment-card">
+                        <p class="card-label">Classical</p>
+                        <h3>日常ではほぼ無理</h3>
+                        <p>表面粗さ、不純物、空気抵抗、内部変形があるので、完全にエネルギー損失をゼロにはできません。</p>
+                    </article>
+                    <article class="environment-card warm-card">
+                        <p class="card-label">Superfluid</p>
+                        <h3>超流動</h3>
+                        <p>ヘリウムのような量子凝縮系では、粒子が 1 つの波として振る舞い、粘性ゼロに近い流れが現れます。</p>
+                    </article>
+                    <article class="environment-card night-card">
+                        <p class="card-label">Superconductor</p>
+                        <h3>超伝導</h3>
+                        <p>電子がクーパー対を作り、散乱されにくくなって電気抵抗ゼロの電流が流れ続けます。</p>
+                    </article>
+                    <article class="environment-card strong-card">
+                        <p class="card-label">Essence</p>
+                        <h3>散逸先がない</h3>
+                        <p>摩擦ゼロの本質は、エネルギーがランダムな自由度へ散らばれないこと。位相が揃った量子コヒーレンスがそれを支えます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>関連ページへ</h2>
+                    <p>摩擦から、粒状体・モデル化・統計へつなげる。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="sand.html">
+                        <p class="card-label">Granular</p>
+                        <h3>砂の物理</h3>
+                        <p>砂山の安息角やジャミングには、粒と粒の摩擦が直接効いています。摩擦の次に読む相手として最短です。</p>
+                    </a>
+                    <a class="link-card" href="simulation.html">
+                        <p class="card-label">Simulation</p>
+                        <h3>シミュレーションとは</h3>
+                        <p>摩擦を 1 つの係数 μ に押し込めるとはどういう近似か。モデル化の意味を掘り下げられます。</p>
+                    </a>
+                    <a class="link-card" href="statistics.html">
+                        <p class="card-label">Statistics</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>摩擦係数は条件で揺れます。その揺らぎをどう測り、どう表現するかの入口です。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>© Reader's Space — 摩擦は、くっつきと散逸が見える場所。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理学トップ</a>
+                <a class="footer-link" href="index.html">サイトトップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="friction.js"></script>
+</body>
+</html>

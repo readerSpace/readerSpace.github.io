@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブラックホールの中はどうなっているのか | 特異点・ホログラフィー・ファズボール</title>
+    <meta name="description" content="ブラックホール内部を高校生向けに整理。事象の地平線の内側で未来が中心方向になる一般相対論の像から、特異点の破綻、弦理論、ファズボール、AdS/CFT、ER=EPR、世界面での特異点解消までを図解します。">
+    <meta name="theme-color" content="#09111d">
+    <link rel="canonical" href="https://readerspace.github.io/blackhole-inside.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="blackhole-inside.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#entrance">入口</a>
+                <a href="#classical">一般相対論</a>
+                <a href="#quantum">量子重力</a>
+                <a href="#stringy">弦理論</a>
+                <a href="#demo">実演</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Black Hole Interior / Singularity / Quantum Information</p>
+                    <h1>ブラックホールの中は、<br>「場所」なのか？</h1>
+                    <p class="hero-lead">
+                        一般相対論で見ると、地平線の内側では中心へ向かうことが未来そのものになります。
+                        しかし特異点に達すると理論は壊れ、弦理論やホログラフィーは「内部は空間の奥ではなく、
+                        量子状態や情報構造として記述されるかもしれない」と示唆します。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#classical">古典像を見る</a>
+                        <a class="button button-secondary" href="#demo">量子像と比べる</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>事象の地平線は「壁」ではなく、十分大きなブラックホールなら通過時に何も感じない</li>
+                        <li>内側では半径方向が時間的になり、中心へ落ちることが未来になる</li>
+                        <li>特異点は終点ではなく、現代理論が破綻している印かもしれない</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="interior-window" aria-hidden="true">
+                        <div class="orbit orbit-a"></div>
+                        <div class="orbit orbit-b"></div>
+                        <div class="horizon-shell"></div>
+                        <div class="quantum-ring"></div>
+                        <div class="core-dot"></div>
+                        <div class="infall-stream stream-a"></div>
+                        <div class="infall-stream stream-b"></div>
+                        <div class="infall-stream stream-c"></div>
+                        <div class="string-loop loop-a"></div>
+                        <div class="string-loop loop-b"></div>
+                        <span class="boundary-bit bit-a"></span>
+                        <span class="boundary-bit bit-b"></span>
+                        <span class="boundary-bit bit-c"></span>
+                        <span class="boundary-bit bit-d"></span>
+                        <span class="boundary-bit bit-e"></span>
+                        <span class="boundary-bit bit-f"></span>
+                        <div class="window-label label-horizon">Event Horizon</div>
+                        <div class="window-label label-interior">Inside = Future</div>
+                        <div class="window-label label-quantum">Quantum State?</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Classical</p>
+                            <h2>未来が中心を向く</h2>
+                            <p>一般相対論では、地平線の内側で「中心に行かない」という選択肢が消えます。因果構造そのものが変わります。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">String</p>
+                            <h2>特異点はなめらぐかもしれない</h2>
+                            <p>弦は点ではなく有限の長さを持つため、無限の密度や無限曲率はそのままでは作れないかもしれません。</p>
+                        </article>
+                        <article class="hero-note night-note">
+                            <p class="card-label">Holography</p>
+                            <h2>内部は情報の再構成かもしれない</h2>
+                            <p>AdS/CFT や ER=EPR の視点では、内部空間そのものが量子もつれから創発している可能性があります。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">ブラックホール内部は、古典時空と量子情報がぶつかる場所。</p>
+                <p class="signal-sub">古典理論では避けられない特異点へ進み、量子理論ではその特異点そのものが「見かけ」かもしれない。内部を理解することは、時空の本質を問い直すことです。</p>
+            </section>
+
+            <section class="section reveal" id="entrance">
+                <div class="section-heading">
+                    <p class="eyebrow">Entrance</p>
+                    <h2>入口で何が分かっていて、何が分からないか</h2>
+                    <p>ブラックホールの中はまだ完全には分かっていません。ただし、地平線の外から内へ入るまでについては、一般相対論がかなり具体的な予想図を与えます。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Boundary</p>
+                        <h3>事象の地平線は壁ではない</h3>
+                        <p>地平線は「何かにぶつかる表面」ではなく、光も戻れない因果構造の境界です。十分大きなブラックホールなら通過時に局所的な異常はほとんどありません。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Outside</p>
+                        <h3>外からは内部を直接観測できない</h3>
+                        <p>落ちた物体の詳細は地平線の向こうに隠れ、外部観測者は内部を直接見ることができません。ここから情報パラドックスが始まります。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Inside</p>
+                        <h3>内側では直感が壊れる</h3>
+                        <p>地平線の内側では、半径方向が時間的になり、中心へ進むことが未来になります。「中心に行かない」道は未来側にはありません。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Status</p>
+                        <h3>最後の答えはまだない</h3>
+                        <p>古典理論だけなら特異点で終わりますが、そこは理論の破綻点です。真の内部構造は量子重力理論が必要な領域にあります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <p class="card-label">Horizon Scale</p>
+                        <div class="formula-block">r<sub>s</sub> = 2GM / c<sup>2</sup></div>
+                        <p>シュワルツシルト半径より内側に入ると、外へ出る光的経路は存在しません。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Interior Rule</p>
+                        <div class="formula-block">r &lt; r<sub>s</sub> → r が時間的になる</div>
+                        <p>古典的には、半径方向そのものが未来になります。中心を避けることは、未来を避けることと同じです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="classical">
+                <div class="section-heading">
+                    <p class="eyebrow">Classical Picture</p>
+                    <h2>一般相対論が描く内部像</h2>
+                    <p>一般相対論は、ブラックホール内部で何が起きるかを非常に鮮明に描きます。ただし、その描像は特異点で止まり、そこで自分自身の限界も露わにします。</p>
+                </div>
+                <div class="inside-grid">
+                    <article class="inside-card strong-card">
+                        <p class="card-label">Point 1</p>
+                        <h3>未来円錐が内向きに傾く</h3>
+                        <p>外側では未来へ進む道が外向きにも残っていますが、地平線の内側では未来円錐そのものが中心方向を向きます。</p>
+                    </article>
+                    <article class="inside-card warm-card">
+                        <p class="card-label">Point 2</p>
+                        <h3>特異点は避けられない未来になる</h3>
+                        <p>特異点は「遠くの危険地帯」ではなく、内側では未来の終点として現れます。どの世界線もそこへ向かわざるを得ません。</p>
+                    </article>
+                    <article class="inside-card">
+                        <p class="card-label">Point 3</p>
+                        <h3>無限大が出た時点で理論は破綻</h3>
+                        <p>密度や曲率が無限大になるという予言は、自然が本当に無限大を作るというより、理論の記述がそこで使えなくなる印です。</p>
+                    </article>
+                    <article class="inside-card night-card">
+                        <p class="card-label">Point 4</p>
+                        <h3>大きいブラックホールでは地平線通過は穏やか</h3>
+                        <p>超大質量ブラックホールなら、地平線そのものの潮汐力は比較的穏やかです。危険なのはもっと深く落ちた後です。</p>
+                    </article>
+                </div>
+
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">Outside</p>
+                        <h3>外側の因果構造</h3>
+                        <p>時間は通常の未来方向へ進み、中心から離れる未来も残ります。ここではブラックホールは「非常に強い重力源」です。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">Inside</p>
+                        <h3>内側の因果構造</h3>
+                        <p>中心に向かわない未来は存在しません。ブラックホールは「外へ出る未来のない領域」だと分かります。</p>
+                    </article>
+                    <article class="comparison-card night-card">
+                        <p class="card-label">Problem</p>
+                        <h3>特異点は答えではない</h3>
+                        <p>特異点は一般相対論の答えというより、量子重力が必要だという警告です。ここで次の理論へ進む必要があります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="quantum">
+                <div class="section-heading">
+                    <p class="eyebrow">Quantum Gravity</p>
+                    <h2>量子重力では内部はどう見え直されるか</h2>
+                    <p>ブラックホール内部を本当に理解するには、一般相対論と量子論を同時に扱う必要があります。ここで登場するのが、弦理論、ホログラフィー、ファイアウォール、ER = EPR のような現代的な視点です。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">String Theory</p>
+                        <h3>ブラックホール = 巨大な量子状態</h3>
+                        <p>弦理論では、ブラックホールは弦やブレーンの膨大な量子状態の集まりとして記述されます。エントロピーの微視的計算はその大きな成果です。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Fuzzball</p>
+                        <h3>地平線の内側が空ではない</h3>
+                        <p>ファズボール仮説では、ブラックホール全体が弦・ブレーンの量子構造で埋まり、空っぽの内部や点特異点は存在しません。</p>
+                    </article>
+                    <article class="model-card night-card">
+                        <p class="card-label">AdS/CFT</p>
+                        <h3>情報は境界理論にある</h3>
+                        <p>ホログラフィーでは、重力を持つ内部空間は境界側の量子場理論から完全に記述できる可能性があります。内部は「創発した幾何」かもしれません。</p>
+                    </article>
+                    <article class="model-card">
+                        <p class="card-label">ER = EPR</p>
+                        <h3>もつれが内部を作るかもしれない</h3>
+                        <p>量子もつれとワームホールが同じ構造の両面なら、内部空間そのものが量子情報ネットワークとして理解されるかもしれません。</p>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">Firewall</p>
+                        <h3>地平線で燃える可能性</h3>
+                        <p>情報保存と滑らかな地平線を両立できないなら、地平線に高エネルギーの壁があるのではないかという仮説です。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">Island</p>
+                        <h3>情報回収の新しい計算</h3>
+                        <p>蒸発するブラックホールのエントロピー計算では、内部領域の一部が「外側の情報」に組み込まれる island 公式が有力になっています。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">Open Issue</p>
+                        <h3>まだ全貌はできていない</h3>
+                        <p>天体ブラックホールの全 microstate を構成できているわけではなく、どの描像が最終的に正しいかはまだ決着していません。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="stringy">
+                <div class="section-heading">
+                    <p class="eyebrow">Why Strings Help</p>
+                    <h2>なぜ弦理論では特異点がやわらぐのか</h2>
+                    <p>特異点の問題は「全部を点に押し込めてよいのか」という問題でもあります。弦理論では基本単位が 1 次元に広がっているため、点粒子理論より自然に無限大を回避できる可能性があります。</p>
+                </div>
+                <div class="string-grid">
+                    <article class="string-card strong-card">
+                        <p class="card-label">Point Particle</p>
+                        <h3>点だと無限に集中できる</h3>
+                        <p>一般相対論の特異点は、物質と重力を 0 次元の点へ押し込めることから生まれます。そこで曲率が無限大になります。</p>
+                    </article>
+                    <article class="string-card warm-card">
+                        <p class="card-label">Finite Length</p>
+                        <h3>弦は広がりを持つ</h3>
+                        <p>弦の長さスケール ℓ<sub>s</sub> = √α′ があるため、相互作用は一点に集中せず、エネルギー密度が自然に分散します。</p>
+                    </article>
+                    <article class="string-card">
+                        <p class="card-label">Worldline → Worldsheet</p>
+                        <h3>相互作用が「面」に広がる</h3>
+                        <p>点粒子では世界線が一点で交わりますが、弦では世界面が滑らかにつながります。pair of pants 型の面がその典型です。</p>
+                    </article>
+                    <article class="string-card night-card">
+                        <p class="card-label">Emergent Space</p>
+                        <h3>空間そのものが基本ではない</h3>
+                        <p>もし時空が量子情報や世界面 CFT から創発しているなら、特異点は「空間で見るから発散して見える」だけかもしれません。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card warm-card">
+                        <p class="card-label">String Scale</p>
+                        <div class="formula-block">ℓ<sub>s</sub> = √α′</div>
+                        <p>弦長より短い距離では、点の概念そのものが崩れはじめます。これが UV の自然なカットオフとして働きます。</p>
+                    </article>
+                    <article class="formula-card night-card">
+                        <p class="card-label">Polyakov Action</p>
+                        <div class="formula-block">S = (1 / 4πα′) ∫ d²σ √h h<sup>ab</sup> ∂<sub>a</sub>X<sup>μ</sup> ∂<sub>b</sub>X<sup>ν</sup> G<sub>μν</sub>(X)</div>
+                        <p>弦の相互作用は世界線ではなく世界面で積分されます。これが短距離発散をやわらげる鍵の 1 つです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>古典像と量子像を切り替えて見る</h2>
+                    <p>落下の深さとブラックホールのスケールを動かし、ブラックホール内部の解釈を 4 つの模型で比べます。古典像では中心が未来の終点ですが、量子模型では「終点」そのものの意味が変わります。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="mode-row" id="modeRow">
+                            <button class="mode-chip is-active" data-mode="classical" type="button">一般相対論</button>
+                            <button class="mode-chip" data-mode="fuzzball" type="button">ファズボール</button>
+                            <button class="mode-chip" data-mode="holography" type="button">ホログラフィー</button>
+                            <!-- <button class="mode-chip" data-mode="worldsheet" type="button">世界面</button> -->
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="depthRange">
+                                <span>落下の深さ</span>
+                                <input id="depthRange" type="range" min="0" max="100" value="60" step="1">
+                                <strong id="depthValue">地平線の内側</strong>
+                            </label>
+                            <label class="control" for="massRange">
+                                <span>ブラックホールの大きさ</span>
+                                <input id="massRange" type="range" min="0" max="100" value="55" step="1">
+                                <strong id="massValue">約 1万 M☉</strong>
+                            </label>
+                        </div>
+                        <p class="demo-note" id="demoNarration">古典理論では、いったん地平線の内側へ入ると、未来そのものが特異点へ収束します。</p>
+                        <div class="stat-grid">
+                            <article>
+                                <span>領域</span>
+                                <strong id="regionValue">地平線の内側</strong>
+                            </article>
+                            <article>
+                                <span>未来の向き</span>
+                                <strong id="futureValue">中心へ収束</strong>
+                            </article>
+                            <article>
+                                <span>内部の終点</span>
+                                <strong id="coreValue">特異点</strong>
+                            </article>
+                            <article>
+                                <span>情報はどこにあるか</span>
+                                <strong id="infoValue">古典理論だけでは不明</strong>
+                            </article>
+                            <article>
+                                <span>通過時の体感</span>
+                                <strong id="tidalValue">まだ比較的穏やか</strong>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="interiorCanvas" class="demo-canvas" width="720" height="460" aria-label="ブラックホール内部の古典像と量子像を比較するシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>白い粒が落下する観測者です。青い輪は事象の地平線、橙や水色の構造は各模型が予想する内部像を表します。矢印は未来の向きのイメージで、古典像では中心へ、量子像では境界や量子構造へ向きます。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Step</p>
+                    <h2>関連ページへ</h2>
+                    <p>内部構造の話は、ペンローズ図、ブラックホール総論、研究テーマ設計へ自然につながります。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="blackhole.html">
+                        <p class="card-label">Related</p>
+                        <h3>ブラックホール総論に戻る</h3>
+                        <p>地平線、潮汐力、情報パラドックスを直感から読み直したいときは、総論ページへ戻るとつながりが見えます。</p>
+                    </a>
+                    <a class="link-card strong-card" href="penrose.html">
+                        <p class="card-label">Diagram</p>
+                        <h3>ペンローズ図で内部を読む</h3>
+                        <p>「未来が中心を向く」を図として理解するには、ペンローズ図が最短です。因果構造がそのまま見えます。</p>
+                    </a>
+                    <a class="link-card warm-card" href="research.html">
+                        <p class="card-label">Research</p>
+                        <h3>研究テーマとして育てる</h3>
+                        <p>情報パラドックス、ファズボール、ER = EPR、蒸発と island 公式は、そのまま現代物理の研究テーマになります。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>ブラックホールの中は、「空間の奥」ではなく、時空と情報の限界そのものかもしれません。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理学トップへ</a>
+                <a class="footer-link" href="blackhole.html">ブラックホール総論へ</a>
+                <a class="footer-link" href="penrose.html">ペンローズ図へ</a>
+                <a class="footer-link" href="research.html">研究とは何かへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="blackhole-inside.js"></script>
+</body>
+</html>
