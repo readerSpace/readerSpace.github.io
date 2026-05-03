@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量子力学と量子コンピュータ | 重ね合わせと干渉から入る入門</title>
+    <meta name="description" content="高校生向けに、量子力学の核心、二重スリット実験、量子コンピュータ、量子回路までを直感と模式図でつなぐ解説ページです。">
+    <meta name="theme-color" content="#0a2033">
+    <link rel="canonical" href="https://readerspace.github.io/quantum.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="量子力学と量子コンピュータ | 重ね合わせと干渉から入る入門">
+    <meta property="og:description" content="量子の波、観測、二重スリット、量子ビット、量子回路までを一つの流れで整理した高校生向けページです。">
+    <meta property="og:url" content="https://readerspace.github.io/quantum.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="量子力学と量子コンピュータ | 重ね合わせと干渉から入る入門">
+    <meta name="twitter:description" content="波としての量子から、干渉を使う量子計算までを直感でつなぐ入門ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="quantum.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#essence">量子の核心</a>
+                <a href="#slit">二重スリット</a>
+                <a href="#computer">量子計算</a>
+                <a href="#circuit">量子回路</a>
+                <a href="#limits">限界と応用</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Quantum / Interference / Computing</p>
+                    <h1>量子は、<br>確率の波で世界を読む。</h1>
+                    <p class="hero-lead">
+                        量子力学は、原子や電子のようなとても小さい世界のルールです。<br>
+                        量子コンピュータは、そのルールをそのまま計算に使う機械です。ここでは、二重スリット実験から量子回路までを一つの流れでつなげます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#slit">二重スリットを見る</a>
+                        <a class="button button-secondary" href="#circuit">量子回路を見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>粒なのに波のように広がる</li>
+                        <li>観測すると結果がひとつに定まる</li>
+                        <li>干渉と量子もつれが計算資源になる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="quantum-visual" aria-hidden="true">
+                        <div class="orbit orbit-a"></div>
+                        <div class="orbit orbit-b"></div>
+                        <div class="orbit orbit-c"></div>
+                        <div class="visual-core">
+                            <span class="psi-mark">ψ</span>
+                            <strong>観測前は、1 本の答えではなく<br>干渉できる振幅として広がる</strong>
+                        </div>
+                        <div class="visual-chip chip-left">double slit</div>
+                        <div class="visual-chip chip-right">H + CNOT</div>
+                        <div class="visual-chip chip-bottom">entanglement</div>
+                    </div>
+                    <div class="hero-summary-grid">
+                        <article class="summary-card strong-card">
+                            <p class="card-label">Quantum Mechanics</p>
+                            <h2>粒なのに波として広がる</h2>
+                            <p>電子や光は、観測するまで 1 本の経路だけを進むとは限らず、重ね合わせとして振る舞います。</p>
+                        </article>
+                        <article class="summary-card warm-card">
+                            <p class="card-label">Quantum Computer</p>
+                            <h2>干渉を設計して答えを残す</h2>
+                            <p>量子計算の強さは、正しい候補の振幅を強め、不要な候補を打ち消すように回路を組める点にあります。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">量子は「どこにあるか」より先に、「どんな振幅が重なっているか」で記述する。</p>
+                <p class="signal-sub">その見方をすると、二重スリットの干渉も、量子ビットの重ね合わせも、量子回路の計算も同じ言葉でつながります。</p>
+            </section>
+
+            <section class="section reveal" id="essence">
+                <div class="section-heading">
+                    <p class="eyebrow">Essence</p>
+                    <h2>まず、普段の物理と何が違うのか</h2>
+                    <p>ボールや車の世界では、位置や速度はかなりはっきりしています。量子の世界では、観測する前の状態はもっと「波」に近いものとして扱います。</p>
+                </div>
+                <div class="classical-grid">
+                    <article class="contrast-card">
+                        <p class="card-label">Classical</p>
+                        <h3>普段の世界</h3>
+                        <ul class="feature-list">
+                            <li>位置はほぼ 1 つに決まっている</li>
+                            <li>速度も合わせて追跡できる</li>
+                            <li>初期条件が分かれば未来をかなり予測できる</li>
+                        </ul>
+                    </article>
+                    <article class="contrast-card strong-card">
+                        <p class="card-label">Quantum</p>
+                        <h3>量子の世界</h3>
+                        <ul class="feature-list">
+                            <li>粒でも波のように広がって振る舞う</li>
+                            <li>観測すると結果が 1 つに定まる</li>
+                            <li>未来は確率分布としてしか言えない</li>
+                        </ul>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Key Formula</p>
+                        <h3>いちばん大事な見方</h3>
+                        <div class="formula-block multiline" aria-label="波動関数の式">
+                            <span>|ψ⟩ = α|0⟩ + β|1⟩</span>
+                            <span>確率 = |振幅|<sup>2</sup></span>
+                        </div>
+                        <p>量子状態は確率そのものではなく、干渉できる振幅として表されます。観測で出る確率は、その振幅の大きさの 2 乗です。</p>
+                    </article>
+                </div>
+                <div class="insight-grid">
+                    <article class="insight-card">
+                        <p class="card-label">Point 1</p>
+                        <h3>粒なのに波</h3>
+                        <p>電子 1 個でも波として回折し、複数の経路の振幅が重なります。</p>
+                    </article>
+                    <article class="insight-card strong-card">
+                        <p class="card-label">Point 2</p>
+                        <h3>観測で確定</h3>
+                        <p>観測前に「ここだ」と決め打ちできず、測定した瞬間に 1 つの結果が得られます。</p>
+                    </article>
+                    <article class="insight-card warm-card">
+                        <p class="card-label">Point 3</p>
+                        <h3>確率でしか予測できない</h3>
+                        <p>量子力学は、未来を完全に言い当てる理論ではなく、各結果の出やすさを与える理論です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="slit">
+                <div class="section-heading">
+                    <p class="eyebrow">Double Slit</p>
+                    <h2>二重スリット実験は、なぜ量子の核心なのか</h2>
+                    <p>粒を 1 個ずつ飛ばしているのに、最後に集めると波の干渉縞が出ます。しかも、どちらのスリットを通ったかを見ようとすると、その干渉が消えます。</p>
+                </div>
+                <div class="slit-grid">
+                    <div class="demo-panel">
+                        <canvas id="slitCanvas" class="demo-canvas" width="720" height="360" aria-label="二重スリット実験の模式図"></canvas>
+                        <p class="canvas-caption"><strong>見方:</strong> 左から粒子が飛び、中央の 2 つのスリットを通って、右のスクリーンで検出されます。図は厳密計算ではなく、観測で干渉が変わる感覚をつかむための模式図です。</p>
+                    </div>
+                    <div class="control-panel">
+                        <label class="control" for="measurementStrength">
+                            <span>どちらのスリットを見ようとする強さ</span>
+                            <input id="measurementStrength" type="range" min="0" max="100" value="10">
+                            <strong id="measurementStrengthValue">10%</strong>
+                        </label>
+                        <div class="stat-grid">
+                            <article>
+                                <span>干渉の強さ</span>
+                                <strong id="visibilityValue">90%</strong>
+                            </article>
+                            <article>
+                                <span>見え方</span>
+                                <strong id="regimeValue">ほぼ波</strong>
+                            </article>
+                        </div>
+                        <div class="state-panel">
+                            <p class="card-label">Current Picture</p>
+                            <div class="formula-block multiline" id="slitFormula" aria-live="polite">
+                                <span>P = |ψA + ψB|<sup>2</sup></span>
+                                <span>干渉項がはっきり残る</span>
+                            </div>
+                            <p class="demo-note" id="slitNote">観測を弱くすると、A を通る波と B を通る波が重なり、スクリーン上で明暗が交互に現れます。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Observation 1</p>
+                        <h3>1 個ずつ飛ばしても干渉縞になる</h3>
+                        <p>1 回ごとの検出は点ですが、たくさん集めると縞模様が現れます。ここが量子の不思議さです。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Observation 2</p>
+                        <h3>どちらを通ったか見ようとすると縞が消える</h3>
+                        <p>経路情報を強く得るほど、干渉項が弱まり、波よりも粒らしい振る舞いになります。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Observation 3</p>
+                        <h3>P = |ψA + ψB|<sup>2</sup> が本質</h3>
+                        <p>量子では確率を足す前に振幅を足します。この違いが、干渉という古典にはない効果を生みます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="computer">
+                <div class="section-heading">
+                    <p class="eyebrow">Quantum Computer</p>
+                    <h2>量子コンピュータは何を計算資源にしているのか</h2>
+                    <p>量子コンピュータは、0 と 1 のどちらかしか持てないビットではなく、重ね合わせできる量子ビットを使います。ただし本当に重要なのは、「同時に持てる」ことよりも「干渉できる」ことです。</p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="bit-card">
+                        <p class="card-label">Bit</p>
+                        <h3>普通のコンピュータ</h3>
+                        <div class="state-chip-row" aria-hidden="true">
+                            <span class="state-chip active">0</span>
+                            <span class="state-chip">1</span>
+                        </div>
+                        <p>情報は 0 か 1 のどちらかです。回路はその確定状態を、論理ゲートで順番に変えていきます。</p>
+                    </article>
+                    <article class="bit-card strong-card">
+                        <p class="card-label">Qubit</p>
+                        <h3>量子コンピュータ</h3>
+                        <div class="state-cloud" aria-hidden="true">
+                            <span>|0⟩</span>
+                            <span class="state-blend">重ね合わせ</span>
+                            <span>|1⟩</span>
+                        </div>
+                        <p>量子ビットは 0 と 1 の両方の振幅を持てます。測定すると 1 つの結果しか出ませんが、計算途中では干渉が使えます。</p>
+                    </article>
+                </div>
+                <div class="resource-grid">
+                    <article class="resource-card">
+                        <p class="card-label">Resource 1</p>
+                        <h3>重ね合わせ</h3>
+                        <p>n 個の量子ビットは、2<sup>n</sup> 個の基底状態にまたがる振幅を持てます。状態空間が急激に大きくなるのが特徴です。</p>
+                    </article>
+                    <article class="resource-card strong-card">
+                        <p class="card-label">Resource 2</p>
+                        <h3>干渉</h3>
+                        <p>正しい候補の振幅を強め、間違った候補を打ち消すように回路を設計すると、測定時に正解が出やすくなります。</p>
+                    </article>
+                    <article class="resource-card warm-card">
+                        <p class="card-label">Resource 3</p>
+                        <h3>量子もつれ</h3>
+                        <p>複数の量子ビットが切り離せない 1 つの状態になると、古典的には持てない強い相関を計算に使えます。</p>
+                    </article>
+                </div>
+                <div class="application-grid">
+                    <article class="application-card">
+                        <p class="card-label">Use Case</p>
+                        <h3>Shor のアルゴリズム</h3>
+                        <p>素因数分解の構造を量子フーリエ変換で読み取る代表例です。RSA 暗号との関係でよく知られています。</p>
+                    </article>
+                    <article class="application-card strong-card">
+                        <p class="card-label">Use Case</p>
+                        <h3>Grover の探索</h3>
+                        <p>N 個の候補から探す問題で、古典の O(N) に対して O(√N) の改善が期待できる有名な量子アルゴリズムです。</p>
+                    </article>
+                    <article class="application-card warm-card">
+                        <p class="card-label">Use Case</p>
+                        <h3>分子・材料シミュレーション</h3>
+                        <p>量子系そのものを量子で表現する発想は、化学反応や新材料設計との相性がよいと期待されています。</p>
+                    </article>
+                </div>
+                <div class="bridge-panel">
+                    <p class="card-label">Important</p>
+                    <h3>量子コンピュータは「何でも同時に解く箱」ではない</h3>
+                    <p>ただ候補を並べるだけでは、最後の測定で 1 つしか取り出せません。重要なのは、回路全体で干渉を設計し、欲しい答えの確率を高めることです。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="circuit">
+                <div class="section-heading">
+                    <p class="eyebrow">Quantum Circuit</p>
+                    <h2>量子回路はどう組み立てるのか</h2>
+                    <p>量子回路は「初期化 → ゲート操作 → 測定」の流れで考えると分かりやすくなります。ここでは、H と CNOT でベル状態を作る最小の例をたどります。</p>
+                </div>
+                <div class="circuit-grid">
+                    <div class="circuit-panel">
+                        <svg class="circuit-svg" viewBox="0 0 760 220" role="img" aria-label="H ゲートと CNOT からなる 2 量子ビット回路の図">
+                            <text class="wire-label-svg" x="36" y="78">q0</text>
+                            <text class="wire-label-svg" x="36" y="158">q1</text>
+                            <line class="wire-line" x1="88" y1="70" x2="688" y2="70"></line>
+                            <line class="wire-line" x1="88" y1="150" x2="688" y2="150"></line>
+
+                            <g id="svgGateH" class="gate-group">
+                                <rect class="gate-box" x="196" y="42" width="56" height="56" rx="16"></rect>
+                                <text class="gate-text" x="224" y="78">H</text>
+                            </g>
+
+                            <g id="svgCnot" class="gate-group">
+                                <circle class="control-dot" cx="430" cy="70" r="10"></circle>
+                                <line class="cnot-link" x1="430" y1="70" x2="430" y2="150"></line>
+                                <circle class="target-ring" cx="430" cy="150" r="22"></circle>
+                                <line class="target-cross" x1="430" y1="132" x2="430" y2="168"></line>
+                                <line class="target-cross" x1="412" y1="150" x2="448" y2="150"></line>
+                            </g>
+
+                            <g id="svgMeasureTop" class="measure-group">
+                                <rect class="measure-box" x="610" y="42" width="54" height="56" rx="16"></rect>
+                                <path class="measure-arc" d="M 624 82 C 632 56, 650 56, 658 82"></path>
+                                <line class="measure-needle" x1="641" y1="70" x2="653" y2="86"></line>
+                            </g>
+
+                            <g id="svgMeasureBottom" class="measure-group">
+                                <rect class="measure-box" x="610" y="122" width="54" height="56" rx="16"></rect>
+                                <path class="measure-arc" d="M 624 162 C 632 136, 650 136, 658 162"></path>
+                                <line class="measure-needle" x1="641" y1="150" x2="653" y2="166"></line>
+                            </g>
+                        </svg>
+
+                        <div class="stage-buttons" aria-label="量子回路の段階">
+                            <button class="stage-button is-active" type="button" data-stage="0">初期化</button>
+                            <button class="stage-button" type="button" data-stage="1">H ゲート</button>
+                            <button class="stage-button" type="button" data-stage="2">CNOT</button>
+                            <button class="stage-button" type="button" data-stage="3">測定</button>
+                        </div>
+
+                        <div class="formula-panel">
+                            <p class="card-label">State</p>
+                            <div class="formula-block multiline" id="circuitFormula" aria-live="polite">
+                                <span>|ψ⟩ = |00⟩</span>
+                                <span>2 つの量子ビットは |0⟩ から始まる</span>
+                            </div>
+                            <p class="demo-note" id="circuitNote">まだ重ね合わせも相関もありません。ここからゲートで状態ベクトルを回していきます。</p>
+                        </div>
+                    </div>
+
+                    <div class="basis-panel">
+                        <p class="card-label">Distribution</p>
+                        <h3>測定したときの出やすさ</h3>
+                        <div class="basis-list">
+                            <div class="basis-row is-on" data-basis="00">
+                                <span class="basis-label">|00⟩</span>
+                                <div class="basis-track"><span class="basis-fill" id="basis00"></span></div>
+                                <strong id="basis00Value">100%</strong>
+                            </div>
+                            <div class="basis-row" data-basis="01">
+                                <span class="basis-label">|01⟩</span>
+                                <div class="basis-track"><span class="basis-fill" id="basis01"></span></div>
+                                <strong id="basis01Value">0%</strong>
+                            </div>
+                            <div class="basis-row" data-basis="10">
+                                <span class="basis-label">|10⟩</span>
+                                <div class="basis-track"><span class="basis-fill" id="basis10"></span></div>
+                                <strong id="basis10Value">0%</strong>
+                            </div>
+                            <div class="basis-row" data-basis="11">
+                                <span class="basis-label">|11⟩</span>
+                                <div class="basis-track"><span class="basis-fill" id="basis11"></span></div>
+                                <strong id="basis11Value">0%</strong>
+                            </div>
+                        </div>
+
+                        <div class="measurement-grid">
+                            <article>
+                                <span>結果</span>
+                                <strong id="measurementOutcome">00 が 100%</strong>
+                            </article>
+                            <article>
+                                <span>もつれ</span>
+                                <strong id="entanglementValue">なし</strong>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card">
+                        <p class="card-label">Gate 1</p>
+                        <h3>H ゲートで重ね合わせを作る</h3>
+                        <p>|0⟩ に H をかけると、0 と 1 を半分ずつ含む状態へ移ります。量子回路の入口として最頻出のゲートです。</p>
+                    </article>
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Gate 2</p>
+                        <h3>CNOT で量子もつれを作る</h3>
+                        <p>制御ビットが 1 の枝だけターゲットを反転するので、2 つの量子ビットを切り離せない 1 つの状態にできます。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Math</p>
+                        <h3>ゲートは状態ベクトルへの変換</h3>
+                        <p>量子回路の本質は、状態ベクトルにユニタリ行列を順番にかけ続けることです。最後だけ測定で古典情報を取り出します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="limits">
+                <div class="section-heading">
+                    <p class="eyebrow">Limits & Reality</p>
+                    <h2>でも、なぜまだ量子コンピュータだらけではないのか</h2>
+                    <p>量子コンピュータは特定の問題に強い一方で、状態が壊れやすく、読み出しも難しく、ハードウェア制御も非常に厳しい世界です。</p>
+                </div>
+                <div class="limits-grid">
+                    <article class="limit-card strong-card">
+                        <p class="card-label">Limit 1</p>
+                        <h3>全部の問題が速くなるわけではない</h3>
+                        <p>量子計算の利点はアルゴリズム依存です。古典コンピュータの完全な置き換えではなく、得意分野のある別の計算機です。</p>
+                    </article>
+                    <article class="limit-card">
+                        <p class="card-label">Limit 2</p>
+                        <h3>観測すると途中状態は壊れる</h3>
+                        <p>計算途中をそのまま覗くと、せっかくの重ね合わせや干渉を壊してしまいます。読み出しは最後にまとめて行うのが基本です。</p>
+                    </article>
+                    <article class="limit-card warm-card">
+                        <p class="card-label">Limit 3</p>
+                        <h3>ノイズとデコヒーレンスに弱い</h3>
+                        <p>外部とのわずかな相互作用でも量子状態は乱れます。誤り訂正や長いコヒーレンス時間が大きな課題です。</p>
+                    </article>
+                    <article class="limit-card">
+                        <p class="card-label">Hardware</p>
+                        <h3>実装方式はいろいろある</h3>
+                        <ul class="hardware-list">
+                            <li>超伝導量子ビット</li>
+                            <li>イオントラップ</li>
+                            <li>光量子</li>
+                            <li>トポロジカル量子</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="roadmap-card">
+                    <p class="card-label">Next Questions</p>
+                    <h3>ここから先で面白くなる論点</h3>
+                    <p>量子力学と量子コンピュータの入口をつかんだら、次は「なぜ速いのか」をアルゴリズムや幾何学で見にいく段階です。</p>
+                    <div class="question-tags">
+                        <span>ショアのアルゴリズム</span>
+                        <span>Grover 探索</span>
+                        <span>ブロッホ球</span>
+                        <span>量子誤り訂正</span>
+                        <span>量子情報とブラックホール</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Step</p>
+                    <h2>量子の話を、他のテーマへつなげる</h2>
+                    <p>量子は独立した特殊分野ではありません。情報、エントロピー、時空、研究テーマ設計まで、ほかのページにもそのまま接続できます。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="entropy.html">
+                        <p class="card-label">Related</p>
+                        <h3>エントロピー</h3>
+                        <p>不確実さや情報量をどう数えるかを理解すると、量子情報の見方もつながりやすくなります。</p>
+                    </a>
+                    <a class="link-card strong-card" href="blackhole-inside.html">
+                        <p class="card-label">Related</p>
+                        <h3>ブラックホールの中</h3>
+                        <p>量子情報と時空の関係が最先端でぶつかる代表的な話題です。もつれと幾何がつながる感覚を広げられます。</p>
+                    </a>
+                    <a class="link-card warm-card" href="research.html">
+                        <p class="card-label">Related</p>
+                        <h3>研究とは何か</h3>
+                        <p>量子のページを読んだあとに、「では何を問いにすると研究になるか」を整理したいときの入口です。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>量子は、小さい世界の変わった例外ではなく、情報と現実の見え方そのものを作り替えるルールです。</p>
+            <div class="footer-links">
+                <a href="physics.html">物理解説トップへ</a>
+                <a href="entropy.html">エントロピーへ</a>
+                <a href="blackhole-inside.html">ブラックホールの中へ</a>
+                <a href="index.html">研究サポートトップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="quantum.js"></script>
+</body>
+</html>
