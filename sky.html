@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>空はなぜ青いのか？ | レイリー散乱と大気の光学</title>
+    <meta name="description" content="太陽光が大気で散乱する仕組み、波長と散乱の関係（1/λ⁴）、夕焼けや惑星ごとの空の色までを、レイリー散乱・ミー散乱を軸に図解する解説ページ。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sky.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a href="index.html" class="brand">Reader's Space</a>
+            <nav class="site-nav" aria-label="サイト内ナビゲーション">
+                <a href="index.html">トップ</a>
+                <a href="physics.html">物理学トップ</a>
+                <a href="snowflake.html">雪の結晶</a>
+                <a href="sand.html">砂の物理</a>
+                <a href="research.html">研究</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero reveal section">
+                <div class="hero-copy">
+                    <p class="eyebrow">Atmospheric Optics / Rayleigh Scattering</p>
+                    <h1>空はなぜ<br>青いのか？</h1>
+                    <p class="hero-lead">
+                        太陽光は本来、虹色の混ざりあった白色光。それが大気の窒素や酸素にぶつかると、
+                        波長の短い青い光ほど強く四方へ散らばります。レイリー散乱と呼ばれるこの現象は
+                        「散乱の強さ ∝ 1 / 波長⁴」というシンプルな式で表されます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#mechanism">仕組みを見る</a>
+                        <a class="button button-secondary" href="#demo">散乱デモへ</a>
+                    </div>
+                    <ul class="hero-points">
+                        <li>太陽光は赤〜紫まで連続した色の集合</li>
+                        <li>大気分子は青を強く・赤を弱く散らす</li>
+                        <li>夕焼けは長い大気路で青が削られた残り</li>
+                    </ul>
+                </div>
+                <div class="hero-panel" aria-hidden="true">
+                    <div class="sky-window">
+                        <div class="sun"></div>
+                        <span class="scatter-ray"></span>
+                        <span class="scatter-ray ray-b"></span>
+                        <span class="scatter-ray ray-c"></span>
+                        <span class="scatter-dot dot-a"></span>
+                        <span class="scatter-dot dot-b"></span>
+                        <span class="scatter-dot dot-c"></span>
+                        <span class="scatter-dot dot-d"></span>
+                        <span class="scatter-dot dot-e"></span>
+                        <span class="scatter-dot dot-f"></span>
+                        <span class="window-label label-rayleigh">青が散る</span>
+                        <span class="window-label label-blue">空全体に広がる</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal section" aria-label="ハイライト">
+                <p class="signal-kicker">Headline</p>
+                <p class="signal-main">青は「拡散しやすい光」、空は「巨大な拡散装置」。</p>
+                <p class="signal-sub">
+                    どこを見ても青が届くのは、波長の短い光が大気のあちこちで何度も散らされるから。
+                    色の主役は<strong>散乱</strong>と<strong>吸収</strong>のせめぎ合いで決まります。
+                </p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>4つの基本ピース</h2>
+                    <p>
+                        白色光・大気分子・波長依存・観測方向。空の青は、どれが欠けても成立しません。
+                        まずは登場人物を揃えます。
+                    </p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card">
+                        <span class="card-label">SOURCE</span>
+                        <h3>白色の太陽光</h3>
+                        <p>
+                            太陽光は赤・橙・黄・緑・青・紫が連続して混ざった白色光。
+                            プリズムを通すと虹色に分かれます。
+                        </p>
+                    </article>
+                    <article class="mechanism-card">
+                        <span class="card-label">MEDIUM</span>
+                        <h3>大気分子</h3>
+                        <p>
+                            窒素 N₂・酸素 O₂ といった分子は、可視光の波長より遥かに小さなターゲット。
+                            この極小サイズがレイリー散乱を生みます。
+                        </p>
+                    </article>
+                    <article class="mechanism-card">
+                        <span class="card-label">RULE</span>
+                        <h3>1 / λ⁴ 則</h3>
+                        <p>
+                            散乱の強さは波長の4乗に反比例。波長が半分になれば散乱は16倍強くなる、
+                            極端な波長依存性を持ちます。
+                        </p>
+                    </article>
+                    <article class="mechanism-card">
+                        <span class="card-label">OBSERVER</span>
+                        <h3>視線の方向</h3>
+                        <p>
+                            真上を見れば散乱光（青）が、太陽方向を見れば直達光（白〜赤）が届く。
+                            観測方向で見える色は変わります。
+                        </p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <span class="card-label">Rayleigh</span>
+                        <p class="formula-block">I ∝ 1 / λ⁴</p>
+                        <p>波長 λ が短いほど散乱強度 I は急激に増える。青は赤の約10倍散らされる。</p>
+                    </article>
+                    <article class="formula-card">
+                        <span class="card-label">Path Length</span>
+                        <p class="formula-block">T = exp(−τ · sec θ)</p>
+                        <p>太陽高度 θ が低いほど大気路長が伸び、青はほぼ消えて赤が残る（夕焼け）。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="models">
+                <div class="section-heading">
+                    <p class="eyebrow">Models</p>
+                    <h2>散乱を3つのレジームで捉える</h2>
+                    <p>
+                        粒子のサイズ <em>r</em> と光の波長 <em>λ</em> の比 <em>x = 2πr/λ</em> が散乱の振る舞いを決めます。
+                    </p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <span class="card-label">x ≪ 1</span>
+                        <h3>レイリー散乱</h3>
+                        <p>分子サイズ。波長依存が強く、青〜紫が前後左右に等しく散らされる。</p>
+                        <ul>
+                            <li>強度 ∝ 1/λ⁴</li>
+                            <li>等方的に近い散乱パターン</li>
+                            <li>地球の青空・遠くの山の霞</li>
+                        </ul>
+                    </article>
+                    <article class="model-card">
+                        <span class="card-label">x ≈ 1</span>
+                        <h3>ミー散乱</h3>
+                        <p>波長と同程度の粒（雲粒・ダスト）。波長依存が弱く前方に強く散る。</p>
+                        <ul>
+                            <li>波長依存はゆるやか</li>
+                            <li>前方散乱が支配的</li>
+                            <li>白い雲・霧・火星の空</li>
+                        </ul>
+                    </article>
+                    <article class="model-card warm-card">
+                        <span class="card-label">x ≫ 1</span>
+                        <h3>幾何光学</h3>
+                        <p>粒子が十分大きい領域。反射・屈折で記述でき、虹や日暈などを生む。</p>
+                        <ul>
+                            <li>反射＋屈折＋回折</li>
+                            <li>角度依存の鋭いパターン</li>
+                            <li>虹・ハロ・グローリー</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="why-blue">
+                <div class="section-heading">
+                    <p class="eyebrow">Why blue, not violet</p>
+                    <h2>「紫じゃないのか？」3つの理由</h2>
+                    <p>
+                        1/λ⁴ 則だけ見れば紫が最強のはず。でも空が青く見えるのは、
+                        物理・生理・大気が同時に働くからです。
+                    </p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <span class="card-label">① Source</span>
+                        <h3>太陽光に紫が少ない</h3>
+                        <p>
+                            太陽スペクトルは可視域では青〜緑がピーク。
+                            紫の成分はそもそも青より少ないため、散らす元が不足します。
+                        </p>
+                    </article>
+                    <article class="comparison-card">
+                        <span class="card-label">② Eye</span>
+                        <h3>人間の目は紫に鈍い</h3>
+                        <p>
+                            視細胞 S 錐体は青に強く反応するが紫域では感度が下がる。
+                            紫の散乱光は届いていても「見えにくい」。
+                        </p>
+                    </article>
+                    <article class="comparison-card">
+                        <span class="card-label">③ Air</span>
+                        <h3>大気が紫を削る</h3>
+                        <p>
+                            オゾン層などが紫外〜紫寄りを吸収。
+                            散らされた紫は到達途中で減衰し、青が勝ち残ります。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="growth">
+                <div class="section-heading">
+                    <p class="eyebrow">Sun angle</p>
+                    <h2>正午から夕焼けへの遷移</h2>
+                    <p>
+                        太陽高度が下がると大気路長は伸び、空の色は連続的に変化します。
+                    </p>
+                </div>
+                <div class="growth-grid">
+                    <article class="growth-card">
+                        <span class="card-label">Step 01</span>
+                        <h3>正午：直達は白</h3>
+                        <p>路長が最短。直達光は白に近く、横方向の散乱光（空）は深い青に染まる。</p>
+                    </article>
+                    <article class="growth-card">
+                        <span class="card-label">Step 02</span>
+                        <h3>夕方：青が削れる</h3>
+                        <p>太陽が低くなり大気を斜めに長く通る。青が散らされ尽くし、橙〜赤が直達光として残る。</p>
+                    </article>
+                    <article class="growth-card">
+                        <span class="card-label">Step 03</span>
+                        <h3>地平線付近：紅</h3>
+                        <p>路長は最大。残った長波長が雲に当たり、雲底を赤く染める。空の色は青と橙のグラデーション。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>レイリー散乱シミュレータ</h2>
+                    <p>
+                        太陽高度・大気の濃さ・粒子の種類を変えて、空の色（散乱光）と
+                        太陽の色（透過光）がどう動くか確かめましょう。
+                    </p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="preset-row" id="presetRow">
+                            <button class="preset-chip is-active" data-preset="noon" type="button">正午</button>
+                            <button class="preset-chip" data-preset="evening" type="button">夕方</button>
+                            <button class="preset-chip" data-preset="sunset" type="button">夕焼け</button>
+                            <button class="preset-chip" data-preset="mars" type="button">火星（塵）</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control">
+                                <span>太陽高度 <strong id="elevationVal">60°</strong></span>
+                                <input type="range" id="elevationRange" min="0" max="90" value="60" step="1">
+                            </label>
+                            <label class="control">
+                                <span>大気の厚み <strong id="thicknessVal">1.0×</strong></span>
+                                <input type="range" id="thicknessRange" min="40" max="260" value="100" step="2">
+                            </label>
+                            <label class="control">
+                                <span>粒子タイプ <strong id="particleVal">レイリー</strong></span>
+                                <input type="range" id="particleRange" min="0" max="100" value="0" step="1">
+                            </label>
+                        </div>
+                        <p class="demo-note" id="demoNarration">
+                            太陽が高く大気を真っ直ぐ突き抜けるので、青の散乱光がくっきり広がっています。
+                        </p>
+                        <div class="stat-grid">
+                            <article>
+                                <span>散乱率（青）</span>
+                                <strong id="statBlue">0.78</strong>
+                            </article>
+                            <article>
+                                <span>散乱率（赤）</span>
+                                <strong id="statRed">0.10</strong>
+                            </article>
+                            <article>
+                                <span>大気路長</span>
+                                <strong id="statPath">1.15 ×</strong>
+                            </article>
+                        </div>
+                        <div class="color-readout">
+                            <div class="color-swatch" id="swatchSky">
+                                <span>SKY</span>
+                                <strong>散乱光</strong>
+                            </div>
+                            <div class="color-swatch" id="swatchSun" style="color:#1a2c63; text-shadow:none;">
+                                <span>SUN</span>
+                                <strong>透過光</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="skyCanvas" class="demo-canvas" width="640" height="520"
+                            aria-label="太陽光が大気を通過しながら散乱する様子を示すシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>左から差し込む光線が大気層で波長ごとに散乱されます。
+                            上半分は空の色（散乱光の積算）、太陽の輪は透過光。粒子タイプを動かすとレイリーから
+                            ミー散乱へと振る舞いが変化します。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="planets">
+                <div class="section-heading">
+                    <p class="eyebrow">Across the solar system</p>
+                    <h2>惑星ごとに変わる空の色</h2>
+                    <p>
+                        散乱の主役と吸収体が変われば、空の色も変わります。色は<strong>大気の指紋</strong>です。
+                    </p>
+                </div>
+                <div class="environment-grid">
+                    <article class="environment-card">
+                        <span class="card-label">Earth</span>
+                        <h3>青</h3>
+                        <p>分子レイリー散乱が主役。1/λ⁴ で青を撒き散らし、空全体が青に染まる。</p>
+                    </article>
+                    <article class="environment-card warm-card">
+                        <span class="card-label">Mars</span>
+                        <h3>赤</h3>
+                        <p>酸化鉄ダストによるミー散乱と吸収で青が削られる。太陽の周りだけは前方散乱で青く見える逆転現象も。</p>
+                    </article>
+                    <article class="environment-card">
+                        <span class="card-label">Saturn</span>
+                        <h3>淡い黄</h3>
+                        <p>水素・ヘリウム大気の上に薄い有機ヘイズ。青を少し削り、パステル調の黄色になる。</p>
+                    </article>
+                    <article class="environment-card night-card">
+                        <span class="card-label">Titan</span>
+                        <h3>濃いオレンジ</h3>
+                        <p>窒素＋メタンから生まれるトリン（複雑有機エアロゾル）が青を強く吸収。重ね合わせで濃いオレンジに。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next steps</p>
+                    <h2>関連ページへ</h2>
+                    <p>大気・光・統計の視点でさらに掘り下げる。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="snowflake.html">
+                        <span class="card-label">Crystal</span>
+                        <h3>雪の結晶はどう育つ？</h3>
+                        <p>大気を漂う水蒸気が拡散と結晶化で六角形を形作る、もう一つの空の物語。</p>
+                    </a>
+                    <a class="link-card" href="chladni.html">
+                        <span class="card-label">Wave</span>
+                        <h3>クラドニ図形</h3>
+                        <p>波と振動が描く対称模様。光の干渉と通底するパターン形成の入口。</p>
+                    </a>
+                    <a class="link-card" href="statistics.html">
+                        <span class="card-label">Statistics</span>
+                        <h3>統計について</h3>
+                        <p>多数の散乱イベントを束ねて「色」が決まる。確率分布で世界を読む練習。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>© Reader's Space — 空の青は、物理・生物・大気の合作。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理学トップ</a>
+                <a class="footer-link" href="index.html">サイトトップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="sky.js"></script>
+</body>
+</html>

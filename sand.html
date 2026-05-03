@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>砂はなぜ流れる？ | 粒状体の物理入門</title>
+    <meta name="description" content="砂の流動を高校生向けに解説。粒状体、降伏応力、安息角、ジャミング、ブラジルナッツ効果、μ(I) レオロジーまでを、動く簡易シミュレーション付きで整理します。">
+    <meta name="theme-color" content="#4b3014">
+    <link rel="canonical" href="https://readerspace.github.io/sand.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="砂はなぜ流れる？ | 粒状体の物理入門">
+    <meta property="og:description" content="砂は固体と流体のあいだを行き来する粒状体です。降伏応力・ジャミング・ブラジルナッツ効果までを、デモ付きで読めるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/sand.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="砂はなぜ流れる？ | 粒状体の物理入門">
+    <meta name="twitter:description" content="砂時計の砂が流れる仕組み、安息角、ジャミング、ブラジルナッツ効果を、直感とシミュレーションでつないで読めます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sand.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#mechanism">仕組み</a>
+                <a href="#models">モデル</a>
+                <a href="#phenomena">現象</a>
+                <a href="#demo">実演</a>
+                <a href="#brazil">ブラジルナッツ</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Granular Matter / Yield Stress / Jamming</p>
+                    <h1>砂は、固体にも<br>流体にもなる。</h1>
+                    <p class="hero-lead">
+                        砂時計の砂は流れ、握れば形を保ちます。<br>
+                        水でも金属でもないこの中間の振る舞いは、粒状体（granular matter）と呼ばれ、現代物理でもまだ完全には理解されていない題材です。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#mechanism">流動の仕組みを見る</a>
+                        <a class="button button-secondary" href="#demo">簡易シミュレーションを見る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>粒は熱で動かないので、力をかけないと流れない</li>
+                        <li>ある「降伏応力」を超えた瞬間、固体から流体に切り替わる</li>
+                        <li>砂山の角度・ジャミング・ブラジルナッツ効果は、すべて粒の接触ネットワークが鍵になる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="sand-window" aria-hidden="true">
+                        <div class="sand-arrow"></div>
+                        <div class="sand-grain grain-a"></div>
+                        <div class="sand-grain grain-b"></div>
+                        <div class="sand-grain grain-c"></div>
+                        <div class="sand-grain grain-d"></div>
+                        <div class="sand-grain grain-e"></div>
+                        <div class="sand-grain grain-f"></div>
+                        <div class="sand-pile pile-back"></div>
+                        <div class="sand-pile"></div>
+                        <div class="window-label label-pile">Angle of Repose</div>
+                        <div class="window-label label-flow">Yield → Flow</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-card">
+                            <p class="card-label">Particle</p>
+                            <h2>粒の集まり</h2>
+                            <p>砂の 1 粒は剛体で、摩擦と非弾性衝突を持ちます。普通の分子のように熱で動き回ったりしません。</p>
+                        </article>
+                        <article class="hero-note warm-card">
+                            <p class="card-label">Threshold</p>
+                            <h2>降伏応力</h2>
+                            <p>小さな力では固体のままで、ある臨界を超えた瞬間に急に流れ出す。これが流体との大きな違いです。</p>
+                        </article>
+                        <article class="hero-note night-card">
+                            <p class="card-label">Network</p>
+                            <h2>接触のネットワーク</h2>
+                            <p>粒同士の接触がつながっていれば固体、崩れれば流体。砂の正体は、このネットワークの強さです。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">砂が流れるかどうかは、粒の接触ネットワークが壊れるかどうかで決まる。</p>
+                <p class="signal-sub">普通の流体は応力に比例して流れますが、砂は「ある力までは動かず、その先で突然崩れる」塑性体的なふるまいをします。</p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>なぜ砂は流体とも固体とも違うのか</h2>
+                    <p>砂のふるまいは、水のような流体や金属のような固体だけでは説明できません。粒のサイズ・摩擦・非弾性衝突・熱で動かないという 4 つが重なって、粒状体ならではの振る舞いを生みます。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card">
+                        <p class="card-label">Step 1</p>
+                        <h3>粒は剛体で大きい</h3>
+                        <p>1 粒のサイズが分子よりずっと大きいため、変形よりも転がる・ぶつかるが基本になります。</p>
+                    </article>
+                    <article class="mechanism-card strong-card">
+                        <p class="card-label">Step 2</p>
+                        <h3>摩擦と非弾性</h3>
+                        <p>接触点で摩擦が働き、衝突するとエネルギーが熱や音に変わって失われていきます。</p>
+                    </article>
+                    <article class="mechanism-card warm-card">
+                        <p class="card-label">Step 3</p>
+                        <h3>熱で動かない</h3>
+                        <p>分子と違い、室温で勝手に動き出すほどの熱は持っていないため、外から力を入れないと流れません。</p>
+                    </article>
+                    <article class="mechanism-card night-card">
+                        <p class="card-label">Step 4</p>
+                        <h3>力を超えると突然流れる</h3>
+                        <p>せん断応力がある臨界を超えた瞬間、接触ネットワークが崩れて流体的にふるまいます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Newtonian Fluid</p>
+                        <div class="formula-block">τ = η · du/dy</div>
+                        <p>水や空気のような普通の流体では、せん断応力は速度勾配に比例します。どれだけ弱い力でも、それに合わせて流れます。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Granular Matter</p>
+                        <div class="formula-block">τ &lt; τ<sub>y</sub> → 動かない<br>τ ≥ τ<sub>y</sub> → 流れる</div>
+                        <p>砂はビンガム流体や摩擦モデルのように、降伏応力 τ<sub>y</sub> を超えるまで動かず、超えてから流れ始めます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="models">
+                <div class="section-heading">
+                    <p class="eyebrow">Models</p>
+                    <h2>砂をどう数理化するか</h2>
+                    <p>砂を扱う方法は、目的によって粒度が変わります。1 粒ずつ追うのか、流れの場として平均化するのか、あるいは流れやすさを 1 つの関数にまとめるのか、レイヤーで整理できます。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">Model 1</p>
+                        <h3>粒子シミュレーション (DEM)</h3>
+                        <p>1 粒ずつ位置と速度を追い、衝突・摩擦を直接扱う方法です。一番物理に近いですが、粒数が多いと計算量が爆発します。</p>
+                        <ul>
+                            <li>個々の挙動が見える</li>
+                            <li>摩擦・回転・形状を入れやすい</li>
+                            <li>粒数が増えると重い</li>
+                        </ul>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Model 2</p>
+                        <h3>連続体モデル</h3>
+                        <p>砂を密度・速度の場として扱い、Navier-Stokes 方程式を拡張して流れを記述します。マクロな流れの予測に向きます。</p>
+                        <ul>
+                            <li>大規模な流れに適用可能</li>
+                            <li>降伏応力を粘性の式に組み込む</li>
+                            <li>粒同士の局所的な乱れは消える</li>
+                        </ul>
+                    </article>
+                    <article class="model-card night-card">
+                        <p class="card-label">Model 3</p>
+                        <h3>μ(I) レオロジー</h3>
+                        <p>有効摩擦係数 μ を、慣性数 I（粒径・流速・圧力で作られる無次元数）の関数として与える、現代の標準的なモデルです。</p>
+                        <ul>
+                            <li>多くの実験を統一的に説明</li>
+                            <li>μ = μ(I) という単純な形</li>
+                            <li>準静的な極限と高速流の両方を含む</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">最初の一歩</p>
+                        <h3>セルオートマトン的な落下モデル</h3>
+                        <p>「重力で落ち、行き先がふさがれていれば斜めに崩れる」という 2 行ルールでも、砂時計や山の挙動の雰囲気を再現できます。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">中間レベル</p>
+                        <h3>2D の DEM</h3>
+                        <p>粒を円として、ばね・ダンパ・摩擦を入れた DEM は、ブラジルナッツ効果やジャミングを再現する定番です。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">本格レベル</p>
+                        <h3>μ(I) を組み込んだ連続体</h3>
+                        <p>ダム崩壊や砂丘の流れなど、大規模な砂の運動を扱うときの研究レベルのモデルです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="phenomena">
+                <div class="section-heading">
+                    <p class="eyebrow">Phenomena</p>
+                    <h2>砂が起こす代表的な現象</h2>
+                    <p>砂の物理を面白くしているのは、いくつかの典型現象です。すべて「接触ネットワークが壊れるかどうか」に戻って理解できます。</p>
+                </div>
+                <div class="instability-layout">
+                    <article class="instability-lead strong-card">
+                        <p class="card-label">Key Word</p>
+                        <h3>安息角とジャミング</h3>
+                        <p>砂山には自然に立ち上がる限界角度（およそ 30〜35°）があり、これを安息角と呼びます。出口でアーチができて流れが止まるのがジャミングで、どちらも接触ネットワークが粒の運動を支える現象です。</p>
+                    </article>
+                    <div class="step-grid">
+                        <article class="step-card">
+                            <span class="step-index">1</span>
+                            <h3>安息角</h3>
+                            <p>砂山が崩れずに保てる最大の角度。重力と摩擦の釣り合いで決まります。</p>
+                        </article>
+                        <article class="step-card warm-card">
+                            <span class="step-index">2</span>
+                            <h3>ジャミング</h3>
+                            <p>出口でアーチが組まれ、それ以上流れなくなる詰まり現象です。</p>
+                        </article>
+                        <article class="step-card strong-card">
+                            <span class="step-index">3</span>
+                            <h3>砂の対流</h3>
+                            <p>容器を振動させると、内部で対流が起き、大粒が表面に出てきます（ブラジルナッツ効果）。</p>
+                        </article>
+                        <article class="step-card night-card">
+                            <span class="step-index">4</span>
+                            <h3>砂丘の形成</h3>
+                            <p>風で粒が跳ねる saltation と、表面の不安定性が組み合わさって、波模様の砂丘が育ちます。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo 1</p>
+                    <h2>セルオートマトンで砂を落とす</h2>
+                    <p>下の実演は、資料にあった「セルオートマトン型」砂シミュレーションです。マウスドラッグで砂を落とすと、真下が空いていれば落ち、ふさがっていれば斜めに崩れる、という 2 つのルールだけで山が育ちます。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="control-grid">
+                            <label class="control" for="brushRange">
+                                <span>ブラシサイズ</span>
+                                <input id="brushRange" type="range" min="1" max="12" value="5">
+                                <strong id="brushValue">5</strong>
+                            </label>
+                            <label class="control" for="stepsRange">
+                                <span>更新回数 / フレーム</span>
+                                <input id="stepsRange" type="range" min="1" max="8" value="3">
+                                <strong id="stepsValue">3</strong>
+                            </label>
+                            <label class="control" for="rainRange">
+                                <span>上から降らせる量</span>
+                                <input id="rainRange" type="range" min="0" max="20" value="0">
+                                <strong id="rainValue">0</strong>
+                            </label>
+                        </div>
+                        <div class="stat-grid">
+                            <article>
+                                <span>砂の総量</span>
+                                <strong id="grainCount">0</strong>
+                            </article>
+                            <article>
+                                <span>山の高さ</span>
+                                <strong id="pileHeight">0%</strong>
+                            </article>
+                            <article>
+                                <span>状態</span>
+                                <strong id="sandStatus">流れている</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note" id="sandNote">マウスドラッグで砂を加えると、重力で落ち、斜めに崩れて山が育ちます。「上から降らせる量」を上げると、砂時計のように継続的に降り続けます。</p>
+                        <div class="demo-actions">
+                            <button class="button button-secondary" id="sandReset" type="button">砂をクリア</button>
+                            <button class="button button-secondary" id="sandWall" type="button">仕切りを置く</button>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas class="demo-canvas" id="sandCanvas" width="500" height="500" aria-label="砂のセルオートマトン落下シミュレーション"></canvas>
+                        <p class="canvas-caption">明るい砂色のセルが粒、暗い箇所が空気です。仕切りを置くと、その上に山ができたり、横から崩れる様子を観察できます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="brazil">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Demo 2</p>
+                    <h2>ブラジルナッツ効果を見る</h2>
+                    <p>容器に大小の粒を混ぜて振ると、大きな粒がだんだん上に出てきます。この対流的な並べ替えが「ブラジルナッツ効果」で、ミューズリーの中で大きなナッツが上に集まる現象としても知られます。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="control-grid">
+                            <label class="control" for="shakeRange">
+                                <span>振動の強さ</span>
+                                <input id="shakeRange" type="range" min="0" max="100" value="55">
+                                <strong id="shakeValue">55</strong>
+                            </label>
+                            <label class="control" for="smallRange">
+                                <span>小粒の数</span>
+                                <input id="smallRange" type="range" min="80" max="320" value="200">
+                                <strong id="smallValue">200</strong>
+                            </label>
+                            <label class="control" for="largeRange">
+                                <span>大粒の数</span>
+                                <input id="largeRange" type="range" min="1" max="10" value="4">
+                                <strong id="largeValue">4</strong>
+                            </label>
+                        </div>
+                        <div class="stat-grid">
+                            <article>
+                                <span>大粒の平均高さ</span>
+                                <strong id="largeHeight">0%</strong>
+                            </article>
+                            <article>
+                                <span>容器の振動</span>
+                                <strong id="shakePhase">中程度</strong>
+                            </article>
+                            <article>
+                                <span>経過フレーム</span>
+                                <strong id="brazilFrames">0</strong>
+                            </article>
+                        </div>
+                        <p class="demo-note" id="brazilNote">赤い大粒は、最初は容器の下の方に置かれています。振動を上げると、小粒が空隙へ落ち込み、大粒は徐々に上へ押し上げられます。</p>
+                        <div class="demo-actions">
+                            <button class="button button-secondary" id="brazilReset" type="button">配置をリセット</button>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas class="demo-canvas" id="brazilCanvas" width="560" height="520" aria-label="ブラジルナッツ効果シミュレーション"></canvas>
+                        <p class="canvas-caption">黄色が小粒、赤が大粒です。容器を上下に揺らすと、振動の慣性と空隙落下の組み合わせで、大粒が表面に浮かんできます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="environment">
+                <div class="section-heading">
+                    <p class="eyebrow">Regimes</p>
+                    <h2>流れの強さで変わる 3 つの相</h2>
+                    <p>砂は単に「固体／流体」の 2 択ではなく、流れの慣性数 I によって、ゆるやかに性格が変わります。これが μ(I) レオロジーの背景です。</p>
+                </div>
+                <div class="environment-grid">
+                    <article class="environment-card warm-card">
+                        <p class="card-label">I が小さい</p>
+                        <h3>準静的</h3>
+                        <p>流れがほぼ止まっている領域で、安息角や山の自然崩壊で支配的になる相です。</p>
+                    </article>
+                    <article class="environment-card">
+                        <p class="card-label">I が中くらい</p>
+                        <h3>密な流れ</h3>
+                        <p>ホッパーやチューブの中を砂が連続的に流れる状態。μ が I に応じて少しずつ増える領域です。</p>
+                    </article>
+                    <article class="environment-card strong-card">
+                        <p class="card-label">I が大きい</p>
+                        <h3>気体的な相</h3>
+                        <p>粒同士が接触ネットワークを失い、衝突主体で運動する高速流。砂塵嵐や雪崩の先端などが該当します。</p>
+                    </article>
+                </div>
+                <div class="callout-card">
+                    <p class="card-label">One Sentence</p>
+                    <h3>砂のレオロジーは、慣性数 I が「どの相」にいるかで決まる</h3>
+                    <p>静止した山も、ゆっくり崩れる砂時計も、激しい砂塵嵐も、同じ μ(I) の枠組みで連続的に説明できます。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Step</p>
+                    <h2>砂から、他のテーマへつなげる</h2>
+                    <p>粒状体の話題は、シミュレーション・統計・パターン形成・カオスといった他のページとも自然につながります。気になる方向に進んでください。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="simulation.html">
+                        <p class="card-label">Related</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>DEM や連続体モデルで、何を残し何を捨てるか。砂のモデル化を通じて、シミュレーション論にもつながります。</p>
+                    </a>
+                    <a class="link-card strong-card" href="snowflake.html">
+                        <p class="card-label">Related</p>
+                        <h3>雪の結晶の成長と比べる</h3>
+                        <p>雪は粒が「成長して凍る」、砂は粒が「集まって流れる」。どちらも非平衡で、ゆらぎの増幅という共通点があります。</p>
+                    </a>
+                    <a class="link-card warm-card" href="chaos.html">
+                        <p class="card-label">Related</p>
+                        <h3>砂崩れとカオス</h3>
+                        <p>砂山の崩壊は、わずかな粒の差でなだれの規模が大きく変わる、自己組織化臨界の典型例です。</p>
+                    </a>
+                    <a class="link-card night-card" href="research.html">
+                        <p class="card-label">Research</p>
+                        <h3>研究テーマとして発展させる</h3>
+                        <p>ジャミングの臨界、安息角の温度依存、湿った砂の振る舞いなど、課題研究にしやすい題材が多く残っています。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>砂の流動は、粒の接触ネットワークが壊れるかどうかという、シンプルな視点で読み解けます。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理解説トップへ</a>
+                <a class="footer-link" href="simulation.html">シミュレーションへ</a>
+                <a class="footer-link" href="snowflake.html">雪の結晶へ</a>
+                <a class="footer-link" href="research.html">研究とは何かへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="sand.js"></script>
+</body>
+</html>
