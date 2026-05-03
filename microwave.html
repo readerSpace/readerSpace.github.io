@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電子レンジはどう温めているのか | マイクロ波・誘電損失・定在波</title>
+    <meta name="description" content="電子レンジの仕組みを高校生向けに解説。マグネトロンと 2.45GHz マイクロ波、水分子の双極子回転、誘電緩和、Debye モデル、氷が温まりにくい理由、定在波とターンテーブルまでを図解でつなげます。">
+    <meta name="theme-color" content="#1c130f">
+    <link rel="canonical" href="https://readerspace.github.io/microwave.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="microwave.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#wave">マイクロ波</a>
+                <a href="#dipole">分子</a>
+                <a href="#frequency">2.45GHz</a>
+                <a href="#cavity">ムラと火花</a>
+                <a href="#demo">模式図</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Microwave / Dielectric Loss / Debye Model / Standing Wave</p>
+                    <h1>電子レンジは、<br>どう温めているのか</h1>
+                    <p class="hero-lead">
+                        電子レンジは、<strong>電場で分子を揺らし、その遅れた運動を熱へ変える</strong>装置です。
+                        中では 2.45GHz のマイクロ波が飛び、水分子の双極子が向きを変えようとして回転し、周囲との衝突でエネルギーが乱雑化します。
+                        その結果として温度が上がります。しかも実際の加熱は、共鳴というより<strong>誘電緩和と位相遅れ</strong>、さらに箱の中の定在波とターンテーブルまで含めて理解すると全体像が見えます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#wave">仕組みを読む</a>
+                        <a class="button button-secondary" href="#demo">模式図でつかむ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>マグネトロンが約 2.45GHz、波長約 12cm のマイクロ波を作る</li>
+                        <li>水分子が電場に遅れて回ろうとし、その衝突が熱になる</li>
+                        <li>箱の中では定在波ができるので、ムラを平均化するために皿を回す</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="microwave-window" aria-hidden="true">
+                        <div class="grid-layer"></div>
+                        <div class="oven-shell">
+                            <div class="door-frame">
+                                <div class="door-window">
+                                    <div class="standing-bar bar-a"></div>
+                                    <div class="standing-bar bar-b"></div>
+                                    <div class="standing-bar bar-c"></div>
+                                    <div class="standing-bar bar-d"></div>
+                                    <div class="tray-disc"></div>
+                                    <div class="meal-core"></div>
+                                    <div class="steam steam-a"></div>
+                                    <div class="steam steam-b"></div>
+                                    <div class="steam steam-c"></div>
+                                </div>
+                            </div>
+                            <div class="control-panel">
+                                <span class="knob knob-a"></span>
+                                <span class="knob knob-b"></span>
+                                <span class="display-panel"></span>
+                            </div>
+                        </div>
+                        <div class="magnetron-core"></div>
+                        <div class="wave-trace wave-a"></div>
+                        <div class="wave-trace wave-b"></div>
+                        <div class="wave-trace wave-c"></div>
+                        <div class="panel-tag tag-wave">2.45 GHz</div>
+                        <div class="panel-tag tag-loss">dielectric loss</div>
+                        <div class="panel-tag tag-cavity">standing wave</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Field</p>
+                            <h2>箱の中で飛んでいるのはマイクロ波</h2>
+                            <p>電子レンジの主役は火でも熱線でもなく、2.45GHz の電磁波です。まず食品へ届くのは「電場の揺れ」です。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">Material</p>
+                            <h2>水分子は共鳴より「遅れ」で熱くなる</h2>
+                            <p>電場の向きが高速で変わると、水分子は完全に追従できずに遅れます。その位相差がエネルギー吸収を生みます。</p>
+                        </article>
+                        <article class="hero-note night-note">
+                            <p class="card-label">Cavity</p>
+                            <h2>ムラは定在波、平均化は皿の回転</h2>
+                            <p>金属箱の中では波が反射して腹と節を作るため、強く温まる場所と弱い場所が固定されます。ターンテーブルはそのムラを平均化します。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">電子レンジ = 電場が双極子を揺らし、遅れた応答が熱へ崩れる装置。</p>
+                <p class="signal-sub">マイクロ波のエネルギーは、そのまま温度になるのではありません。まず分子の回転運動へ入り、そこから衝突と乱雑化を通って熱へ変わります。波の話、物質応答、散逸が同時に見える装置です。</p>
+            </section>
+
+            <section class="section reveal" id="wave">
+                <div class="section-heading">
+                    <p class="eyebrow">Microwave Source</p>
+                    <h2>まず箱の中で何が飛んでいるのか</h2>
+                    <p>電子レンジの中ではマグネトロンがマイクロ波を作り、金属箱の中へ送り込みます。これは可視光よりずっと波長の長い電磁波で、食品の中の水分子へ直接電場をかける役目です。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Magnetron</p>
+                        <h3>電波の発生源はマグネトロン</h3>
+                        <p>電子レンジの内部にはマグネトロンがあり、そこから数 GHz 帯の強いマイクロ波を作って加熱室へ送り込みます。火ではなく発振器です。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Frequency</p>
+                        <h3>周波数は約 2.45GHz</h3>
+                        <p>家庭用電子レンジで使う周波数は約 2.45GHz、波長は約 12cm です。食品サイズに対して扱いやすい電磁波の時間・空間スケールです。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Electromagnetic Wave</p>
+                        <h3>これは「見えない光」の一種</h3>
+                        <p>マイクロ波は光や X 線と同じ電磁波の仲間です。違うのは周波数帯だけで、電子レンジは電磁場そのものを調理に使っています。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Metal Box</p>
+                        <h3>箱は波を閉じ込める共振室でもある</h3>
+                        <p>金属の加熱室は波を反射して漏れにくくし、内部で場を作ります。その反射が後で定在波や加熱ムラの原因にもなります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Microwave</p>
+                        <div class="formula-block">f &asymp; 2.45 GHz</div>
+                        <p>電子レンジのマイクロ波は GHz 帯の高速振動です。電場の向きが 1 秒間に何十億回も入れ替わります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Wavelength</p>
+                        <div class="formula-block">&lambda; = c / f &asymp; 12 cm</div>
+                        <p>波長が数 cm スケールなので、箱の寸法や食品配置と絡んで腹・節の空間パターンが現れます。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Viewpoint</p>
+                        <div class="formula-block">電子レンジ = 電場を食品へ注ぎ込む装置</div>
+                        <p>最初に食品へ入るのは熱ではなく、時間変化する電場です。熱はそのあと物質側で作られます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="dipole">
+                <div class="section-heading">
+                    <p class="eyebrow">Dipole Heating</p>
+                    <h2>水分子はどうやって熱へ変えるのか</h2>
+                    <p>水分子は + と - の偏りを持つ双極子なので、電場がかかるとその向きへ回ろうとします。ただし液体中では周囲とぶつかり、電場に完全には追従できません。この遅れと衝突が熱の正体です。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Dipole</p>
+                        <h3>水分子には向きがある</h3>
+                        <p>H<sub>2</sub>O は電荷分布が偏っているので、外から見ると小さな双極子として振る舞います。電場があると向きをそろえようとします。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Torque</p>
+                        <h3>電場が回転トルクをかける</h3>
+                        <p>マイクロ波の電場は向きを高速で変えるので、水分子はそのたびにぐるぐる回ろうとします。まず起きるのは回転運動です。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Collision</p>
+                        <h3>衝突して乱雑化すると熱になる</h3>
+                        <p>液体の中では分子同士が密にぶつかるため、回転エネルギーはすぐにランダムな運動へ崩れます。これが温度上昇として見えます。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Misconception</p>
+                        <h3>本質は「共鳴」より「緩和」</h3>
+                        <p>電子レンジが温める理由は、水の固有共鳴にぴったり当てているからではありません。電場に対する応答の遅れ、つまり誘電緩和が本体です。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Energy Flow</p>
+                        <div class="formula-block">電波 &rarr; 回転運動 &rarr; 衝突 &rarr; 熱</div>
+                        <p>電子レンジ加熱は、電磁波のエネルギーをいったん分子運動へ移し、そこから熱へ崩す変換過程です。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Loss Power</p>
+                        <div class="formula-block">&lang;p&rang; = (1/2)&omega;&epsilon;<sub>0</sub>&epsilon;''E<sub>0</sub><sup>2</sup></div>
+                        <p>平均吸収電力は損失項 &epsilon;'' に比例します。どれだけ遅れて応答するかが、そのまま加熱の強さです。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Entropy</p>
+                        <div class="formula-block">秩序だった駆動 &rarr; 乱雑な熱運動</div>
+                        <p>外からは整然とした電場で駆動していても、内部では衝突でエネルギーがランダム化され、エントロピーが増えます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="frequency">
+                <div class="section-heading">
+                    <p class="eyebrow">Frequency Choice</p>
+                    <h2>なぜ 2.45GHz で、なぜ氷は温まりにくいのか</h2>
+                    <p>2.45GHz は「水がちょうどよく損失を持ち、数 cm ほど内部へ入り、装置としても作りやすく、法律上も使いやすい」という妥協点です。ここでは Debye モデルでその理由が見えます。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Compromise</p>
+                        <h3>2.45GHz は吸収と浸透の釣り合い</h3>
+                        <p>周波数が高すぎると表面だけで吸収され、低すぎると電場に追従してしまって熱になりにくくなります。2.45GHz はその中間です。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Not 20GHz</p>
+                        <h3>強吸収帯を使えばよいわけではない</h3>
+                        <p>水の損失ピークはもっと高い帯域にありますが、そこでは浸透深さが浅すぎて表面加熱になりやすいので、調理には不向きです。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Ice</p>
+                        <h3>氷は分子が縛られていて回りにくい</h3>
+                        <p>氷では水素結合ネットワークが強く、分子回転の自由度が小さいため、誘電緩和が起きにくくなります。だから液体水より温まりにくいのです。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Engineering</p>
+                        <h3>ISM バンドとマグネトロンの都合もある</h3>
+                        <p>2.45GHz は ISM バンドに含まれ、産業・医療用途で使いやすい周波数です。マグネトロンでも安価に大電力を出しやすい帯域でした。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Debye</p>
+                        <div class="formula-block">&epsilon;*(ω) = &epsilon;<sub>&infin;</sub> + (&epsilon;<sub>s</sub> - &epsilon;<sub>&infin;</sub>) / (1 + iωτ)</div>
+                        <p>複素誘電率の Debye モデルは、「分極が遅れて追従する」ことをそのまま式にしたものです。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Loss Term</p>
+                        <div class="formula-block">&epsilon;''(ω) = ((&epsilon;<sub>s</sub> - &epsilon;<sub>&infin;</sub>)ωτ) / (1 + (ωτ)<sup>2</sup>)</div>
+                        <p>損失項は ωτ の関数で、低すぎても高すぎても小さくなります。加熱は中間で最大になります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Maximum</p>
+                        <div class="formula-block">ωτ &asymp; 1 で吸収が最大</div>
+                        <p>電場の振動周期と分子の応答時間がちょうどずれると、位相差が大きくなり、電磁波の仕事が最も熱へ変わります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="cavity">
+                <div class="section-heading">
+                    <p class="eyebrow">Cavity Physics</p>
+                    <h2>なぜムラや火花が起きるのか</h2>
+                    <p>電子レンジは金属箱の中の波です。反射波が重なると定在波ができ、強く加熱される腹と弱い節が固定されます。そこで食品を回したり、モードをかき混ぜたりして平均化します。一方、金属は表面電流を生み、条件によっては放電を起こします。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Standing Wave</p>
+                        <h3>箱の中では腹と節が固定される</h3>
+                        <p>金属壁で反射した波が重なると定在波になり、空間的に電場の強い場所と弱い場所が固定されます。ここが加熱ムラの根です。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Turntable</p>
+                        <h3>皿を回してムラを平均化する</h3>
+                        <p>ターンテーブルは食品を強い場所と弱い場所の両方へ通し、時間平均で温度差を減らします。最近はモードスターラーで同じ役目をする機種もあります。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Metal</p>
+                        <h3>金属は反射し、時に火花になる</h3>
+                        <p>金属は電波を強く反射し、端では電流が集中します。形状や隙間によっては放電が起き、火花として見えるので危険です。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Inside Out?</p>
+                        <h3>「中から温まる」は完全には正確ではない</h3>
+                        <p>マイクロ波は表面だけでなく数 cm ほど内部まで入るのでフライパンより深く加熱しますが、完全に一様でも無限に深く届くわけでもありません。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Cavity Field</p>
+                        <div class="formula-block">E(x, t) = E<sub>0</sub> sin(kx) cos(ωt)</div>
+                        <p>定在波の最も簡単な形です。sin(kx)=0 の場所は節で、電場が弱く加熱されにくい領域になります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Hot Spot</p>
+                        <div class="formula-block">腹 &rarr; 強加熱 / 節 &rarr; 弱加熱</div>
+                        <p>同じ食品でも置く位置で温まり方が違うのは、箱の中の場が空間的に均一でないからです。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Metal Risk</p>
+                        <div class="formula-block">反射 &rarr; 表面電流 &rarr; 放電</div>
+                        <p>金属が危ない理由は、単に熱くなるからではなく、強い電場集中と放電条件を作りやすいからです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Diagram</p>
+                    <h2>4 つの視点で電子レンジの内部物理を切り替える</h2>
+                    <p>マグネトロンから出るマイクロ波、水分子の双極子回転、Debye 型の損失、定在波とターンテーブルによる平均化を 1 枚のキャンバスで切り替えます。厳密な電磁場シミュレーションではなく、何が熱を生み、何がムラを作るかを掴むための模式図です。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="mode-row" id="modeRow">
+                            <button class="mode-chip is-active" data-mode="source" type="button">マイクロ波</button>
+                            <button class="mode-chip" data-mode="dipole" type="button">双極子</button>
+                            <button class="mode-chip" data-mode="loss" type="button">誘電損失</button>
+                            <button class="mode-chip" data-mode="cavity" type="button">定在波</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="primaryRange">
+                                <span id="primaryLabel">周波数</span>
+                                <input id="primaryRange" type="range" min="2.0" max="3.2" value="2.45" step="0.05">
+                                <strong id="primaryValue">2.45 GHz</strong>
+                            </label>
+                            <label class="control" for="secondaryRange">
+                                <span id="secondaryLabel">出力</span>
+                                <input id="secondaryRange" type="range" min="20" max="100" value="72" step="1">
+                                <strong id="secondaryValue">72%</strong>
+                            </label>
+                        </div>
+                        <div class="canvas-frame">
+                            <canvas id="microwaveCanvas" width="900" height="520" aria-label="電子レンジ内部の模式図"></canvas>
+                        </div>
+                        <p class="canvas-caption"><strong>注意:</strong> ここでの図は考え方を掴むための模式図です。実機では導波管形状、回路設計、食品の複雑な誘電率分布などがさらに効きます。</p>
+                        <p class="demo-note" id="demoNarration" aria-live="polite">マイクロ波モードでは、マグネトロンから発生した 2.45GHz の電磁波が金属箱の中へ入り、食品へ届く流れを見てください。</p>
+                    </div>
+
+                    <aside class="status-panel">
+                        <article class="status-card strong-card">
+                            <p class="card-label">Field</p>
+                            <h3>電磁場</h3>
+                            <p id="fieldValue">マイクロ波は火ではなく、時間変化する電場として食品へ届く。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Material</p>
+                            <h3>物質応答</h3>
+                            <p id="materialValue">水分子は双極子として電場に向きを合わせようとする。</p>
+                        </article>
+                        <article class="status-card warm-card">
+                            <p class="card-label">Heating</p>
+                            <h3>熱化</h3>
+                            <p id="heatValue">位相遅れと衝突が、電磁波のエネルギーを熱に変える。</p>
+                        </article>
+                        <article class="status-card night-card">
+                            <p class="card-label">Cavity</p>
+                            <h3>箱の中の波</h3>
+                            <p id="cavityValue">定在波の腹と節が、加熱ムラや金属反射の振る舞いを決める。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Reading Memo</p>
+                            <h3>読み取りメモ</h3>
+                            <p id="statusValue">電子レンジは、波動・物質応答・散逸が一つの箱の中で同時に見える装置です。</p>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Reads</p>
+                    <h2>電子レンジの話を、別のページへ広げる</h2>
+                    <p>電子レンジを理解すると、電磁波、定在波、熱化、散逸、研究テーマ化が一気につながります。ここから先は通信、摩擦、波動、研究設計へ伸ばすと自然です。</p>
+                </div>
+                <div class="link-grid">
+                    <article class="link-card strong-card">
+                        <p class="card-label">Electromagnetism</p>
+                        <h3>通信のページで電波を見る</h3>
+                        <p>電子レンジもスマホ通信も、結局は電磁波と物質の相互作用です。電波の側から見ると理解がさらに立体になります。</p>
+                        <a class="button button-primary" href="communication.html">通信のページへ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Dissipation</p>
+                        <h3>摩擦と熱化をもう一度読む</h3>
+                        <p>整った運動が乱雑な熱へ崩れるという意味では、電子レンジの加熱と摩擦の散逸はかなり近い構造を持っています。</p>
+                        <a class="button button-secondary" href="friction.html">摩擦力のページへ</a>
+                    </article>
+                    <article class="link-card">
+                        <p class="card-label">Wave Pattern</p>
+                        <h3>定在波の模様を別の形で見る</h3>
+                        <p>箱の中の定在波は、節と腹の空間パターンとして現れます。クラドニ図形と並べて読むと、波の節の考え方が深まります。</p>
+                        <a class="button button-secondary" href="chladni.html">クラドニ図形へ</a>
+                    </article>
+                    <article class="link-card night-card">
+                        <p class="card-label">Research</p>
+                        <h3>電子レンジを研究テーマへ育てる</h3>
+                        <p>複素誘電率、定在波の制御、加熱ムラ、氷と水の応答差は、そのまま強い研究テーマ候補になります。</p>
+                        <a class="button button-secondary" href="research.html">研究の入口へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>電子レンジは、見えない電場で分子を駆動し、その遅れた応答を熱へ変える装置です。波動、物質応答、散逸が一台の箱の中に詰まっています。</p>
+            <div class="footer-links">
+                <a href="physics.html">物理学トップへ</a>
+                <a href="communication.html">通信へ</a>
+                <a href="friction.html">摩擦へ</a>
+                <a href="chladni.html">クラドニ図形へ</a>
+                <a href="index.html">研究サポートへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="microwave.js"></script>
+</body>
+</html>
