@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPSはなぜここまで正確なのか | 時間・相対論・原子時計</title>
+    <meta name="description" content="GPS がなぜ高精度で位置を測れるのかを高校生向けに解説。時間による距離測定、4衛星の幾何学、原子時計、特殊相対論と一般相対論、誤差補正と RTK までを図解でつなげます。">
+    <meta name="theme-color" content="#07111f">
+    <link rel="canonical" href="https://readerspace.github.io/gps.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gps.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#basics">基本原理</a>
+                <a href="#geometry">4衛星</a>
+                <a href="#clocks">原子時計</a>
+                <a href="#relativity">相対論</a>
+                <a href="#errors">誤差</a>
+                <a href="#demo">模式図</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">GPS / Atomic Clock / Trilateration / Relativity</p>
+                    <h1>GPS はなぜ、<br>ここまで正確なのか</h1>
+                    <p class="hero-lead">
+                        GPS の正確さは、<strong>超正確な時計 × 光の速さ × 幾何学</strong>でできています。
+                        衛星は「いま何時か」を電波で送り、受信機はその時間差を光速で距離へ変えます。
+                        ただし、それだけでは足りません。4 つ目の衛星で時計誤差を消し、さらに特殊相対論と一般相対論で時計の進み方まで補正して初めて、数 m から cm 級の測位が成立します。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#basics">仕組みを読む</a>
+                        <a class="button button-secondary" href="#demo">模式図でつかむ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>GPS は「時間差」から衛星までの距離を求めている</li>
+                        <li>4 衛星を使うのは、位置だけでなく受信機の時計ずれも未知数だから</li>
+                        <li>相対論補正を外すと、1 日で約 10 km 級の誤差になる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="gps-window" aria-hidden="true">
+                        <div class="star-layer"></div>
+                        <div class="orbit-ring"></div>
+                        <div class="earth-disc">
+                            <span class="continent continent-a"></span>
+                            <span class="continent continent-b"></span>
+                            <span class="continent continent-c"></span>
+                        </div>
+                        <div class="receiver-node"></div>
+                        <div class="satellite sat-a"></div>
+                        <div class="satellite sat-b"></div>
+                        <div class="satellite sat-c"></div>
+                        <div class="satellite sat-d"></div>
+                        <div class="beam beam-a"></div>
+                        <div class="beam beam-b"></div>
+                        <div class="beam beam-c"></div>
+                        <div class="beam beam-d"></div>
+                        <div class="clock-chip atomic-chip">Atomic Clock</div>
+                        <div class="clock-chip relativity-chip">+38.5 &micro;s/day</div>
+                        <div class="measure-tag">d = c &times; &Delta;t</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Time</p>
+                            <h2>時間を測ることが、空間を測ること</h2>
+                            <p>衛星信号の到達時間を光速で掛けると、衛星までの距離になります。GPS は「距離計」ではなく、まず「時計」です。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">Geometry</p>
+                            <h2>4 衛星で位置と時計ずれを同時に解く</h2>
+                            <p>未知数は位置の 3 成分だけではなく、受信機時計のずれもあります。だから 4 本目の方程式が必要です。</p>
+                        </article>
+                        <article class="hero-note night-note">
+                            <p class="card-label">Relativity</p>
+                            <h2>GPS は相対論を毎日使っている</h2>
+                            <p>衛星は速く動くので時計が遅れ、高い場所にあるので時計が速みます。その差を毎日補正して測位を維持しています。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">GPS の本質 = 時刻スタンプを距離へ変え、幾何と相対論で補正すること。</p>
+                <p class="signal-sub">衛星からの電波は「いま何時に送ったか」の情報を持っています。受信機はその差から距離を作り、複数衛星の幾何で位置を決め、さらに原子時計と相対論補正で精度を支えます。</p>
+            </section>
+
+            <section class="section reveal" id="basics">
+                <div class="section-heading">
+                    <p class="eyebrow">Time Of Flight</p>
+                    <h2>基本原理は、時間から距離を作ること</h2>
+                    <p>GPS 衛星は常に「いまの時刻」を送っています。受信機は送信時刻と受信時刻の差を取り、その電波が飛んだ時間を光速で掛けて衛星までの距離を求めます。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Broadcast</p>
+                        <h3>衛星は時刻スタンプを送り続ける</h3>
+                        <p>各衛星は「何時何分何秒に送った信号か」を埋め込んだ電波を常時放送しています。GPS の信号はまず時計の情報です。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Receive</p>
+                        <h3>受信機は到着までの時間差を読む</h3>
+                        <p>スマホやカーナビは、受信した瞬間の時刻との差を計算します。ここで得られるのは「時間差」であって、まだ位置そのものではありません。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Convert</p>
+                        <h3>光速で掛けると距離になる</h3>
+                        <p>電波はほぼ光速で進むので、時間差 &Delta;t が分かれば d = c &times; &Delta;t で衛星までの距離が出ます。GPS は飛行時間測定です。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Scale</p>
+                        <h3>1 ns のずれでも 30 cm</h3>
+                        <p>時間誤差が 1 ナノ秒あるだけで、距離には約 30 cm のズレが出ます。精度の核心が時計にある理由がここです。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Distance</p>
+                        <div class="formula-block">d = c &times; &Delta;t</div>
+                        <p>GPS の最初の一歩はこの式です。時間差を距離へ変換するだけで、測位の骨格が始まります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Pseudorange</p>
+                        <div class="formula-block">&rho; = c(t<sub>recv</sub> - t<sub>send</sub>)</div>
+                        <p>実際には受信機の時計も完全ではないので、最初に得られるのは厳密な距離ではなく「擬似距離」です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Nanosecond</p>
+                        <div class="formula-block">1 ns &rarr; 約 0.30 m</div>
+                        <p>超高精度の位置情報には、ナノ秒どころかそれ以下の時間制御が要ることが分かります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="geometry">
+                <div class="section-heading">
+                    <p class="eyebrow">Geometry</p>
+                    <h2>なぜ 4 つ目の衛星が必要なのか</h2>
+                    <p>1 つの衛星から分かるのは「その距離の球面上にいる」ということだけです。衛星が増えるごとに候補が絞られますが、現実の受信機には時計誤差があるので、位置 3 成分に加えて時刻補正も未知数になります。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">1 Satellite</p>
+                        <h3>分かるのは球面まで</h3>
+                        <p>衛星までの距離が 1 本分かっても、自分がその距離の球面上のどこにいるかは決まりません。候補は無数に残ります。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">2, 3 Satellites</p>
+                        <h3>交わりで候補を絞る</h3>
+                        <p>2 つで円、3 つで候補点まで絞れますが、それでも受信機時計のずれを無視した理想化です。まだ現実の測位には足りません。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">4 Satellites</p>
+                        <h3>位置と時計ずれを同時に解く</h3>
+                        <p>4 つ目の衛星を入れると、x, y, z と受信機の時計補正 &delta;t の 4 未知数に対して 4 本の式がそろいます。ここで初めて実用的な測位が成立します。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Clock Bias</p>
+                        <h3>4 本目は「時計のズレ」を消すため</h3>
+                        <p>受信機には衛星のような原子時計がないので、そのずれを未知数として一緒に解く必要があります。GPS の 4 衛星ルールはここから来ます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Measurement</p>
+                        <div class="formula-block">&rho;<sub>i</sub> = |r - r<sub>i</sub>| + c&delta;t</div>
+                        <p>各衛星 i ごとに、観測された擬似距離は幾何学的距離と受信機時計のずれの和として書けます。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Unknowns</p>
+                        <div class="formula-block">unknowns = x, y, z, &delta;t</div>
+                        <p>測位方程式の未知数は 4 個です。位置だけでなく、時刻補正が含まれていることがポイントです。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Minimum</p>
+                        <div class="formula-block">4 satellites &rarr; 1 point + clock correction</div>
+                        <p>実用上は 4 衛星が最低条件で、実際の受信ではそれ以上を使ってノイズや誤差に対して頑健にします。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="clocks">
+                <div class="section-heading">
+                    <p class="eyebrow">Atomic Clock</p>
+                    <h2>正確さの芯には原子時計がある</h2>
+                    <p>GPS 衛星の時刻基準が強いのは、量子力学で決まる原子の遷移周波数をそのまま時間基準にしているからです。普通の機械式時計や水晶より、自然法則そのものに近い基準を使っています。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Quantum Frequency</p>
+                        <h3>原子の準位差が周波数を決める</h3>
+                        <p>&Delta;E = h&nu; により、原子のエネルギー準位差は一意の周波数へ結びつきます。ここが原子時計の「振り子」です。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Cesium</p>
+                        <h3>秒の定義はセシウム 133</h3>
+                        <p>現在の 1 秒は、セシウム 133 の超微細構造遷移 9,192,631,770 周期で定義されています。秒そのものが量子遷移の数え上げです。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Lock</p>
+                        <h3>共鳴が最大になる周波数へロックする</h3>
+                        <p>マイクロ波を少しずつ変えながら当て、遷移が最大になる周波数へフィードバックをかけます。こうして「正しい周波数」を維持します。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Future</p>
+                        <h3>光格子時計はさらに桁違いに強い</h3>
+                        <p>可視光領域の超高周波を使う光時計では 10<sup>-18</sup> 級の精度に達します。高さ差による相対論的な時間差さえ測れるレベルです。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Quantum Rule</p>
+                        <div class="formula-block">&Delta;E = h&nu;</div>
+                        <p>エネルギー差が固定なら、対応する周波数も固定です。時間基準としてこれ以上ないほど安定した源になります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Cesium Standard</p>
+                        <div class="formula-block">9,192,631,770 Hz</div>
+                        <p>この周波数の数え上げが現在の秒の定義です。GPS の精度は、この量子標準へつながっています。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Meaning</p>
+                        <div class="formula-block">time = counting a stable frequency</div>
+                        <p>原子時計の本質は「普遍的な周波数を数えること」です。時間とは周波数のカウントだと言い換えられます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="relativity">
+                <div class="section-heading">
+                    <p class="eyebrow">Relativity</p>
+                    <h2>GPS は相対論なしでは成立しない</h2>
+                    <p>衛星時計は地上時計と同じ速さで進みません。衛星は高速で動くので特殊相対論で遅れ、地上より高くて重力が弱いので一般相対論で速く進みます。その差を補正しないと、位置は毎日大きく崩れます。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Special Relativity</p>
+                        <h3>速く動く時計は遅れる</h3>
+                        <p>GPS 衛星は秒速約 3.87 km で地球を回っています。そのため特殊相対論の効果で、地上から見ると時計は 1 日に約 -7.2 &micro;s 遅れます。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">General Relativity</p>
+                        <h3>高い場所の時計は速く進む</h3>
+                        <p>衛星は地上より重力ポテンシャルが高い場所にあるため、一般相対論の効果で時計は 1 日に約 +45.7 &micro;s 速く進みます。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Net</p>
+                        <h3>合計は +38.5 &micro;s/day</h3>
+                        <p>2 つの効果を足すと、GPS 衛星の時計は地上時計より 1 日で約 38.5 マイクロ秒速く進みます。補正は必須です。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Consequence</p>
+                        <h3>放置すると 1 日で約 11.6 km</h3>
+                        <p>38.5 &micro;s は光にとって大きな距離差です。光速で掛けると、測位誤差は 1 日で約 11.6 km に達します。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">SR</p>
+                        <div class="formula-block">&Delta;t'/&Delta;t &asymp; 1 - v<sup>2</sup> / 2c<sup>2</sup></div>
+                        <p>衛星の高速運動による時間遅れを与える弱速近似です。GPS ではこれが約 -7.2 &micro;s/day になります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">GR</p>
+                        <div class="formula-block">d&tau; &asymp; (1 + &Phi;/c<sup>2</sup>) dt</div>
+                        <p>弱重力場では、重力ポテンシャルが高いほど固有時は速く進みます。GPS ではこの効果が支配的です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Total</p>
+                        <div class="formula-block">+45.7 - 7.2 = +38.5 &micro;s/day</div>
+                        <p>GPS は相対論を教科書の外へ持ち出した、日常の大規模実験だと見なせます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="errors">
+                <div class="section-heading">
+                    <p class="eyebrow">Real World Errors</p>
+                    <h2>それでも現実には誤差が入る</h2>
+                    <p>相対論を入れても、GPS はまだ理想にはなりません。大気、建物反射、衛星位置のずれなどが誤差源になり、単独測位では数 m 程度のズレが残ります。そこで差分補正や搬送波位相の測定が活きます。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Atmosphere</p>
+                        <h3>電離層と対流圏が信号を遅らせる</h3>
+                        <p>電波は真空ではなく大気を通るので、屈折や電子密度の影響で到達時間が少し伸びます。これが距離誤差へ直結します。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Multipath</p>
+                        <h3>建物反射で遠回りした信号が混ざる</h3>
+                        <p>都市部では信号が壁や地面で反射し、複数経路で届きます。直接波と反射波が混ざると、測距は不安定になります。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Ephemeris</p>
+                        <h3>衛星位置の情報にも誤差がある</h3>
+                        <p>衛星が「どこにいるか」の情報そのものにズレがあれば、いくら時間測定が正しくても位置推定はずれます。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Correction</p>
+                        <h3>DGPS と RTK で m から cm へ</h3>
+                        <p>既知位置の基地局との差を使う DGPS、搬送波位相まで使う RTK により、単独 GPS をはるかに超える精度へ押し上げられます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Raw Error</p>
+                        <div class="formula-block">single GPS &rarr; meter scale</div>
+                        <p>相対論を含めても、実環境では m 級の誤差が普通に残ります。理論と現場の間に補正技術が入ります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">DGPS</p>
+                        <div class="formula-block">shared local error &rarr; subtract</div>
+                        <p>近くの基地局で見えた共通誤差を差し引くことで、局所的なズレをかなり小さくできます。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">RTK</p>
+                        <div class="formula-block">carrier phase &rarr; centimeter scale</div>
+                        <p>搬送波の位相まで読むと、コード測位よりはるかに細かい情報が得られ、cm 級まで到達できます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Diagram</p>
+                    <h2>4 つの視点で GPS の精度の支え方を切り替える</h2>
+                    <p>時間差で距離を作ること、4 衛星で位置と時計ずれを解くこと、相対論補正、そして誤差補正までを 1 枚のキャンバスで見比べます。厳密な航法計算ではなく、何が精度を支えているかを直感で掴むための模式図です。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="mode-row" id="modeRow">
+                            <button class="mode-chip is-active" data-mode="ranging" type="button">時間測距</button>
+                            <button class="mode-chip" data-mode="geometry" type="button">4衛星</button>
+                            <button class="mode-chip" data-mode="relativity" type="button">相対論</button>
+                            <button class="mode-chip" data-mode="errors" type="button">誤差補正</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="primaryRange">
+                                <span id="primaryLabel">伝播時間</span>
+                                <input id="primaryRange" type="range" min="60" max="90" value="70" step="0.5">
+                                <strong id="primaryValue">70.0 ms</strong>
+                            </label>
+                            <label class="control" for="secondaryRange">
+                                <span id="secondaryLabel">時計ずれ</span>
+                                <input id="secondaryRange" type="range" min="0" max="120" value="8" step="1">
+                                <strong id="secondaryValue">8 ns</strong>
+                            </label>
+                        </div>
+                        <div class="canvas-frame">
+                            <canvas id="gpsCanvas" width="900" height="520" aria-label="GPS の精度を支える仕組みの模式図"></canvas>
+                        </div>
+                        <p class="canvas-caption"><strong>注意:</strong> ここでの図は考え方をつかむための模式図です。実際の測位では軌道計算、符号同期、誤差モデル、カルマンフィルタなどがさらに入ります。</p>
+                        <p class="demo-note" id="demoNarration" aria-live="polite">時間測距モードでは、衛星からの信号がどれだけ時間をかけて届いたかを距離へ変える様子を見てください。</p>
+                    </div>
+
+                    <aside class="status-panel">
+                        <article class="status-card strong-card">
+                            <p class="card-label">Time</p>
+                            <h3>時間と距離</h3>
+                            <p id="timeValue">GPS は電波の到達時間を距離へ変換している。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Geometry</p>
+                            <h3>4 衛星の意味</h3>
+                            <p id="geometryValue">位置 3 成分と受信機時計のずれを同時に解く。</p>
+                        </article>
+                        <article class="status-card warm-card">
+                            <p class="card-label">Relativity</p>
+                            <h3>相対論補正</h3>
+                            <p id="relativityValue">衛星時計は地上時計と同じ速さでは進まない。</p>
+                        </article>
+                        <article class="status-card night-card">
+                            <p class="card-label">Error</p>
+                            <h3>現実のズレ</h3>
+                            <p id="errorValue">大気、反射、衛星位置誤差が単独測位を揺らす。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Reading Memo</p>
+                            <h3>読み取りメモ</h3>
+                            <p id="statusValue">GPS は「時計・電波・幾何学・相対論」が全部一つの装置に重なった例です。</p>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Reads</p>
+                    <h2>GPS の話を、別のページへ広げる</h2>
+                    <p>GPS を理解すると、光速、電磁波、誤差解析、研究テーマ化が一気につながります。ここから先は、相対論と信号、ノイズへ伸ばすと自然です。</p>
+                </div>
+                <div class="link-grid">
+                    <article class="link-card strong-card">
+                        <p class="card-label">Relativity</p>
+                        <h3>光速の意味を読み直す</h3>
+                        <p>GPS は「光速が有限で一定」という事実を毎回使っています。光速のページへ戻ると、測距の意味がよりはっきり見えます。</p>
+                        <a class="button button-primary" href="lightspeed.html">光速のページへ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Signal</p>
+                        <h3>通信として見ると何が送られているか</h3>
+                        <p>GPS も結局は時刻情報を乗せた電波です。通信ページと合わせると、信号の見え方がさらに具体的になります。</p>
+                        <a class="button button-secondary" href="communication.html">通信のページへ</a>
+                    </article>
+                    <article class="link-card">
+                        <p class="card-label">Noise</p>
+                        <h3>誤差解析の視点へつなぐ</h3>
+                        <p>単独測位の誤差や補正の限界は、統計と誤差伝播の考え方へ自然につながります。</p>
+                        <a class="button button-secondary" href="statistics.html">統計のページへ</a>
+                    </article>
+                    <article class="link-card night-card">
+                        <p class="card-label">Research</p>
+                        <h3>測位を研究テーマへ育てる</h3>
+                        <p>相対論補正、電離層補正、RTK、時刻同期は、そのまま強い研究テーマ候補になります。</p>
+                        <a class="button button-secondary" href="research.html">研究の入口へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>GPS の正確さは、空間を直接測っているのではなく、「時間のズレ」を極限まで正確に扱うことで生まれています。時空そのものを測位装置にしたのが GPS です。</p>
+            <div class="footer-links">
+                <a href="physics.html">物理学トップへ</a>
+                <a href="lightspeed.html">光速へ</a>
+                <a href="communication.html">通信へ</a>
+                <a href="statistics.html">統計へ</a>
+                <a href="index.html">研究サポートへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="gps.js"></script>
+</body>
+</html>

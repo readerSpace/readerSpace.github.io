@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スマホの通信はどう動いているのか | 電波・変調・5G・OFDM</title>
+    <meta name="description" content="スマホ通信の仕組みを高校生向けに解説。携帯回線とWi-Fi、電波と変調、QAM、5Gのミリ波・MIMO・ビームフォーミング、OFDMとsincまでを図解と模式図でつなげます。">
+    <meta name="theme-color" content="#081820">
+    <link rel="canonical" href="https://readerspace.github.io/communication.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="communication.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#network">全体像</a>
+                <a href="#wave">電波</a>
+                <a href="#modulation">変調</a>
+                <a href="#speed">5G</a>
+                <a href="#ofdm">OFDM</a>
+                <a href="#demo">模式図</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Wireless Communication / Electromagnetic Waves / QAM / OFDM</p>
+                    <h1>スマホの通信は、<br>どう動いているのか</h1>
+                    <p class="hero-lead">
+                        スマホ通信の本質は、<strong>電磁場の揺れを使って情報を運ぶ</strong>ことです。
+                        携帯回線なら基地局へ、Wi-Fi ならルーターへ電波を送り、そこでインターネットへ接続されます。
+                        その中身では、変調、QAM、5G のミリ波と MIMO、さらに OFDM のような数理が同時に動いています。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#network">通信の流れを見る</a>
+                        <a class="button button-secondary" href="#demo">模式図でつかむ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>スマホ通信は「電波で基地局やルーターに送り、そこからインターネットへ流す」仕組みです</li>
+                        <li>情報は振幅・周波数・位相の変化として電波に埋め込まれます</li>
+                        <li>5G は帯域、空間チャネル、位相制御を一気に使って速度を押し上げています</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="telecom-window" aria-hidden="true">
+                        <div class="grid-layer"></div>
+                        <div class="cloud-core"></div>
+                        <div class="tower tower-a">
+                            <span class="tower-stem"></span>
+                            <span class="tower-wing wing-left"></span>
+                            <span class="tower-wing wing-right"></span>
+                        </div>
+                        <div class="tower tower-b">
+                            <span class="tower-stem"></span>
+                            <span class="tower-wing wing-left"></span>
+                            <span class="tower-wing wing-right"></span>
+                        </div>
+                        <div class="phone-shell hero-phone cellular-phone"></div>
+                        <div class="phone-shell hero-phone wifi-phone"></div>
+                        <div class="router-shell"></div>
+                        <div class="beam-trace beam-cell"></div>
+                        <div class="beam-trace beam-wifi"></div>
+                        <div class="wifi-ring ring-a"></div>
+                        <div class="wifi-ring ring-b"></div>
+                        <span class="packet-node packet-a"></span>
+                        <span class="packet-node packet-b"></span>
+                        <span class="packet-node packet-c"></span>
+                        <span class="packet-node packet-d"></span>
+                        <div class="window-label label-cell">Cellular</div>
+                        <div class="window-label label-router">Wi-Fi</div>
+                        <div class="window-label label-modulation">Modulation</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Route</p>
+                            <h2>携帯回線と Wi-Fi は中継役が違う</h2>
+                            <p>携帯回線では基地局、Wi-Fi ではルーターが最初の受け手です。その先でどちらもインターネット側へ流れます。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">Encoding</p>
+                            <h2>情報は電波の形の変化</h2>
+                            <p>0 と 1 のデータは、そのまま飛んでいるのではなく、電波の振幅・周波数・位相の変化として表現されています。</p>
+                        </article>
+                        <article class="hero-note night-note">
+                            <p class="card-label">5G</p>
+                            <h2>速さは帯域と空間自由度で作る</h2>
+                            <p>5G はミリ波で周波数帯域を広げ、MIMO とビームフォーミングで空間方向まで通信資源として使っています。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">通信 = 電磁場の揺れに情報を埋め込み、遠くで復元すること。</p>
+                <p class="signal-sub">スマホ通信は、電波という波のパラメータを少しずつ変え、その変化を基地局やルーターで読み解く技術です。物理で見れば「場の揺れ」、数理で見れば「変調・行列・フーリエ解析」の組み合わせです。</p>
+            </section>
+
+            <section class="section reveal" id="network">
+                <div class="section-heading">
+                    <p class="eyebrow">Network Route</p>
+                    <h2>スマホ通信の全体像</h2>
+                    <p>スマホは主に携帯回線と Wi-Fi の 2 本立てで通信します。どちらも最初は電波を飛ばしますが、最初に受ける相手と、その後の流れが少し違います。</p>
+                </div>
+                <div class="flow-grid">
+                    <article class="flow-card strong-card">
+                        <p class="card-label">Cellular</p>
+                        <h3>4G / 5G は基地局へ送る</h3>
+                        <p>スマホは近くの基地局へ電波を送り、基地局がそれを光回線や中継網へ渡します。動画、通話、SNS も最初の一跳びはこの流れです。</p>
+                    </article>
+                    <article class="flow-card warm-card">
+                        <p class="card-label">Wi-Fi</p>
+                        <h3>家やカフェではルーターへ送る</h3>
+                        <p>Wi-Fi ではスマホがルーターへ接続し、そこから光回線などを通ってインターネットへ出ます。基地局の代わりにルーターが中継役です。</p>
+                    </article>
+                    <article class="flow-card">
+                        <p class="card-label">Mobility</p>
+                        <h3>移動中は基地局が自動で切り替わる</h3>
+                        <p>電車や徒歩で移動しても、スマホは近い基地局へ自動でつなぎ替えます。これがハンドオーバーです。</p>
+                    </article>
+                    <article class="flow-card night-card">
+                        <p class="card-label">Common Core</p>
+                        <h3>最後はどちらもインターネットへ流れる</h3>
+                        <p>入口は違っても、基地局やルーターの先ではサーバーや相手端末へ届くネットワークに合流します。違うのは「最初の中継地点」です。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Common Route</p>
+                        <div class="formula-block">スマホ → 基地局 / ルーター → インターネット → 相手</div>
+                        <p>スマホ通信を一行でまとめるとこの流れです。最初の無線区間だけが電波で、その先は有線や光も混ざります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Physics</p>
+                        <div class="formula-block">電波 = 電磁波 = 電磁場の振動</div>
+                        <p>スマホが使う電波は、光や X 線と同じ電磁波の仲間です。違うのは周波数帯だけです。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Handover</p>
+                        <div class="formula-block">移動中でも最寄りの基地局へ切り替える</div>
+                        <p>スマホは固定電話のように一本の線でつながっているわけではなく、周囲の基地局配置を見ながら通信路を選び直しています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="wave">
+                <div class="section-heading">
+                    <p class="eyebrow">Electromagnetic Wave</p>
+                    <h2>まず電波は「波」である</h2>
+                    <p>通信の数式は全部ここから始まります。電波は時間とともに振動する波で、その振動の強さ・速さ・ずれ方を変えることで情報が乗ります。</p>
+                </div>
+                <div class="system-grid">
+                    <article class="system-card strong-card">
+                        <p class="card-label">Carrier</p>
+                        <h3>基本形は正弦波</h3>
+                        <p>電波は s(t) = A cos(2πft + φ) のような波として表せます。A は強さ、f は周波数、φ は位相です。</p>
+                    </article>
+                    <article class="system-card warm-card">
+                        <p class="card-label">Digital</p>
+                        <h3>送りたいのは 0 と 1</h3>
+                        <p>写真、音声、文字も最後はビット列になります。そのビット列を、そのままではなく波の変化として埋め込むのが変調です。</p>
+                    </article>
+                    <article class="system-card">
+                        <p class="card-label">Knobs</p>
+                        <h3>変えられるノブは 3 つ</h3>
+                        <p>振幅、周波数、位相の 3 つを動かせば、波の形に多様なパターンを作れます。通信はこの自由度を使う技術です。</p>
+                    </article>
+                    <article class="system-card night-card">
+                        <p class="card-label">Decode</p>
+                        <h3>受信側は逆向きに読み解く</h3>
+                        <p>受信側は届いた電波を基準波と比較し、A・f・φ の変化から元のデータを復元します。だからエンコードとデコードが対になっています。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Carrier Wave</p>
+                        <div class="formula-block">s(t) = A cos(2πft + φ)</div>
+                        <p>通信で使う搬送波の最小モデルです。ここにデータ m(t) を混ぜていくと変調になります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Data</p>
+                        <div class="formula-block">情報 = 波のパラメータ変化のパターン</div>
+                        <p>ビットそのものが飛ぶのではなく、波形の違いとして空間を伝わります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Fourier View</p>
+                        <div class="formula-block">信号は周波数成分へ分解できる</div>
+                        <p>混ざった信号でもフーリエ解析で周波数ごとに分けられるので、多数の通信が同じ空間を共有できます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="modulation">
+                <div class="section-heading">
+                    <p class="eyebrow">Modulation</p>
+                    <h2>データはどこに乗っているのか</h2>
+                    <p>変調とは、電波のどこかを少し変えて情報にすることです。スマホ通信では、最終的に位相と振幅を細かく使う PSK や QAM が主役になります。</p>
+                </div>
+                <div class="modulation-grid">
+                    <article class="modulation-card strong-card">
+                        <p class="card-label">AM</p>
+                        <h3>振幅変調</h3>
+                        <p>波の大きさを変える方式です。直感的ですが、ノイズで振幅が揺れると情報も崩れやすくなります。</p>
+                    </article>
+                    <article class="modulation-card warm-card">
+                        <p class="card-label">FM</p>
+                        <h3>周波数変調</h3>
+                        <p>波の速さを変える方式です。FM ラジオのようにノイズに強く、連続的な信号にも向いています。</p>
+                    </article>
+                    <article class="modulation-card night-card">
+                        <p class="card-label">PSK</p>
+                        <h3>位相変調</h3>
+                        <p>波のタイミングのずれを使う方式です。BPSK では 0 と 1 を位相の反転で表し、デジタル通信の基本になります。</p>
+                    </article>
+                    <article class="modulation-card">
+                        <p class="card-label">QAM</p>
+                        <h3>振幅と位相を同時に使う</h3>
+                        <p>QAM は I 成分と Q 成分を同時に使って、1 回のシンボルで多くのビットを送ります。スマホ通信の高速化の中心です。</p>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">BPSK</p>
+                        <h3>最小のデジタル変調</h3>
+                        <p>0 と 1 を位相 0 と π に対応させるだけなので、考え方をつかむ入口として最適です。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">QAM</p>
+                        <h3>多値化で一気に詰め込む</h3>
+                        <p>I-Q 平面上に多数の点を置き、それぞれへデータを割り当てると、一つのシンボルに複数ビットを詰め込めます。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">Trade-off</p>
+                        <h3>密に詰めるほどノイズに敏感</h3>
+                        <p>点を近づけると速度は上がりますが、ノイズで隣の点へ誤認しやすくなります。高速通信はこのせめぎ合いです。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">AM</p>
+                        <div class="formula-block">s(t) = (1 + m(t)) cos(2πft)</div>
+                        <p>振幅を変えると、波の山と谷の大きさに情報が埋め込まれます。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">BPSK</p>
+                        <div class="formula-block">s(t) = A cos(2πft + πb), b ∈ {0, 1}</div>
+                        <p>0 と 1 を位相反転で表す、最も基本的なデジタル変調です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">QAM</p>
+                        <div class="formula-block">s(t) = I(t) cos(2πft) + Q(t) sin(2πft)</div>
+                        <p>振幅と位相を同時に使うので、同じ時間でも多くのビットを送れます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="speed">
+                <div class="section-heading">
+                    <p class="eyebrow">5G</p>
+                    <h2>5G はなぜ速いのか</h2>
+                    <p>通信速度を押し上げる方法は、物理的にはそんなに多くありません。広い帯域を使うか、S/N を良くするか、空間方向まで使うか。その具体化がミリ波、MIMO、ビームフォーミングです。</p>
+                </div>
+                <div class="throughput-grid">
+                    <article class="throughput-card strong-card">
+                        <p class="card-label">Capacity</p>
+                        <h3>シャノン容量が速度の土台</h3>
+                        <p>通信速度 C は帯域幅 B と S/N 比で決まります。広い帯域を確保し、ノイズに埋もれないようにすることが基本です。</p>
+                    </article>
+                    <article class="throughput-card warm-card">
+                        <p class="card-label">Millimeter Wave</p>
+                        <h3>ミリ波で帯域を広げる</h3>
+                        <p>5G は 24GHz 級の高い周波数帯も使い、4G よりずっと広い帯域幅を取れます。これが速度向上の第一の武器です。</p>
+                    </article>
+                    <article class="throughput-card night-card">
+                        <p class="card-label">MIMO</p>
+                        <h3>空間を並列チャネルにする</h3>
+                        <p>複数アンテナを使って、同じ時間・同じ周波数でも別々の信号を同時に送ります。反射や回折でできた多経路を逆に利用する発想です。</p>
+                    </article>
+                    <article class="throughput-card">
+                        <p class="card-label">Beamforming</p>
+                        <h3>必要な方向へエネルギーを集める</h3>
+                        <p>位相をそろえて特定方向へ電波を集中させると、S/N が改善し、届きにくい高周波でも効率よく通信できます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Shannon</p>
+                        <div class="formula-block">C = B log<sub>2</sub>(1 + S/N)</div>
+                        <p>帯域を広げるか、ノイズに対する信号の強さを上げるか。高速通信の本質はこの式に凝縮されています。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">MIMO</p>
+                        <div class="formula-block">y = Hx</div>
+                        <p>送信ベクトル x が空間チャネル H で混ざり、受信ベクトル y になる。MIMO はこの逆問題を解いて分離します。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Physical Lever</p>
+                        <div class="formula-block">周波数方向 × 空間方向 × 位相制御</div>
+                        <p>5G は電磁場の自由度を、周波数・空間・位相の 3 方向で同時に使っています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="ofdm">
+                <div class="section-heading">
+                    <p class="eyebrow">OFDM</p>
+                    <h2>5G の土台は「フーリエ基底で並列送信する」こと</h2>
+                    <p>OFDM は、広い帯域を多数の細いサブキャリアへ分けて同時送信する方式です。サブキャリア同士は重なって見えても、直交しているので干渉せずに分離できます。</p>
+                </div>
+                <div class="ofdm-grid">
+                    <article class="ofdm-card strong-card">
+                        <p class="card-label">Parallel</p>
+                        <h3>多数の細い周波数で同時送信</h3>
+                        <p>1 本の太い通信路で全部送る代わりに、多数のサブキャリアへ分けて並列に運びます。高速化の正体はこの並列化です。</p>
+                    </article>
+                    <article class="ofdm-card warm-card">
+                        <p class="card-label">Orthogonality</p>
+                        <h3>重なっても直交している</h3>
+                        <p>周波数間隔を 1/T に設計すると、あるサブキャリアの中心では、他のサブキャリアの寄与がちょうど 0 になります。</p>
+                    </article>
+                    <article class="ofdm-card night-card">
+                        <p class="card-label">Multipath</p>
+                        <h3>長いシンボルでマルチパスに強くする</h3>
+                        <p>細いサブキャリアほど 1 シンボルが長くなり、遅延の影響を受けにくくなります。さらに CP が反射遅延を吸収します。</p>
+                    </article>
+                    <article class="ofdm-card">
+                        <p class="card-label">FFT</p>
+                        <h3>実装は IFFT / FFT で一気に行う</h3>
+                        <p>OFDM はフーリエ基底そのものなので、送信側は IFFT、受信側は FFT で大量のサブキャリアを効率よく扱えます。</p>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">Time Cut</p>
+                        <h3>有限時間で切ると周波数に広がる</h3>
+                        <p>サブキャリアは無限長の正弦波ではなく、長さ T の窓で切られた波です。だから周波数側では sinc 形に広がります。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">sinc</p>
+                        <h3>ゼロ点を使って干渉を消す</h3>
+                        <p>sinc の裾は広がりますが、サブキャリア中心では隣の sinc がゼロになるよう間隔を選ぶので、復号点では干渉しません。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">Insight</p>
+                        <h3>OFDM = 周波数モードへの情報配置</h3>
+                        <p>物理っぽく言えば、電磁場を周波数モードへ分解して、それぞれのモードへデータを配置していると見なせます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">OFDM Signal</p>
+                        <div class="formula-block">s(t) = Σ X<sub>k</sub> e<sup>i2πf<sub>k</sub>t</sup></div>
+                        <p>各サブキャリアに QAM などで作ったデータ X<sub>k</sub> を載せ、全部を重ねて送ります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Orthogonality</p>
+                        <div class="formula-block">f<sub>k</sub> = k / T, Δf = 1 / T</div>
+                        <p>周波数間隔を 1/T にすると、サブキャリア同士が直交して、復号時に分離できます。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">sinc Spectrum</p>
+                        <div class="formula-block">X<sub>k</sub>(f) = T e<sup>-iπ(f-f<sub>k</sub>)T</sup> sinc((f-f<sub>k</sub>)T)</div>
+                        <p>有限時間で切った正弦波のフーリエ変換が sinc になるので、OFDM のスペクトルは隣同士が重なって見えます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Diagram</p>
+                    <h2>4 つの視点でスマホ通信の中身を切り替える</h2>
+                    <p>携帯回線と Wi-Fi の流れ、変調、MIMO とビームフォーミング、OFDM の重なったサブキャリアを 1 枚のキャンバスで切り替えます。厳密な通信シミュレータではなく、物理と数理の役割分担をつかむための模式図です。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="mode-row" id="modeRow">
+                            <button class="mode-chip is-active" data-mode="network" type="button">回線とWi-Fi</button>
+                            <button class="mode-chip" data-mode="modulation" type="button">変調</button>
+                            <button class="mode-chip" data-mode="mimo" type="button">5G / MIMO</button>
+                            <button class="mode-chip" data-mode="ofdm" type="button">OFDM</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="primaryRange">
+                                <span id="primaryLabel">スマホの位置</span>
+                                <input id="primaryRange" type="range" min="0" max="100" value="32" step="1">
+                                <strong id="primaryValue">32%</strong>
+                            </label>
+                            <label class="control" for="secondaryRange">
+                                <span id="secondaryLabel">通信量</span>
+                                <input id="secondaryRange" type="range" min="0" max="100" value="54" step="1">
+                                <strong id="secondaryValue">54%</strong>
+                            </label>
+                        </div>
+                        <div class="canvas-frame">
+                            <canvas id="communicationCanvas" width="900" height="520" aria-label="スマホ通信の模式図"></canvas>
+                        </div>
+                        <p class="canvas-caption"><strong>注意:</strong> 数式そのものを解くページではなく、「どこで電波が飛び、どこで変調され、どこで並列化されるのか」を直感でつかむための図です。</p>
+                        <p class="demo-note" id="demoNarration" aria-live="polite">まずは回線と Wi-Fi モードで、スマホから基地局やルーターへ無線で送られ、その先でインターネットへつながる流れを見てください。</p>
+                    </div>
+
+                    <aside class="status-panel">
+                        <article class="status-card strong-card">
+                            <p class="card-label">Route</p>
+                            <h3>流れ</h3>
+                            <p id="routeValue">スマホ → 基地局 / ルーター → インターネット。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Wave</p>
+                            <h3>波の顔</h3>
+                            <p id="waveValue">情報は電波の振幅・周波数・位相の変化として乗る。</p>
+                        </article>
+                        <article class="status-card warm-card">
+                            <p class="card-label">Capacity</p>
+                            <h3>速度の顔</h3>
+                            <p id="capacityValue">5G は帯域幅と空間チャネルを増やして速くする。</p>
+                        </article>
+                        <article class="status-card night-card">
+                            <p class="card-label">Trade-off</p>
+                            <h3>代償</h3>
+                            <p id="tradeoffValue">高周波ほど広帯域だが届きにくく、小型セルやビーム制御が必要になる。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Reading Memo</p>
+                            <h3>読み取りメモ</h3>
+                            <p id="statusValue">通信は、波・フーリエ・線形代数・確率が全部一つの装置の中で出会う場所です。</p>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Reads</p>
+                    <h2>通信の話を、別のページへつなげる</h2>
+                    <p>スマホ通信を理解すると、電磁波、フーリエ分解、ノイズ、シミュレーションが全部つながって見えます。ここから先は、光・数値計算・統計へ広げると自然です。</p>
+                </div>
+                <div class="link-grid">
+                    <article class="link-card strong-card">
+                        <p class="card-label">Electromagnetism</p>
+                        <h3>光速と電磁波の境界を読む</h3>
+                        <p>電波も光も同じ電磁波です。なぜ光速が境界なのかを読むと、通信で使う「電波」の見え方も変わります。</p>
+                        <a class="button button-primary" href="lightspeed.html">光速のページへ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Modeling</p>
+                        <h3>シミュレーションで通信を近似する</h3>
+                        <p>実際の通信設計では、多経路、雑音、行列、FFT を全部数値化します。モデル化の考え方が必要です。</p>
+                        <a class="button button-secondary" href="simulation.html">シミュレーションへ</a>
+                    </article>
+                    <article class="link-card">
+                        <p class="card-label">Noise</p>
+                        <h3>統計でノイズと確率誤りを読む</h3>
+                        <p>S/N 比、誤り率、容量の話は最終的に確率と統計へつながります。通信はノイズとの戦いです。</p>
+                        <a class="button button-secondary" href="statistics.html">統計へ</a>
+                    </article>
+                    <article class="link-card night-card">
+                        <p class="card-label">Research</p>
+                        <h3>通信を研究テーマへ育てる</h3>
+                        <p>「MIMO 容量」「OFDM と sinc」「シャノン限界」は、そのまま強い研究テーマ候補になります。</p>
+                        <a class="button button-secondary" href="research.html">研究の入口へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>スマホ通信は、電波の話だけでは終わりません。変調、フーリエ解析、行列計算、確率が全部つながって初めて「届く通信」になります。</p>
+            <div class="footer-links">
+                <a href="physics.html">物理学トップへ</a>
+                <a href="lightspeed.html">光速へ</a>
+                <a href="simulation.html">シミュレーションへ</a>
+                <a href="statistics.html">統計へ</a>
+                <a href="index.html">研究サポートへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="communication.js"></script>
+</body>
+</html>
