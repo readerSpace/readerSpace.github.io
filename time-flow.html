@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時間は本当に流れているのか | 相対論・エントロピー・情報</title>
+    <meta name="description" content="時間の流れを高校生向けに解説。古典力学の時間パラメータ、相対論のブロック宇宙、エントロピーの時間の矢、カオスと情報、Page-Wootters 機構、記憶が過去だけを記録する理由までを図解でつなげます。">
+    <meta name="theme-color" content="#171b26">
+    <link rel="canonical" href="https://readerspace.github.io/time-flow.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="time-flow.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#intuition">直感</a>
+                <a href="#relativity">相対論</a>
+                <a href="#arrow">時間の矢</a>
+                <a href="#correlation">内部時間</a>
+                <a href="#memory">記憶</a>
+                <a href="#demo">模式図</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Time / Relativity / Entropy Arrow / Page-Wootters / Memory</p>
+                    <h1>時間は、<br>本当に流れているのか</h1>
+                    <p class="hero-lead">
+                        私たちは時間が流れていると感じます。けれど物理学の深いところでは、<strong>時間は絶対に流れる実体ではなく、状態の並び方や情報の増え方として現れている</strong>可能性が高いです。
+                        ニュートン力学ではただの外部パラメータ、相対論では空間と一体の時空、熱力学ではエントロピー増大の向き、量子論では相関から復元される内部時間。
+                        「時間の流れ」は、法則そのものよりも、変化・記録・情報の構造から見えているかもしれません。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#intuition">直感から読む</a>
+                        <a class="button button-secondary" href="#demo">模式図でつかむ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>古典力学では時間は外から与える変数で、流れる理由までは説明しない</li>
+                        <li>時間の向きはエントロピー増大、カオス、記録形成の不可逆性から見えてくる</li>
+                        <li>量子重力では「宇宙全体に時間はなく、相関から時間が現れる」という見方がある</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="time-window" aria-hidden="true">
+                        <div class="grid-layer"></div>
+                        <div class="world-stack">
+                            <div class="frame-card frame-a"></div>
+                            <div class="frame-card frame-b"></div>
+                            <div class="frame-card frame-c"></div>
+                            <div class="frame-card frame-d"></div>
+                        </div>
+                        <div class="block-sheet sheet-a"></div>
+                        <div class="block-sheet sheet-b"></div>
+                        <div class="block-sheet sheet-c"></div>
+                        <div class="clock-orbit"></div>
+                        <div class="clock-core"></div>
+                        <div class="clock-hand"></div>
+                        <div class="light-cone cone-a"></div>
+                        <div class="light-cone cone-b"></div>
+                        <div class="memory-trace"></div>
+                        <div class="record-dot dot-a"></div>
+                        <div class="record-dot dot-b"></div>
+                        <div class="record-dot dot-c"></div>
+                        <div class="record-dot dot-d"></div>
+                        <div class="panel-tag tag-block">block universe</div>
+                        <div class="panel-tag tag-arrow">entropy arrow</div>
+                        <div class="panel-tag tag-page">Page-Wootters</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Coordinate</p>
+                            <h2>時間はまず「変化のラベル」として現れる</h2>
+                            <p>映画フィルムの各コマは静止しています。それでも順序をつけて読むと流れが見えます。時間もまずは状態列の読み方だと考えられます。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">Arrow</p>
+                            <h2>向きはエントロピーの増大から見える</h2>
+                            <p>割れたコップは元へ戻らず、記憶は過去だけを記録します。この非対称性が「時間の矢」です。</p>
+                        </article>
+                        <article class="hero-note night-note">
+                            <p class="card-label">Correlation</p>
+                            <h2>根本では、時間は相関として現れるかもしれない</h2>
+                            <p>宇宙全体が静止していても、時計と対象の相関を見ると「t に応じて状態が変わる」と読めます。これが内部時間の考え方です。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">時間の流れ = 変化・情報・記録が一方向に並ぶ見え方。</p>
+                <p class="signal-sub">時間そのものが流れているのか、それとも私たちが変化の列をそう読んでいるのか。現代物理は後者にかなり近い答えを返し始めています。</p>
+            </section>
+
+            <section class="section reveal" id="intuition">
+                <div class="section-heading">
+                    <p class="eyebrow">Intuition</p>
+                    <h2>まずは「流れ」を、状態の並びとして見る</h2>
+                    <p>日常では時間は流れているように感じられます。でも物理で最初にやるのは、その感覚を一度ほどいて「何が並び、何が変化として読まれているか」を分けることです。直感的には、時間は状態列に貼ったラベルとしても読めます。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Film</p>
+                        <h3>映画の流れは、静止画 + 順序から見える</h3>
+                        <p>1 枚 1 枚のコマは止まっていても、並び順があると物語が進んで見えます。時間もまずは同じ構造で考えられます。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Newton</p>
+                        <h3>古典力学では、時間は外から与える変数</h3>
+                        <p>ニュートン力学の t は、運動方程式を走らせるためのパラメータです。なぜ流れるのかは、その理論の中では説明されません。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Change</p>
+                        <h3>変化を比較するための座標としても使える</h3>
+                        <p>「昨日より今日の方が温かい」「この位置からあの位置へ動いた」という比較に、私たちは時間軸を導入して整理します。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Question</p>
+                        <h3>大事なのは「流れ」が実在かどうか</h3>
+                        <p>時間が流れるという感覚は強いけれど、それが宇宙に埋め込まれた絶対的事実なのか、観測者の読み方なのかは別問題です。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Viewpoint</p>
+                        <div class="formula-block">時間 = 状態の並び順につけたラベル</div>
+                        <p>まずは「変化を記述するための座標」として時間を見ると、感覚と理論を切り分けやすくなります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Classical</p>
+                        <div class="formula-block">x = x(t), p = p(t)</div>
+                        <p>古典力学では、時間は運動を記述するために外から置かれた変数です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">One Line</p>
+                        <div class="formula-block">流れ = 変化の見え方 かもしれない</div>
+                        <p>直感の「時間が進む」を、そのまま宇宙の根本に持ち込まないことが出発点になります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="relativity">
+                <div class="section-heading">
+                    <p class="eyebrow">Relativity</p>
+                    <h2>相対論が壊した「絶対の今」</h2>
+                    <p>アインシュタインの相対論では、時間は空間と独立な背景ではなく、時空の一部になります。観測者の運動状態によって同時刻の切り方が変わるので、「宇宙全体に一つだけ共通の今がある」という考えは保てません。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Spacetime</p>
+                        <h3>時間は空間と一体の時空になる</h3>
+                        <p>相対論では、時間も空間も 4 次元時空の座標です。別々に絶対視することはできません。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">No Absolute Now</p>
+                        <h3>「今」は観測者ごとに違う</h3>
+                        <p>高速で動く観測者どうしは、どの出来事が同時かについて一致しません。絶対的な現在は消えます。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Time Dilation</p>
+                        <h3>時計の進み方そのものが変わる</h3>
+                        <p>相対速度や重力によって固有時の進み方が変わります。GPS が成り立つのもこの補正が必要だからです。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Block Universe</p>
+                        <h3>過去・現在・未来が並ぶブロック宇宙像</h3>
+                        <p>時空全体をひとつの幾何として見ると、過去・現在・未来が全部そこにあり、私たちがその一部を体験しているだけだという見方が出てきます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Interval</p>
+                        <div class="formula-block">ds<sup>2</sup> = -c<sup>2</sup>dt<sup>2</sup> + dx<sup>2</sup> + dy<sup>2</sup> + dz<sup>2</sup></div>
+                        <p>相対論では時間と空間が同じ時空間隔の中で結びつきます。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Proper Time</p>
+                        <div class="formula-block">&Delta;&tau; = &Delta;t&radic;(1 - v<sup>2</sup>/c<sup>2</sup>)</div>
+                        <p>動く観測者の時計は遅れます。時間は誰にとっても同じ速さで流れるわけではありません。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Reading</p>
+                        <div class="formula-block">「今」は宇宙の属性ではなく、観測者の切り方</div>
+                        <p>相対論のあとでは、時間の流れを絶対的な一本の川として描くのは難しくなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="arrow">
+                <div class="section-heading">
+                    <p class="eyebrow">Arrow Of Time</p>
+                    <h2>それでも向きがあるように見えるのはなぜか</h2>
+                    <p>物理法則の多くは時間反転にかなり近い対称性を持ちます。それなのに現実では、コップは割れても元に戻らず、記録は過去だけを残し、未来は開いて見えます。この非対称性を作るのがエントロピー増大と情報の散逸です。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Entropy</p>
+                        <h3>時間の矢はエントロピー増大から出る</h3>
+                        <p>整った状態より、崩れた状態の方が圧倒的に数が多い。だからマクロには「未来へ向かって増える」ように見えます。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Broken Cup</p>
+                        <h3>割れるのは普通、戻るのは奇跡</h3>
+                        <p>破片が勝手に元のコップへ戻る配置は理論上あり得ても、状態数の差が大きすぎて現実ではほぼ起きません。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Chaos</p>
+                        <h3>カオスは未来を実質的に読めなくする</h3>
+                        <p>初期値の微小差が指数的に増えると、未来を固定するための情報量が急増します。ここでも時間の進みが見えます。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Information</p>
+                        <h3>時間の向きは情報の失われ方でもある</h3>
+                        <p>細かいミクロ情報を追わずにマクロだけを見ると、過去の情報は粗視化の中へ埋もれ、不可逆性として現れます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Second Law</p>
+                        <div class="formula-block">&Delta;S &ge; 0</div>
+                        <p>マクロに見れば、孤立系のエントロピーは増える方向が圧倒的に起こりやすいのです。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Chaos</p>
+                        <div class="formula-block">&delta;x(t) &asymp; &delta;x(0)e<sup>&lambda;t</sup></div>
+                        <p>Lyapunov 指数が正なら、初期誤差は指数的に広がり、未来予測にはますます多くの情報が必要になります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">One Sentence</p>
+                        <div class="formula-block">時間の矢 = 状態数と情報散逸の非対称性</div>
+                        <p>流れの向きは、宇宙が未来だけを選ぶからではなく、多数派の状態へ落ちる見え方から生まれます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="correlation">
+                <div class="section-heading">
+                    <p class="eyebrow">Internal Time</p>
+                    <h2>宇宙全体に時間がなくても、内部では時間が現れる</h2>
+                    <p>量子重力では、宇宙全体の基本方程式に時間が現れない可能性があります。それでも私たちは変化を経験します。Page–Wootters の発想は、時間を外から与えず、時計と系の相関から内部的に復元するというものです。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">No External Time</p>
+                        <h3>宇宙全体は静止した波動関数かもしれない</h3>
+                        <p>量子重力では「宇宙全体の状態は時間に依らない」という形が自然に出てきます。全体としては止まって見えるのです。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Clock + System</p>
+                        <h3>時計と対象に分けると、内部時間が見える</h3>
+                        <p>時計が t を指すとき対象が ψ(t) にある、という相関を読むと、私たちは時間発展として経験します。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Conditional State</p>
+                        <h3>条件付きで見ると、シュレディンガー方程式が戻る</h3>
+                        <p>全体が静止していても、「時計がこの値なら」と条件をつけた部分状態は、通常の時間発展のように振る舞います。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Frontier</p>
+                        <h3>ブラックホールと複雑さ成長にもつながる</h3>
+                        <p>最先端では、時間の進みを量子複雑さの成長やホログラフィーと結びつける見方もあり、重力と情報が接続されています。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Global State</p>
+                        <div class="formula-block">H<sub>total</sub>|&Psi;&rang; = 0</div>
+                        <p>宇宙全体には外部時間がなく、静止した制約式だけが残るという像です。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Page-Wootters</p>
+                        <div class="formula-block">|&Psi;&rang; = &Sigma;<sub>t</sub> |t&rang;<sub>clock</sub> &otimes; |&psi;(t)&rang;<sub>system</sub></div>
+                        <p>時計と系の相関だけで、t に応じた状態列が表れます。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Conditional Evolution</p>
+                        <div class="formula-block">|&psi;(t)&rang; = &lang;t|&Psi;&rang;, &nbsp; i d|&psi;&rang;/dt = H|&psi;&rang;</div>
+                        <p>条件付き状態として読むと、通常の量子時間発展が回復します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="memory">
+                <div class="section-heading">
+                    <p class="eyebrow">Memory</p>
+                    <h2>なぜ私たちは過去だけを覚えているのか</h2>
+                    <p>記憶は心理現象である前に、物理的な記録です。脳のシナプス、紙のインク、磁気記録はすべて物理状態の変化です。そしてその形成にはエネルギー消費と熱が伴います。だから記録は不可逆で、過去の痕跡としてしか残りません。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Record</p>
+                        <h3>記憶は物理的な痕跡である</h3>
+                        <p>脳でもノートでも HDD でも、記憶とは何らかの自由度が書き換わった結果として残る記録です。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Irreversible</p>
+                        <h3>記録を作るには、環境へエントロピーを押し出す</h3>
+                        <p>局所的な秩序を作る代わりに、熱や散逸を外へ出すので、記録形成は不可逆過程になります。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Past Only</p>
+                        <h3>記録は原因の痕跡なので、過去にしか向かない</h3>
+                        <p>割れたガラス片は「割れた」という記録を持ちますが、未来のどの形になるかはまだ分岐中なので記録として固定できません。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Branching Future</p>
+                        <h3>未来は候補が多すぎて、まだ相関していない</h3>
+                        <p>未来を覚えるには現在が未来状態と強く相関していなければなりません。でも現実では未来は多くの枝に開いていて、一つの記録に落ちていません。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Record Cost</p>
+                        <div class="formula-block">記録 = 局所秩序 + 全体の無秩序増大</div>
+                        <p>記録は一部を整える代わりに、環境をより乱雑にすることで作られます。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Trace</p>
+                        <div class="formula-block">原因 &rarr; 痕跡 &rarr; 記憶</div>
+                        <p>記録は因果の痕跡なので、未来ではなく過去に向かいます。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">One Line</p>
+                        <div class="formula-block">時間の向き = 記録が作られる向き</div>
+                        <p>私たちが過去だけを覚えること自体が、時間の矢の一つの現れになっています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Diagram</p>
+                    <h2>4 つの視点で「時間の流れ」を切り替える</h2>
+                    <p>相対論での同時刻の傾き、エントロピーの矢、Page–Wootters の内部時間、過去だけに残る記録を 1 枚のキャンバスで切り替えます。厳密な相対論や量子重力の計算ではなく、時間がどの文脈でどう現れるかを掴むための模式図です。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="mode-row" id="modeRow">
+                            <button class="mode-chip is-active" data-mode="coordinate" type="button">座標</button>
+                            <button class="mode-chip" data-mode="arrow" type="button">時間の矢</button>
+                            <button class="mode-chip" data-mode="correlation" type="button">内部時間</button>
+                            <button class="mode-chip" data-mode="memory" type="button">記憶</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="primaryRange">
+                                <span id="primaryLabel">観測者の傾き</span>
+                                <input id="primaryRange" type="range" min="-55" max="55" value="20" step="1">
+                                <strong id="primaryValue">20°</strong>
+                            </label>
+                            <label class="control" for="secondaryRange">
+                                <span id="secondaryLabel">現在の幅</span>
+                                <input id="secondaryRange" type="range" min="12" max="100" value="46" step="1">
+                                <strong id="secondaryValue">46%</strong>
+                            </label>
+                        </div>
+                        <div class="canvas-frame">
+                            <canvas id="timeCanvas" width="900" height="520" aria-label="時間の流れの模式図"></canvas>
+                        </div>
+                        <p class="canvas-caption"><strong>注意:</strong> ここでの図は概念の整理用です。厳密な相対論計算や Wheeler–DeWitt 方程式の完全な解を描いているわけではありません。</p>
+                        <p class="demo-note" id="demoNarration" aria-live="polite">座標モードでは、観測者によって「同時」の切り方が変わり、絶対的な今が消える様子を見てください。</p>
+                    </div>
+
+                    <aside class="status-panel">
+                        <article class="status-card strong-card">
+                            <p class="card-label">Coordinate</p>
+                            <h3>時間は何か</h3>
+                            <p id="coordinateValue">古典では外部パラメータ、相対論では時空の座標として現れる。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Arrow</p>
+                            <h3>向きはどこから出るか</h3>
+                            <p id="arrowValue">エントロピー増大と情報散逸が、未来へ向かう非対称性を作る。</p>
+                        </article>
+                        <article class="status-card warm-card">
+                            <p class="card-label">Correlation</p>
+                            <h3>内部時間</h3>
+                            <p id="correlationValue">時計と系の相関を読むと、全体が静止していても時間発展が見える。</p>
+                        </article>
+                        <article class="status-card night-card">
+                            <p class="card-label">Record</p>
+                            <h3>記憶の矢</h3>
+                            <p id="recordValue">記録形成は不可逆なので、過去だけが痕跡として残る。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Reading Memo</p>
+                            <h3>読み取りメモ</h3>
+                            <p id="statusValue">時間の流れは、宇宙に一本の川があるというより、変化と情報の非対称性として現れている。</p>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Reads</p>
+                    <h2>時間のページから、別のテーマへ広げる</h2>
+                    <p>時間を理解すると、エントロピー、相対論、カオス、量子重力のページが一気につながります。ここから先は、不確実さ、実在する時計、予測限界、ブラックホール内部へ進むと自然です。</p>
+                </div>
+                <div class="link-grid">
+                    <article class="link-card strong-card">
+                        <p class="card-label">Entropy</p>
+                        <h3>時間の矢をエントロピーから読む</h3>
+                        <p>時間の向きがなぜ生まれるのかを、状態数と情報量の側からもっとはっきり読みたいなら、このページが直結です。</p>
+                        <a class="button button-primary" href="entropy.html">エントロピーへ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Relativity In Practice</p>
+                        <h3>GPS で「時間が遅れる」を現実の技術で見る</h3>
+                        <p>相対論的な時計補正が抽象概念ではなく、日常の測位精度に直結していることが分かります。</p>
+                        <a class="button button-secondary" href="gps.html">GPS のページへ</a>
+                    </article>
+                    <article class="link-card">
+                        <p class="card-label">Chaos</p>
+                        <h3>予測不能性を Lyapunov 指数で定量化する</h3>
+                        <p>カオスが未来予測をどの速さで壊すのかを、より数理的に見たいなら Lyapunov 指数へ進むのが最短です。</p>
+                        <a class="button button-secondary" href="lyapunov.html">Lyapunov指数へ</a>
+                    </article>
+                    <article class="link-card night-card">
+                        <p class="card-label">Quantum Gravity</p>
+                        <h3>時間が消える極限としてブラックホール内部を見る</h3>
+                        <p>時間が根本にないかもしれないという感覚を、ホログラフィーや内部構造の話まで押し込むと量子重力に届きます。</p>
+                        <a class="button button-secondary" href="blackhole-inside.html">ブラックホール内部へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>時間の流れは、座標、エントロピー、相関、記憶という複数の層で見えてくる現象です。一本の答えに閉じるより、どの理論でどの姿になるかを並べて読むと輪郭がはっきりします。</p>
+            <div class="footer-links">
+                <a href="physics.html">物理学トップへ</a>
+                <a href="entropy.html">エントロピーへ</a>
+                <a href="gps.html">GPSへ</a>
+                <a href="lyapunov.html">Lyapunov指数へ</a>
+                <a href="blackhole.html">ブラックホールへ</a>
+                <a href="index.html">研究サポートへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="time-flow.js"></script>
+</body>
+</html>

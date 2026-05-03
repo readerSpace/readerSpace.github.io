@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エントロピーとは何か | 情報・状態数・第二法則</title>
+    <meta name="description" content="エントロピーを高校生向けに解説。コインの不確実さ、シャノン情報量、S = k_B log Ω、なぜ第二法則で増えるのか、KS エントロピー、ブラックホールの面積則と情報パラドックスまでを図解でつなげます。">
+    <meta name="theme-color" content="#13201d">
+    <link rel="canonical" href="https://readerspace.github.io/entropy.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="entropy.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#intuition">直感</a>
+                <a href="#info">情報</a>
+                <a href="#second-law">第二法則</a>
+                <a href="#chaos">カオス</a>
+                <a href="#blackhole">ブラックホール</a>
+                <a href="#demo">模式図</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Entropy / Information / Microstates / Second Law / Black Hole</p>
+                    <h1>エントロピーとは、<br>何がどれだけあり得るか</h1>
+                    <p class="hero-lead">
+                        エントロピーは、ただの「乱雑さ」ではありません。もっと正確には、<strong>どれだけ多くの結果や状態があり得るか</strong>を測る量です。
+                        コインの表裏なら予測できるほど小さく、50/50 に近いほど大きい。気体やインクでは、あり得る配置の数が多いほど大きい。
+                        そしてカオスでは情報の増え方になり、ブラックホールでは地平線の面積にまでつながります。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#intuition">直感から読む</a>
+                        <a class="button button-secondary" href="#demo">模式図でつかむ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>予測できる結果ほどエントロピーは小さく、予測しにくい結果ほど大きい</li>
+                        <li>物理では「あり得る微視的状態の数」がエントロピーの本体になる</li>
+                        <li>第二法則、KS エントロピー、ブラックホール面積則は同じ根から伸びている</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="entropy-window" aria-hidden="true">
+                        <div class="grid-layer"></div>
+                        <div class="state-stack">
+                            <span class="state-cell cell-a"></span>
+                            <span class="state-cell cell-b"></span>
+                            <span class="state-cell cell-c"></span>
+                            <span class="state-cell cell-d"></span>
+                            <span class="state-cell cell-e"></span>
+                            <span class="state-cell cell-f"></span>
+                        </div>
+                        <div class="coin-band">
+                            <span class="coin-chip chip-a">H</span>
+                            <span class="coin-chip chip-b">T</span>
+                            <span class="coin-chip chip-c">H</span>
+                            <span class="coin-chip chip-d">T</span>
+                        </div>
+                        <div class="particle-field">
+                            <span class="particle particle-a"></span>
+                            <span class="particle particle-b"></span>
+                            <span class="particle particle-c"></span>
+                            <span class="particle particle-d"></span>
+                            <span class="particle particle-e"></span>
+                            <span class="particle particle-f"></span>
+                            <span class="particle particle-g"></span>
+                            <span class="particle particle-h"></span>
+                        </div>
+                        <div class="horizon-ring"></div>
+                        <div class="horizon-core"></div>
+                        <div class="page-curve"></div>
+                        <div class="curve-dot dot-a"></div>
+                        <div class="curve-dot dot-b"></div>
+                        <div class="curve-dot dot-c"></div>
+                        <div class="panel-tag tag-info">H = -&Sigma; p log p</div>
+                        <div class="panel-tag tag-law">S = k log &Omega;</div>
+                        <div class="panel-tag tag-hole">area law</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Chance</p>
+                            <h2>予測できるほど、エントロピーは小さい</h2>
+                            <p>常に表が出るコインは情報をほとんど持ちません。50/50 のコインは毎回少しずつ驚きを持ち、エントロピーが最大になります。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">States</p>
+                            <h2>本質は「何通りあり得るか」</h2>
+                            <p>散らかった部屋が本質なのではなく、配置の自由度が膨大だということが本体です。状態数の多さがエントロピーです。</p>
+                        </article>
+                        <article class="hero-note night-note">
+                            <p class="card-label">Gravity</p>
+                            <h2>極限では地平線の面積につながる</h2>
+                            <p>ブラックホールではエントロピーが体積ではなく面積に比例します。情報が境界に刻まれているように見えるからです。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">エントロピー = どれだけ可能なパターンがあるか。</p>
+                <p class="signal-sub">不確実さ、情報量、状態数という言い方は、実は同じ根を別の文脈で見ているだけです。何通りあり得るかが増えるほど、結果は読みづらくなり、情報の必要量も増えます。</p>
+            </section>
+
+            <section class="section reveal" id="intuition">
+                <div class="section-heading">
+                    <p class="eyebrow">Intuition</p>
+                    <h2>まずはコインで直感をつかむ</h2>
+                    <p>エントロピーを一番短く感じる方法は、コインの表裏です。結果が決まりきっているなら驚きはなく、半々なら毎回少しずつ情報が入ります。ここでは「乱雑さ」よりも「予測しにくさ」で見た方が分かりやすくなります。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Certain Coin</p>
+                        <h3>常に表なら、情報はほぼ 0</h3>
+                        <p>結果が最初から分かっていると、何回投げても新しい情報は入りません。エントロピーは 0 です。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Fair Coin</p>
+                        <h3>50/50 なら、毎回少し驚く</h3>
+                        <p>公平なコインでは結果が読めません。だから 1 回ごとに約 1 bit の情報が入り、エントロピーも最大になります。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Surprise</p>
+                        <h3>珍しい出来事ほど情報量が大きい</h3>
+                        <p>ほぼ確実な出来事は知っても驚きません。めったに起きない出来事ほど「そんなことが起きたのか」という情報量が大きくなります。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Not Messy</p>
+                        <h3>「散らかり」より「自由度」で見る</h3>
+                        <p>部屋が散らかっているのは、ただ見た目の比喩です。物理の本質は、配置や状態の可能性がどれだけ多いかにあります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Shannon</p>
+                        <div class="formula-block">H = -&Sigma; p<sub>i</sub> log<sub>2</sub> p<sub>i</sub></div>
+                        <p>シャノンエントロピーは、起こりうる結果の平均的な「驚き」を表します。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Certain</p>
+                        <div class="formula-block">H(1, 0) = 0 bit</div>
+                        <p>結果が完全に決まっているなら、次に何が起きても予想どおりなので情報は増えません。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Fair</p>
+                        <div class="formula-block">H(1/2, 1/2) = 1 bit</div>
+                        <p>2 通りが同じ確率なら、1 回の観測でちょうど 1 bit 分の不確実さが解消されます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="info">
+                <div class="section-heading">
+                    <p class="eyebrow">Information</p>
+                    <h2>情報量・状態数・圧縮はどうつながるか</h2>
+                    <p>エントロピーは情報理論の量であると同時に、物理の状態数でもあります。どちらも「区別しなければならない可能性がどれだけあるか」という問いを別の言葉で書いているだけです。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Pattern Count</p>
+                        <h3>サイコロが 6 通りあるなら、選択肢も 6 通り</h3>
+                        <p>どの目が出るかが本当に 6 通りあるなら、その分だけ結果を区別する必要があります。常に 1 が出るなら、その必要はありません。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Average Surprise</p>
+                        <h3>エントロピーは平均の驚き</h3>
+                        <p>1 回ごとの驚きは出来事ごとに違いますが、平均すると「どれくらい情報を受け取る系か」が分かります。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Compression</p>
+                        <h3>予測しやすい列ほど短く書ける</h3>
+                        <p>同じ文字ばかりの列は強く圧縮できます。多様な並びが出る列は、短くまとめる余地が少なく、エントロピーが高いと言えます。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Microstates</p>
+                        <h3>物理では「見えない細部の数」になる</h3>
+                        <p>気体の温度や圧力が同じでも、分子の位置と速度の組み合わせは無数にあります。その微視的状態数がエントロピーです。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Surprisal</p>
+                        <div class="formula-block">I(x) = -log<sub>2</sub> p(x)</div>
+                        <p>珍しい出来事ほど大きい値になります。驚きの平均を取るとシャノンエントロピーです。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Boltzmann</p>
+                        <div class="formula-block">S = k<sub>B</sub> log &Omega;</div>
+                        <p>&Omega; はあり得る微視的状態の数です。物理のエントロピーは、その桁の大きさをログで測っています。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">One Sentence</p>
+                        <div class="formula-block">情報量 = 区別すべき可能性の多さ</div>
+                        <p>情報理論の H も熱力学の S も、「何通りを区別する必要があるか」という問いに答えています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="second-law">
+                <div class="section-heading">
+                    <p class="eyebrow">Second Law</p>
+                    <h2>なぜ自然には増えるように見えるのか</h2>
+                    <p>インクが広がるのは「広がる命令」があるからではありません。広がった配置の方が、集中した配置よりも圧倒的に数が多いからです。第二法則の本体は、命令ではなく統計です。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Diffusion</p>
+                        <h3>インクが広がるのは、広がった状態が普通だから</h3>
+                        <p>一点に集まったままの配置は極端に少なく、広く散った配置は天文学的に多い。自然は多数派の側へ流れます。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Statistical Law</p>
+                        <h3>第二法則は統計的な法則</h3>
+                        <p>理論上は逆向きもあり得ますが、確率があまりに小さいため、実際にはまず見えません。だから「増える」と見えるのです。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Time Arrow</p>
+                        <h3>時間の矢は初期条件の特別さに支えられる</h3>
+                        <p>基本法則は時間反転に近い対称性を持つのに、現実では未来に向かってエントロピーが増える。そこには宇宙の低エントロピー初期条件が関わります。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Coarse View</p>
+                        <h3>粗く見ると「情報が失われた」ように見える</h3>
+                        <p>細部を全部追わずに平均量だけで見ると、元の細かな情報は見えなくなります。これが散逸や不可逆性の見え方を作ります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">State Count</p>
+                        <div class="formula-block">集中した状態 &Lt;&Lt; 広がった状態</div>
+                        <p>本当に重要なのは、広がった側の方が圧倒的にたくさんあるという「数の差」です。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Log Scale</p>
+                        <div class="formula-block">S = log(状態数)</div>
+                        <p>状態数は巨大なので、そのままでは扱いにくく、ログを取って比較するのが自然です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Reverse Process</p>
+                        <div class="formula-block">逆向きは理論上あり得ても、確率は極端に小さい</div>
+                        <p>第二法則は「絶対に逆転しない」という命令ではなく、ほぼ確実に起きないという統計的主張です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="chaos">
+                <div class="section-heading">
+                    <p class="eyebrow">Chaos</p>
+                    <h2>カオスでは、情報はどの速さで増えるのか</h2>
+                    <p>カオスでは初期値の差が指数的に広がるため、未来を言い当てるにはどんどん多くの桁が必要になります。その「情報生成の速さ」を測るのが KS エントロピーです。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Sensitivity</p>
+                        <h3>わずかな差が指数的に増える</h3>
+                        <p>初期値のほんの小さな違いが時間とともに広がるので、予測に必要な精度が急速に厳しくなります。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">KS Entropy</p>
+                        <h3>KS エントロピーは「情報生成率」</h3>
+                        <p>単位時間あたりに何 bit ぶん未来予測が難しくなるか、という見方ができます。カオスの強さを表す尺度です。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Lyapunov</p>
+                        <h3>Lyapunov 指数と深く結びつく</h3>
+                        <p>滑らかな力学系では、KS エントロピーは正の Lyapunov 指数の和と結びつきます。誤差の増え方と情報の増え方が同じ根を持つわけです。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Predictability</p>
+                        <h3>予測可能時間には限界がある</h3>
+                        <p>測定誤差をいくら小さくしても、指数的な広がりがあるなら、十分先の未来は読み切れません。ここでエントロピーが現実の予測限界に変わります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Separation</p>
+                        <div class="formula-block">&delta;x(t) &asymp; &delta;x(0)e<sup>&lambda;t</sup></div>
+                        <p>Lyapunov 指数 &lambda; が正なら、初期誤差は指数的に広がります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">KS</p>
+                        <div class="formula-block">h<sub>KS</sub> &approx; &Sigma; &lambda;<sub>i</sub><sup>+</sup></div>
+                        <p>滑らかな双曲系では、情報生成率と正の Lyapunov 指数の和が対応します。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Predictability Horizon</p>
+                        <div class="formula-block">t<sub>pred</sub> &sim; (1 / &lambda;) log(L / &delta;<sub>0</sub>)</div>
+                        <p>初期誤差 &delta;<sub>0</sub> があっても、ある時間を過ぎると誤差が系の大きさ L に達し、予測は崩れます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="blackhole">
+                <div class="section-heading">
+                    <p class="eyebrow">Black Hole</p>
+                    <h2>ブラックホールでは、なぜ面積がエントロピーになるのか</h2>
+                    <p>ブラックホールではエントロピーが体積ではなく事象の地平線の面積に比例します。外から見えない内部情報が境界に圧縮されているように見えるからです。ここからホログラフィーと情報パラドックスが始まります。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Area Law</p>
+                        <h3>ブラックホールのエントロピーは面積比例</h3>
+                        <p>普通の物体では体積とともに自由度が増えるのに、ブラックホールでは地平線の面積が情報量を決めます。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Hidden Information</p>
+                        <h3>外から見える量は少ないのに、内部状態は膨大</h3>
+                        <p>質量・電荷・回転だけでは、何が落ち込んだかまでは分かりません。見えない細部の多さがエントロピーです。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Page Curve</p>
+                        <h3>情報は消えるのではなく、遅れて戻ると考えられている</h3>
+                        <p>初期のホーキング放射は熱的に見えても、後半には微妙な相関が効いてページ曲線が折り返す。現在はこの像が有力です。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Holography</p>
+                        <h3>宇宙の情報は境界に書けるかもしれない</h3>
+                        <p>ブラックホールの面積則は、3 次元の情報が 2 次元の境界に記述できるというホログラフィー原理の手がかりです。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Bekenstein-Hawking</p>
+                        <div class="formula-block">S = k<sub>B</sub>c<sup>3</sup>A / 4G&hbar;</div>
+                        <p>事象の地平線の面積 A が、ブラックホールのエントロピーを決めます。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Area</p>
+                        <div class="formula-block">A &prop; r<sub>s</sub><sup>2</sup></div>
+                        <p>半径が大きいほど地平線面積も増え、隠せる情報量も急増します。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">One Line</p>
+                        <div class="formula-block">ブラックホールは情報を消すのでなく、極限まで混ぜる</div>
+                        <p>今の有力な理解では、情報は失われるのではなく、極端に取り出しにくい形へスクランブルされます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Diagram</p>
+                    <h2>4 つの視点でエントロピーを切り替える</h2>
+                    <p>コインの不確実さ、粒子の拡散、カオスの情報生成、ブラックホールの面積則を 1 枚のキャンバスで切り替えます。厳密な数値実験ではなく、エントロピーが文脈ごとにどう姿を変えるかを掴むための模式図です。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="mode-row" id="modeRow">
+                            <button class="mode-chip is-active" data-mode="chance" type="button">コイン</button>
+                            <button class="mode-chip" data-mode="mixing" type="button">拡散</button>
+                            <button class="mode-chip" data-mode="chaos" type="button">カオス</button>
+                            <button class="mode-chip" data-mode="horizon" type="button">地平線</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="primaryRange">
+                                <span id="primaryLabel">表の確率</span>
+                                <input id="primaryRange" type="range" min="0" max="100" value="50" step="1">
+                                <strong id="primaryValue">50%</strong>
+                            </label>
+                            <label class="control" for="secondaryRange">
+                                <span id="secondaryLabel">試行数</span>
+                                <input id="secondaryRange" type="range" min="24" max="120" value="64" step="1">
+                                <strong id="secondaryValue">64 回</strong>
+                            </label>
+                        </div>
+                        <div class="canvas-frame">
+                            <canvas id="entropyCanvas" width="900" height="520" aria-label="エントロピーの模式図"></canvas>
+                        </div>
+                        <p class="canvas-caption"><strong>注意:</strong> ここでの図は概念をつかむための模式図です。厳密な統計力学や量子重力の計算をそのまま描いているわけではありません。</p>
+                        <p class="demo-note" id="demoNarration" aria-live="polite">コインモードでは、確率の偏りを変えたときにシャノンエントロピーがどう変わるかを見てください。</p>
+                    </div>
+
+                    <aside class="status-panel">
+                        <article class="status-card strong-card">
+                            <p class="card-label">Uncertainty</p>
+                            <h3>不確実さ</h3>
+                            <p id="uncertaintyValue">結果が読めないほど、次の観測が持つ情報量は大きくなる。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Patterns</p>
+                            <h3>状態数</h3>
+                            <p id="patternValue">区別すべき可能性が多いほど、エントロピーは高くなる。</p>
+                        </article>
+                        <article class="status-card warm-card">
+                            <p class="card-label">Increase</p>
+                            <h3>増大</h3>
+                            <p id="increaseValue">自然は、圧倒的に数の多いマクロ状態へ流れやすい。</p>
+                        </article>
+                        <article class="status-card night-card">
+                            <p class="card-label">Extreme Case</p>
+                            <h3>極限</h3>
+                            <p id="extremeValue">ブラックホールではエントロピーが地平線の面積に比例する。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Reading Memo</p>
+                            <h3>読み取りメモ</h3>
+                            <p id="statusValue">情報理論、熱力学、カオス、重力は「可能性の多さ」を違う言葉で見ている。</p>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Reads</p>
+                    <h2>エントロピーから別のページへ広げる</h2>
+                    <p>エントロピーを理解すると、統計、散逸、カオス、ブラックホールの話が一つながりに見えてきます。ここから先は測定のゆらぎ、摩擦、Lyapunov 指数、情報パラドックスへ伸ばすと自然です。</p>
+                </div>
+                <div class="link-grid">
+                    <article class="link-card strong-card">
+                        <p class="card-label">Statistics</p>
+                        <h3>ゆらぎを統計で読む</h3>
+                        <p>確率分布、平均、標準偏差、誤差解析を学ぶと、エントロピーの「不確実さ」が測定データの側から見えてきます。</p>
+                        <a class="button button-primary" href="statistics.html">統計のページへ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Dissipation</p>
+                        <h3>摩擦と熱化を読む</h3>
+                        <p>秩序だった運動が乱雑な熱運動へ崩れるという点では、摩擦とエントロピー増大はほぼ同じ骨格を持っています。</p>
+                        <a class="button button-secondary" href="friction.html">摩擦力のページへ</a>
+                    </article>
+                    <article class="link-card">
+                        <p class="card-label">Chaos</p>
+                        <h3>Lyapunov 指数と予測限界へ進む</h3>
+                        <p>KS エントロピーの感覚をもう少し数理へ寄せたいなら、誤差の広がる速さとしての Lyapunov 指数が最短ルートです。</p>
+                        <a class="button button-secondary" href="lyapunov.html">Lyapunov指数へ</a>
+                    </article>
+                    <article class="link-card night-card">
+                        <p class="card-label">Gravity</p>
+                        <h3>ブラックホールの情報問題へ</h3>
+                        <p>面積則、ホログラフィー、ページ曲線、情報パラドックスは、エントロピーが最も深い姿で現れる場所の一つです。</p>
+                        <a class="button button-secondary" href="blackhole.html">ブラックホールへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>エントロピーは、乱雑さの話に見えて、実際には「どれだけ多くの可能性を区別しなければならないか」という深い問いです。情報、熱、カオス、重力がここでつながります。</p>
+            <div class="footer-links">
+                <a href="physics.html">物理学トップへ</a>
+                <a href="statistics.html">統計へ</a>
+                <a href="friction.html">摩擦へ</a>
+                <a href="lyapunov.html">Lyapunov指数へ</a>
+                <a href="blackhole.html">ブラックホールへ</a>
+                <a href="index.html">研究サポートへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="entropy.js"></script>
+</body>
+</html>
