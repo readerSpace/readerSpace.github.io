@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光の速さはなぜ限界なのか | 相対論・光円錐・固有時ゼロ</title>
+    <meta name="description" content="光の速さがなぜ限界なのかを高校生向けに解説。特殊相対論、光円錐、無限のエネルギー、質量ゼロ粒子、固有時ゼロ、量子場としての光までを模式図つきでつなげます。">
+    <meta name="theme-color" content="#081321">
+    <link rel="canonical" href="https://readerspace.github.io/lightspeed.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lightspeed.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#limit">限界</a>
+                <a href="#relativity">時空構造</a>
+                <a href="#massless">質量ゼロ</a>
+                <a href="#proper">固有時</a>
+                <a href="#quantum">量子論</a>
+                <a href="#demo">模式図</a>
+                <a href="#next">発展</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Special Relativity / Light Cone / Proper Time / Quantum Field</p>
+                    <h1>光の速さは、<br>なぜ限界なのか</h1>
+                    <p class="hero-lead">
+                        大事なのは、光が特別だから宇宙最速なのではないという点です。
+                        本質は、<strong>どんなものでも超えられない速度の境界があり、その値がたまたま光の速さ c である</strong>こと。
+                        その境界は単なるルールではなく、時間・空間・因果関係の作られ方そのものに埋め込まれています。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#limit">まず本質を見る</a>
+                        <a class="button button-secondary" href="#demo">模式図でつかむ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>光速は「光だけの特権」ではなく、時空全体の速度境界です</li>
+                        <li>v が c に近づくと、必要なエネルギーは発散し、光円錐を越えると因果律が壊れます</li>
+                        <li>質量ゼロ粒子は c でしか存在できず、光には固有時も静止系もありません</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="beam-window" aria-hidden="true">
+                        <div class="beam-grid"></div>
+                        <div class="beam-core"></div>
+                        <div class="cone-band cone-left"></div>
+                        <div class="cone-band cone-right"></div>
+                        <div class="limit-arc arc-a"></div>
+                        <div class="limit-arc arc-b"></div>
+                        <span class="photon-node node-a"></span>
+                        <span class="photon-node node-b"></span>
+                        <span class="photon-node node-c"></span>
+                        <span class="photon-node node-d"></span>
+                        <span class="photon-node node-e"></span>
+                        <div class="window-label label-limit">c Is The Boundary</div>
+                        <div class="window-label label-cone">Light Cone</div>
+                        <div class="window-label label-time">Proper Time = 0</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-note">
+                            <p class="card-label">Limit</p>
+                            <h2>速さの上限ではなく境界</h2>
+                            <p>c は「これ以上速いものがない」というだけでなく、時空で到達可能な方向そのものを決める境目です。</p>
+                        </article>
+                        <article class="hero-note warm-note">
+                            <p class="card-label">Massless</p>
+                            <h2>質量ゼロなら c でしかいられない</h2>
+                            <p>光子のような質量ゼロ粒子は静止できず、ゆっくり進む状態も持てません。常に光円錐の上を進みます。</p>
+                        </article>
+                        <article class="hero-note night-note">
+                            <p class="card-label">Photon</p>
+                            <h2>光には「自分の時計」がない</h2>
+                            <p>光に沿った経路では固有時が 0 になるため、光自身の静止系や「光の視点」は定義できません。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">光速は、速さの数字ではなく、時空のルールそのもの。</p>
+                <p class="signal-sub">エネルギーが発散するから超えられない、という説明だけでは半分です。もっと深い理由は、c が光円錐の傾きとして因果律を守っていることにあります。</p>
+            </section>
+
+            <section class="section reveal" id="limit">
+                <div class="section-heading">
+                    <p class="eyebrow">Speed Limit</p>
+                    <h2>まず「何が限界なのか」を分けて考える</h2>
+                    <p>光速制限は「光だけが速い」という話ではありません。時空の中で、どんな信号・どんな物体にも共通の速度境界があり、その値が真空中の光速 c です。</p>
+                </div>
+                <div class="concept-grid">
+                    <article class="concept-card strong-card">
+                        <p class="card-label">Point 1</p>
+                        <h3>光が特別だから速いのではない</h3>
+                        <p>正しくは、どんなものでも越えられない普遍的な速度があり、光は質量ゼロなのでちょうどその境界を走っている、という順番です。</p>
+                    </article>
+                    <article class="concept-card">
+                        <p class="card-label">Point 2</p>
+                        <h3>どの観測者から見ても c は同じ</h3>
+                        <p>特殊相対論では、慣性系が違っても真空中の光速は不変です。この条件を守るために、時間と空間の測り方が変わります。</p>
+                    </article>
+                    <article class="concept-card warm-card">
+                        <p class="card-label">Point 3</p>
+                        <h3>近づくほど必要なエネルギーが増える</h3>
+                        <p>質量を持つ粒子は、v が c に近づくほど γ が大きくなり、加速に必要なエネルギーは発散します。到達できても超えられないのではなく、到達自体ができません。</p>
+                    </article>
+                    <article class="concept-card night-card">
+                        <p class="card-label">Point 4</p>
+                        <h3>宇宙膨張で c を越えて見えるのは別の話</h3>
+                        <p>遠方銀河が光速より速く遠ざかるように見えるのは、空間の尺度が伸びているからです。物体が局所的に空間の中を超光速で走っているわけではありません。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <p class="card-label">Numerical Value</p>
+                        <div class="formula-block">c ≈ 3.0 × 10<sup>8</sup> m/s</div>
+                        <p>真空中の光速 c はおよそ毎秒 30 万 km です。重要なのは値そのものより、この量が時空の基本定数であることです。</p>
+                    </article>
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Energy Barrier</p>
+                        <div class="formula-block">E = γmc<sup>2</sup>, γ = 1 / √(1 - v<sup>2</sup>/c<sup>2</sup>)</div>
+                        <p>v が c に近づくと分母が 0 に近づき、γ は無限大へ向かいます。質量を持つ粒子はこの壁を越えられません。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Cosmic Caveat</p>
+                        <div class="formula-block">v = H<sub>0</sub>d</div>
+                        <p>宇宙論では距離 d に比例して後退速度が大きくなります。これは「空間内の運動速度」とは別なので、特殊相対論とは矛盾しません。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="relativity">
+                <div class="section-heading">
+                    <p class="eyebrow">Spacetime Geometry</p>
+                    <h2>c を守るために、時空の測り方が変わる</h2>
+                    <p>光速が全員にとって同じであるなら、時間と空間を古典力学のように固定したままにはできません。その結果、時間の遅れ、長さの収縮、同時性のずれが必然的に現れます。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">Geometry</p>
+                        <h3>光円錐が因果関係の境界になる</h3>
+                        <p>時空図では、光が進む方向が光円錐の表面です。物体はその内側、光はちょうど境界、超光速は外側に対応します。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Time Dilation</p>
+                        <h3>時間の遅れは c を守るための調整</h3>
+                        <p>高速で動く物体の時計が遅れるのは不思議な副作用ではなく、異なる観測者が同じ c を測るために必要な時空の変形です。</p>
+                    </article>
+                    <article class="model-card night-card">
+                        <p class="card-label">Simultaneity</p>
+                        <h3>同時刻そのものが観測者ごとに変わる</h3>
+                        <p>相対論では「同時」は絶対ではありません。だからこそ、超光速通信を許すと、ある観測者では結果が原因より先に起きてしまいます。</p>
+                    </article>
+                    <article class="model-card">
+                        <p class="card-label">Causality</p>
+                        <h3>c を越えると原因と結果の順序が崩れる</h3>
+                        <p>光速制限は単なる工学的制約ではなく、因果律を守る仕組みです。だから本質は「速さ」よりも「届き方の順序」にあります。</p>
+                    </article>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <p class="card-label">Timelike</p>
+                        <h3>質量ありの世界線</h3>
+                        <p>光円錐の内側を進みます。固有時は正で、自分の時計が流れます。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <p class="card-label">Lightlike</p>
+                        <h3>光の世界線</h3>
+                        <p>光円錐の表面を進みます。固有時は 0 で、境界そのものをなぞります。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <p class="card-label">Spacelike</p>
+                        <h3>超光速に対応する領域</h3>
+                        <p>もしここを物理的に通れるなら、因果順序を壊す可能性があります。相対論はこの領域への実在的な移動を許しません。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="massless">
+                <div class="section-heading">
+                    <p class="eyebrow">Massless Particles</p>
+                    <h2>質量ゼロの粒子は、なぜ c でしか存在できないのか</h2>
+                    <p>ここでよく起きる誤解は、「光が速いから質量ゼロ」だと思ってしまうことです。順序は逆で、質量ゼロだからこそ、静止系も低速状態も持てず、c に固定されます。</p>
+                </div>
+                <div class="case-grid">
+                    <article class="case-card strong-card">
+                        <p class="card-label">Relation</p>
+                        <h3>相対論の基本式</h3>
+                        <p>粒子のエネルギーと運動量は、E<sup>2</sup> = p<sup>2</sup>c<sup>2</sup> + m<sup>2</sup>c<sup>4</sup> で結ばれます。これが質量あり・なしをまとめて含む出発点です。</p>
+                    </article>
+                    <article class="case-card warm-card">
+                        <p class="card-label">m = 0</p>
+                        <h3>質量ゼロなら E = pc</h3>
+                        <p>m = 0 を代入するとエネルギーと運動量が完全に直結し、質量項による曲がりが消えます。これが「境界の上に乗る」理由です。</p>
+                    </article>
+                    <article class="case-card night-card">
+                        <p class="card-label">Velocity</p>
+                        <h3>速度は c に固定される</h3>
+                        <p>分散関係から v = ∂E/∂p を見ると、質量ゼロでは v = c になります。ゆっくり進む余地が式の中にありません。</p>
+                    </article>
+                    <article class="case-card">
+                        <p class="card-label">Misconception</p>
+                        <h3>「光速で動くもの = 質量ゼロ」</h3>
+                        <p>質量を持つ粒子は c に達することも超えることもできないので、真空中で光速そのものにいる粒子は質量ゼロでなければなりません。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <p class="card-label">Master Formula</p>
+                        <div class="formula-block">E<sup>2</sup> = p<sup>2</sup>c<sup>2</sup> + m<sup>2</sup>c<sup>4</sup></div>
+                        <p>相対論では、運動量が増えても、質量がある限り c を越える形にはなりません。</p>
+                    </article>
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Massless Limit</p>
+                        <div class="formula-block">m = 0 → E = pc</div>
+                        <p>質量項が消えると、エネルギーと運動量は一本の直線関係になり、光円錐の表面に対応します。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Velocity</p>
+                        <div class="formula-block">v = ∂E / ∂p = c</div>
+                        <p>「止まれない」ことと「常に c」が同じ内容だと見えてきます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="proper">
+                <div class="section-heading">
+                    <p class="eyebrow">Proper Time</p>
+                    <h2>光に「自分の時間」はあるのか</h2>
+                    <p>直感では「光から見ればどうなるのか」と言いたくなりますが、ここには注意が必要です。光に沿った経路では固有時が 0 になり、光自身の静止系は作れません。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">Definition</p>
+                        <h3>固有時は腕時計の時間</h3>
+                        <p>固有時は、ある物体に乗った時計が実際に刻む時間です。質量を持つ粒子なら、世界線に沿って正の固有時を持てます。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Lightlike Path</p>
+                        <h3>光では dτ = 0</h3>
+                        <p>光は常に dx = cdt を満たすので、固有時の式に入れると dτ は 0 になります。出発から到着までの「自分の時間」はありません。</p>
+                    </article>
+                    <article class="model-card night-card">
+                        <p class="card-label">No Rest Frame</p>
+                        <h3>光の慣性系は作れない</h3>
+                        <p>観測者には静止系が必要ですが、光は静止できません。ローレンツ変換も v = c で発散するため、「光から見た世界」は厳密には定義できません。</p>
+                    </article>
+                    <article class="model-card">
+                        <p class="card-label">Boundary</p>
+                        <h3>光は時空の境界をなぞる</h3>
+                        <p>質量あり粒子が光円錐の内側を進むのに対し、光はちょうど表面を進みます。光は時間の中を進む粒子というより、因果構造の境界そのものです。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <p class="card-label">Proper Time</p>
+                        <div class="formula-block">dτ<sup>2</sup> = dt<sup>2</sup> - dx<sup>2</sup>/c<sup>2</sup></div>
+                        <p>この式は、空間移動が大きいほど、同じ座標時間に対する固有時が減ることを表しています。</p>
+                    </article>
+                    <article class="formula-card strong-card">
+                        <p class="card-label">For Light</p>
+                        <div class="formula-block">dx = cdt → dτ = 0</div>
+                        <p>光に沿った経路では、固有時は完全に消えます。だから「光の腕時計」は進みません。</p>
+                    </article>
+                    <article class="formula-card night-card">
+                        <p class="card-label">Lorentz Factor</p>
+                        <div class="formula-block">γ = 1 / √(1 - v<sup>2</sup>/c<sup>2</sup>)</div>
+                        <p>v = c で γ は発散し、光の静止系へ座標変換する操作そのものが壊れます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="quantum">
+                <div class="section-heading">
+                    <p class="eyebrow">Quantum Picture</p>
+                    <h2>量子論では光をどう扱うのか</h2>
+                    <p>量子論に入っても、光に固有時を与えるわけではありません。光子は「時間を持つ小さな玉」ではなく、電磁場の量子化された揺らぎとして記述されます。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">Field</p>
+                        <h3>光子は場の励起</h3>
+                        <p>量子電磁力学では、電磁場 A<sub>μ</sub>(x, t) を量子化し、その振動の一単位が光子です。粒子というよりモードの量子です。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Time</p>
+                        <h3>時間は観測者の座標時間で追う</h3>
+                        <p>状態の時間発展は外から見た t で書きます。光子自身の固有時計を使うのではなく、背景時空の時間を使って記述します。</p>
+                    </article>
+                    <article class="model-card night-card">
+                        <p class="card-label">Propagation</p>
+                        <h3>主な伝播は光円錐に沿う</h3>
+                        <p>プロパゲータや経路積分では多くの経路を考えますが、相対論と整合するため、寄与が大きいのは光円錐に沿った構造です。</p>
+                    </article>
+                    <article class="model-card">
+                        <p class="card-label">Meaning</p>
+                        <h3>光は時空構造に従う量子場の揺らぎ</h3>
+                        <p>だから「光は時間を感じるか」という問いは、古典的な粒子像に引きずられています。現代的には、場の伝播として捉える方が自然です。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Quantum Evolution</p>
+                        <div class="formula-block">iħ d|ψ(t)⟩/dt = H|ψ(t)⟩</div>
+                        <p>ここに出てくる t は、観測者が使う座標時間です。光子自身の固有時間ではありません。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Field Language</p>
+                        <div class="formula-block">光子 = 電磁場の量子化された励起</div>
+                        <p>量子論では、粒子像だけでなく「場のモード」として考えることで、光の本質が見えやすくなります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Path Integral</p>
+                        <div class="formula-block">主な寄与は光円錐上の経路</div>
+                        <p>すべての経路を足し合わせる見方でも、相対論的な因果構造は保たれます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive Diagram</p>
+                    <h2>5 つの視点で「c の意味」を切り替える</h2>
+                    <p>光円錐、エネルギー障壁、質量ゼロ粒子、固有時、量子伝播を 1 枚のキャンバスで切り替えます。これは厳密な計算機ではなく、相対論の論点を一望するための模式図です。</p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="mode-row" id="modeRow">
+                            <button class="mode-chip is-active" data-mode="cone" type="button">光円錐</button>
+                            <button class="mode-chip" data-mode="energy" type="button">エネルギー</button>
+                            <button class="mode-chip" data-mode="massless" type="button">質量ゼロ</button>
+                            <button class="mode-chip" data-mode="proper" type="button">固有時</button>
+                            <button class="mode-chip" data-mode="quantum" type="button">量子論</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control" for="primaryRange">
+                                <span id="primaryLabel">速度比 v/c</span>
+                                <input id="primaryRange" type="range" min="5" max="95" value="58" step="1">
+                                <strong id="primaryValue">0.58 c</strong>
+                            </label>
+                            <label class="control" for="secondaryRange">
+                                <span id="secondaryLabel">表示時間</span>
+                                <input id="secondaryRange" type="range" min="20" max="100" value="72" step="1">
+                                <strong id="secondaryValue">72%</strong>
+                            </label>
+                        </div>
+                        <div class="canvas-frame">
+                            <canvas id="lightspeedCanvas" width="900" height="520" aria-label="光速制限の模式図"></canvas>
+                        </div>
+                        <p class="canvas-caption"><strong>注意:</strong> 相対論の厳密な導出ではなく、c が「時空の境界」であることを直感でつかむための図です。</p>
+                        <p class="demo-note" id="demoNarration" aria-live="polite">光円錐モードでは、質量ありの粒子が円錐の内側、光が境界、超光速が外側に対応することを見てください。</p>
+                    </div>
+
+                    <aside class="status-panel">
+                        <article class="status-card strong-card">
+                            <p class="card-label">Limit</p>
+                            <h3>速度境界</h3>
+                            <p id="limitValue">c はすべての信号に共通の境界。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Geometry</p>
+                            <h3>時空の意味</h3>
+                            <p id="geometryValue">光円錐が到達可能な未来を決める。</p>
+                        </article>
+                        <article class="status-card warm-card">
+                            <p class="card-label">Energy</p>
+                            <h3>エネルギーの顔</h3>
+                            <p id="energyValue">質量あり粒子は c に近づくほど重く見える。</p>
+                        </article>
+                        <article class="status-card night-card">
+                            <p class="card-label">Proper Time</p>
+                            <h3>時間の顔</h3>
+                            <p id="timeValue">光の固有時は 0 で、静止系は作れない。</p>
+                        </article>
+                        <article class="status-card">
+                            <p class="card-label">Reading Memo</p>
+                            <h3>読み取りメモ</h3>
+                            <p id="statusValue">「光が速い」のではなく、「c が時空の境界」だと読むと全体がつながります。</p>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Reads</p>
+                    <h2>光速制限を、別の文脈へつなげる</h2>
+                    <p>c の意味が分かると、宇宙論の地平線、ペンローズ図、ブラックホール、研究の問い立てが一段深く見えるようになります。</p>
+                </div>
+                <div class="link-grid">
+                    <article class="link-card strong-card">
+                        <p class="card-label">Cosmology</p>
+                        <h3>宇宙の地平線と光速制限をつなぐ</h3>
+                        <p>観測可能宇宙が有限になる理由も、最終的には光速有限と時空膨張の組み合わせです。</p>
+                        <a class="button button-primary" href="universe.html">宇宙の広がりへ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Diagram</p>
+                        <h3>光円錐を図で読むならペンローズ図へ</h3>
+                        <p>無限遠や地平線を有限の図に押し込み、因果構造を見やすくする手法がペンローズ図です。</p>
+                        <a class="button button-secondary" href="penrose.html">ペンローズ図へ</a>
+                    </article>
+                    <article class="link-card">
+                        <p class="card-label">Extreme Gravity</p>
+                        <h3>ブラックホールで「戻れない境界」を考える</h3>
+                        <p>事象の地平線は宇宙論の地平線とは別物ですが、どちらも「情報が届くか」を考えるうえで光速が核心です。</p>
+                        <a class="button button-secondary" href="blackhole.html">ブラックホールへ</a>
+                    </article>
+                    <article class="link-card night-card">
+                        <p class="card-label">Research</p>
+                        <h3>このテーマを研究の問いに変える</h3>
+                        <p>「光速制限はどこまで一般的か」「量子重力で光円錐はどうなるか」は、そのまま強い研究テーマ候補になります。</p>
+                        <a class="button button-secondary" href="research.html">研究の入口へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>光速は、光そのものの話で終わりません。時間、空間、因果律、量子場という物理の骨格全部につながっています。</p>
+            <div class="footer-links">
+                <a href="physics.html">物理学トップへ</a>
+                <a href="universe.html">宇宙論へ</a>
+                <a href="penrose.html">ペンローズ図へ</a>
+                <a href="blackhole.html">ブラックホールへ</a>
+                <a href="index.html">研究サポートへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="lightspeed.js"></script>
+</body>
+</html>
