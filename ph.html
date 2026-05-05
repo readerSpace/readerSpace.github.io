@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酸性・アルカリ性液体のpH混合シミュレーション | 中和で変わるpH</title>
+    <meta name="description" content="酸性液体とアルカリ性液体を混ぜたとき、pH が単純平均ではなく H+ と OH- の中和で決まることを観察できる簡易シミュレーションです。">
+    <meta name="theme-color" content="#eef2ff">
+    <link rel="canonical" href="https://readerspace.github.io/ph.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="酸性・アルカリ性液体のpH混合シミュレーション | 中和で変わるpH">
+    <meta property="og:description" content="酸と塩基を混ぜたとき、H+ と OH- が中和して pH がどう変わるかをその場で試せるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/ph.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="酸性・アルカリ性液体のpH混合シミュレーション | 中和で変わるpH">
+    <meta name="twitter:description" content="単純な pH 平均ではなく、H+ と OH- の量で中和を計算する簡易モデルを観察できます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ph.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Acid / Base / Neutralization</p>
+                    <h1>pH は平均ではなく、<br>中和で決まる。</h1>
+                    <p class="stage-lead">
+                        酸性液体とアルカリ性液体を混ぜると、pH は単純な平均にはなりません。<br>
+                        このページでは、強酸と強塩基が完全に電離すると仮定して、酸の H+ とアルカリの OH- が中和して水になるという考え方で pH を計算します。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>酸性液体と塩基性液体を追加</span>
+                        <span>H+ と OH- の中和で計算</span>
+                        <span>pH スケールと色変化を観察</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="phCanvas" aria-label="酸性液体とアルカリ性液体の pH 混合シミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>pH 混合シミュレーション</h2>
+                            <p>量と pH を決めて酸または塩基を入れてください。H+ と OH- が打ち消し合うぶんだけ中和し、残ったイオンの濃度で pH が決まります。</p>
+                        </div>
+
+                        <p class="subheading">液体を追加</p>
+
+                        <label class="control" for="amount">
+                            <span>追加する量</span>
+                            <strong id="amountText">100 mL</strong>
+                            <input id="amount" type="range" min="10" max="500" step="10" value="100">
+                        </label>
+
+                        <label class="control" for="acidPh">
+                            <span>酸性液体の pH</span>
+                            <strong id="acidPhText">pH 2.0</strong>
+                            <input id="acidPh" type="range" min="0" max="6.9" step="0.1" value="2.0">
+                        </label>
+                        <button id="addAcid" class="acid-action wide-button" type="button">酸性液体を入れる</button>
+
+                        <label class="control" for="basePh">
+                            <span>アルカリ性液体の pH</span>
+                            <strong id="basePhText">pH 12.0</strong>
+                            <input id="basePh" type="range" min="7.1" max="14" step="0.1" value="12.0">
+                        </label>
+                        <button id="addBase" class="base-action wide-button" type="button">アルカリ性液体を入れる</button>
+
+                        <div class="button-grid">
+                            <button id="addWater" class="water-action" type="button">中性の水を入れる</button>
+                            <button id="resetSim" class="reset-action" type="button">リセット</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>全体量</span>
+                                <strong id="volumeStat">0 mL</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>現在の pH</span>
+                                <strong id="phStat">7.00</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>性質</span>
+                                <strong id="typeStat">中性</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>中和率</span>
+                                <strong id="neutralStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>残った H+</span>
+                                <strong id="hStat">0 mol</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>残った OH-</span>
+                                <strong id="ohStat">0 mol</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデル: 強酸・強塩基が完全に電離すると仮定します。pH から [H+] = 10^(-pH)、pOH = 14 - pH、[OH-] = 10^(-pOH) を計算し、H+ と OH- を中和させます。弱酸・緩衝液・温度変化は扱いません。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">酸と塩基を混ぜると、H+ と OH- が中和して水になり、残ったイオンの量で pH が決まります。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: まず酸か塩基を入れ、必要ならもう片方や水を加えてください。中性に近づくほど色は緑寄りに変わります。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>全体量</span>
+                            <strong id="quickVolume">0 mL</strong>
+                        </article>
+                        <article>
+                            <span>pH</span>
+                            <strong id="quickPh">7.00</strong>
+                        </article>
+                        <article>
+                            <span>性質</span>
+                            <strong id="quickState">中性</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">酸性と塩基性の混合は、pH の平均ではなくイオン数の差で決まる。</p>
+                <p class="signal-sub">このページでは H+ と OH- の量だけに注目し、余ったほうの濃度から pH を逆算しています。水を加えたときはモル数ではなく濃度が薄まるので、pH の変化もその分だけになります。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで計算していること</h2>
+                    <p>実験の完全再現ではなく、強酸・強塩基の混合と中和の考え方が見えるように単純化したモデルです。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">01</p>
+                        <h3>pH から H+ を求める</h3>
+                        <p>酸性液体は pH から H+ 濃度を求め、その濃度に体積を掛けて H+ のモル数に直しています。</p>
+                    </article>
+                    <article class="model-card base-card">
+                        <p class="card-label">02</p>
+                        <h3>pOH から OH- を求める</h3>
+                        <p>塩基性液体は pOH = 14 - pH を使って OH- 濃度を求め、同じようにモル数へ変換しています。</p>
+                    </article>
+                    <article class="model-card neutral-card">
+                        <p class="card-label">03</p>
+                        <h3>中和は少ない側まで進む</h3>
+                        <p>H+ と OH- は 1:1 で打ち消し合うので、少ない側がなくなるところまで中和し、余った側が最終的な性質を決めます。</p>
+                    </article>
+                    <article class="model-card water-card">
+                        <p class="card-label">04</p>
+                        <h3>水は濃度だけを薄める</h3>
+                        <p>中性の水を加えると H+ や OH- を直接増やしません。液量が増えるぶん、残ったイオン濃度が薄まり pH が動きます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>試すと違いが出やすい観察ポイント</h2>
+                    <p>量をそろえるだけでは中性にならず、pH が強いほうは少量でも大きな影響を持つことが見えてきます。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card strong-card">
+                        <h3>強い酸は少量でも効く</h3>
+                        <p>pH 1 と pH 3 では H+ 濃度が 100 倍違います。同じ量を入れても、強い酸のほうが混合後の pH を大きく動かします。</p>
+                    </article>
+                    <article class="observation-card base-card">
+                        <h3>強い塩基も同じ</h3>
+                        <p>pH 13 と pH 11 では OH- 濃度が 100 倍違います。塩基側でも、数値の差は対数的な濃度差を表しています。</p>
+                    </article>
+                    <article class="observation-card neutral-card">
+                        <h3>量が同じでも平均 pH にはならない</h3>
+                        <p>pH 2 と pH 12 を同量混ぜると、単純平均で 7 を取るのではなく、H+ と OH- の残り具合で最終 pH が決まります。</p>
+                    </article>
+                    <article class="observation-card water-card">
+                        <h3>水で薄めると中性へ近づく</h3>
+                        <p>水を加えると濃度が下がるため、pH は 7 に近づく方向へ動きます。ただし H+ と OH- が打ち消し合ったわけではありません。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>混合や化学のモデルを広げるなら</h2>
+                    <p>このページは中和の簡易モデルです。ここから別の混合現象や、モデル化の考え方へつなげられます。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解するページを入口別にまとめて見たいときのハブです。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Mixture</p>
+                        <h3>沸騰と濃度</h3>
+                        <p>別の混合モデルとして、濃度と蒸発の関係を追うページです。</p>
+                        <a class="button button-secondary" href="boiling-concentration.html">関連ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Model</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何を残し、何を近似したのかを整理し直したいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Data</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>観察結果をどこまで信じるか、ばらつきをどう読むかを整理する入口です。</p>
+                        <a class="button button-secondary" href="statistics.html">統計のページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>粒子や波だけでなく、pH や中和のような見えにくい量も、手で動かして理解できるモデルにしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="simulation.html">シミュレーションとは</a>
+                <a href="statistics.html">統計と誤差解析</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="ph.js"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>磁化と磁石集団のシミュレーション | イジングモデルと外部磁場</title>
+    <meta name="description" content="温度と外部磁場で磁化が変わるイジングモデルと、小さな棒磁石の集団が外部磁石にそろっていく様子を同じページで観察できるシミュレーションです。">
+    <meta name="theme-color" content="#eef4ff">
+    <link rel="canonical" href="https://readerspace.github.io/magnetization.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="磁化と磁石集団のシミュレーション | イジングモデルと外部磁場">
+    <meta property="og:description" content="低温でそろい、高温でほどける磁化の変化と、外部磁石に引かれて向きをそろえる棒磁石集団を見比べられるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/magnetization.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="磁化と磁石集団のシミュレーション | イジングモデルと外部磁場">
+    <meta name="twitter:description" content="イジング模型の温度依存と、棒磁石集団の配向を同じ画面で試せる磁化シミュレーションです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="magnetization.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Magnetization / External Field</p>
+                    <h1>磁化は、<br>そろう力と乱す力のせめぎ合い。</h1>
+                    <p class="stage-lead">
+                        左は 2 次元イジングモデルです。温度が低いと上向き・下向きのスピンがまとまり、高いと熱ゆらぎでほどけます。<br>
+                        右は小さな棒磁石の集団です。外部磁石を近づけると向きが少しずつそろい、ランダムな揺れを強めるとまた乱れます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>温度と外部磁場で磁化を見る</span>
+                        <span>臨界付近の乱れを観察</span>
+                        <span>外部磁石で配向と磁力ベクトルを試す</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="magnetizationCanvas" aria-label="磁化のイジングモデルと棒磁石集団のシミュレーション"></canvas>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>温度 T</span>
+                            <strong id="quickTemp">2.30</strong>
+                        </article>
+                        <article>
+                            <span>イジング磁化</span>
+                            <strong id="quickMag">0.000</strong>
+                        </article>
+                        <article>
+                            <span>棒磁石のそろい</span>
+                            <strong id="quickAlign">0 %</strong>
+                        </article>
+                        <article>
+                            <span>磁力線表示</span>
+                            <strong id="quickField">ON</strong>
+                        </article>
+                    </div>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>磁化シミュレーション</h2>
+                            <p>左は温度で整列のしやすさが変わる離散スピン系、右は小さな棒磁石が局所磁場へ回転していく連続配向モデルです。外部磁場で偏り、熱ゆらぎで乱れるという共通点を見比べられます。</p>
+                        </div>
+
+                        <div class="control-columns">
+                            <section class="control-group">
+                                <p class="subheading">イジングモデル</p>
+
+                                <label class="control" for="temperature">
+                                    <span>温度 T</span>
+                                    <strong id="tempText">2.30</strong>
+                                    <input id="temperature" type="range" min="0.5" max="5.0" value="2.3" step="0.01">
+                                </label>
+
+                                <label class="control" for="field">
+                                    <span>外部磁場 h</span>
+                                    <strong id="fieldText">0.00</strong>
+                                    <input id="field" type="range" min="-1.5" max="1.5" value="0" step="0.01">
+                                </label>
+
+                                <div class="button-row button-row-three">
+                                    <button id="randomizeIsing" class="soft-action" type="button">ランダム初期化</button>
+                                    <button id="alignUp" class="positive-action" type="button">上向きにそろえる</button>
+                                    <button id="alignDown" class="negative-action" type="button">下向きにそろえる</button>
+                                </div>
+                            </section>
+
+                            <section class="control-group bars-group">
+                                <p class="subheading">棒磁石集団</p>
+
+                                <label class="control" for="magnetPower">
+                                    <span>外部磁石の強さ</span>
+                                    <strong id="magnetPowerText">1.80</strong>
+                                    <input id="magnetPower" type="range" min="0" max="4" value="1.8" step="0.05">
+                                </label>
+
+                                <label class="control" for="magnetAngle">
+                                    <span>外部磁石の向き</span>
+                                    <strong id="magnetAngleText">180°</strong>
+                                    <input id="magnetAngle" type="range" min="0" max="360" value="180" step="1">
+                                </label>
+
+                                <label class="control" for="noise">
+                                    <span>ランダムな揺れ</span>
+                                    <strong id="noiseText">0.18</strong>
+                                    <input id="noise" type="range" min="0" max="0.8" value="0.18" step="0.01">
+                                </label>
+
+                                <label class="control" for="coupling">
+                                    <span>棒磁石どうしの影響</span>
+                                    <strong id="couplingText">0.65</strong>
+                                    <input id="coupling" type="range" min="0" max="2" value="0.65" step="0.01">
+                                </label>
+
+                                <div class="button-row">
+                                    <button id="randomizeBars" class="field-action" type="button">棒磁石をランダム化</button>
+                                    <button id="toggleField" class="toggle-action" type="button">磁力線を隠す</button>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>イジング磁化</span>
+                                <strong id="isingMagStat">0.000</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>相の状態</span>
+                                <strong id="phaseStat">ランダム</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>棒磁石のそろい</span>
+                                <strong id="barAlignStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>外部磁石距離</span>
+                                <strong id="distanceStat">0 px</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">左: 2 次元イジングモデルを簡易 Metropolis 法で更新し、温度と外部磁場によってスピン反転の起こりやすさを変えています。右: 棒磁石は外部磁場と近傍磁石の向きからトルクを受け、ランダムな熱ゆらぎに相当するノイズも加えています。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">左の温度を上げると整列が崩れやすくなり、右の外部磁石を近づけると棒磁石の向きが少しずつそろいます。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: 右側の大きい棒磁石はキャンバス上でドラッグして動かせます。向きはスライダーで回転できます。磁力線表示を切り替えると、外部磁場の向きが見やすくなります。
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">整列を生む相互作用と、乱れを生む熱ゆらぎが釣り合う場所に、磁化の切り替わりが現れる。</p>
+                <p class="signal-sub">イジングモデルでは上向き・下向きの 2 状態が、棒磁石集団では連続的な角度が、それぞれ外場と近傍の影響を受けます。どちらも「そろう力」と「乱れる力」の競合として見ると理解しやすくなります。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページの2つの磁化モデル</h2>
+                    <p>左は離散的なスピンの相転移、右は連続角度を持つ小さな磁石の配向です。厳密な物質モデルではなく、磁化の直感がつかめる簡易版にしています。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">01</p>
+                        <h3>イジング模型の整列</h3>
+                        <p>各格子点は上向きか下向きの 2 状態だけを取り、周囲 4 近傍と同じ向きだとエネルギーが下がるようにしています。</p>
+                    </article>
+                    <article class="model-card field-card">
+                        <p class="card-label">02</p>
+                        <h3>温度は反転の起こりやすさ</h3>
+                        <p>温度が高いと、本来は不利な向きへの反転も起こりやすくなります。臨界温度付近では大きな島ができたり崩れたりしやすくなります。</p>
+                    </article>
+                    <article class="model-card cool-card">
+                        <p class="card-label">03</p>
+                        <h3>外部磁場は偏りをつくる</h3>
+                        <p>外部磁場 h が正なら上向き、負なら下向きが少し有利になります。完全な自発磁化でなくても、外場で磁化は偏ります。</p>
+                    </article>
+                    <article class="model-card neutral-card">
+                        <p class="card-label">04</p>
+                        <h3>棒磁石は局所磁場へ回る</h3>
+                        <p>右側の棒磁石は、外部磁石と近傍磁石がつくる合成磁場の向きへ回転しつつ、ノイズで少しずつ向きを乱されます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>試すと違いが出やすい観察ポイント</h2>
+                    <p>単に「磁石がそろう」ではなく、どの条件が整列と乱れのどちらを優勢にするかを見ると、左と右の対応が見えます。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card strong-card">
+                        <h3>低温では大きな島が残りやすい</h3>
+                        <p>イジング側で温度を下げると、赤や青の塊が大きくなり、磁化がゼロから離れやすくなります。</p>
+                    </article>
+                    <article class="observation-card field-card">
+                        <h3>臨界付近では揺れが大きい</h3>
+                        <p>温度が 2.27 前後だと、秩序と無秩序の境目に近づき、まとまりが突然崩れたり再形成されたりします。</p>
+                    </article>
+                    <article class="observation-card cool-card">
+                        <h3>外場は小さくても偏りを生む</h3>
+                        <p>外部磁場 h を少しだけ入れると、完全なランダムではなく片側の向きがじわっと有利になります。</p>
+                    </article>
+                    <article class="observation-card neutral-card">
+                        <h3>棒磁石集団は距離で応答が変わる</h3>
+                        <p>右の外部磁石を近づけるほど局所磁場が強くなり、集団全体の平均ベクトルも大きくそろっていきます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>磁化や集団現象を広げるなら</h2>
+                    <p>このページは磁化の入口です。電場・磁場の可視化や、局所ルールから集団挙動が生まれる別のモデルへつなげられます。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>他の力学、場、波動、混合モデルもまとめて見たいときの入口です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Field</p>
+                        <h3>電場と磁場の可視化</h3>
+                        <p>力線やベクトル場を直接見比べたいときは、こちらの場の可視化ページがつながります。</p>
+                        <a class="button button-secondary" href="electric-magnetic.html">関連ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Collective</p>
+                        <h3>鳥の集団と創発</h3>
+                        <p>単純な局所相互作用から秩序が生まれる別例として、群れのシミュレーションも比較できます。</p>
+                        <a class="button button-secondary" href="boids.html">群れのページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Theory</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何をモデル化し、何を省略しているかを整理したいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>磁化のような見えにくい量も、格子やベクトルの動きに落とし込むと、温度や外場の役割が手で追えるようになります。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="electric-magnetic.html">電場と磁場の可視化</a>
+                <a href="physics.html">物理学解説トップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="magnetization.js"></script>
+</body>
+</html>
