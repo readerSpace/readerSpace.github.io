@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ライフゲームとは？ | 描いて試せるセルオートマトンのシミュレーション</title>
+    <meta name="description" content="ライフゲームを高校生向けに直感から試せるページです。描く・消す、再生速度、セルサイズ、グライダーやグライダー銃などの有名パターン配置まで 1 画面で操作できます。">
+    <meta name="theme-color" content="#163548">
+    <link rel="canonical" href="https://readerspace.github.io/life-game.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="ライフゲームとは？ | 描いて試せるセルオートマトンのシミュレーション">
+    <meta property="og:description" content="単純な生死ルールだけで、移動する模様、振動する模様、増殖する模様が生まれる。描いて試せるライフゲームの体験ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/life-game.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ライフゲームとは？ | 描いて試せるセルオートマトンのシミュレーション">
+    <meta name="twitter:description" content="ペン、消しゴム、再生速度、グライダーやグライダー銃の配置を切り替えながら、ライフゲームをその場で試せます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="life-game.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#rules">ルール</a>
+                <a href="#patterns">模様</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Cellular Automaton / Life Game / Emergence</p>
+                    <h1>生きる・死ぬだけで、<br>模様が動き出す。</h1>
+                    <p class="stage-lead">
+                        ライフゲームは、セルが「生きる」か「死ぬ」かだけの離散モデルです。<br>
+                        それなのに、移動する模様、振動する模様、増殖する模様が現れます。まずは描いて、置いて、眺めてみてください。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>ドラッグで描く</span>
+                        <span>有名パターンを配置</span>
+                        <span>速度と解像度を変更</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell">
+                    <canvas id="lifeCanvas" aria-label="ライフゲームシミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>ライフゲーム</h2>
+                            <p>生きる・死ぬだけの単純ルールから、動く模様や増える模様が生まれます。</p>
+                        </div>
+
+                        <div class="row controls-row">
+                            <button id="playPause" class="green" type="button">一時停止</button>
+                            <button id="step" type="button">1 ステップ</button>
+                            <button id="drawMode" class="active" type="button">描く</button>
+                            <button id="eraseMode" type="button">消す</button>
+                        </div>
+
+                        <div class="control">
+                            <label for="speed">速度 <span id="speedValue"></span></label>
+                            <input id="speed" type="range" min="1" max="30" step="1" value="10">
+                        </div>
+
+                        <div class="control">
+                            <label for="cellSize">セルサイズ <span id="cellSizeValue"></span></label>
+                            <input id="cellSize" type="range" min="6" max="22" step="1" value="10">
+                        </div>
+
+                        <div class="pattern-header">
+                            <p>有名パターンを置く</p>
+                            <span id="patternValue">未選択</span>
+                        </div>
+                        <div class="patterns">
+                            <button type="button" data-pattern="glider">グライダー</button>
+                            <button type="button" data-pattern="lwss">宇宙船</button>
+                            <button type="button" data-pattern="pulsar">パルサー</button>
+                            <button type="button" data-pattern="gosper">グライダー銃</button>
+                            <button type="button" data-pattern="diehard">Diehard</button>
+                            <button type="button" data-pattern="acorn">Acorn</button>
+                        </div>
+
+                        <div class="row utility-row">
+                            <button id="random" class="yellow" type="button">ランダム</button>
+                            <button id="clear" class="red" type="button">クリア</button>
+                        </div>
+
+                        <div class="stats">
+                            <div class="stat-box">世代: <span id="generation">0</span></div>
+                            <div class="stat-box">生存セル: <span id="aliveCount">0</span></div>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">キャンバスにドラッグすると自分で初期条件を描けます。パターンを選んだら、次のクリックで配置されます。</p>
+                    </div>
+
+                    <div class="floating-hint">
+                        操作: ドラッグでセルを描く / 消す。パターンボタンを押したあと、好きな場所をクリックすると配置できます。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>ツール</span>
+                            <strong id="toolValue">描く</strong>
+                        </article>
+                        <article>
+                            <span>選択中の模様</span>
+                            <strong id="selectedPatternValue">なし</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="runningValue">再生中</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">局所ルールを繰り返すだけで、全体のふるまいは驚くほど豊かになる。</p>
+                <p class="signal-sub">ライフゲームは「生きるか死ぬか」しか持たないのに、運動、振動、衝突、自己複製に近いふるまいまで現れます。創発を体験するための代表的な離散モデルです。</p>
+            </section>
+
+            <section class="section reveal" id="rules">
+                <div class="section-heading">
+                    <p class="eyebrow">Rules</p>
+                    <h2>ルールは 3 行で言える</h2>
+                    <p>各セルは、周囲 8 マスの生存セル数だけを見ます。未来を決める情報はそれだけです。</p>
+                </div>
+                <div class="rule-grid">
+                    <article class="rule-card strong-card">
+                        <p class="card-label">Survival</p>
+                        <h3>生存条件</h3>
+                        <p>生きているセルは、近傍に 2 個または 3 個の生存セルがあると生き残ります。</p>
+                    </article>
+                    <article class="rule-card warm-card">
+                        <p class="card-label">Birth</p>
+                        <h3>誕生条件</h3>
+                        <p>死んでいるセルでも、近傍にちょうど 3 個の生存セルがあると新しく生まれます。</p>
+                    </article>
+                    <article class="rule-card">
+                        <p class="card-label">Death</p>
+                        <h3>過密と過疎</h3>
+                        <p>近傍が少なすぎても多すぎても死にます。だから増え続けるだけではなく、崩れたり揺れたりもします。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="patterns">
+                <div class="section-heading">
+                    <p class="eyebrow">Patterns</p>
+                    <h2>有名パターンを見ると、何が面白いかが分かる</h2>
+                    <p>ライフゲームの見どころは、静止・振動・移動・放出のように、同じルールから異なる型のふるまいが出ることです。</p>
+                </div>
+                <div class="pattern-grid">
+                    <article class="pattern-card strong-card">
+                        <p class="card-label">Mover</p>
+                        <h3>グライダー</h3>
+                        <p>自分の形を周期的に変えながら、斜めへ移動する最も有名な模様です。</p>
+                    </article>
+                    <article class="pattern-card warm-card">
+                        <p class="card-label">Oscillator</p>
+                        <h3>パルサー</h3>
+                        <p>位置は固定されたまま、周期的に形だけが変わります。振動子の代表例です。</p>
+                    </article>
+                    <article class="pattern-card">
+                        <p class="card-label">Emitter</p>
+                        <h3>グライダー銃</h3>
+                        <p>一定間隔でグライダーを放出し続けます。増殖や情報伝達のイメージにつながる模様です。</p>
+                    </article>
+                    <article class="pattern-card accent-card">
+                        <p class="card-label">Long Tail</p>
+                        <h3>Diehard と Acorn</h3>
+                        <p>小さな初期配置なのに、長い時間をかけて複雑な展開を見せます。初期条件の効き方を見るのに向いています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるならこのページ</h2>
+                    <p>離散ルールから秩序や複雑さが出るという点で、創発やパターン形成の他のページと自然につながります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>ライフゲームを含めて、動くページを入口別にまとめた一覧です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Collective</p>
+                        <h3>鳥の集団で見る創発</h3>
+                        <p>離散格子ではなく連続空間ですが、局所ルールから全体秩序が出るという点でよく似ています。</p>
+                        <a class="button button-secondary" href="boids.html">鳥の集団へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Granular</p>
+                        <h3>砂の崩れ方を見る</h3>
+                        <p>単純な更新ルールを繰り返すことで、別の種類の模様と流れが見えてきます。</p>
+                        <a class="button button-secondary" href="sand.html">砂の物理へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションの意味に戻る</h3>
+                        <p>ライフゲームのような離散モデルが、何を残して何を捨てた近似なのかを整理し直せます。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>創発、カオス、離散モデル、パターン形成まで、動かして理解するページを増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="life-game.js"></script>
+</body>
+</html>
