@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イジングモデルのシミュレーション | 温度・磁化・相転移</title>
+    <meta name="description" content="たくさんの小さな磁石が、温度と外部磁場によってそろったり乱れたりするイジングモデルをリアルタイムで観察できるシミュレーションです。">
+    <meta name="theme-color" content="#fff2f2">
+    <link rel="canonical" href="https://readerspace.github.io/ising-model.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="イジングモデルのシミュレーション | 温度・磁化・相転移">
+    <meta property="og:description" content="局所ルールから全体の秩序が生まれるイジングモデルを、温度・外部磁場・磁化グラフつきで試せるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/ising-model.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="イジングモデルのシミュレーション | 温度・磁化・相転移">
+    <meta name="twitter:description" content="低温ではそろい、高温ではほどける。イジング模型の相転移を手で試せます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ising-model.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Ising / Critical Phenomena</p>
+                    <h1>局所ルールから、<br>全体の秩序が生まれる。</h1>
+                    <p class="stage-lead">
+                        イジングモデルは、格子上の小さな磁石が上向きか下向きの 2 状態だけを取る、統計物理の基本モデルです。<br>
+                        隣と同じ向きになりたがる相互作用と、温度による熱ゆらぎが競合すると、低温では整列し、高温ではランダムになります。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>温度 T と外部磁場 h を変える</span>
+                        <span>磁化 M の時間変化を見る</span>
+                        <span>臨界温度付近のゆらぎを観察する</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="isingCanvas" aria-label="イジングモデルのシミュレーション"></canvas>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>温度 T</span>
+                            <strong id="quickTemp">2.30</strong>
+                        </article>
+                        <article>
+                            <span>外部磁場 h</span>
+                            <strong id="quickField">0.00</strong>
+                        </article>
+                        <article>
+                            <span>磁化 M</span>
+                            <strong id="quickMag">0.000</strong>
+                        </article>
+                        <article>
+                            <span>相の状態</span>
+                            <strong id="quickPhase">ランダム</strong>
+                        </article>
+                    </div>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>イジングモデル</h2>
+                            <p>各マスのスピンは上向きか下向きだけを取ります。温度が低いと同じ向きの塊が育ち、高いと熱ゆらぎで崩れます。外部磁場を入れると、片方の向きが少し有利になります。</p>
+                        </div>
+
+                        <section class="control-group ising-group">
+                            <p class="subheading">パラメータ</p>
+
+                            <label class="control" for="temperature">
+                                <span>温度 T</span>
+                                <strong id="tempText">2.30</strong>
+                                <input id="temperature" type="range" min="0.5" max="5.0" value="2.3" step="0.01">
+                            </label>
+
+                            <label class="control" for="field">
+                                <span>外部磁場 h</span>
+                                <strong id="fieldText">0.00</strong>
+                                <input id="field" type="range" min="-1.5" max="1.5" value="0" step="0.01">
+                            </label>
+
+                            <div class="button-row">
+                                <button id="randomizeIsing" class="soft-action" type="button">ランダム初期化</button>
+                                <button id="togglePause" class="pause-action" type="button">一時停止</button>
+                            </div>
+
+                            <div class="button-row">
+                                <button id="alignUp" class="positive-action" type="button">上向きにそろえる</button>
+                                <button id="alignDown" class="negative-action" type="button">下向きにそろえる</button>
+                            </div>
+                        </section>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>磁化 M</span>
+                                <strong id="magStat">0.000</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>上向き割合</span>
+                                <strong id="upStat">50 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>相の状態</span>
+                                <strong id="phaseStat">ランダム</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>更新状態</span>
+                                <strong id="runtimeStat">更新中</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデル: ハミルトニアンは H = -J Σ s_i s_j - h Σ s_i と考え、ランダムに選んだスピン反転を Metropolis 法で受理しています。ここでは J > 0 の強磁性的な場合だけを扱います。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">温度を上げると整列が崩れやすくなります。T ≈ 2.27 付近では大きな塊ができたり崩れたりするゆらぎが見えやすくなります。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: まずランダム初期化のまま温度を上下してみてください。次に外部磁場を正や負に振ると、平均磁化がどちらへ偏るかがわかります。一時停止すると状態を固定して観察できます。
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">隣と同じ向きになりたがる力と、熱ゆらぎで崩す力の競合が、相転移をつくる。</p>
+                <p class="signal-sub">イジングモデルは、磁化、臨界現象、相関、スケーリング、さらにはボルツマンマシンのような確率モデルへつながる入口です。単純なのに、秩序がどこから生まれるかをかなり深く教えてくれます。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>イジングモデルで計算していること</h2>
+                    <p>格子上の各スピンは +1 か -1 だけを取り、近くのスピンと同じ向きだとエネルギーが下がります。温度は、その秩序をどれだけ壊しやすいかを決める量です。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">01</p>
+                        <h3>スピンは 2 状態だけ</h3>
+                        <p>各格子点のスピン s_i は +1 か -1 のどちらかだけを取ります。小さな磁石が上か下を向くイメージです。</p>
+                    </article>
+                    <article class="model-card field-card">
+                        <p class="card-label">02</p>
+                        <h3>ハミルトニアン</h3>
+                        <p>H = -J Σ s_i s_j - h Σ s_i と考えます。J &gt; 0 なら隣同士は同じ向きになりたがり、h は外部磁場として片方の向きを有利にします。</p>
+                    </article>
+                    <article class="model-card cool-card">
+                        <p class="card-label">03</p>
+                        <h3>磁化は全体の偏り</h3>
+                        <p>M = (1 / N) Σ s_i で全体の向きの偏りを測ります。M = 1 なら全て上、M = 0 なら上と下がほぼ打ち消し合っています。</p>
+                    </article>
+                    <article class="model-card neutral-card">
+                        <p class="card-label">04</p>
+                        <h3>Metropolis 法で更新</h3>
+                        <p>ランダムに 1 つ選んで反転し、エネルギー差 ΔE を計算します。ΔE が小さければ受理されやすく、確率 exp(-ΔE / T) が温度の意味になります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>見ておくと面白い観察ポイント</h2>
+                    <p>単に赤と青の模様を見るだけでなく、どの条件で磁化が立ち上がり、どこで壊れるかを追うと、相転移の直感がかなりつかめます。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card strong-card">
+                        <h3>低温では大きな塊が育つ</h3>
+                        <p>温度を下げると、同じ向きのスピン同士がまとまりやすくなり、赤か青の大きな島が残りやすくなります。</p>
+                    </article>
+                    <article class="observation-card field-card">
+                        <h3>高温ではランダムにほどける</h3>
+                        <p>温度を上げると、エネルギー的に不利な反転も起こりやすくなり、全体の磁化はゼロ付近へ戻っていきます。</p>
+                    </article>
+                    <article class="observation-card cool-card">
+                        <h3>臨界付近ではゆらぎが大きい</h3>
+                        <p>T ≈ 2.27 付近では、秩序と無秩序の境目に近づくため、大きな塊が突然崩れたり再形成されたりしやすくなります。</p>
+                    </article>
+                    <article class="observation-card neutral-card">
+                        <h3>外部磁場は小さくても偏りをつくる</h3>
+                        <p>h を少しだけ正や負に振ると、完全なランダムではなく、片方の向きがじわっと有利になります。磁化の符号がどちらへ寄るかに注目してください。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>イジング模型から広げるなら</h2>
+                    <p>相転移の入口としてイジング模型を見たあと、連続角度を持つ磁石の配向や、モデル化そのものの考え方へつなげると理解が広がります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>他の力学、波動、場、混合現象も含めて入口別に見たいときのハブです。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Collective</p>
+                        <h3>棒磁石集団の磁化</h3>
+                        <p>離散スピンではなく、連続角度を持つ磁石が外部磁場へどうそろうかを見たいときの関連ページです。</p>
+                        <a class="button button-secondary" href="magnetization.html">関連ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Theory</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何を残し、何を省略しているかを整理し直したいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Data</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>ゆらぎや平均量の意味を、観測データや誤差の読み方へつなげる入口です。</p>
+                        <a class="button button-secondary" href="statistics.html">統計のページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>イジングモデルは、シンプルな局所ルールから秩序、相転移、臨界ゆらぎが立ち上がることを見せてくれる代表的なモデルです。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="magnetization.html">棒磁石集団の磁化</a>
+                <a href="physics.html">物理学解説トップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="ising-model.js"></script>
+</body>
+</html>

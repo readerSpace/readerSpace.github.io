@@ -27,49 +27,39 @@ if (!canvas || !simulationShell || !context) {
     throw new Error("Magnetization page failed to initialize.");
 }
 
-const temperatureSlider = document.querySelector("#temperature");
-const fieldSlider = document.querySelector("#field");
 const magnetPowerSlider = document.querySelector("#magnetPower");
 const magnetAngleSlider = document.querySelector("#magnetAngle");
 const noiseSlider = document.querySelector("#noise");
 const couplingSlider = document.querySelector("#coupling");
-const randomizeIsingButton = document.querySelector("#randomizeIsing");
-const alignUpButton = document.querySelector("#alignUp");
-const alignDownButton = document.querySelector("#alignDown");
 const randomizeBarsButton = document.querySelector("#randomizeBars");
 const toggleFieldButton = document.querySelector("#toggleField");
 
-const tempText = document.querySelector("#tempText");
-const fieldText = document.querySelector("#fieldText");
 const magnetPowerText = document.querySelector("#magnetPowerText");
 const magnetAngleText = document.querySelector("#magnetAngleText");
 const noiseText = document.querySelector("#noiseText");
 const couplingText = document.querySelector("#couplingText");
 
-const isingMagStat = document.querySelector("#isingMagStat");
-const phaseStat = document.querySelector("#phaseStat");
 const barAlignStat = document.querySelector("#barAlignStat");
 const distanceStat = document.querySelector("#distanceStat");
+const meanDirectionStat = document.querySelector("#meanDirectionStat");
+const stateStat = document.querySelector("#stateStat");
 
-const quickTemp = document.querySelector("#quickTemp");
-const quickMag = document.querySelector("#quickMag");
+const quickPower = document.querySelector("#quickPower");
 const quickAlign = document.querySelector("#quickAlign");
+const quickDistance = document.querySelector("#quickDistance");
 const quickField = document.querySelector("#quickField");
 const panelStatus = document.querySelector("#panelStatus");
 
-const ISING_SIZE = 56;
-const CRITICAL_TEMPERATURE = 2.27;
 const bars = [];
-let spins = [];
 let width = 0;
 let height = 0;
 let showField = true;
 let statusTimeout = 0;
 
-const defaultStatus = "左の温度を上げると整列が崩れやすくなり、右の外部磁石を近づけると棒磁石の向きが少しずつそろいます。";
+const defaultStatus = "外部磁石を近づけると、近い場所の棒磁石ほど向きをそろえやすくなります。ノイズを強めると整列が崩れます。";
 const externalMagnet = {
-    u: 0.88,
-    v: 0.52,
+    u: 0.84,
+    v: 0.46,
     angle: Math.PI,
     dragging: false
 };
@@ -89,7 +79,7 @@ function setStatus(message, reset = false) {
     if (reset) {
         statusTimeout = window.setTimeout(() => {
             panelStatus.textContent = defaultStatus;
-        }, 3000);
+        }, 3200);
     }
 }
 
@@ -108,62 +98,10 @@ function drawRoundedRectPath(x, y, boxWidth, boxHeight, radius) {
     context.closePath();
 }
 
-function initIsing() {
-    spins = Array.from({ length: ISING_SIZE }, () =>
-        Array.from({ length: ISING_SIZE }, () => (Math.random() < 0.5 ? 1 : -1))
-    );
-}
-
-function randomizeIsing() {
-    initIsing();
-    setStatus("イジングモデルをランダム初期化しました。低温へ下げると同じ向きの島が育ちやすくなります。", true);
-}
-
-function alignIsing(direction) {
-    spins = Array.from({ length: ISING_SIZE }, () =>
-        Array.from({ length: ISING_SIZE }, () => direction)
-    );
-    setStatus(direction > 0 ? "全スピンを上向きにそろえました。高温にすると整列が崩れていきます。" : "全スピンを下向きにそろえました。外部磁場や温度で偏りの戻り方を見比べられます。", true);
-}
-
-function isingStep() {
-    const temperature = Number(temperatureSlider.value);
-    const field = Number(fieldSlider.value);
-    const coupling = 1;
-
-    for (let trial = 0; trial < ISING_SIZE * ISING_SIZE * 0.35; trial += 1) {
-        const row = Math.floor(Math.random() * ISING_SIZE);
-        const column = Math.floor(Math.random() * ISING_SIZE);
-        const spin = spins[row][column];
-        const up = spins[(row - 1 + ISING_SIZE) % ISING_SIZE][column];
-        const down = spins[(row + 1) % ISING_SIZE][column];
-        const left = spins[row][(column - 1 + ISING_SIZE) % ISING_SIZE];
-        const right = spins[row][(column + 1) % ISING_SIZE];
-        const neighborSum = up + down + left + right;
-        const deltaEnergy = 2 * spin * (coupling * neighborSum + field);
-
-        if (deltaEnergy <= 0 || Math.random() < Math.exp(-deltaEnergy / temperature)) {
-            spins[row][column] = -spin;
-        }
-    }
-}
-
-function isingMagnetization() {
-    let sum = 0;
-
-    for (let row = 0; row < ISING_SIZE; row += 1) {
-        for (let column = 0; column < ISING_SIZE; column += 1) {
-            sum += spins[row][column];
-        }
-    }
-
-    return sum / (ISING_SIZE * ISING_SIZE);
-}
-
 function initBars() {
     bars.length = 0;
-    const columns = 11;
-    const rows = 11;
+    const columns = 12;
+    const rows = 10;
 
     for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
@@ -183,12 +121,14 @@ function randomizeBars() {
         bar.omega = 0;
     }
 
-    setStatus("棒磁石集団をランダム化しました。外部磁石を近づけると再び平均方向が立ち上がります。", true);
+    setStatus("棒磁石集団をランダム化しました。外部磁石を近づけると、平均方向がもう一度立ち上がります。", true);
 }
 
 function toggleFieldLines() {
     showField = !showField;
     updateToggleButton();
+    updateUi();
+    draw();
     setStatus(showField ? "磁力線表示を ON にしました。外部磁石がつくる場の向きが矢印で見えます。" : "磁力線表示を OFF にしました。棒磁石自身の向きだけを見たいときに使えます。", true);
 }
 
@@ -198,70 +138,21 @@ function updateToggleButton() {
     }
 }
 
-function getRegions() {
+function getSceneRegion() {
+    return {
+        x: 18,
+        y: 18,
+        w: width - 36,
+        h: height - 36
+    };
+}
+
+function getBarArea() {
+    const region = getSceneRegion();
     const compact = width <= 860;
-    const outerPadding = compact ? 18 : 24;
-    const topOffset = compact ? 18 : 20;
-    const gap = compact ? 22 : 24;
-
-    if (compact) {
-        const zoneWidth = width - outerPadding * 2;
-        const zoneHeight = (height - topOffset * 2 - gap) / 2;
-
-        return {
-            compact,
-            ising: {
-                x: outerPadding,
-                y: topOffset,
-                w: zoneWidth,
-                h: zoneHeight
-            },
-            bars: {
-                x: outerPadding,
-                y: topOffset + zoneHeight + gap,
-                w: zoneWidth,
-                h: zoneHeight
-            }
-        };
-    }
-
-    const zoneWidth = (width - outerPadding * 2 - gap) / 2;
-    const zoneHeight = height - topOffset * 2;
-
-    return {
-        compact,
-        ising: {
-            x: outerPadding,
-            y: topOffset,
-            w: zoneWidth,
-            h: zoneHeight
-        },
-        bars: {
-            x: outerPadding + zoneWidth + gap,
-            y: topOffset,
-            w: zoneWidth,
-            h: zoneHeight
-        }
-    };
-}
-
-function getIsingBoard(region) {
-    const labelSpace = width <= 860 ? 60 : 68;
-    const footerSpace = width <= 860 ? 82 : 96;
-    const boardSize = Math.max(120, Math.min(region.w - 22, region.h - labelSpace - footerSpace));
-
-    return {
-        x: region.x + (region.w - boardSize) / 2,
-        y: region.y + labelSpace,
-        size: boardSize,
-        cell: boardSize / ISING_SIZE
-    };
-}
-
-function getBarArea(region) {
-    const topPad = width <= 860 ? 56 : 64;
-    const bottomPad = width <= 860 ? 52 : 64;
-    const sidePad = width <= 860 ? 16 : 18;
+    const topPad = compact ? 60 : 64;
+    const bottomPad = compact ? 86 : 92;
+    const sidePad = compact ? 14 : 18;
 
     return {
         x: region.x + sidePad,
@@ -273,7 +164,7 @@ function getBarArea(region) {
 
 function barPosition(bar, area) {
     const padX = 24;
-    const padY = 24;
+    const padY = 22;
 
     return {
         x: area.x + padX + bar.u * Math.max(1, area.w - padX * 2),
@@ -289,14 +180,14 @@ function externalMagnetPosition(area) {
 }
 
 function syncExternalMagnet() {
-    const area = getBarArea(getRegions().bars);
+    const area = getBarArea();
     externalMagnet.u = clamp(externalMagnet.u, -0.12, 1.12);
     externalMagnet.v = clamp(externalMagnet.v, -0.12, 1.12);
     const magnetPosition = externalMagnetPosition(area);
 
     if (!Number.isFinite(magnetPosition.x) || !Number.isFinite(magnetPosition.y)) {
-        externalMagnet.u = 0.88;
-        externalMagnet.v = 0.52;
+        externalMagnet.u = 0.84;
+        externalMagnet.v = 0.46;
     }
 }
 
@@ -355,7 +246,7 @@ function neighborFieldAt(index, area) {
         const dy = source.y - target.y;
         const r2 = dx * dx + dy * dy + 1200;
 
-        if (r2 > 5000) {
+        if (r2 > 5200) {
             continue;
         }
 
@@ -388,7 +279,7 @@ function updateBars(area) {
     }
 }
 
-function barAlignment() {
+function getAverageVector() {
     let sx = 0;
     let sy = 0;
 
@@ -397,61 +288,41 @@ function barAlignment() {
         sy += Math.sin(bar.angle);
     }
 
-    return Math.sqrt(sx * sx + sy * sy) / bars.length;
+    return {
+        x: sx,
+        y: sy,
+        magnitude: Math.sqrt(sx * sx + sy * sy) / bars.length
+    };
 }
 
-function phaseLabel(magnetization, temperature, field) {
-    if (Math.abs(temperature - CRITICAL_TEMPERATURE) < 0.25) {
-        return "臨界付近";
-    }
-
-    if (temperature > 3.2 && Math.abs(magnetization) < 0.18) {
-        return "高温で乱雑";
-    }
-
-    if (Math.abs(field) > 0.3 && Math.abs(magnetization) > 0.18) {
-        return "外場で偏る";
-    }
-
-    if (Math.abs(magnetization) > 0.7) {
-        return "強く磁化";
-    }
-
-    if (Math.abs(magnetization) > 0.28) {
-        return "弱く磁化";
-    }
-
-    return "ランダム";
+function barAlignment() {
+    return getAverageVector().magnitude;
 }
 
-function updateUi(regions) {
-    const temperature = Number(temperatureSlider.value);
-    const field = Number(fieldSlider.value);
-    const magnetization = isingMagnetization();
-    const alignment = barAlignment();
-    const barArea = getBarArea(regions.bars);
-    const magnetPosition = externalMagnetPosition(barArea);
-    const centerX = barArea.x + barArea.w / 2;
-    const centerY = barArea.y + barArea.h / 2;
-    const distance = Math.hypot(magnetPosition.x - centerX, magnetPosition.y - centerY);
-    const angleDegrees = Math.round((externalMagnet.angle * 180) / Math.PI) % 360;
+function meanDirectionDegrees() {
+    const average = getAverageVector();
 
-    tempText.textContent = temperature.toFixed(2);
-    fieldText.textContent = field.toFixed(2);
-    magnetPowerText.textContent = Number(magnetPowerSlider.value).toFixed(2);
-    magnetAngleText.textContent = `${((angleDegrees + 360) % 360).toFixed(0)}°`;
-    noiseText.textContent = Number(noiseSlider.value).toFixed(2);
-    couplingText.textContent = Number(couplingSlider.value).toFixed(2);
+    if (average.magnitude < 0.08) {
+        return null;
+    }
 
-    isingMagStat.textContent = magnetization.toFixed(3);
-    phaseStat.textContent = phaseLabel(magnetization, temperature, field);
-    barAlignStat.textContent = `${(alignment * 100).toFixed(0)} %`;
-    distanceStat.textContent = `${distance.toFixed(0)} px`;
+    return ((Math.atan2(average.y, average.x) * 180) / Math.PI + 360) % 360;
+}
 
-    quickTemp.textContent = temperature.toFixed(2);
-    quickMag.textContent = magnetization.toFixed(3);
-    quickAlign.textContent = `${(alignment * 100).toFixed(0)} %`;
-    quickField.textContent = showField ? "ON" : "OFF";
+function alignmentLabel(alignment) {
+    if (alignment > 0.78) {
+        return "強く整列";
+    }
+
+    if (alignment > 0.48) {
+        return "かなり整列";
+    }
+
+    if (alignment > 0.24) {
+        return "ゆるく整列";
+    }
+
+    return "ばらばら";
 }
 
 function drawArrow(x, y, angle, length, color, lineWidth = 2) {
@@ -493,10 +364,10 @@ function drawBarMagnet(x, y, angle, length, barWidth = 8, alpha = 1) {
     context.restore();
 }
 
-function drawRegionBackground(region, tintA, tintB) {
+function drawSceneBackground(region) {
     const gradient = context.createLinearGradient(region.x, region.y, region.x, region.y + region.h);
-    gradient.addColorStop(0, tintA);
-    gradient.addColorStop(1, tintB);
+    gradient.addColorStop(0, "rgba(255, 255, 255, 0.8)");
+    gradient.addColorStop(1, "rgba(245, 240, 255, 0.62)");
     context.fillStyle = gradient;
     drawRoundedRectPath(region.x, region.y, region.w, region.h, 24);
     context.fill();
@@ -505,78 +376,15 @@ function drawRegionBackground(region, tintA, tintB) {
     context.stroke();
 }
 
-function drawIsing(region) {
-    const compact = width <= 860;
-    const board = getIsingBoard(region);
-    const magnetization = isingMagnetization();
-    const meterX = board.x;
-    const meterY = board.y + board.size + 18;
-    const meterWidth = board.size;
-    const meterHeight = 18;
-    const tempBarY = meterY + 34;
-    const temp = Number(temperatureSlider.value);
-
-    drawRegionBackground(region, "rgba(255, 255, 255, 0.78)", "rgba(255, 245, 245, 0.58)");
-
-    context.fillStyle = "#111827";
-    context.font = `${compact ? 16 : 18}px "IBM Plex Sans JP"`;
-    context.fillText("イジングモデル", region.x + 16, region.y + 24);
-    context.font = `${compact ? 12 : 13}px "IBM Plex Sans JP"`;
-    context.fillStyle = "#475569";
-    context.fillText("低温ではそろい、高温では熱ゆらぎでほどける", region.x + 16, region.y + 44);
-
-    for (let row = 0; row < ISING_SIZE; row += 1) {
-        for (let column = 0; column < ISING_SIZE; column += 1) {
-            context.fillStyle = spins[row][column] === 1 ? "#ef4444" : "#2563eb";
-            context.fillRect(board.x + column * board.cell, board.y + row * board.cell, board.cell + 0.3, board.cell + 0.3);
-        }
-    }
-
-    context.strokeStyle = "#334155";
-    context.lineWidth = 2.5;
-    context.strokeRect(board.x, board.y, board.size, board.size);
-
-    context.fillStyle = "#e5e7eb";
-    context.fillRect(meterX, meterY, meterWidth, meterHeight);
-    context.fillStyle = magnetization >= 0 ? "#ef4444" : "#2563eb";
-    context.fillRect(meterX + meterWidth / 2, meterY, (meterWidth / 2) * magnetization, meterHeight);
-    context.strokeStyle = "#334155";
-    context.strokeRect(meterX, meterY, meterWidth, meterHeight);
-    context.fillStyle = "#111827";
-    context.font = `${compact ? 12 : 13}px "IBM Plex Sans JP"`;
-    context.fillText("磁化 M", meterX, meterY - 8);
-    context.fillText(magnetization.toFixed(3), meterX + meterWidth / 2 - 18, meterY + 34);
-
-    context.fillStyle = "#e5e7eb";
-    context.fillRect(meterX, tempBarY, meterWidth, 12);
-    context.strokeStyle = "#334155";
-    context.strokeRect(meterX, tempBarY, meterWidth, 12);
-
-    const tempX = meterX + ((temp - 0.5) / 4.5) * meterWidth;
-    const criticalX = meterX + ((CRITICAL_TEMPERATURE - 0.5) / 4.5) * meterWidth;
-    context.fillStyle = "#f97316";
-    context.fillRect(tempX - 2, tempBarY - 5, 4, 22);
-    context.strokeStyle = "#111827";
-    context.beginPath();
-    context.moveTo(criticalX, tempBarY - 7);
-    context.lineTo(criticalX, tempBarY + 18);
-    context.stroke();
-    context.fillStyle = "#111827";
-    context.fillText("T", meterX, tempBarY - 8);
-    if (!compact) {
-        context.fillText("臨界付近", criticalX - 25, tempBarY + 34);
-    }
-}
-
 function drawFieldLines(area) {
     if (!showField) {
         return;
     }
 
-    const step = width <= 860 ? 36 : 42;
+    const step = width <= 860 ? 34 : 40;
 
-    for (let y = area.y + 20; y < area.y + area.h; y += step) {
-        for (let x = area.x + 20; x < area.x + area.w; x += step) {
+    for (let y = area.y + 18; y < area.y + area.h; y += step) {
+        for (let x = area.x + 18; x < area.x + area.w; x += step) {
             const field = externalFieldAt(x, y, area);
             const length = Math.min(24, Math.sqrt(field.x * field.x + field.y * field.y) * 20);
             const angle = Math.atan2(field.y, field.x);
@@ -585,24 +393,34 @@ function drawFieldLines(area) {
     }
 }
 
-function drawBarsSimulation(region) {
-    const compact = width <= 860;
-    const area = getBarArea(region);
-    const magnetPosition = externalMagnetPosition(area);
-    const alignment = barAlignment();
-    const averageX = bars.reduce((sum, bar) => sum + Math.cos(bar.angle), 0);
-    const averageY = bars.reduce((sum, bar) => sum + Math.sin(bar.angle), 0);
-    const averageAngle = Math.atan2(averageY, averageX);
-    const barLength = clamp(area.w / 14, 16, 24);
+function drawAlignmentMeter(x, y, meterWidth, alignment) {
+    context.fillStyle = "#e5e7eb";
+    context.fillRect(x, y, meterWidth, 16);
+    context.fillStyle = "#7c3aed";
+    context.fillRect(x, y, meterWidth * alignment, 16);
+    context.strokeStyle = "#334155";
+    context.lineWidth = 1.5;
+    context.strokeRect(x, y, meterWidth, 16);
+}
 
-    drawRegionBackground(region, "rgba(255, 255, 255, 0.78)", "rgba(245, 240, 255, 0.6)");
+function drawBarsSimulation() {
+    const compact = width <= 860;
+    const region = getSceneRegion();
+    const area = getBarArea();
+    const magnetPosition = externalMagnetPosition(area);
+    const average = getAverageVector();
+    const averageAngle = Math.atan2(average.y, average.x);
+    const alignment = average.magnitude;
+    const barLength = clamp(area.w / 15, 16, 24);
+
+    drawSceneBackground(region);
 
     context.fillStyle = "#111827";
     context.font = `${compact ? 16 : 18}px "IBM Plex Sans JP"`;
-    context.fillText("棒磁石の集団", region.x + 16, region.y + 24);
+    context.fillText("棒磁石の集団", region.x + 16, region.y + 26);
     context.font = `${compact ? 12 : 13}px "IBM Plex Sans JP"`;
     context.fillStyle = "#475569";
-    context.fillText("外部磁石を動かすと局所磁場へ少しずつ回る", region.x + 16, region.y + 44);
+    context.fillText("外部磁石と近傍相互作用で平均磁化が立ち上がる", region.x + 16, region.y + 46);
 
     context.fillStyle = "rgba(248, 250, 252, 0.82)";
     drawRoundedRectPath(area.x, area.y, area.w, area.h, 18);
@@ -620,31 +438,56 @@ function drawBarsSimulation(region) {
         drawBarMagnet(position.x, position.y, bar.angle, barLength, Math.max(6, barLength * 0.34), 0.55 + fieldStrength * 0.45);
     }
 
-    drawBarMagnet(magnetPosition.x, magnetPosition.y, externalMagnet.angle, Math.max(74, barLength * 3.8), Math.max(20, barLength * 1.1), 1);
+    drawBarMagnet(magnetPosition.x, magnetPosition.y, externalMagnet.angle, Math.max(78, barLength * 3.9), Math.max(20, barLength * 1.1), 1);
     context.fillStyle = "#111827";
     context.font = `${compact ? 12 : 13}px "IBM Plex Sans JP"`;
     context.fillText("外部磁石", magnetPosition.x - 24, magnetPosition.y - 34);
 
-    drawArrow(area.x + area.w / 2, region.y + region.h - 28, averageAngle, 30 + alignment * 76, "rgba(124, 58, 237, 0.84)", 2.4);
+    if (alignment > 0.08) {
+        drawArrow(area.x + area.w / 2, area.y + area.h + 26, averageAngle, 30 + alignment * 78, "rgba(124, 58, 237, 0.84)", 2.4);
+        context.fillStyle = "#111827";
+        context.fillText("集団の平均磁化方向", area.x + area.w / 2 - 56, area.y + area.h + 48);
+    } else {
+        context.fillStyle = "#111827";
+        context.fillText("平均方向はまだ立っていません", area.x + area.w / 2 - 66, area.y + area.h + 38);
+    }
+
     context.fillStyle = "#111827";
-    context.fillText("集団の平均磁化方向", area.x + area.w / 2 - 56, region.y + region.h - 8);
+    context.fillText("整列度", area.x, region.y + region.h - 16);
+    drawAlignmentMeter(area.x + 48, region.y + region.h - 28, area.w - 48, alignment);
 }
 
-function draw(regions) {
+function draw() {
     context.clearRect(0, 0, width, height);
+    drawBarsSimulation();
+}
 
-    drawIsing(regions.ising);
-    drawBarsSimulation(regions.bars);
+function updateUi() {
+    const power = Number(magnetPowerSlider.value);
+    const angleDegrees = ((Math.round((externalMagnet.angle * 180) / Math.PI) % 360) + 360) % 360;
+    const alignment = barAlignment();
+    const meanDirection = meanDirectionDegrees();
+    const area = getBarArea();
+    const magnetPosition = externalMagnetPosition(area);
+    const centerX = area.x + area.w / 2;
+    const centerY = area.y + area.h / 2;
+    const distance = Math.hypot(magnetPosition.x - centerX, magnetPosition.y - centerY);
+    const state = alignmentLabel(alignment);
 
-    context.fillStyle = "#111827";
-    context.font = `${width <= 860 ? 12 : 13}px "IBM Plex Sans JP"`;
+    magnetPowerText.textContent = power.toFixed(2);
+    magnetAngleText.textContent = `${angleDegrees.toFixed(0)}°`;
+    noiseText.textContent = Number(noiseSlider.value).toFixed(2);
+    couplingText.textContent = Number(couplingSlider.value).toFixed(2);
 
-    if (width <= 860) {
-        context.fillText("左: イジング模型 / 右: 棒磁石集団", 20, height - 12);
-    } else {
-        context.fillText("左: 温度と外部磁場で変わる磁化", 20, height - 12);
-        context.fillText("右: 外部磁石と近傍相互作用でそろう棒磁石集団", width / 2 + 8, height - 12);
-    }
+    barAlignStat.textContent = `${(alignment * 100).toFixed(0)} %`;
+    distanceStat.textContent = `${distance.toFixed(0)} px`;
+    meanDirectionStat.textContent = meanDirection === null ? "---" : `${meanDirection.toFixed(0)}°`;
+    stateStat.textContent = state;
+
+    quickPower.textContent = power.toFixed(2);
+    quickAlign.textContent = `${(alignment * 100).toFixed(0)} %`;
+    quickDistance.textContent = `${distance.toFixed(0)} px`;
+    quickField.textContent = showField ? "ON" : "OFF";
 }
 
 function resizeCanvas() {
@@ -654,9 +497,9 @@ function resizeCanvas() {
     width = nextWidth;
 
     if (window.matchMedia("(max-width: 860px)").matches) {
-        height = Math.max(640, Math.min(820, Math.floor(Math.min(width * 1.95, viewportHeight * 0.9))));
+        height = Math.max(460, Math.min(620, Math.floor(Math.min(width * 1.26, viewportHeight * 0.72))));
     } else {
-        height = Math.max(680, Math.min(780, Math.floor(width * 0.62)));
+        height = Math.max(520, Math.min(640, Math.floor(width * 0.54)));
     }
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -669,15 +512,10 @@ function resizeCanvas() {
 }
 
 function loop() {
-    const regions = getRegions();
-
-    for (let step = 0; step < 2; step += 1) {
-        isingStep();
-    }
-
-    updateBars(getBarArea(regions.bars));
-    updateUi(regions);
-    draw(regions);
+    const area = getBarArea();
+    updateBars(area);
+    updateUi();
+    draw();
     window.requestAnimationFrame(loop);
 }
 
@@ -694,7 +532,7 @@ function getPointerPosition(event) {
 
 canvas.addEventListener("pointerdown", (event) => {
     const point = getPointerPosition(event);
-    const area = getBarArea(getRegions().bars);
+    const area = getBarArea();
     const magnetPosition = externalMagnetPosition(area);
 
     if (Math.hypot(point.x - magnetPosition.x, point.y - magnetPosition.y) < 64) {
@@ -709,7 +547,7 @@ canvas.addEventListener("pointermove", (event) => {
     }
 
     const point = getPointerPosition(event);
-    const area = getBarArea(getRegions().bars);
+    const area = getBarArea();
     const margin = 42;
     const clampedX = clamp(point.x, area.x - margin, area.x + area.w + margin);
     const clampedY = clamp(point.y, area.y - margin, area.y + area.h + margin);
@@ -736,27 +574,20 @@ canvas.addEventListener("pointercancel", (event) => {
     stopDragging(event.pointerId);
 });
 
-randomizeIsingButton?.addEventListener("click", randomizeIsing);
-alignUpButton?.addEventListener("click", () => alignIsing(1));
-alignDownButton?.addEventListener("click", () => alignIsing(-1));
 randomizeBarsButton?.addEventListener("click", randomizeBars);
 toggleFieldButton?.addEventListener("click", toggleFieldLines);
-
-temperatureSlider?.addEventListener("input", () => updateUi(getRegions()));
-fieldSlider?.addEventListener("input", () => updateUi(getRegions()));
-magnetPowerSlider?.addEventListener("input", () => updateUi(getRegions()));
-noiseSlider?.addEventListener("input", () => updateUi(getRegions()));
-couplingSlider?.addEventListener("input", () => updateUi(getRegions()));
+magnetPowerSlider?.addEventListener("input", updateUi);
+noiseSlider?.addEventListener("input", updateUi);
+couplingSlider?.addEventListener("input", updateUi);
 magnetAngleSlider?.addEventListener("input", () => {
     externalMagnet.angle = (Number(magnetAngleSlider.value) * Math.PI) / 180;
-    updateUi(getRegions());
+    updateUi();
 });
 
 window.addEventListener("resize", resizeCanvas);
 
-initIsing();
 initBars();
 updateToggleButton();
 resizeCanvas();
-updateUi(getRegions());
+updateUi();
 loop();
