@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水と油の混合・分離シミュレーション | 振ると混ざり、置くと分かれる</title>
+    <meta name="description" content="水と油を別々に追加し、振ると一時的に白っぽく混ざり、静置すると再び油層と水層に分離する簡易シミュレーションです。">
+    <meta name="theme-color" content="#e9f5ff">
+    <link rel="canonical" href="https://readerspace.github.io/water-oil.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="水と油の混合・分離シミュレーション | 振ると混ざり、置くと分かれる">
+    <meta property="og:description" content="油は上、水は下。振ると小さな液滴に分かれて白っぽく見え、時間がたつとまた分離する様子を観察できます。">
+    <meta property="og:url" content="https://readerspace.github.io/water-oil.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="水と油の混合・分離シミュレーション | 振ると混ざり、置くと分かれる">
+    <meta name="twitter:description" content="水と油を加え、振ると一時的に混ざり、止めると再び二層に戻る流れをその場で試せるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="water-oil.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Oil / Water / Separation</p>
+                    <h1>振ると白く混ざり、<br>置くとまた分かれる。</h1>
+                    <p class="stage-lead">
+                        水と油は分子の性質が違うので、静かに置くと完全には混ざらず分離します。<br>
+                        油は水より軽いので上へ、水は下へ沈みます。振ると小さな液滴に分かれて一時的に白っぽい混合状態になりますが、時間がたつとまた二層に戻ります。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>水と油を別々に追加</span>
+                        <span>振とうで一時的に乳化</span>
+                        <span>静置で再分離を観察</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="separationCanvas" aria-label="水と油の混合と分離のシミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>水と油の混合・分離</h2>
+                            <p>まず水か油を入れ、両方そろったら振ってください。白っぽく混ざって見えても、時間がたつとまた油層と水層に戻ります。</p>
+                        </div>
+
+                        <p class="subheading">液体を追加</p>
+
+                        <label class="control" for="addAmount">
+                            <span>追加する量</span>
+                            <strong id="addAmountText">120 mL</strong>
+                            <input id="addAmount" type="range" min="20" max="300" step="10" value="120">
+                        </label>
+
+                        <div class="button-grid button-grid-three">
+                            <button id="addWater" class="water-action" type="button">水を入れる</button>
+                            <button id="addOil" class="oil-action" type="button">油を入れる</button>
+                            <button id="resetSim" class="reset-action" type="button">リセット</button>
+                        </div>
+
+                        <p class="subheading">容器を振る</p>
+
+                        <label class="control" for="shakePower">
+                            <span>振る強さ</span>
+                            <strong id="shakePowerText">70</strong>
+                            <input id="shakePower" type="range" min="0" max="100" step="1" value="70">
+                        </label>
+
+                        <div class="button-grid">
+                            <button id="startShake" class="shake-action" type="button">振る</button>
+                            <button id="stopShake" class="stop-action" type="button">止める</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>水の量</span>
+                                <strong id="waterStat">0 mL</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>油の量</span>
+                                <strong id="oilStat">0 mL</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>全体量</span>
+                                <strong id="totalStat">0 mL</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>混ざり具合</span>
+                                <strong id="mixStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>油滴の数</span>
+                                <strong id="oilDropStat">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>水滴の数</span>
+                                <strong id="waterDropStat">0</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデル: 油は水より密度が低いので上へ、水は下へ移動します。振ると界面が壊れて液滴が増え、混ざり具合が上がります。界面活性剤は入れていないので、放置すると分離します。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">油は上、水は下。振ると細かい液滴が増えて一時的に白っぽく混ざります。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: まず水か油を入れ、両方入ったら振ってください。止めて待つと、油が上、水が下の二層へ戻っていきます。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>全体量</span>
+                            <strong id="quickTotal">0 mL</strong>
+                        </article>
+                        <article>
+                            <span>混ざり具合</span>
+                            <strong id="quickMix">0 %</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="quickState">空</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">混ざりにくい二つの液体も、振ると一時的には細かく分散する。</p>
+                <p class="signal-sub">このページでは、油と水が完全には溶け合わず、振ると液滴が増えて白っぽく見え、静かにすると密度差でまた分かれていく流れだけに絞っています。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで残している物理</h2>
+                    <p>実験の完全再現ではなく、分離、振とう、液滴の分散、再分離が読みやすくなるように単純化したモデルです。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">01</p>
+                        <h3>油は上、水は下</h3>
+                        <p>油は水より軽いので上へ、水は下へ集まりやすいようにしています。静置時はその差がゆっくり層として現れます。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">02</p>
+                        <h3>振ると界面が壊れる</h3>
+                        <p>容器を振ると境界面が崩れ、油滴と水滴が細かく増えます。そのため全体が白っぽく混ざって見えます。</p>
+                    </article>
+                    <article class="model-card mist-card">
+                        <p class="card-label">03</p>
+                        <h3>止めると再分離する</h3>
+                        <p>界面活性剤を入れていない前提なので、振るのを止めると液滴はそれぞれの層へ戻り、また二層に分かれていきます。</p>
+                    </article>
+                    <article class="model-card neutral-card">
+                        <p class="card-label">04</p>
+                        <h3>乳化は一時的な見かけ</h3>
+                        <p>このモデルの白っぽさは、細かな液滴がたくさん浮かんでいる状態を表しています。溶けたわけではありません。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>条件を変えると見え方が変わるポイント</h2>
+                    <p>量の比や振る強さを少し変えるだけで、混ざり方も戻り方もかなり印象が変わります。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card strong-card">
+                        <h3>片方だけだと層は一つ</h3>
+                        <p>水だけ、または油だけを入れたときは境界面がありません。二層になるには両方が必要です。</p>
+                    </article>
+                    <article class="observation-card warm-card">
+                        <h3>強く振るほど白っぽく見える</h3>
+                        <p>振る強さを上げると液滴の数が増え、混ざり具合の指標も大きくなります。見た目もにごったようになります。</p>
+                    </article>
+                    <article class="observation-card mist-card">
+                        <h3>止めると少しずつ澄んでくる</h3>
+                        <p>振とうを止めると液滴がそれぞれの層へ戻り、上の油層と下の水層がまた見えやすくなります。</p>
+                    </article>
+                    <article class="observation-card neutral-card">
+                        <h3>量の比で境界の位置が変わる</h3>
+                        <p>油を多く入れれば上層が厚くなり、水を多く入れれば下層が厚くなります。混合後も戻る位置はその比で決まります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>混合やモデル化を広げるなら</h2>
+                    <p>油と水は混ざりにくい組み合わせの代表例です。ここから別の混合モデルや、シミュレーションの見方へつなげられます。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解するページを入口別にまとめて見たいときのハブです。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Mixing</p>
+                        <h3>沸騰と濃度</h3>
+                        <p>別の混合モデルとして、濃度変化と蒸発の関係を追うページです。</p>
+                        <a class="button button-secondary" href="boiling-concentration.html">関連ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Model</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何を残し、何を近似したのかを整理し直したいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Data</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>観察結果をどこまで信じるか、ばらつきをどう読むかを整理する入口です。</p>
+                        <a class="button button-secondary" href="statistics.html">統計のページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>火や煙、軌道だけでなく、水と油のような身近な現象も、手で動かして見えるモデルにしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="simulation.html">シミュレーションとは</a>
+                <a href="statistics.html">統計と誤差解析</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="water-oil.js"></script>
+</body>
+</html>
