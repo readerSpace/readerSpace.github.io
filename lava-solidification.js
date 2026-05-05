@@ -68,6 +68,9 @@ let height = 0;
 let widthDpr = 1;
 let running = true;
 let temperature = defaults.tempStart;
+let reheatPressed = false;
+let reheating = false;
+let reheatTarget = defaults.tempStart;
 let crystals = [];
 let bubbles = [];
 let sparks = [];
@@ -170,6 +173,9 @@ function coolingLabel() {
 
 function resetState() {
     temperature = Number(tempStartSlider.value);
+    reheatPressed = false;
+    reheating = false;
+    reheatTarget = temperature;
     crystals = [];
     bubbles = [];
     sparks = [];
@@ -207,10 +213,7 @@ function quickCoolPreset() {
     tempStartSlider.value = 1180;
     nucleationSlider.value = 85;
     growthSlider.value = 38;
-    running = true;
-    resetState();
-    setStatus("急冷にしました。結晶核は多く生まれますが、一つひとつは大きく育ちにくい設定です。", true);
-    updateToggleButton();
+    setStatus("急冷寄りの条件に切り替えました。現在の状態を保ったまま、ここから先は細かい結晶が増えやすい条件になります。", true);
     updateUi();
     draw();
 }
@@ -220,20 +223,23 @@ function slowCoolPreset() {
     tempStartSlider.value = 1240;
     nucleationSlider.value = 35;
     growthSlider.value = 82;
-    running = true;
-    resetState();
-    setStatus("徐冷にしました。結晶核は少なめですが、成長時間が長く大きな結晶が育ちやすい設定です。", true);
-    updateToggleButton();
+    setStatus("徐冷寄りの条件に切り替えました。現在の状態を保ったまま、ここから先は大きな結晶が育ちやすい条件になります。", true);
     updateUi();
     draw();
 }
 
-function reheat() {
+function startReheat() {
+    if (reheatPressed) {
+        return;
+    }
+
     running = true;
-    temperature = Math.max(temperature, Number(tempStartSlider.value));
+    reheatPressed = true;
+    reheatTarget = Math.max(temperature, Number(tempStartSlider.value));
+    reheating = reheatTarget > temperature + 0.5;
 
     crystals.forEach((crystal) => {
-        crystal.melting = 1;
+        crystal.melting = Math.max(crystal.melting, 0.4);
     });
 
     const layout = getLayout();
@@ -248,8 +254,20 @@ function reheat() {
         });
     }
 
-    setStatus("再加熱しました。育ちかけの結晶は溶けやすくなり、また液体に近い状態へ戻ります。", true);
+    setStatus("再加熱しています。ボタンを押している間だけ温度が上がり、結晶は溶けながら小さくなっていきます。");
     updateToggleButton();
+    updateUi();
+    draw();
+}
+
+function stopReheat() {
+    if (!reheatPressed && !reheating) {
+        return;
+    }
+
+    reheatPressed = false;
+    reheating = false;
+    setStatus("再加熱を止めました。ボタンを離すと、また周囲へ熱を失いながら冷えていきます。", true);
     updateUi();
     draw();
 }
@@ -267,6 +285,10 @@ function averageCrystalSize() {
 }
 
 function stateName() {
+    if (reheating && temperature < liquidus + 25) {
+        return "再加熱中";
+    }
+
     if (temperature > liquidus + 25) {
         return "溶融";
     }
@@ -416,6 +438,19 @@ function nucleateCrystals(layout, timeScale) {
 }
 
 function growCrystals(layout, timeScale) {
+    if (reheating) {
+        const meltProgress = clamp((temperature - 320) / Math.max(1, reheatTarget - 320), 0, 1);
+        const meltRate = (0.001 + meltProgress * 0.013) * timeScale;
+
+        crystals.forEach((crystal) => {
+            crystal.r *= Math.max(0.82, 1 - meltRate);
+            crystal.melting = Math.max(crystal.melting * 0.98, 0.28 + meltProgress * 0.7);
+        });
+
+        crystals = crystals.filter((crystal) => crystal.r > 1.05);
+        return;
+    }
+
     if (temperature > liquidus + 18) {
         crystals.forEach((crystal) => {
             crystal.r *= 0.988;
@@ -504,14 +539,27 @@ function updateModel(timeScale) {
         return;
     }
 
-    if (temperature > 300) {
+    if (reheatPressed) {
+        reheatTarget = Math.max(temperature, Number(tempStartSlider.value));
+        const remaining = reheatTarget - temperature;
+        reheating = remaining > 0.5;
+
+        if (reheating) {
+            const heatingRate = (0.9 + clamp(remaining / 220, 0.18, 2.2)) * timeScale;
+            temperature = Math.min(reheatTarget, temperature + heatingRate);
+        }
+    } else if (temperature > 300) {
+        reheating = false;
         const cool = Number(coolRateSlider.value);
         const environmentPull = clamp((temperature - 25) / 1200, 0.08, 1);
         temperature -= (0.035 + cool * 0.0065) * environmentPull * timeScale;
         temperature = Math.max(260, temperature);
     }
 
-    nucleateCrystals(layout, timeScale);
+    if (!reheating) {
+        nucleateCrystals(layout, timeScale);
+    }
+
     growCrystals(layout, timeScale);
     updateBubblesAndSparks(layout, timeScale);
 
@@ -938,8 +986,33 @@ function loop(timestamp) {
 toggleRunningButton?.addEventListener("click", toggleRunning);
 quickCoolButton?.addEventListener("click", quickCoolPreset);
 slowCoolButton?.addEventListener("click", slowCoolPreset);
-reheatButton?.addEventListener("click", reheat);
 resetButton?.addEventListener("click", resetSimulation);
+
+reheatButton?.addEventListener("pointerdown", (event) => {
+    if (typeof reheatButton.setPointerCapture === "function") {
+        reheatButton.setPointerCapture(event.pointerId);
+    }
+
+    startReheat();
+});
+
+reheatButton?.addEventListener("pointerup", stopReheat);
+reheatButton?.addEventListener("pointercancel", stopReheat);
+reheatButton?.addEventListener("lostpointercapture", stopReheat);
+reheatButton?.addEventListener("blur", stopReheat);
+reheatButton?.addEventListener("keydown", (event) => {
+    if ((event.code === "Space" || event.code === "Enter") && !event.repeat) {
+        event.preventDefault();
+        startReheat();
+    }
+});
+reheatButton?.addEventListener("keyup", (event) => {
+    if (event.code === "Space" || event.code === "Enter") {
+        stopReheat();
+    }
+});
+
+window.addEventListener("pointerup", stopReheat);
 
 [coolRateSlider, tempStartSlider, nucleationSlider, growthSlider].forEach((slider) => {
     slider?.addEventListener("input", () => {
