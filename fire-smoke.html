@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>火と煙シミュレーション | 炎・煙・風の流れを描いて観察する</title>
+    <meta name="description" content="火を描くと上昇流が立ち、煙が風と壁でちぎれながら流れる。炎・煙・風・冷却・壁をその場で試せるインタラクティブなシミュレーションページです。">
+    <meta name="theme-color" content="#140d10">
+    <link rel="canonical" href="https://readerspace.github.io/fire-smoke.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="火と煙シミュレーション | 炎・煙・風の流れを描いて観察する">
+    <meta property="og:description" content="炎を置くと熱が立ち上がり、煙は風や壁で崩れていく。資料の1ファイル版をもとに整理した体験ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/fire-smoke.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="火と煙シミュレーション | 炎・煙・風の流れを描いて観察する">
+    <meta name="twitter:description" content="火・煙・風・冷却・壁を動かしながら、見えない流れ場を色で観察できるシミュレーションです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fire-smoke.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#tools">道具</a>
+                <a href="#physics">見どころ</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Fire / Smoke / Flow Field</p>
+                    <h1>炎を描くと、<br>空気の流れが見えてくる。</h1>
+                    <p class="stage-lead">
+                        資料にあった 1 ファイル版を、そのまま触れるページとして整理しました。<br>
+                        火を置くと熱が上昇流を作り、煙は風と壁でちぎれながら流れます。見えない空気の動きを、色と揺らぎとして観察できます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>ドラッグで描く</span>
+                        <span>壁で流れを曲げる</span>
+                        <span>火花で派手に崩す</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="fireCanvas" aria-label="火と煙のシミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>火と煙のシミュレーション</h2>
+                            <p>まずはたき火を作って、風・壁・冷却で煙の柱を崩してください。</p>
+                        </div>
+
+                        <div class="button-grid">
+                            <button id="playPause" class="accent" type="button">一時停止</button>
+                            <button id="clear" class="danger" type="button">リセット</button>
+                            <button id="campfire" class="warning" type="button">たき火</button>
+                            <button id="spark" type="button">火花</button>
+                        </div>
+
+                        <p class="subheading">描くもの</p>
+                        <div class="tool-grid">
+                            <button data-tool="fire" class="is-active" type="button">火</button>
+                            <button data-tool="smoke" type="button">煙</button>
+                            <button data-tool="wind" type="button">風</button>
+                            <button data-tool="cool" type="button">冷やす</button>
+                            <button data-tool="wall" type="button">壁</button>
+                            <button data-tool="erase" type="button">消す</button>
+                        </div>
+
+                        <div class="control-grid">
+                            <label class="control" for="heat">
+                                <span>火の強さ</span>
+                                <strong id="heatValue">120</strong>
+                                <input id="heat" type="range" min="20" max="220" step="1" value="120">
+                            </label>
+
+                            <label class="control" for="smoke">
+                                <span>煙の量</span>
+                                <strong id="smokeValue">95</strong>
+                                <input id="smoke" type="range" min="0" max="220" step="1" value="95">
+                            </label>
+
+                            <label class="control" for="buoyancy">
+                                <span>上昇気流</span>
+                                <strong id="buoyancyValue">0.75</strong>
+                                <input id="buoyancy" type="range" min="0" max="1.6" step="0.01" value="0.75">
+                            </label>
+
+                            <label class="control" for="wind">
+                                <span>風</span>
+                                <strong id="windValue">0.15</strong>
+                                <input id="wind" type="range" min="-1.5" max="1.5" step="0.01" value="0.15">
+                            </label>
+
+                            <label class="control" for="brush">
+                                <span>筆の大きさ</span>
+                                <strong id="brushValue">15px</strong>
+                                <input id="brush" type="range" min="4" max="34" step="1" value="15">
+                            </label>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">キャンバスをドラッグすると炎や煙を足せます。壁を置くと煙突や障害物のように流れを曲げられます。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: キャンバスをドラッグして火を描きます。風ツールはドラッグ方向に流れを押し、冷やすと上昇流が弱まります。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>火花</span>
+                            <strong id="particleCount">0</strong>
+                        </article>
+                        <article>
+                            <span>格子</span>
+                            <strong id="resolution">0×0</strong>
+                        </article>
+                        <article>
+                            <span>選択中</span>
+                            <strong id="toolLabel">火</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">火は熱を足し、煙は流れを見える形にする。</p>
+                <p class="signal-sub">このページでは本格的な流体計算をしているわけではありませんが、熱で上向きの速度を作り、煙をその流れに乗せることで、炎のまわりにある「見えない空気の流れ」を直感的に観察できるようにしています。</p>
+            </section>
+
+            <section class="section reveal" id="tools">
+                <div class="section-heading">
+                    <p class="eyebrow">Tools</p>
+                    <h2>このページで触れる 6 つの道具</h2>
+                    <p>資料にあった操作をそのまま残し、速くドラッグしても途切れにくいようにストローク補間を入れています。</p>
+                </div>
+                <div class="tool-card-grid">
+                    <article class="tool-card strong-card">
+                        <p class="card-label">01</p>
+                        <h3>火を置く</h3>
+                        <p>熱と少量の煙を同時に足し、上向きの速度を入れます。炎の芯ほど明るく、白熱域も出ます。</p>
+                    </article>
+                    <article class="tool-card warm-card">
+                        <p class="card-label">02</p>
+                        <h3>煙を描く</h3>
+                        <p>熱をほとんど入れずに煙だけを追加できます。既存の上昇流や横風にどう運ばれるかが見やすくなります。</p>
+                    </article>
+                    <article class="tool-card cool-card">
+                        <p class="card-label">03</p>
+                        <h3>風を押し込む</h3>
+                        <p>ドラッグ方向に局所的な流れを加えます。煙の柱を曲げたり、たまりを裂いたりするときに使います。</p>
+                    </article>
+                    <article class="tool-card">
+                        <p class="card-label">04</p>
+                        <h3>冷やす</h3>
+                        <p>熱と速度を弱め、煙も少し減衰させます。上昇流がどこで消えるかをその場で試せます。</p>
+                    </article>
+                    <article class="tool-card ember-card">
+                        <p class="card-label">05</p>
+                        <h3>壁を置く</h3>
+                        <p>流れが通れない障害物を描けます。煙突、仕切り、曲がり角を置くと plume の形が一気に変わります。</p>
+                    </article>
+                    <article class="tool-card erase-card">
+                        <p class="card-label">06</p>
+                        <h3>消して整える</h3>
+                        <p>壁を消しながら、その場所の熱と煙も弱めます。場を部分的に作り直したいときのツールです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="physics">
+                <div class="section-heading">
+                    <p class="eyebrow">What To Watch</p>
+                    <h2>見え方の裏で起きていること</h2>
+                    <p>厳密な流体方程式を解いているわけではありませんが、火と煙の見え方に必要な要素はきちんと分けています。</p>
+                </div>
+                <div class="physics-grid">
+                    <article class="physics-card strong-card">
+                        <p class="card-label">Buoyancy</p>
+                        <h3>熱いほど上にのぼる</h3>
+                        <p>熱量が大きいセルほど上向きの速度を強くし、煙も少し上へ引き上げています。たき火を置くと柱状の上昇流が自然に立ち上がります。</p>
+                    </article>
+                    <article class="physics-card warm-card">
+                        <p class="card-label">Advection</p>
+                        <h3>煙は流れに乗って運ばれる</h3>
+                        <p>煙そのものを勝手に上げるのではなく、周囲の速度場を逆向きにたどってサンプリングすることで、流れに沿った移流らしい見え方を作っています。</p>
+                    </article>
+                    <article class="physics-card cool-card">
+                        <p class="card-label">Diffusion</p>
+                        <h3>少しずつ広がり、少しずつ冷える</h3>
+                        <p>近傍平均で熱と煙を少しにじませ、毎フレームわずかに減衰させています。そのため輪郭は保ちつつ、ずっと残り続けることはありません。</p>
+                    </article>
+                    <article class="physics-card ember-card">
+                        <p class="card-label">Boundary</p>
+                        <h3>壁が plume の形を決める</h3>
+                        <p>壁の内部は熱・煙・速度を持たせず、そこを流れが通れないようにしています。障害物だけで流れ場の読み方がかなり変わるのが見どころです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>似た方向に広げるならこのページ</h2>
+                    <p>火と煙は「場の上で何かが運ばれる」タイプの入口です。媒質、模様、モデル化の別の例にそのままつながります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解するページを入口別にまとめて見たいときのハブです。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Granular</p>
+                        <h3>砂の物理で媒質の別の顔を見る</h3>
+                        <p>流れて見えるのに、閾値を超えるまで動かない。火と煙とは別種の「流れにくさ」が見られます。</p>
+                        <a class="button button-secondary" href="sand.html">砂の物理へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Wave</p>
+                        <h3>水面の波で干渉と障害物を見る</h3>
+                        <p>壁やスリットで形が変わるという意味では、煙の流れの次に見てもつながりやすいページです。</p>
+                        <a class="button button-secondary" href="wave.html">波のページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションとは何かに戻る</h3>
+                        <p>何を残し、何を近似したのかを理論側から整理し直したいときの入口です。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>火、煙、群れ、砂、波のように、見た目の面白さから物理へ戻れるページを少しずつ増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="fire-smoke.js"></script>
+</body>
+</html>
