@@ -111,9 +111,9 @@ h3,
 .section,
 .signal-strip,
 .site-footer {
-    opacity: 0;
-    transform: translateY(26px);
-    transition: opacity 520ms ease, transform 520ms ease;
+    opacity: 1;
+    transform: none;
+    transition: none;
 }
 
 .reveal.is-visible,
