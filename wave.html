@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>波とは？ | 干渉縞と回り込みが見える水面波シミュレーション</title>
+    <meta name="description" content="クリックで広がる波紋、2つの波源の干渉、壁での反射っぽい戻り、二重スリットでの回り込みをその場で試せる、水面波のシミュレーションページです。">
+    <meta name="theme-color" content="#0f4c67">
+    <link rel="canonical" href="https://readerspace.github.io/wave.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="波とは？ | 干渉縞と回り込みが見える水面波シミュレーション">
+    <meta property="og:description" content="波紋、連続波源、壁、二重スリットを置きながら、干渉と回り込みを直感的に観察できます。">
+    <meta property="og:url" content="https://readerspace.github.io/wave.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="波とは？ | 干渉縞と回り込みが見える水面波シミュレーション">
+    <meta name="twitter:description" content="山と谷の足し算でできる干渉縞を、水面波で触りながら確かめられるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="wave.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#mechanism">仕組み</a>
+                <a href="#experiments">実験</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Wave / Interference / Diffraction</p>
+                    <h1>山と谷が重なると、<br>縞が見えてくる。</h1>
+                    <p class="stage-lead">
+                        水面の波は、1つだけならただ広がるだけに見えます。<br>
+                        でも 2 つ以上の波源を置くと、強め合う場所と弱め合う場所が空間に並び、干渉縞として見えてきます。壁や二重スリットも加えて、波がどう回り込むかまで試してみてください。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>クリックで波紋を出す</span>
+                        <span>連続波源を追加する</span>
+                        <span>壁と二重スリットを試す</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell">
+                    <canvas id="waveCanvas" aria-label="波と干渉のシミュレーション"></canvas>
+
+                    <div class="panel" id="simulationPanel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <div class="panel-heading-row">
+                                <h2>水面の波・干渉</h2>
+                                <button id="togglePanel" class="panel-toggle" type="button" aria-controls="simulationPanel" aria-expanded="true">パネルを隠す</button>
+                            </div>
+                            <p>波紋、連続波源、雨、壁、二重スリットを切り替えながら、波の足し算で模様がどう生まれるかを観察できます。</p>
+                        </div>
+
+                        <div class="buttons">
+                            <button id="playPause" class="green" type="button">一時停止</button>
+                            <button id="clear" class="red" type="button">リセット</button>
+                            <button id="twoSources" class="yellow" type="button">2つの波源</button>
+                            <button id="doubleSlit" type="button">二重スリット</button>
+                            <button id="rain" type="button">雨モード</button>
+                        </div>
+
+                        <div class="tool-header">
+                            <p>クリック操作</p>
+                            <span id="toolPanelValue">波紋</span>
+                        </div>
+                        <div class="tool-buttons">
+                            <button type="button" data-tool="drop" class="active">波紋</button>
+                            <button type="button" data-tool="source">波源追加</button>
+                            <button type="button" data-tool="wall">壁</button>
+                            <button type="button" data-tool="erase">消す</button>
+                            <button type="button" data-tool="stir">かき混ぜる</button>
+                        </div>
+
+                        <div class="control">
+                            <label for="waveSpeed">波の速さ <span id="speedValue"></span></label>
+                            <input id="waveSpeed" type="range" min="0.08" max="0.45" step="0.01" value="0.22">
+                        </div>
+
+                        <div class="control">
+                            <label for="damping">減衰 <span id="dampingValue"></span></label>
+                            <input id="damping" type="range" min="0.980" max="0.999" step="0.001" value="0.994">
+                        </div>
+
+                        <div class="control">
+                            <label for="amplitude">波源の強さ <span id="ampValue"></span></label>
+                            <input id="amplitude" type="range" min="30" max="220" step="1" value="110">
+                        </div>
+
+                        <div class="control">
+                            <label for="frequency">波源の周期 <span id="freqValue"></span></label>
+                            <input id="frequency" type="range" min="0.04" max="0.32" step="0.01" value="0.13">
+                        </div>
+
+                        <div class="stats">
+                            <div class="stat-box">波源: <span id="sourceCount">0</span></div>
+                            <div class="stat-box">解像度: <span id="resolution"></span></div>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">クリックで波紋、波源追加で連続波、壁で反射っぽい境界を置けます。2つの波源か二重スリットから始めると変化が見やすいです。</p>
+                    </div>
+
+                    <button id="showPanel" class="panel-reveal" type="button" aria-controls="simulationPanel" aria-expanded="false">パラメータを表示</button>
+
+                    <div class="floating-hint">
+                        操作: 波紋を打つ → 波源を 2 つ置く → 干渉縞を見る。壁や二重スリットを作ると、反射っぽい戻りや回り込みも観察できます。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>ツール</span>
+                            <strong id="toolValue">波紋</strong>
+                        </article>
+                        <article>
+                            <span>水面</span>
+                            <strong id="modeValue">静かな水面</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="runningValue">再生中</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">干渉縞は、波どうしが出会った場所の「足し算」の地図です。</p>
+                <p class="signal-sub">山と山、谷と谷が重なる場所は大きく揺れ、山と谷が打ち消し合う場所は静かになります。模様はそこに最初から描かれているのではなく、重ね合わせの結果として現れます。</p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>波の何を見ているのか</h2>
+                    <p>このページでは、水面を細かい格子に分けて、それぞれの点が前後にどれだけ揺れているかを更新しています。正確な水理模型ではありませんが、波の広がり、反射っぽさ、干渉、回り込みの直感を見るには十分です。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card strong-card">
+                        <p class="card-label">Spread</p>
+                        <h3>波は周囲へ広がる</h3>
+                        <p>ある点が持ち上がると、その影響が隣へ伝わり、輪のように広がります。クリックの波紋はこの広がりを見やすくしたものです。</p>
+                    </article>
+                    <article class="mechanism-card warm-card">
+                        <p class="card-label">Interference</p>
+                        <h3>重なると強め合い・弱め合いが起こる</h3>
+                        <p>2つの波源が同じ周期で揺れると、強く揺れる筋と静かな筋が交互に並びます。これが干渉縞です。</p>
+                    </article>
+                    <article class="mechanism-card accent-card">
+                        <p class="card-label">Wall</p>
+                        <h3>壁を置くと反射っぽい戻りが出る</h3>
+                        <p>壁セルは動けない点として扱うので、波はその手前で折り返すように見えます。厳密な境界条件ではありませんが、反射の雰囲気をつかめます。</p>
+                    </article>
+                    <article class="mechanism-card feature-card">
+                        <p class="card-label">Diffraction</p>
+                        <h3>すき間を通ると回り込む</h3>
+                        <p>二重スリットでは、細いすき間を抜けた後にまた波が広がり、向こう側で新しい干渉縞ができます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="experiments">
+                <div class="section-heading">
+                    <p class="eyebrow">Experiments</p>
+                    <h2>まず試すと分かりやすい実験</h2>
+                    <p>波は単体より、複数の条件を競わせたほうが性質が読みやすくなります。下の 4 つは、干渉と回り込みの違いが短時間で見える組み合わせです。</p>
+                </div>
+                <div class="experiment-grid">
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">1</p>
+                        <h3>2つの波源</h3>
+                        <p>まずはボタンで 2 つの連続波源を置いてください。縞の間隔は、周期と波の速さで変わります。</p>
+                    </article>
+                    <article class="experiment-card warm-card">
+                        <p class="card-label">2</p>
+                        <h3>二重スリット</h3>
+                        <p>1 つの波が壁の 2 つのすき間を通ると、向こう側では 2 つの波源があるかのような縞が出ます。</p>
+                    </article>
+                    <article class="experiment-card accent-card">
+                        <p class="card-label">3</p>
+                        <h3>自分で壁を描く</h3>
+                        <p>壁ツールで通路や角を描くと、反射っぽい戻りと回り込みが同じ画面で見られます。</p>
+                    </article>
+                    <article class="experiment-card feature-card">
+                        <p class="card-label">4</p>
+                        <h3>雨モードとかき混ぜる</h3>
+                        <p>整った縞だけでなく、ランダムな揺らぎが加わったときにどこまで模様が残るかも観察できます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるならこのページ</h2>
+                    <p>水面波で見えた干渉と回り込みは、音、光、板の振動、電磁波にもつながります。どこが同じでどこがモデルごとに違うかを並べると、波の見え方が一気に整理されます。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>創発、模様形成、波、粒状体など、動くページを入口別にまとめた一覧です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Wave</p>
+                        <h3>クラドニ図形へ</h3>
+                        <p>こちらは定常波が節の線として固定された例です。動く波と止まった模様を見比べられます。</p>
+                        <a class="button button-secondary" href="chladni.html">クラドニ図形へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Field</p>
+                        <h3>電場と磁場の可視化へ</h3>
+                        <p>媒質の水面ではありませんが、波が空間をどう通るかという見方を電磁気へ広げられます。</p>
+                        <a class="button button-secondary" href="electric-magnetic.html">電場と磁場へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションの意味に戻る</h3>
+                        <p>この水面モデルが何を残し、何を省略した近似なのかを、理論側から整理し直せます。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>創発、模様形成、波、離散モデルまで、動かして理解するページを少しずつ増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="wave.js"></script>
+</body>
+</html>
