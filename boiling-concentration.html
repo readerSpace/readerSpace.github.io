@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沸騰と濃度シミュレーション | 混合・加熱・蒸発を観察する</title>
+    <meta name="description" content="濃度の違う液体を混合し、加熱で水だけが蒸発する簡易モデルを観察できるシミュレーションです。濃度上昇に応じて沸点も上がります。">
+    <meta name="theme-color" content="#d8eefb">
+    <link rel="canonical" href="https://readerspace.github.io/boiling-concentration.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="沸騰と濃度シミュレーション | 混合・加熱・蒸発を観察する">
+    <meta property="og:description" content="濃度を決めた液体を加熱すると、水だけが蒸発して濃度が上がる。沸点上昇の直感をその場で試せるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/boiling-concentration.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="沸騰と濃度シミュレーション | 混合・加熱・蒸発を観察する">
+    <meta name="twitter:description" content="濃度が高いほど沸点が上がる簡易モデルを、混合・加熱・蒸発の流れで観察できるシミュレーションです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="boiling-concentration.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Concentration / Boiling / Evaporation</p>
+                    <h1>濃くなるほど、<br>沸点が上がる。</h1>
+                    <p class="stage-lead">
+                        濃度を調整した液体を入れて加熱すると、水だけが蒸発します。水が減るほど濃度が上がり、濃度が高いほど沸点も上がる簡易モデルです。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>液体を追加して観察</span>
+                        <span>加熱で温度を上げる</span>
+                        <span>蒸発で濃度上昇を観察</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="mixCanvas" aria-label="沸騰と濃度のシミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>沸騰と濃度シミュレーション</h2>
+                            <p>まず液体の濃度と体積を決めて入れ、次に加熱を始めて濃度と沸点がどう変わるかを見てください。</p>
+                        </div>
+
+                        <p class="subheading">液体を追加</p>
+
+                        <label class="control" for="addVolume">
+                            <span>追加する体積</span>
+                            <strong id="addVolumeText">100 mL</strong>
+                            <input id="addVolume" type="range" min="10" max="300" step="10" value="100">
+                        </label>
+
+                        <label class="control" for="concA">
+                            <span>液体の濃度</span>
+                            <strong id="concAText">10 %</strong>
+                            <input id="concA" type="range" min="0" max="80" step="1" value="10">
+                        </label>
+                        <button id="addLiquidA" class="primary-action" type="button">液体を入れる</button>
+
+                        <p class="subheading">加熱・冷却</p>
+
+                        <label class="control" for="heatPower">
+                            <span>加熱パワー</span>
+                            <strong id="heatPowerText">60</strong>
+                            <input id="heatPower" type="range" min="0" max="100" step="1" value="60">
+                        </label>
+
+                        <div class="button-grid">
+                            <button id="toggleHeater" class="hot" type="button">加熱開始</button>
+                            <button id="coolDown" class="cool" type="button">少し冷やす</button>
+                            <button id="resetSim" class="neutral" type="button">リセット</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>全体量</span>
+                                <strong id="volumeStat">0 mL</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>濃度</span>
+                                <strong id="concStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>温度</span>
+                                <strong id="tempStat">25 ℃</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>沸点</span>
+                                <strong id="boilStat">100 ℃</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>溶質量</span>
+                                <strong id="soluteStat">0 g</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>水分量</span>
+                                <strong id="waterStat">0 g</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">モデル: 濃度 = 溶質量 / 全体量、沸点 = 100 + 0.35 × 濃度[%] の簡易式です。実際の沸点上昇は物質、圧力、モル濃度で変わります。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">液体を加えると全体濃度が決まり、加熱すると沸点を超えたあとに水だけが蒸発します。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: まず液体を入れてから加熱します。沸点を超えると泡と蒸気が出て、水分だけが減っていきます。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>全体量</span>
+                            <strong id="quickVolume">0 mL</strong>
+                        </article>
+                        <article>
+                            <span>濃度</span>
+                            <strong id="quickConc">0 %</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="quickState">空</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">水が減ると濃度が上がり、濃度が上がるとさらに沸きにくくなる。</p>
+                <p class="signal-sub">このページでは、溶質は残り、水だけが蒸発するようにしています。そのため加熱を続けるほど液体は濃くなり、簡易的な沸点上昇モデルによって必要温度も上がっていきます。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで計算していること</h2>
+                    <p>実験室の完全再現ではなく、混合、加熱、蒸発、沸点上昇の関係が見えるように要素を絞ったモデルです。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">01</p>
+                        <h3>混合後の濃度</h3>
+                        <p>液体を入れるたびに、水分量と溶質量を足し合わせ、全体量から新しい濃度を計算します。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">02</p>
+                        <h3>濃度で沸点を上げる</h3>
+                        <p>濃度が高いほど沸点が上がるように、単純な一次式で沸点を更新しています。濃い液体ほど同じ火力では沸きにくくなります。</p>
+                    </article>
+                    <article class="model-card mist-card">
+                        <p class="card-label">03</p>
+                        <h3>水だけ蒸発する</h3>
+                        <p>沸点を超えたあとは、水分量だけを減らし、溶質は残すようにしています。その結果、蒸発するほど液体は濃くなります。</p>
+                    </article>
+                    <article class="model-card neutral-card">
+                        <p class="card-label">04</p>
+                        <h3>見た目は現象を読むための補助</h3>
+                        <p>泡、蒸気、液面の色、温度計を付けています。数値だけでなく、何が起きているかを視覚的に追いやすくするためです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>試すと違いが出やすい観察ポイント</h2>
+                    <p>条件を少し変えるだけで、温度の上がり方と蒸発の進み方がかなり変わります。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card strong-card">
+                        <h3>薄い液体は早く沸き始める</h3>
+                        <p>低濃度の液体Aだけを入れると、沸点が低いので比較的すぐ泡が出ます。基準として最初に試しやすい条件です。</p>
+                    </article>
+                    <article class="observation-card warm-card">
+                        <h3>濃い液体は同じ火力では伸びにくい</h3>
+                        <p>濃度を高めにした液体を入れると初期濃度が高く、沸点も最初から高くなります。加熱しても立ち上がりが遅くなります。</p>
+                    </article>
+                    <article class="observation-card mist-card">
+                        <h3>蒸発するほどさらに濃くなる</h3>
+                        <p>沸騰が始まった後は、水だけが減るため濃度が上がります。すると沸点も上がり、同じ火力でも進み方が鈍く見えます。</p>
+                    </article>
+                    <article class="observation-card neutral-card">
+                        <h3>冷やすと一度状態を戻せる</h3>
+                        <p>沸騰直前や直後に少し冷やすと、泡と蒸気の出方が変わります。温度と沸点の差が重要だと分かります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>モデル化や熱の話へ広げるなら</h2>
+                    <p>このページは混合と沸騰の簡易モデルです。ここからモデル化の考え方や、温める仕組みの別テーマへつながります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解するページを入口別にまとめて見たいときのハブです。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Model</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何を残し、何を近似したのかを整理し直したいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Data</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>実験やシミュレーション結果をどこまで信用するかを整理したいときの入口です。</p>
+                        <a class="button button-secondary" href="statistics.html">統計のページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Heat</p>
+                        <h3>電子レンジはどう温めているのか</h3>
+                        <p>温度を上げる別の仕組みとして、マイクロ波と水分子の話へ進めます。</p>
+                        <a class="button button-secondary" href="microwave.html">電子レンジの仕組みへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>波、火、砂、軌道だけでなく、混合と沸騰のような身近な現象も、モデルとして触れるページにしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="simulation.html">シミュレーションとは</a>
+                <a href="statistics.html">統計と誤差解析</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="boiling-concentration.js"></script>
+</body>
+</html>
