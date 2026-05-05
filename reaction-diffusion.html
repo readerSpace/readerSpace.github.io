@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>反応拡散とは？ | 縞と斑点が生まれる模様形成シミュレーション</title>
+    <meta name="description" content="反応拡散モデルを高校生向けに直感から試せるページです。Feed と Kill を少し動かすだけで、シマウマ模様、ヒョウ柄、迷路模様のような自然パターンが生まれます。">
+    <meta name="theme-color" content="#153a46">
+    <link rel="canonical" href="https://readerspace.github.io/reaction-diffusion.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="反応拡散とは？ | 縞と斑点が生まれる模様形成シミュレーション">
+    <meta property="og:description" content="2 種類の薬品の反応と拡散だけで、縞・斑点・迷路のような模様が立ち上がる様子をその場で試せるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/reaction-diffusion.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="反応拡散とは？ | 縞と斑点が生まれる模様形成シミュレーション">
+    <meta name="twitter:description" content="Feed / Kill を変えながら、反応拡散で自然模様がどう変わるかを体験できます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="reaction-diffusion.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#mechanism">仕組み</a>
+                <a href="#controls">パラメータ</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Reaction Diffusion / Turing Pattern / Morphogenesis</p>
+                    <h1>反応と拡散だけで、<br>自然の模様が立ち上がる。</h1>
+                    <p class="stage-lead">
+                        反応拡散モデルでは、2 種類の物質が「増える・減る」と「広がる」を同時にくり返します。<br>
+                        ルールはかなり少ないのに、縞、斑点、迷路、サンゴのような模様が出てきます。まずは Feed と Kill を少しだけ動かしてみてください。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>Feed / Kill を調整</span>
+                        <span>ドラッグで薬品 B を追加</span>
+                        <span>模様プリセットを比較</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell">
+                    <canvas id="reactionCanvas" aria-label="反応拡散シミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>反応拡散シミュレーション</h2>
+                            <p>縞、斑点、迷路模様がどこで切り替わるかを、プリセットとスライダーで比較できます。</p>
+                        </div>
+
+                        <div class="buttons">
+                            <button id="playPause" class="green" type="button">一時停止</button>
+                            <button id="seed" class="yellow" type="button">タネをまく</button>
+                            <button id="clear" class="red" type="button">リセット</button>
+                            <button id="invert" type="button">色を反転</button>
+                        </div>
+
+                        <div class="preset-header">
+                            <p>模様プリセット</p>
+                            <span id="presetPanelValue">シマウマ</span>
+                        </div>
+                        <div class="presets">
+                            <button type="button" data-preset="zebra" class="active">シマウマ</button>
+                            <button type="button" data-preset="leopard">ヒョウ柄</button>
+                            <button type="button" data-preset="coral">サンゴ</button>
+                            <button type="button" data-preset="maze">迷路</button>
+                            <button type="button" data-preset="spots">水玉</button>
+                            <button type="button" data-preset="chaos">カオス</button>
+                        </div>
+
+                        <div class="control">
+                            <label for="feed">反応のエサ Feed <span id="feedValue"></span></label>
+                            <input id="feed" type="range" min="0.010" max="0.090" step="0.001" value="0.035">
+                        </div>
+
+                        <div class="control">
+                            <label for="kill">消える速さ Kill <span id="killValue"></span></label>
+                            <input id="kill" type="range" min="0.030" max="0.075" step="0.001" value="0.060">
+                        </div>
+
+                        <div class="control">
+                            <label for="brush">筆の大きさ <span id="brushValue"></span></label>
+                            <input id="brush" type="range" min="6" max="48" step="1" value="18">
+                        </div>
+
+                        <div class="control">
+                            <label for="speed">計算速度 <span id="speedValue"></span></label>
+                            <input id="speed" type="range" min="1" max="12" step="1" value="5">
+                        </div>
+
+                        <div class="stats">
+                            <div class="stat-box">世代: <span id="generation">0</span></div>
+                            <div class="stat-box">解像度: <span id="resolution"></span></div>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">キャンバスをドラッグすると薬品 B を足せます。Feed と Kill を少しずつ動かすと、模様の相が変わります。</p>
+                    </div>
+
+                    <div class="floating-hint">
+                        操作: キャンバスをドラッグすると薬品 B を足せます。縞が欲しければ Feed と Kill を少し低めに、斑点が欲しければ少し高めに寄せてみてください。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>プリセット</span>
+                            <strong id="presetValue">シマウマ</strong>
+                        </article>
+                        <article>
+                            <span>色</span>
+                            <strong id="paletteValue">標準</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="runningValue">再生中</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">模様は「描く」のではなく、「局所ルールを繰り返した結果」として立ち上がる。</p>
+                <p class="signal-sub">反応拡散は、チューリング・パターンの直感的な入口です。均一だった場が不安定になり、反応と拡散のバランスで縞や斑点へ分かれていきます。</p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>何が模様を作っているのか</h2>
+                    <p>このモデルは、薬品 A と B の濃度を各点で持っています。各点では反応が起き、隣へは拡散します。その競争で均一な場が崩れていきます。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card strong-card">
+                        <p class="card-label">Reaction</p>
+                        <h3>B が増えると、A が食われる</h3>
+                        <p>同じ場所に A と B が重なると反応が強まり、B が増えやすくなります。局所的な自己増幅が起きる部分です。</p>
+                    </article>
+                    <article class="mechanism-card warm-card">
+                        <p class="card-label">Diffusion</p>
+                        <h3>濃い場所から薄い場所へ広がる</h3>
+                        <p>A と B は周囲へ広がります。ただし広がり方が同じではないので、濃度差が残って模様になります。</p>
+                    </article>
+                    <article class="mechanism-card accent-card">
+                        <p class="card-label">Competition</p>
+                        <h3>均一さと偏りが引っ張り合う</h3>
+                        <p>拡散は均一に戻そうとし、反応は局所差を育てます。このせめぎ合いが、縞や斑点のようなパターンを固定します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="controls">
+                <div class="section-heading">
+                    <p class="eyebrow">Controls</p>
+                    <h2>どのつまみが何を変えるか</h2>
+                    <p>Feed と Kill は、模様の相を切り替える主役です。ドラッグで局所的に B を足すと、そこから波紋のように成長が始まります。</p>
+                </div>
+                <div class="parameter-grid">
+                    <article class="parameter-card strong-card">
+                        <p class="card-label">Feed</p>
+                        <h3>A を補給する強さ</h3>
+                        <p>Feed を上げると新しい反応が続きやすくなり、細かい斑点や複雑な境界が出やすくなります。</p>
+                    </article>
+                    <article class="parameter-card warm-card">
+                        <p class="card-label">Kill</p>
+                        <h3>B が消える強さ</h3>
+                        <p>Kill を上げると B が残りにくくなり、模様は細くなったり断片化したりします。</p>
+                    </article>
+                    <article class="parameter-card">
+                        <p class="card-label">Brush</p>
+                        <h3>どれだけ大きく乱すか</h3>
+                        <p>筆を大きくすると、模様の種になる領域を広く置けます。初期条件の入り方の違いも観察できます。</p>
+                    </article>
+                    <article class="parameter-card accent-card">
+                        <p class="card-label">Speed</p>
+                        <h3>相の切り替わりを見る速さ</h3>
+                        <p>速度を上げると相変化が見えやすくなり、下げると境界が整っていく過程をじっくり追えます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるならこのページ</h2>
+                    <p>反応拡散は、パターン形成とモデル化の交点にあります。離散モデルや成長モデルと並べると、何が共通で何が違うかが見やすくなります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>模様形成、創発、波、粒状体など、動くページを入口別にまとめた一覧です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Crystal</p>
+                        <h3>雪の結晶の成長へ</h3>
+                        <p>反応拡散とは別の機構ですが、拡散と成長の競争で模様が出る点はよく似ています。</p>
+                        <a class="button button-secondary" href="snowflake.html">雪の結晶へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Cellular</p>
+                        <h3>ライフゲームへ</h3>
+                        <p>連続濃度ではなく生死の離散ルールですが、少ない更新則から複雑さが出る例として並べて見られます。</p>
+                        <a class="button button-secondary" href="life-game.html">ライフゲームへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションの意味に戻る</h3>
+                        <p>このモデルが何を残し、何を捨てた近似なのかを、理論側から整理し直せます。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>創発、模様形成、波、離散モデルまで、動かして理解するページを少しずつ増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="reaction-diffusion.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アリの探索とは？ | フェロモンで道が浮かぶ経路探索シミュレーション</title>
+    <meta name="description" content="アリの経路探索を高校生向けに直感から試せるページです。巣、エサ、障害物を置きながら、短い道ほどフェロモンが濃くなる様子を観察できます。">
+    <meta name="theme-color" content="#162338">
+    <link rel="canonical" href="https://readerspace.github.io/ants.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="アリの探索とは？ | フェロモンで道が浮かぶ経路探索シミュレーション">
+    <meta property="og:description" content="巣とエサの間を行き来するアリが、短い道ほど濃いフェロモンを作っていく様子を、障害物や迷路つきで試せるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/ants.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="アリの探索とは？ | フェロモンで道が浮かぶ経路探索シミュレーション">
+    <meta name="twitter:description" content="フェロモン蒸発、追従の強さ、ランダム探索を変えながら、アリの最短経路らしい道筋を体験できます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ants.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#mechanism">仕組み</a>
+                <a href="#experiments">実験の見方</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Ant Colony / Pheromone / Path Finding</p>
+                    <h1>短い道ほど、<br>だんだん濃くなる。</h1>
+                    <p class="stage-lead">
+                        アリは歩いた道にフェロモンを残します。たまたま短い道を通ったアリは、早く戻ってまた同じ道を通りやすい。<br>
+                        その繰り返しで、巣からエサまでの有力な道筋が空間に浮かび上がります。障害物や迷路を置いて、どう道が選ばれるかを見てみてください。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>巣・エサ・障害物を配置</span>
+                        <span>近道実験と迷路を比較</span>
+                        <span>蒸発率とランダム探索を調整</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell">
+                    <canvas id="antCanvas" aria-label="アリの経路探索シミュレーション"></canvas>
+
+                    <div class="panel" id="simulationPanel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <div class="panel-heading-row">
+                                <h2>アリの経路探索</h2>
+                                <button id="togglePanel" class="panel-toggle" type="button" aria-controls="simulationPanel" aria-expanded="true">パネルを隠す</button>
+                            </div>
+                            <p>巣とエサの間で、フェロモンの正のフィードバックがどう道を絞り込むかを観察できます。</p>
+                        </div>
+
+                        <div class="buttons">
+                            <button id="playPause" class="green" type="button">一時停止</button>
+                            <button id="reset" class="red" type="button">リセット</button>
+                            <button id="clearPheromone" type="button">フェロモン消去</button>
+                            <button id="addAnts" class="yellow" type="button">アリ追加</button>
+                        </div>
+
+                        <div class="tool-header">
+                            <p>クリック操作</p>
+                            <span id="toolPanelValue">エサ</span>
+                        </div>
+                        <div class="tool-buttons">
+                            <button type="button" data-tool="food" class="active">エサ</button>
+                            <button type="button" data-tool="obstacle">障害物</button>
+                            <button type="button" data-tool="erase">消す</button>
+                            <button type="button" data-tool="nest">巣を移動</button>
+                        </div>
+
+                        <div class="scenario-header">
+                            <p>シナリオ実験</p>
+                            <span id="scenePanelValue">自由配置</span>
+                        </div>
+                        <div class="scenario-buttons">
+                            <button id="shortcutExperiment" type="button">近道実験</button>
+                            <button id="mazeExperiment" type="button">迷路</button>
+                        </div>
+
+                        <div class="control">
+                            <label for="antCount">アリの数 <span id="antCountValue"></span></label>
+                            <input id="antCount" type="range" min="40" max="500" step="10" value="180">
+                        </div>
+
+                        <div class="control">
+                            <label for="evaporation">フェロモン蒸発 <span id="evapValue"></span></label>
+                            <input id="evaporation" type="range" min="0.900" max="0.995" step="0.001" value="0.975">
+                        </div>
+
+                        <div class="control">
+                            <label for="follow">フェロモンへの反応 <span id="followValue"></span></label>
+                            <input id="follow" type="range" min="0" max="4" step="0.05" value="1.8">
+                        </div>
+
+                        <div class="control">
+                            <label for="randomness">ランダム探索 <span id="randomValue"></span></label>
+                            <input id="randomness" type="range" min="0" max="1" step="0.01" value="0.22">
+                        </div>
+
+                        <div class="stats">
+                            <div class="stat-box">運んだエサ: <span id="delivered">0</span></div>
+                            <div class="stat-box">探索中のアリ: <span id="searching">0</span></div>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">エサをクリックで置くと探索が始まります。障害物や近道実験を入れると、短い道ほど濃くなる理由が見えます。</p>
+                    </div>
+
+                    <button id="showPanel" class="panel-reveal" type="button" aria-controls="simulationPanel" aria-expanded="false">パラメータを表示</button>
+
+                    <div class="floating-hint">
+                        操作: エサを置く → アリが探索する → 見つけた道にフェロモンが残る。迷路や障害物を置くと、迂回路どうしの競争が見やすくなります。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>ツール</span>
+                            <strong id="toolValue">エサ</strong>
+                        </article>
+                        <article>
+                            <span>シーン</span>
+                            <strong id="sceneValue">自由配置</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="runningValue">再生中</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">短い道は早く何度も往復されるから、結果としてさらに選ばれやすくなる。</p>
+                <p class="signal-sub">アリは全体図を知っているわけではありません。局所的な匂いの強さと少しのランダム探索だけで、道の候補が競争し、強い経路へ収束していきます。</p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>何が「最短経路っぽさ」を作るのか</h2>
+                    <p>重要なのは、フェロモンを残すこと自体ではなく、残した道が次の個体の行動を少しだけ偏らせることです。その偏りが増幅されると、道筋が濃く見えるようになります。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card strong-card">
+                        <p class="card-label">Deposit</p>
+                        <h3>通るたびに匂いを残す</h3>
+                        <p>アリは巣へ戻る道、エサへ向かう道の両方にフェロモンを残します。通行量が多い場所ほど濃くなります。</p>
+                    </article>
+                    <article class="mechanism-card warm-card">
+                        <p class="card-label">Evaporation</p>
+                        <h3>使われない道は薄れて消える</h3>
+                        <p>蒸発があるので、たまたま一度だけ通られた遠回りの道は残りにくく、継続して通る道だけが残ります。</p>
+                    </article>
+                    <article class="mechanism-card accent-card">
+                        <p class="card-label">Feedback</p>
+                        <h3>早く戻れる道ほどさらに強くなる</h3>
+                        <p>短い道は往復周期が短いので、同じ時間でもより多くフェロモンが上書きされます。この正のフィードバックが経路を絞ります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="experiments">
+                <div class="section-heading">
+                    <p class="eyebrow">Experiments</p>
+                    <h2>見どころは「競争させる」と分かりやすい</h2>
+                    <p>アリの探索は、一本道よりも複数の候補がある場面のほうが面白く見えます。近道、障害物、迷路で道の競争を作ると変化が読みやすくなります。</p>
+                </div>
+                <div class="experiment-grid">
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">Shortcut</p>
+                        <h3>近道実験</h3>
+                        <p>最初は迂回路を通っていても、途中に短い抜け道があると、やがてそちらが濃くなっていきます。</p>
+                    </article>
+                    <article class="experiment-card warm-card">
+                        <p class="card-label">Maze</p>
+                        <h3>迷路</h3>
+                        <p>完全な最短経路計算ではなくても、局所的な匂い追従だけで有力なルートが浮かびます。</p>
+                    </article>
+                    <article class="experiment-card">
+                        <p class="card-label">Obstacle</p>
+                        <h3>障害物を自分で描く</h3>
+                        <p>壁を追加すると、それまでの経路が崩れ、別のルートへ切り替わる様子が見えます。探索の柔らかさを体験できます。</p>
+                    </article>
+                    <article class="experiment-card accent-card">
+                        <p class="card-label">Randomness</p>
+                        <h3>ランダム探索も必要</h3>
+                        <p>匂いだけを強く信じすぎると、新しい道を発見しにくくなります。少しのランダムさが探索を生かします。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるならこのページ</h2>
+                    <p>アリの探索は、群れの創発と最適化の両方の入口になります。局所ルールが全体の構造を作るという意味では、Boids や反応拡散とも自然につながります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>群れ、模様形成、波、粒状体など、動くページを入口別にまとめた一覧です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Collective</p>
+                        <h3>鳥の集団へ</h3>
+                        <p>アリと同じく、個体は局所情報しか持たないのに、全体では秩序が立ち上がります。</p>
+                        <a class="button button-secondary" href="boids.html">鳥の集団へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Pattern</p>
+                        <h3>反応拡散へ</h3>
+                        <p>こちらは匂いではなく濃度場ですが、局所更新の反復で構造が浮かぶという点ではよく似ています。</p>
+                        <a class="button button-secondary" href="reaction-diffusion.html">反応拡散へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションの意味に戻る</h3>
+                        <p>アリの行動モデルが何を残し、何を省略した近似なのかを理論側から整理できます。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>創発、群れ、最適化、模様形成まで、動かして理解するページを少しずつ増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="ants.js"></script>
+</body>
+</html>
