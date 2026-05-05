@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+
+        gtag("config", "G-G6WJJGWBCG");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お金の流れシミュレーション | 家計・企業・銀行・政府で循環する</title>
+    <meta name="description" content="家計・企業・銀行・政府の間でお金が循環する簡易モデルです。消費、賃金、税金、政府支出、銀行融資、金利を調整しながら、景気や債務の変化を観察できます。">
+    <meta name="theme-color" content="#f7f3ea">
+    <link rel="canonical" href="https://readerspace.github.io/money-flow.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="お金の流れシミュレーション | 家計・企業・銀行・政府で循環する">
+    <meta property="og:description" content="誰かの支出は誰かの収入になる。家計、企業、銀行、政府の間をお金が循環する様子を、パラメータを変えながら試せるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/money-flow.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="お金の流れシミュレーション | 家計・企業・銀行・政府で循環する">
+    <meta name="twitter:description" content="消費、賃金、税、政府支出、銀行融資、金利を変えながら、景気と債務の動きを観察できる経済循環シミュレーションです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="money-flow.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Economy / Circulation / Spending</p>
+                    <h1>お金は、<br>回りながら景気を作る。</h1>
+                    <p class="stage-lead">
+                        経済を、家計・企業・銀行・政府の間でお金が循環するモデルとして見ます。<br>
+                        家計は賃金を受け取り消費し、企業は売上を得て賃金を払い、政府は税を取り支出で戻し、銀行は融資で流れを変えます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>消費・賃金・税率を変える</span>
+                        <span>政府支出と銀行融資を比べる</span>
+                        <span>景気、貯蓄、債務の変化を見る</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="moneyFlowCanvas" aria-label="お金の流れシミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>お金の流れシミュレーション</h2>
+                            <p>家計・企業・銀行・政府のあいだで、誰の支出が誰の収入になるのかを追います。プリセットで景気局面を切り替えながら見てください。</p>
+                        </div>
+
+                        <p class="subheading">経済の設定</p>
+
+                        <label class="control" for="consumeRate">
+                            <span>消費性向</span>
+                            <strong id="consumeText">60 %</strong>
+                            <input id="consumeRate" type="range" min="10" max="100" value="60" step="1">
+                        </label>
+
+                        <label class="control" for="wageRate">
+                            <span>賃金率</span>
+                            <strong id="wageText">45 %</strong>
+                            <input id="wageRate" type="range" min="10" max="90" value="45" step="1">
+                        </label>
+
+                        <label class="control" for="taxRate">
+                            <span>税率</span>
+                            <strong id="taxText">18 %</strong>
+                            <input id="taxRate" type="range" min="0" max="60" value="18" step="1">
+                        </label>
+
+                        <label class="control" for="govSpend">
+                            <span>政府支出</span>
+                            <strong id="govText">35</strong>
+                            <input id="govSpend" type="range" min="0" max="100" value="35" step="1">
+                        </label>
+
+                        <label class="control" for="loanRate">
+                            <span>銀行融資</span>
+                            <strong id="loanText">25</strong>
+                            <input id="loanRate" type="range" min="0" max="100" value="25" step="1">
+                        </label>
+
+                        <label class="control" for="interestRate">
+                            <span>金利</span>
+                            <strong id="interestText">3 %</strong>
+                            <input id="interestRate" type="range" min="0" max="20" value="3" step="1">
+                        </label>
+
+                        <div class="button-grid">
+                            <button id="toggleRunning" class="play-action" type="button">一時停止</button>
+                            <button id="boomPreset" class="boom-action" type="button">好景気</button>
+                            <button id="recessionPreset" class="recession-action" type="button">不景気</button>
+                            <button id="stimulusPreset" class="stimulus-action" type="button">財政出動</button>
+                            <button id="resetSim" class="reset-action wide-button" type="button">リセット</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>景気指数</span>
+                                <strong id="gdpStat">100</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>企業利益</span>
+                                <strong id="profitStat">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>家計貯蓄</span>
+                                <strong id="savingStat">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>政府財政</span>
+                                <strong id="budgetStat">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>企業債務</span>
+                                <strong id="debtStat">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>状態</span>
+                                <strong id="stateStat">通常</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデルです。実際の経済は価格、雇用、輸出入、投資期待、中央銀行、金融市場などが関係します。ここでは「誰かの支出は誰かの収入」という循環を直感的に見るためのモデルです。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">家計の消費、企業の賃金、政府の支出、銀行の融資が、景気と債務のバランスを一緒に動かします。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: まず「好景気」と「不景気」を切り替えてください。次に税率や政府支出を動かすと、誰の資金が増えて誰の資金が減るかが見えてきます。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>景気</span>
+                            <strong id="quickGdp">100</strong>
+                        </article>
+                        <article>
+                            <span>家計</span>
+                            <strong id="quickHousehold">260</strong>
+                        </article>
+                        <article>
+                            <span>債務</span>
+                            <strong id="quickDebt">100</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="quickState">通常</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">誰かの支出は、別の誰かの収入になる。</p>
+                <p class="signal-sub">家計が使ったお金は企業の売上になり、企業が払った賃金は家計の収入になります。税と融資を通じて、政府と銀行もこの循環を押したり詰まらせたりします。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで計算していること</h2>
+                    <p>資料にあった一枚もののモデルを、このサイトの単独ページとして整理しました。流れの向きと量が見えることを優先した簡易経済モデルです。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card household-card">
+                        <p class="card-label">01</p>
+                        <h3>家計は賃金を受け取り消費する</h3>
+                        <p>家計の保有資金と景気の勢いをもとに消費が決まり、その支出が企業の売上になります。</p>
+                    </article>
+                    <article class="model-card firm-card">
+                        <p class="card-label">02</p>
+                        <h3>企業は売上から賃金と利払いを行う</h3>
+                        <p>企業は売上と公共支出を受け取った後、賃金を払い、借入があれば銀行へ利払いも行います。</p>
+                    </article>
+                    <article class="model-card gov-card">
+                        <p class="card-label">03</p>
+                        <h3>政府は税を取り、支出で戻す</h3>
+                        <p>家計と企業から税を受け取り、給付や公共事業として再び家計と企業へ資金を戻します。</p>
+                    </article>
+                    <article class="model-card bank-card">
+                        <p class="card-label">04</p>
+                        <h3>銀行融資は活動を押すが、債務も増やす</h3>
+                        <p>銀行融資は企業の資金繰りを助けますが、同時に債務も増やします。金利が高いと利払いが重くなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>動かすと差が出やすい観察ポイント</h2>
+                    <p>景気指数だけでなく、どの主体に資金がたまり、どこが詰まり始めるかを見ると、循環モデルの意味がつかみやすくなります。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card household-card">
+                        <h3>消費性向が下がると売上が細る</h3>
+                        <p>家計がお金を使わなくなると企業の売上が減り、賃金も落ちやすくなります。循環全体が弱くなる入口です。</p>
+                    </article>
+                    <article class="observation-card firm-card">
+                        <h3>賃金率は家計と企業利益の配分を変える</h3>
+                        <p>賃金を高くすると家計資金は増えますが、企業利益は圧迫されます。逆に低すぎると消費が細ります。</p>
+                    </article>
+                    <article class="observation-card gov-card">
+                        <h3>政府支出は落ち込みを緩和できる</h3>
+                        <p>家計や企業の資金が弱っているとき、政府支出を増やすと循環に新しい流れが生まれ、景気指数が持ち直しやすくなります。</p>
+                    </article>
+                    <article class="observation-card bank-card">
+                        <h3>融資は景気を押すが、債務過多も招く</h3>
+                        <p>融資を増やすと短期的には企業活動が回りやすくなりますが、金利が高いと利払いが重なり、やがて債務過多になりやすくなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>モデルの見方を広げるなら</h2>
+                    <p>このページは経済を流れのネットワークとして見る入口です。数値モデルや統計の読み方と合わせると、何を省略した近似なのかが見えてきます。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解するページを分野別に見たいときの入口です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Method</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何を残して何を省略したモデルなのかを整理し直したいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Data</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>結果の振れ方や数値の読み方を、平均や標準偏差の観点から整理し直したいときの関連ページです。</p>
+                        <a class="button button-secondary" href="statistics.html">統計を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Research</p>
+                        <h3>研究とは何か</h3>
+                        <p>モデルを読むだけで終わらず、問いの立て方やテーマの作り方へ進みたいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="research.html">研究ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>経済のように見えにくい流れも、家計、企業、銀行、政府のあいだの支出と収入として描くと、循環モデルとして追いやすくなります。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="simulation.html">シミュレーションとは</a>
+                <a href="statistics.html">統計と誤差解析</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="money-flow.js"></script>
+</body>
+</html>

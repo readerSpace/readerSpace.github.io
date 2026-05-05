@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+
+        gtag("config", "G-G6WJJGWBCG");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太陽風・地磁気・オーロラ シミュレーション | 磁気圏が押し縮められる</title>
+    <meta name="description" content="太陽風の規模と速度、地磁気の強さを変えながら、磁気圏が押し縮められ、一部の粒子が極地方へ導かれてオーロラになる様子を観察できるシミュレーションです。">
+    <meta name="theme-color" content="#07111f">
+    <link rel="canonical" href="https://readerspace.github.io/solar-wind.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="太陽風・地磁気・オーロラ シミュレーション | 磁気圏が押し縮められる">
+    <meta property="og:description" content="強い太陽風ほど磁気圏は押し縮められ、極地方のオーロラは広く明るくなります。太陽風と地磁気のせめぎ合いを動かして見られるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/solar-wind.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="太陽風・地磁気・オーロラ シミュレーション | 磁気圏が押し縮められる">
+    <meta name="twitter:description" content="太陽風の規模、速度、地磁気の強さを変えながら、磁気圏の変形とオーロラの変化を観察できる宇宙シミュレーションです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="solar-wind.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Solar Wind / Magnetosphere / Aurora</p>
+                    <h1>太陽風は、<br>磁気圏を押し縮める。</h1>
+                    <p class="stage-lead">
+                        太陽から飛んでくる高エネルギー粒子の流れを太陽風といいます。<br>
+                        地球の磁場はその多くをそらしますが、一部は極地方へ導かれ、大気とぶつかってオーロラになります。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>太陽風の規模と速度を変える</span>
+                        <span>地磁気の強さで磁気圏の縮み方を見る</span>
+                        <span>極域オーロラの明るさと広がりを比べる</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="magnetosphereCanvas" aria-label="太陽風・地磁気・オーロラ シミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>太陽風と地磁気のシミュレーション</h2>
+                            <p>太陽風を強くすると磁気圏は押し縮められます。防ぎ切れなかった粒子が極地方へ導かれると、オーロラが強くなります。</p>
+                        </div>
+
+                        <p class="subheading">条件を変える</p>
+
+                        <label class="control" for="solarWind">
+                            <span>太陽風の規模</span>
+                            <strong id="windScaleText">55 %</strong>
+                            <input id="solarWind" type="range" min="0" max="100" value="55" step="1">
+                        </label>
+
+                        <label class="control" for="windSpeed">
+                            <span>太陽風の速度</span>
+                            <strong id="windSpeedText">60 %</strong>
+                            <input id="windSpeed" type="range" min="10" max="100" value="60" step="1">
+                        </label>
+
+                        <label class="control" for="magStrength">
+                            <span>地磁気の強さ</span>
+                            <strong id="magStrengthText">70 %</strong>
+                            <input id="magStrength" type="range" min="10" max="100" value="70" step="1">
+                        </label>
+
+                        <label class="control" for="lineDensity">
+                            <span>磁力線表示</span>
+                            <strong id="fieldLinesText">70 %</strong>
+                            <input id="lineDensity" type="range" min="0" max="100" value="70" step="1">
+                        </label>
+
+                        <div class="button-grid">
+                            <button id="quietSun" class="quiet-action" type="button">穏やかな太陽風</button>
+                            <button id="solarStorm" class="storm-action" type="button">太陽嵐</button>
+                            <button id="resetSim" class="reset-action" type="button">リセット</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>磁気圏サイズ</span>
+                                <strong id="shieldStat">---</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>極への到達</span>
+                                <strong id="entryStat">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>オーロラ規模</span>
+                                <strong id="auroraStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>防御率</span>
+                                <strong id="protectStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>状態</span>
+                                <strong id="stateStat">通常</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>極の明るさ</span>
+                                <strong id="brightnessStat">0 %</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデルです。実際の磁気圏は太陽風の密度、速度、惑星間磁場の向き、地球磁場、大気密度などで複雑に変化します。ここでは「強い太陽風ほど磁気圏が押し縮められ、極地方のオーロラが強くなる」関係が直感的に見えるようにしています。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">多くの粒子は磁気圏でそらされますが、一部は磁力線に沿って極へ入り、オーロラを強めます。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: まず「穏やかな太陽風」と「太陽嵐」を比べてください。太陽風が強いほど磁気圏が小さくなり、極地方の発光帯が広く明るくなります。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>太陽風</span>
+                            <strong id="quickWind">55 %</strong>
+                        </article>
+                        <article>
+                            <span>磁気圏</span>
+                            <strong id="quickShield">---</strong>
+                        </article>
+                        <article>
+                            <span>オーロラ</span>
+                            <strong id="quickAurora">0 %</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="quickState">通常</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">地球は、磁場で宇宙の粒子風を受け流している。</p>
+                <p class="signal-sub">太陽風が強まると磁気圏は太陽側から押し込まれ、防げる範囲が狭くなります。そのぶん極地方へ流れ込む粒子が増え、オーロラが広く明るくなります。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで計算していること</h2>
+                    <p>資料にあった考え方をもとに、太陽風、地磁気、磁気圏、極域オーロラの関係が一画面で追えるように整理したモデルです。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card wind-card">
+                        <p class="card-label">01</p>
+                        <h3>太陽風粒子が左から流れ込む</h3>
+                        <p>太陽風の規模を上げると飛来する粒子数が増え、速度を上げると粒子がより強く地球側へ押し込みます。</p>
+                    </article>
+                    <article class="model-card field-card">
+                        <p class="card-label">02</p>
+                        <h3>地磁気が多くの粒子をそらす</h3>
+                        <p>地球を双極子磁石として近似し、磁気圏近くで荷電粒子の進行方向が曲げられるようにしています。</p>
+                    </article>
+                    <article class="model-card aurora-card">
+                        <p class="card-label">03</p>
+                        <h3>一部は磁力線に沿って極へ入る</h3>
+                        <p>太陽風が強く磁気圏が圧縮されるほど、極地方へ導かれる粒子の割合が増え、オーロラの帯が目立ちます。</p>
+                    </article>
+                    <article class="model-card storm-card">
+                        <p class="card-label">04</p>
+                        <h3>太陽嵐では磁気圏が押し込まれる</h3>
+                        <p>磁気圏境界を変形する形で描き、太陽側では縮み、反対側では尾のように長くのびる様子を簡略化して表しています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>見比べると分かりやすい観察ポイント</h2>
+                    <p>単にオーロラが光るかどうかではなく、「磁気圏がどこまで押されるか」と「どれだけ極へ回り込むか」を一緒に見ると理解しやすくなります。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card wind-card">
+                        <h3>太陽風を強めると境界が前に出る</h3>
+                        <p>太陽側の磁気圏境界が地球へ近づきます。同じ地磁気でも、受ける粒子流が強いほど防御の余裕が減ります。</p>
+                    </article>
+                    <article class="observation-card field-card">
+                        <h3>地磁気を強めると防御率が回復する</h3>
+                        <p>磁場を強くすると粒子は早めに曲げられ、地球へ近づく前に外へ逃がされやすくなります。</p>
+                    </article>
+                    <article class="observation-card aurora-card">
+                        <h3>極地方の明るさは侵入粒子に連動する</h3>
+                        <p>磁力線に沿って極へ入った粒子が増えるほど、北極と南極の周囲に現れる発光帯が広く、強くなります。</p>
+                    </article>
+                    <article class="observation-card storm-card">
+                        <h3>太陽嵐では「守る」と「光る」が同時に起こる</h3>
+                        <p>太陽風が強いほど危険に見えますが、同時にオーロラも派手になります。防御率の低下と発光の増加を並べて見てください。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>宇宙と場の話を広げるなら</h2>
+                    <p>このページは「宇宙空間で粒子が場に曲げられる」現象の入口です。重力や電磁場の可視化と見比べると、何が同じで何が違うかが見えてきます。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解するページを、分野別にまとめて見たいときの入口です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Space</p>
+                        <h3>天体シミュレーション</h3>
+                        <p>重力で軌道が曲がる場合と、磁場で粒子が曲がる場合を並べて見ると、中心力と場の違いがつかみやすくなります。</p>
+                        <a class="button button-secondary" href="celestial.html">関連ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Field</p>
+                        <h3>電場と磁場の可視化</h3>
+                        <p>電荷、棒磁石、テスト粒子を動かしながら、力線と場の向きの違いをその場で比べられるページです。</p>
+                        <a class="button button-secondary" href="electric-magnetic.html">場の可視化を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Theory</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何を残して何を省略したモデルなのかを整理し直したいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>宇宙空間の粒子も、場、境界、侵入、発光という形に置き換えると、高校物理の延長で手で追えるモデルになります。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="celestial.html">天体シミュレーション</a>
+                <a href="electric-magnetic.html">電場と磁場の可視化</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="solar-wind.js"></script>
+</body>
+</html>

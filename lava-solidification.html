@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+
+        gtag("config", "G-G6WJJGWBCG");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>溶岩の凝固シミュレーション | 冷却速度で結晶サイズが変わる</title>
+    <meta name="description" content="冷却速度、初期温度、結晶核生成、結晶成長の条件を変えながら、急冷では細かい結晶が多数、徐冷では大きな結晶が育つ様子を見られる溶岩の凝固シミュレーションです。">
+    <meta name="theme-color" content="#261109">
+    <link rel="canonical" href="https://readerspace.github.io/lava-solidification.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="溶岩の凝固シミュレーション | 冷却速度で結晶サイズが変わる">
+    <meta property="og:description" content="溶岩の冷え方で結晶の数と大きさがどう変わるかを、核生成と成長のバランスとして動かして見られるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/lava-solidification.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="溶岩の凝固シミュレーション | 冷却速度で結晶サイズが変わる">
+    <meta name="twitter:description" content="急冷では小さい結晶が多数、徐冷では少数の大きな結晶が育つ様子を、冷却速度と結晶成長の条件を変えながら観察できるシミュレーションです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lava-solidification.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Igneous Rock / Cooling / Crystal Growth</p>
+                    <h1>溶岩は、<br>冷え方で結晶の大きさが変わる。</h1>
+                    <p class="stage-lead">
+                        溶岩が冷えると、液体の中から鉱物の結晶核が生まれ、時間をかけて成長します。<br>
+                        急冷では成長時間が短く細粒になりやすく、徐冷では少数の結晶が長く育って粗粒になりやすくなります。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>冷却速度を変える</span>
+                        <span>核生成と成長のバランスを比べる</span>
+                        <span>細粒と粗粒の違いを見る</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="lavaCanvas" aria-label="溶岩の凝固シミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>溶岩の凝固と結晶成長</h2>
+                            <p>温度が液相線を下回ると結晶核が生まれます。冷却が速いほど結晶は増えやすい一方で成長時間は短くなり、ゆっくり冷えるほど大きな結晶が育ちやすくなります。</p>
+                        </div>
+
+                        <p class="subheading">冷却条件</p>
+
+                        <label class="control" for="coolRate">
+                            <span>冷却速度</span>
+                            <strong id="coolText">45 %</strong>
+                            <input id="coolRate" type="range" min="1" max="100" value="45" step="1">
+                        </label>
+
+                        <label class="control" for="tempStart">
+                            <span>初期温度</span>
+                            <strong id="tempStartText">1200 ℃</strong>
+                            <input id="tempStart" type="range" min="900" max="1400" value="1200" step="10">
+                        </label>
+
+                        <label class="control" for="nucleation">
+                            <span>結晶核のできやすさ</span>
+                            <strong id="nucleationText">50 %</strong>
+                            <input id="nucleation" type="range" min="5" max="100" value="50" step="1">
+                        </label>
+
+                        <label class="control" for="growth">
+                            <span>結晶成長しやすさ</span>
+                            <strong id="growthText">55 %</strong>
+                            <input id="growth" type="range" min="5" max="100" value="55" step="1">
+                        </label>
+
+                        <div class="button-grid">
+                            <button id="toggleRunning" class="toggle-action" type="button">一時停止</button>
+                            <button id="quickCool" class="quick-action" type="button">急冷</button>
+                            <button id="slowCool" class="slow-action" type="button">徐冷</button>
+                            <button id="reheat" class="heat-action" type="button">再加熱</button>
+                            <button id="resetSim" class="reset-action wide-button" type="button">リセット</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>温度</span>
+                                <strong id="tempStat">1200 ℃</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>状態</span>
+                                <strong id="stateStat">溶融</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>固化率</span>
+                                <strong id="solidStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>結晶数</span>
+                                <strong id="crystalCountStat">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>平均結晶サイズ</span>
+                                <strong id="avgSizeStat">0 px</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>岩石タイプ</span>
+                                <strong id="rockTypeStat">形成中</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデルです。実際のマグマでは組成、水分、圧力、拡散、鉱物ごとの相平衡が効きます。ここでは「急冷では細粒、徐冷では粗粒」という見え方を、核生成と結晶成長のバランスとして表現しています。初期温度はリセットと再加熱で反映されます。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">温度が液相線を下回ると結晶核が生まれ、冷えている時間が長いほど結晶は大きく育ちやすくなります。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: まず「急冷」と「徐冷」を切り替えてください。急冷では小さな結晶が多数、徐冷では少数の大きな結晶が育つ違いが見えます。次に核生成と成長のスライダーを動かすと、同じ冷却速度でも見た目が変わります。
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">結晶の大きさは、どれだけ生まれ、どれだけ育つ時間があるかで決まる。</p>
+                <p class="signal-sub">急冷では核生成が多くても成長時間が足りず、細かい結晶やガラス質に寄ります。徐冷では核の数が少なくても、残った結晶が長く育つため粗粒になりやすくなります。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで計算していること</h2>
+                    <p>資料にあった考え方をもとに、温度、結晶核生成、結晶成長の 3 つを一画面で追えるように整理しました。火成岩の細粒と粗粒の違いを直感的に見るための簡易モデルです。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card cooling-card">
+                        <p class="card-label">01</p>
+                        <h3>温度が下がると液相から結晶核が生まれる</h3>
+                        <p>液相線を下回ると、溶けた状態の中から小さな結晶核が発生し始めます。冷却が速いほど核生成のチャンスを増やして表現しています。</p>
+                    </article>
+                    <article class="model-card nucleation-card">
+                        <p class="card-label">02</p>
+                        <h3>急冷では核は多くても成長時間が短い</h3>
+                        <p>急激に温度が下がると、あちこちに結晶核は生まれますが、そのまま固まりやすいため一つひとつはあまり大きくなれません。</p>
+                    </article>
+                    <article class="model-card growth-card">
+                        <p class="card-label">03</p>
+                        <h3>徐冷では少数の結晶が長く育つ</h3>
+                        <p>ゆっくり冷える条件では成長に使える時間が長く、近くの結晶どうしがぶつかるまで大きく成長しやすくなります。</p>
+                    </article>
+                    <article class="model-card rock-card">
+                        <p class="card-label">04</p>
+                        <h3>平均結晶サイズから岩石の見え方を読む</h3>
+                        <p>固化率と平均結晶サイズを合わせて、ガラス質から細粒、中粒、粗粒までの見え方を簡略に分類しています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>見比べると分かりやすい観察ポイント</h2>
+                    <p>結晶の数だけではなく、どの時点で固化率が上がり、どこまで平均サイズが伸びるかを一緒に見ると、冷却速度の違いがつかみやすくなります。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card cooling-card">
+                        <h3>急冷では細粒かガラス質に寄りやすい</h3>
+                        <p>温度が急に下がると固化率が早く上がり、結晶が育つ余地が減ります。結晶数は多くても平均サイズは小さいまま止まりやすくなります。</p>
+                    </article>
+                    <article class="observation-card nucleation-card">
+                        <h3>核生成しやすさと成長しやすさは別の効果を持つ</h3>
+                        <p>核生成を上げると結晶の数は増えますが、同じ空間を奪い合うので一つあたりのサイズは伸びにくくなります。</p>
+                    </article>
+                    <article class="observation-card growth-card">
+                        <h3>徐冷と高い成長率が重なると粗粒になりやすい</h3>
+                        <p>冷却が遅く、かつ成長しやすい条件では、少数の結晶が長く育ちます。平均サイズの上昇が最後まで続きやすい条件です。</p>
+                    </article>
+                    <article class="observation-card rock-card">
+                        <h3>再加熱するとできかけの結晶は溶け戻る</h3>
+                        <p>再加熱では一度育った結晶も溶けやすくなります。冷却の途中で熱履歴が変わると、見える組織も変わることが分かります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>温度と相変化の見方を広げるなら</h2>
+                    <p>このページは「冷却の速さが組織を変える」という入口です。熱の移動や観測データの読み方と合わせると、どこまでが簡略化かが見えやすくなります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>触って理解するページを分野別に見たいときの入口です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Flow</p>
+                        <h3>火と煙の流れを見たい方へ</h3>
+                        <p>高温の流体が上昇し、冷えて形が変わる様子を、浮力と流れ場の側から見たいときの関連ページです。</p>
+                        <a class="button button-secondary" href="fire-smoke.html">火と煙を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Data</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>条件を変えたときの結晶数や平均サイズの違いを、データとしてどう読むかを整理し直したいときの関連ページです。</p>
+                        <a class="button button-secondary" href="statistics.html">統計を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Research</p>
+                        <h3>研究とは何か</h3>
+                        <p>「冷却速度で何が変わるか」を問いとして深め、条件を切り分けて調べるテーマにしたいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="research.html">研究ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>溶岩がどれくらいの速さで冷えたかは、できあがる岩石の粒の大きさに残ります。見えにくい熱履歴も、結晶の大きさとして読み直せます。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="simulation.html">シミュレーションとは</a>
+                <a href="statistics.html">統計と誤差解析</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="lava-solidification.js"></script>
+</body>
+</html>
