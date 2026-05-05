@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天体シミュレーション | 惑星を投げて軌道を作る</title>
+    <meta name="description" content="惑星をドラッグして投げると、中心星の重力で軌道になります。軌跡表示、複数惑星、太陽質量の調整、安定軌道ボタン付きの天体シミュレーションです。">
+    <meta name="theme-color" content="#07111f">
+    <link rel="canonical" href="https://readerspace.github.io/celestial.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="天体シミュレーション | 惑星を投げて軌道を作る">
+    <meta property="og:description" content="短く投げると落ち、横向きにうまく投げると軌道になる。惑星・月・重い星をその場で試せる宇宙シミュレーションです。">
+    <meta property="og:url" content="https://readerspace.github.io/celestial.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="天体シミュレーション | 惑星を投げて軌道を作る">
+    <meta name="twitter:description" content="惑星を投げて、落下・周回・脱出の境目をその場で観察できる天体シミュレーションです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="celestial.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#tools">モード</a>
+                <a href="#physics">見どころ</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Orbit / Gravity / Throwing Planets</p>
+                    <h1>惑星を投げると、<br>軌道になる。</h1>
+                    <p class="stage-lead">
+                        資料にあった 1 ファイル版を、このサイトの動くページとして整理しました。<br>
+                        惑星をドラッグして投げると、中心の太陽の重力で落下・周回・脱出が切り替わります。速すぎると逃げ、遅すぎると落ちます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>ドラッグで惑星を投げる</span>
+                        <span>安定軌道をワンクリックで追加</span>
+                        <span>月つき惑星と重い星も置ける</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="spaceCanvas" aria-label="天体シミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>天体シミュレーション</h2>
+                            <p>まずは「安定軌道」で 1 個置き、そのあと自分で投げて落下と脱出の差を見てください。</p>
+                        </div>
+
+                        <div class="button-grid">
+                            <button id="playPause" class="accent" type="button">一時停止</button>
+                            <button id="clear" class="danger" type="button">惑星クリア</button>
+                            <button id="stableOrbit" class="warning" type="button">安定軌道</button>
+                            <button id="solarSystem" type="button">惑星セット</button>
+                        </div>
+
+                        <p class="subheading">操作モード</p>
+                        <div class="tool-grid">
+                            <button data-tool="throw" class="is-active" type="button">惑星を投げる</button>
+                            <button data-tool="star" type="button">太陽を動かす</button>
+                            <button data-tool="moon" type="button">月つき惑星</button>
+                            <button data-tool="blackhole" type="button">重い星</button>
+                            <button data-tool="erase" type="button">消す</button>
+                            <button data-tool="burst" type="button">大量投入</button>
+                        </div>
+
+                        <div class="control-grid">
+                            <label class="control" for="starMass">
+                                <span>太陽の質量</span>
+                                <strong id="massValue">2300</strong>
+                                <input id="starMass" type="range" min="400" max="6000" step="10" value="2300">
+                            </label>
+
+                            <label class="control" for="timeStep">
+                                <span>時間の速さ</span>
+                                <strong id="timeValue">1.00</strong>
+                                <input id="timeStep" type="range" min="0.2" max="3" step="0.05" value="1.0">
+                            </label>
+
+                            <label class="control" for="throwPower">
+                                <span>投げる強さ</span>
+                                <strong id="throwValue">0.12</strong>
+                                <input id="throwPower" type="range" min="0.03" max="0.30" step="0.01" value="0.12">
+                            </label>
+
+                            <label class="control" for="trailLength">
+                                <span>軌跡の長さ</span>
+                                <strong id="trailValue">280</strong>
+                                <input id="trailLength" type="range" min="20" max="650" step="10" value="280">
+                            </label>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">ドラッグ開始位置に惑星が置かれ、離した方向に速度がつきます。できるだけ横向きに投げると軌道になりやすくなります。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: ドラッグして惑星を投げると、中心星の重力で軌道になります。短く投げると落下、強く投げると脱出です。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>惑星</span>
+                            <strong id="planetCount">0</strong>
+                        </article>
+                        <article>
+                            <span>星</span>
+                            <strong id="starCount">1</strong>
+                        </article>
+                        <article>
+                            <span>選択モード</span>
+                            <strong id="modeName">惑星を投げる</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">軌道は、落ち続けながら外れ続ける運動である。</p>
+                <p class="signal-sub">太陽の重力は常に中心へ引きますが、横向きの速度が十分あれば、惑星は真下へ落ちきらずに回り込みます。このページでは、その境目を自分の手で作れます。</p>
+            </section>
+
+            <section class="section reveal" id="tools">
+                <div class="section-heading">
+                    <p class="eyebrow">Modes</p>
+                    <h2>6 つのモードで軌道を壊したり整えたりする</h2>
+                    <p>資料にあった操作を残し、中心星の移動、多数投入、月つき惑星まで 1 画面で試せるようにしています。</p>
+                </div>
+                <div class="tool-card-grid">
+                    <article class="tool-card strong-card">
+                        <p class="card-label">01</p>
+                        <h3>惑星を投げる</h3>
+                        <p>ドラッグ方向に初速度を与えて惑星を置きます。横速度が足りなければ落ち、強すぎれば外へ逃げます。</p>
+                    </article>
+                    <article class="tool-card warm-card">
+                        <p class="card-label">02</p>
+                        <h3>太陽を動かす</h3>
+                        <p>中心星をつかんで位置を変えると、すでに回っている惑星の軌道が一気に崩れます。重力中心の役割が見やすいモードです。</p>
+                    </article>
+                    <article class="tool-card moon-card">
+                        <p class="card-label">03</p>
+                        <h3>月つき惑星</h3>
+                        <p>惑星に小さな月を添えて投入します。主星まわりの公転と、惑星まわりの相対運動が重なって見えます。</p>
+                    </article>
+                    <article class="tool-card void-card">
+                        <p class="card-label">04</p>
+                        <h3>重い星を置く</h3>
+                        <p>追加の重力源を置けます。単純な 1 体問題ではなくなり、軌道が歪んだり不安定になったりします。</p>
+                    </article>
+                    <article class="tool-card erase-card">
+                        <p class="card-label">05</p>
+                        <h3>消す</h3>
+                        <p>惑星や追加した重い星を消します。主星は残したまま、場だけ整理して投げ直せます。</p>
+                    </article>
+                    <article class="tool-card burst-card">
+                        <p class="card-label">06</p>
+                        <h3>大量投入</h3>
+                        <p>一気に多数の小天体を入れて、軌道の束や散乱の雰囲気を見ます。整った系よりも崩れ方を観察したいときに向いています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="physics">
+                <div class="section-heading">
+                    <p class="eyebrow">What To Watch</p>
+                    <h2>見どころは「速さ」と「向き」のせめぎ合い</h2>
+                    <p>厳密な天体力学を全部入れているわけではありませんが、軌道ができる直感に必要な要素は揃えています。</p>
+                </div>
+                <div class="physics-grid">
+                    <article class="physics-card strong-card">
+                        <p class="card-label">Gravity</p>
+                        <h3>重力は常に中心へ向く</h3>
+                        <p>各惑星は中心星から引かれ続けます。だから速度がなければ真っすぐ落下し、速度があれば回り込みます。</p>
+                    </article>
+                    <article class="physics-card warm-card">
+                        <p class="card-label">Orbit</p>
+                        <h3>横向きの速さが軌道を作る</h3>
+                        <p>安定軌道ボタンは、半径に対してちょうど円軌道に近い速さを入れています。自分で投げた場合は、その速さより弱いか強いかで結果が変わります。</p>
+                    </article>
+                    <article class="physics-card moon-card">
+                        <p class="card-label">Many Body</p>
+                        <h3>多体になると途端に読みづらい</h3>
+                        <p>惑星同士の重力は弱めですが、近づくと少し軌道を乱します。月つき惑星や大量投入で、1 体問題から外れたときの不安定さが見えます。</p>
+                    </article>
+                    <article class="physics-card void-card">
+                        <p class="card-label">Scale</p>
+                        <h3>質量と時間の設定で景色が変わる</h3>
+                        <p>太陽質量を上げると、同じ初速度でもより強く曲げられます。時間を速めると周回も崩壊も早く観察できます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>重力と宇宙を広げるならこのページ</h2>
+                    <p>このページはニュートン力学の入口です。ここから宇宙論、ブラックホール、モデル化の話へ自然に進めます。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解するページ全体を入口別に見たいときのハブです。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Cosmology</p>
+                        <h3>宇宙はどこまで広がっているのか</h3>
+                        <p>軌道のスケールから離れて、宇宙全体の大きさや観測可能宇宙の話へ進めます。</p>
+                        <a class="button button-secondary" href="universe.html">宇宙の広がりへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Relativity</p>
+                        <h3>ブラックホールを読む</h3>
+                        <p>重力が極端に強くなった先で、時空がどう見えるかを直感から追えるページです。</p>
+                        <a class="button button-secondary" href="blackhole.html">ブラックホールへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションの意味に戻る</h3>
+                        <p>何を近似し、何を捨てているのかを理論側から整理し直したいときの入口です。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>波、群れ、砂、火と煙に加えて、重力で曲がる軌道も手で壊しながら理解できるようにしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="universe.html">宇宙の広がり</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="celestial.js"></script>
+</body>
+</html>
