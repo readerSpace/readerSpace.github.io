@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鳥の集団とは？ | Boids で見る創発と群れの物理</title>
+    <meta name="description" content="Boids を使って、鳥の群れがなぜ生まれるかを高校生向けに直感から解説。3 つのルール、天敵、変な 1 匹、障害物で秩序と崩壊をその場で試せます。">
+    <meta name="theme-color" content="#123642">
+    <link rel="canonical" href="https://readerspace.github.io/boids.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="鳥の集団とは？ | Boids で見る創発と群れの物理">
+    <meta property="og:description" content="近づく・離れる・向きをそろえるだけで群れが生まれる。Boids をその場で壊して試せる体験ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/boids.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="鳥の集団とは？ | Boids で見る創発と群れの物理">
+    <meta name="twitter:description" content="群れの秩序がどう生まれ、どの条件で崩れるかを動くデモで試せる Boids ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="boids.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#rules">3 つのルール</a>
+                <a href="#breakpoints">壊し方</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Boids / Emergence / Collective Motion</p>
+                    <h1>ルールは 3 つだけ。<br>なのに群れになる。</h1>
+                    <p class="stage-lead">
+                        近づく、離れる、向きをそろえる。そこに 1 匹の反逆者、天敵、障害物を足すと、
+                        群れの秩序は驚くほど簡単に崩れます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>クリックで障害物</span>
+                        <span>ドラッグで天敵</span>
+                        <span>崩壊モードあり</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell">
+                    <canvas id="boidsCanvas" aria-label="鳥の集団シミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>鳥の集団シミュレーション</h2>
+                            <p>意味が分からなくても、まず動かして壊してみるためのページです。</p>
+                        </div>
+
+                        <div class="control">
+                            <label for="cohesion">集まる力 <span id="cohesionValue"></span></label>
+                            <input id="cohesion" type="range" min="0" max="2" step="0.01" value="0.55">
+                        </div>
+
+                        <div class="control">
+                            <label for="separation">離れる力 <span id="separationValue"></span></label>
+                            <input id="separation" type="range" min="0" max="3" step="0.01" value="1.35">
+                        </div>
+
+                        <div class="control">
+                            <label for="alignment">向きをそろえる力 <span id="alignmentValue"></span></label>
+                            <input id="alignment" type="range" min="0" max="2" step="0.01" value="0.85">
+                        </div>
+
+                        <div class="control">
+                            <label for="predatorForce">天敵から逃げる力 <span id="predatorValue"></span></label>
+                            <input id="predatorForce" type="range" min="0" max="5" step="0.01" value="2.60">
+                        </div>
+
+                        <div class="buttons">
+                            <button id="togglePredator" type="button">天敵 ON</button>
+                            <button id="toggleOdd" class="secondary" type="button">変な 1 匹 ON</button>
+                            <button id="presetCalm" class="secondary" type="button">整列モード</button>
+                            <button id="presetChaos" type="button">崩壊モード</button>
+                            <button id="clearObstacles" class="secondary" type="button">障害物クリア</button>
+                            <button id="saveShot" class="secondary" type="button">スクショ保存</button>
+                            <button id="reset" class="button-wide" type="button">リセット</button>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">まずは「崩壊モード」を押すと、群れがほどける瞬間が見えます。</p>
+                    </div>
+
+                    <div class="floating-hint">
+                        操作: クリックで障害物 / ドラッグで天敵を移動 / スクショ保存で面白い瞬間を残せます。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>個体数</span>
+                            <strong id="boidCountValue">96</strong>
+                        </article>
+                        <article>
+                            <span>障害物</span>
+                            <strong id="obstacleCountValue">0</strong>
+                        </article>
+                        <article>
+                            <span>秩序の雰囲気</span>
+                            <strong id="moodValue">整列中</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">全体を指揮するリーダーがいなくても、局所ルールだけで秩序は生まれる。</p>
+                <p class="signal-sub">Boids は、集団行動を 1 羽ずつの簡単な判断へ分解したモデルです。だから少しルールをいじるだけで、群れ全体の性質が大きく変わります。</p>
+            </section>
+
+            <section class="section reveal" id="rules">
+                <div class="section-heading">
+                    <p class="eyebrow">Three Rules</p>
+                    <h2>群れを作るのは、たった 3 つの局所ルール</h2>
+                    <p>各個体は全体図を見ていません。近くの仲間だけを見て少しずつ進路を変えることで、群れの形が自然に立ち上がります。</p>
+                </div>
+                <div class="rule-grid">
+                    <article class="rule-card strong-card">
+                        <p class="card-label">Cohesion</p>
+                        <h3>近づく</h3>
+                        <p>近くの仲間の中心へ寄る力です。これが弱すぎると群れがばらけ、強すぎると団子のように固まりやすくなります。</p>
+                    </article>
+                    <article class="rule-card warm-card">
+                        <p class="card-label">Separation</p>
+                        <h3>離れる</h3>
+                        <p>ぶつからないための反発です。ここを上げすぎると、きれいな群れではなく爆散に近い動きが出てきます。</p>
+                    </article>
+                    <article class="rule-card">
+                        <p class="card-label">Alignment</p>
+                        <h3>向きをそろえる</h3>
+                        <p>近くの仲間の速度に合わせる力です。秩序の見え方に直結し、少し下げるだけでまとまりが崩れます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="breakpoints">
+                <div class="section-heading">
+                    <p class="eyebrow">Break The Flock</p>
+                    <h2>このページで試してほしい「壊し方」</h2>
+                    <p>資料にあった 3 つの追加要素を入れてあります。群れは安定して見えても、条件を少し変えるだけで簡単に別の相へ移ります。</p>
+                </div>
+                <div class="break-grid">
+                    <article class="break-card strong-card">
+                        <h3>1. 変な 1 匹を残す</h3>
+                        <p>1 羽だけ仲間と逆向きに動きやすくしてあります。群れの中の小さな異常が、どこまで全体に広がるかを見る仕掛けです。</p>
+                    </article>
+                    <article class="break-card warm-card">
+                        <h3>2. 天敵で流れを切る</h3>
+                        <p>赤い天敵は自動で動き、ドラッグで好きな場所に持っていけます。逃走反応が入ると、整列より回避が優先されます。</p>
+                    </article>
+                    <article class="break-card">
+                        <h3>3. 障害物で地形を作る</h3>
+                        <p>クリックした場所に障害物を置けます。回り込みが必要になるので、群れの流線が目で追いやすくなります。</p>
+                    </article>
+                    <article class="break-card accent-card">
+                        <h3>4. 面白い瞬間を保存する</h3>
+                        <p>スクショ保存で、その時点のキャンバスを PNG にできます。秩序と崩壊の境目は、短い瞬間ほど見応えがあります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>似た方向に広げるならこのページ</h2>
+                    <p>Boids は「局所ルールから全体構造が出る」例です。次はカオス、波、粒状体に進むと、別の種類の複雑さとつながります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>Boids を含めて、今ある動くページを入口別にまとめた一覧ページです。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Chaos</p>
+                        <h3>二重振り子で読む予測不能</h3>
+                        <p>少しの差が未来を大きく変える、もう一つの「壊れ方」を見られます。</p>
+                        <a class="button button-secondary" href="double-pendulum.html">二重振り子へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Wave</p>
+                        <h3>クラドニ図形で見る模様の秩序</h3>
+                        <p>群れの動きとは逆に、波の節が固定された模様として現れる例です。</p>
+                        <a class="button button-secondary" href="chladni.html">クラドニ図形へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションの意味に戻る</h3>
+                        <p>何を残して何を捨てたモデルなのか、Boids を理論側から整理し直せます。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>創発、カオス、波動、粒状体まで、動かして理解するページを少しずつ増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="simulation.html">シミュレーションとは</a>
+                <a href="physics.html">物理解説トップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="boids.js"></script>
+</body>
+</html>

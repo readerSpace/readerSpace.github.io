@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電場と磁場とは？ | 力線と場の向きを動かして見るシミュレーション</title>
+    <meta name="description" content="電場モードと磁石モードを 1 ページで切り替え、電荷や磁石をドラッグしながら力線・ベクトル場・テスト粒子の動きを観察できる可視化ページです。">
+    <meta name="theme-color" content="#143147">
+    <link rel="canonical" href="https://readerspace.github.io/electric-magnetic.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="電場と磁場とは？ | 力線と場の向きを動かして見るシミュレーション">
+    <meta property="og:description" content="電荷や棒磁石を動かすと、見えない場の向きがその場で変わる。電場と磁場を切り替えて比べられる体験ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/electric-magnetic.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="電場と磁場とは？ | 力線と場の向きを動かして見るシミュレーション">
+    <meta name="twitter:description" content="ドラッグできる電荷・磁石、力線、ベクトル場、動く粒子を使って、電場と磁場の違いを直感的に見られます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="electric-magnetic.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#difference">違い</a>
+                <a href="#model">モデル</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Electric Field / Magnetic Field / Visualization</p>
+                    <h1>見えない「場」を、<br>動かして比べる。</h1>
+                    <p class="stage-lead">
+                        電荷なら電場、棒磁石なら磁場。どちらもその場に広がる「向き」を持っています。<br>
+                        このページでは、電荷や磁石をドラッグしながら、力線とテスト粒子の動きを同じ画面で観察できます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>電場 / 磁場を切替</span>
+                        <span>ドラッグで配置変更</span>
+                        <span>力線と粒子を可視化</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell">
+                    <canvas id="fieldCanvas" aria-label="電場と磁場の可視化シミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>磁力線・電場シミュレーション</h2>
+                            <p>電荷や磁石の位置を変えて、見えない場の形と粒子の流れがどう変わるかを確かめられます。</p>
+                        </div>
+
+                        <div class="tabs">
+                            <button id="electricMode" class="active" type="button">電場モード</button>
+                            <button id="magnetMode" type="button">磁石モード</button>
+                        </div>
+
+                        <div class="buttons" id="electricButtons">
+                            <button id="addPositive" class="plus" type="button">＋電荷を追加</button>
+                            <button id="addNegative" class="minus" type="button">−電荷を追加</button>
+                        </div>
+
+                        <div class="buttons common-buttons">
+                            <button id="sprinkle" type="button">粒子をばら撒く</button>
+                            <button id="clearParticles" type="button">粒子クリア</button>
+                            <button id="reset" class="danger" type="button">リセット</button>
+                            <button id="toggleLines" type="button">力線 ON</button>
+                        </div>
+
+                        <div class="control">
+                            <label for="strength">場の強さ <span id="strengthValue"></span></label>
+                            <input id="strength" type="range" min="0.2" max="4" step="0.01" value="1.60">
+                        </div>
+
+                        <div class="control">
+                            <label for="particleSpeed">粒子の速さ <span id="speedValue"></span></label>
+                            <input id="particleSpeed" type="range" min="0.1" max="3" step="0.01" value="1.00">
+                        </div>
+
+                        <div class="legend">
+                            <div><span class="dot red"></span>＋電荷 / N 極</div>
+                            <div><span class="dot blue"></span>−電荷 / S 極</div>
+                            <div><span class="dot green"></span>テスト粒子</div>
+                            <div><span class="dot purple"></span>力線</div>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">電場モードでは、力線は＋から出て−へ入ります。まずは赤と青の点を動かしてください。</p>
+                    </div>
+
+                    <div class="floating-hint" id="modeHint">
+                        操作: 赤/青の点をドラッグ。電場モードでは＋/−電荷を追加でき、磁石モードでは N 極と S 極がセットで動きます。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>現在のモード</span>
+                            <strong id="modeValue">電場</strong>
+                        </article>
+                        <article>
+                            <span>源の数</span>
+                            <strong id="sourceCountValue">2</strong>
+                        </article>
+                        <article>
+                            <span>粒子数</span>
+                            <strong id="particleCountValue">0</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">場は「そこに物がなくても、向きと強さが空間に広がっている」という見方です。</p>
+                <p class="signal-sub">電荷や磁石を動かすと、影響はその周囲の空間全体へ広がります。力線は実際の糸ではなく、その向きを目で追うための地図です。</p>
+            </section>
+
+            <section class="section reveal" id="difference">
+                <div class="section-heading">
+                    <p class="eyebrow">Difference</p>
+                    <h2>電場と磁場は何が違うか</h2>
+                    <p>どちらも「空間に広がる向き」を持ちますが、力線の読み方と作られ方は少し違います。ここでは高校生向けの直感を優先して整理します。</p>
+                </div>
+                <div class="difference-grid">
+                    <article class="difference-card strong-card">
+                        <p class="card-label">Electric Field</p>
+                        <h3>電場は電荷から広がる</h3>
+                        <p>正電荷のまわりでは外向き、負電荷のまわりでは内向きに力の向きが決まります。だから力線は普通、＋から出て−へ入る形で描かれます。</p>
+                    </article>
+                    <article class="difference-card warm-card">
+                        <p class="card-label">Magnetic Field</p>
+                        <h3>磁場は磁石のまわりに回り込む</h3>
+                        <p>棒磁石の外側では N 極から S 極へ向かうように見えます。実際には閉じたループとして考えるのが自然で、電場より循環的です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model Note</p>
+                    <h2>このページで使っている近似</h2>
+                    <p>画面で動かしやすくするため、いくつかの近似を入れています。実物の現象と完全一致ではなく、「向きの構造を見る」ためのモデルです。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card">
+                        <p class="card-label">Approximation 1</p>
+                        <h3>棒磁石は N/S の極対として表す</h3>
+                        <p>磁石モードでは、棒磁石の外側の場を見やすくするために、N 極と S 極のペアとして近似しています。</p>
+                    </article>
+                    <article class="model-card strong-card">
+                        <p class="card-label">Approximation 2</p>
+                        <h3>粒子は場の向きをなぞるテスト粒子</h3>
+                        <p>緑の粒子は、厳密なローレンツ力を受ける荷電粒子ではなく、場の向きの流れを見やすくするためのトレーサーです。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Approximation 3</p>
+                        <h3>力線は地図であって糸ではない</h3>
+                        <p>紫の線は、ある点での場の向きを連ねて描いたものです。密度が高いほど、その近くで場が強いと読めます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるならこのページ</h2>
+                    <p>電場と磁場の可視化を見たあと、電磁波やモデル化の意味に進むと理解がつながります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>今ある動くページを、創発、カオス、波、場の可視化などの入口ごとにまとめた一覧です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Microwave</p>
+                        <h3>電場が熱を生む例へ</h3>
+                        <p>時間変化する電場が水分子をどう揺らし、熱へ変わるかを追えます。</p>
+                        <a class="button button-secondary" href="microwave.html">電子レンジへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Communication</p>
+                        <h3>電磁場が情報を運ぶ例へ</h3>
+                        <p>通信では、電磁場の揺れにどのようにデータを埋め込むかが主題になります。</p>
+                        <a class="button button-secondary" href="communication.html">スマホ通信へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションの意味に戻る</h3>
+                        <p>このページの近似やモデル化を、理論側から整理し直せます。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>波、光、通信、熱、場の可視化まで、見えない量を動かして理解するページを増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="electric-magnetic.js"></script>
+</body>
+</html>

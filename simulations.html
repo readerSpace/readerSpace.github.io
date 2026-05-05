@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シミュレーション一覧 | 動かして試せる物理ページ集</title>
+    <meta name="description" content="readerSpace の動くシミュレーションを、カオス、群れ、波、粒状体、数値モデルの入口ごとに整理した一覧ページです。">
+    <meta name="theme-color" content="#16465a">
+    <link rel="canonical" href="https://readerspace.github.io/simulations.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="シミュレーション一覧 | 動かして試せる物理ページ集">
+    <meta property="og:description" content="Boids、二重振り子、クラドニ図形、砂、雪の結晶など、触って理解する物理ページをまとめた一覧です。">
+    <meta property="og:url" content="https://readerspace.github.io/simulations.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="シミュレーション一覧 | 動かして試せる物理ページ集">
+    <meta name="twitter:description" content="崩れる、そろう、広がる、模様が出る。動かして理解できるシミュレーションを入口別に整理したページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="simulations.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#featured">注目</a>
+                <a href="#catalog">一覧</a>
+                <a href="#routes">読み方</a>
+                <a href="#next">次へ</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Simulation Playground</p>
+                    <h1>動かして、壊して、<br>理解する。</h1>
+                    <p class="hero-lead">
+                        readerSpace にある動くページを、体験の入口ごとにまとめました。<br>
+                        まず見た目で面白いものから入ってもいいし、数値モデルや誤差の話へまっすぐ進んでも構いません。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#catalog">一覧を見る</a>
+                        <a class="button button-secondary" href="boids.html">新規: 鳥の集団を見る</a>
+                        <a class="button button-secondary" href="physics.html">物理解説トップへ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページでできること">
+                        <li>崩れる系・そろう系・模様が出る系を分けて探せる</li>
+                        <li>研究テーマにしやすいページをすぐ見つけられる</li>
+                        <li>シミュレーションの意味や誤差の解説にも戻れる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Touch</p>
+                        <h2>すぐ触れる</h2>
+                        <p>スライダー、クリック、ドラッグですぐ変化が見えるページを優先して並べています。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Break</p>
+                        <h2>壊して学ぶ</h2>
+                        <p>秩序が崩れる瞬間や、パラメータで相が変わる瞬間が見やすいページを集めています。</p>
+                    </article>
+                    <article class="hero-note">
+                        <p class="card-label">Think</p>
+                        <h2>モデルとして読み直す</h2>
+                        <p>面白いだけで終わらず、「何を残して何を捨てたモデルか」までつなげて読めます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">面白い動きは、だいたい「少ないルール」と「強い非線形」から生まれる。</p>
+                <p class="signal-sub">鳥の群れ、二重振り子、クラドニ図形、砂の崩れ方は見た目は違っても、少数のルールを繰り返した結果として全体構造が現れる、という点でつながっています。</p>
+            </section>
+
+            <section class="section reveal" id="featured">
+                <div class="section-heading">
+                    <p class="eyebrow">Featured</p>
+                    <h2>まず触るならこの 4 本</h2>
+                    <p>見た目の変化が大きく、短時間で「何かが起きている」感じをつかみやすいページです。</p>
+                </div>
+                <div class="featured-grid">
+                    <article class="featured-card feature-primary">
+                        <p class="card-label">New / Collective</p>
+                        <h3>鳥の集団 Boids</h3>
+                        <p>近づく・離れる・そろえるだけで群れが生まれます。天敵、変な 1 匹、障害物で簡単に崩せます。</p>
+                        <div class="card-tags"><span>創発</span><span>群れ</span><span>崩壊</span></div>
+                        <a class="button button-primary" href="boids.html">Boids を見る</a>
+                    </article>
+                    <article class="featured-card">
+                        <p class="card-label">Chaos / Mechanics</p>
+                        <h3>二重振り子</h3>
+                        <p>法則に従うのに予測が壊れる代表例です。影の振り子との差も同時に追えます。</p>
+                        <div class="card-tags"><span>カオス</span><span>力学</span></div>
+                        <a class="button button-secondary" href="double-pendulum.html">二重振り子へ</a>
+                    </article>
+                    <article class="featured-card">
+                        <p class="card-label">Wave / Pattern</p>
+                        <h3>クラドニ図形</h3>
+                        <p>板の上の見えない波が、節の模様として固定されるページです。</p>
+                        <div class="card-tags"><span>波動</span><span>模様</span></div>
+                        <a class="button button-secondary" href="chladni.html">クラドニ図形へ</a>
+                    </article>
+                    <article class="featured-card">
+                        <p class="card-label">Granular / Matter</p>
+                        <h3>砂の物理</h3>
+                        <p>単純な落下ルールだけでも、山、崩れ、ジャミングの雰囲気が出ます。</p>
+                        <div class="card-tags"><span>粒状体</span><span>セルオートマトン</span></div>
+                        <a class="button button-secondary" href="sand.html">砂のページへ</a>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="catalog">
+                <div class="section-heading">
+                    <p class="eyebrow">Catalog</p>
+                    <h2>シミュレーション一覧</h2>
+                    <p>興味の入口に合わせて絞り込めます。カードは複数カテゴリにまたがることがあります。</p>
+                </div>
+                <div class="filter-row" aria-label="カテゴリで絞り込む">
+                    <button class="filter-chip is-active" type="button" data-filter="all">すべて</button>
+                    <button class="filter-chip" type="button" data-filter="collective">群れと創発</button>
+                    <button class="filter-chip" type="button" data-filter="chaos">カオスと力学</button>
+                    <button class="filter-chip" type="button" data-filter="pattern">波と模様</button>
+                    <button class="filter-chip" type="button" data-filter="matter">物質と媒質</button>
+                    <button class="filter-chip" type="button" data-filter="method">モデルと誤差</button>
+                </div>
+                <div class="catalog-grid">
+                    <article class="simulation-card" data-groups="collective method">
+                        <p class="card-label">Collective Motion</p>
+                        <h3>鳥の集団 Boids</h3>
+                        <p>局所ルールから全体秩序が立ち上がる、創発の入口です。</p>
+                        <div class="card-tags"><span>創発</span><span>群れ</span></div>
+                        <a class="button button-secondary" href="boids.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="chaos method">
+                        <p class="card-label">Chaos</p>
+                        <h3>カオス現象</h3>
+                        <p>単純なルールでも未来の予測が難しくなる理由を、直感から整理します。</p>
+                        <div class="card-tags"><span>初期値敏感性</span><span>非線形</span></div>
+                        <a class="button button-secondary" href="chaos.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="chaos method">
+                        <p class="card-label">Lyapunov</p>
+                        <h3>Lyapunov 指数</h3>
+                        <p>誤差がどれだけ速く広がるかを、数値として見るページです。</p>
+                        <div class="card-tags"><span>指数</span><span>予測可能時間</span></div>
+                        <a class="button button-secondary" href="lyapunov.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="chaos method">
+                        <p class="card-label">Poincare</p>
+                        <h3>ポアンカレ写像</h3>
+                        <p>連続運動を断面で読む方法です。複雑な軌道の構造が見やすくなります。</p>
+                        <div class="card-tags"><span>断面</span><span>位相空間</span></div>
+                        <a class="button button-secondary" href="poincare.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="chaos matter">
+                        <p class="card-label">Mechanics</p>
+                        <h3>二重振り子</h3>
+                        <p>自由度が 1 つ増えるだけで、運動の読みやすさが一気に崩れます。</p>
+                        <div class="card-tags"><span>力学</span><span>カオス</span></div>
+                        <a class="button button-secondary" href="double-pendulum.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="pattern matter">
+                        <p class="card-label">Wave</p>
+                        <h3>クラドニ図形</h3>
+                        <p>波の節が固定された線となって表れる、波動の可視化です。</p>
+                        <div class="card-tags"><span>定常波</span><span>節</span></div>
+                        <a class="button button-secondary" href="chladni.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="pattern matter">
+                        <p class="card-label">Crystal Growth</p>
+                        <h3>雪の結晶</h3>
+                        <p>拡散と成長の競争で、六角対称の枝分かれ模様が出てきます。</p>
+                        <div class="card-tags"><span>DLA</span><span>結晶成長</span></div>
+                        <a class="button button-secondary" href="snowflake.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="matter pattern">
+                        <p class="card-label">Granular</p>
+                        <h3>砂の物理</h3>
+                        <p>真下に落ちて、詰まれば斜めに崩れる。単純なルールから山ができます。</p>
+                        <div class="card-tags"><span>粒状体</span><span>安息角</span></div>
+                        <a class="button button-secondary" href="sand.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="matter method">
+                        <p class="card-label">Friction</p>
+                        <h3>摩擦力</h3>
+                        <p>箱を押す実演で、静止摩擦、動摩擦、熱化の違いを追えます。</p>
+                        <div class="card-tags"><span>散逸</span><span>接触力</span></div>
+                        <a class="button button-secondary" href="friction.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="matter method">
+                        <p class="card-label">Field</p>
+                        <h3>電場と磁場の可視化</h3>
+                        <p>電荷や棒磁石を動かしながら、力線、ベクトル場、テスト粒子の流れを比較できます。</p>
+                        <div class="card-tags"><span>電磁気</span><span>力線</span></div>
+                        <a class="button button-secondary" href="electric-magnetic.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="matter pattern">
+                        <p class="card-label">Optics</p>
+                        <h3>空はなぜ青いのか</h3>
+                        <p>大気中の散乱を、角度と波長の違いで見られる可視化ページです。</p>
+                        <div class="card-tags"><span>レイリー散乱</span><span>光学</span></div>
+                        <a class="button button-secondary" href="sky.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="method">
+                        <p class="card-label">Simulation Theory</p>
+                        <h3>シミュレーションとは</h3>
+                        <p>現実との違い、近似、誤差、収束の考え方を解説側から整理します。</p>
+                        <div class="card-tags"><span>モデル化</span><span>収束</span></div>
+                        <a class="button button-secondary" href="simulation.html">開く</a>
+                    </article>
+                    <article class="simulation-card" data-groups="method">
+                        <p class="card-label">Statistics</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>シミュレーション結果や実験データを、どこまで信用するかを見るページです。</p>
+                        <div class="card-tags"><span>標準偏差</span><span>誤差</span></div>
+                        <a class="button button-secondary" href="statistics.html">開く</a>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="routes">
+                <div class="section-heading">
+                    <p class="eyebrow">Routes</p>
+                    <h2>目的別の見方</h2>
+                    <p>どれから読むか迷う場合は、次の 3 ルートが自然です。</p>
+                </div>
+                <div class="route-grid">
+                    <article class="route-card strong-card">
+                        <p class="card-label">Route 1</p>
+                        <h3>見た目の変化から入る</h3>
+                        <ol>
+                            <li>鳥の集団</li>
+                            <li>クラドニ図形</li>
+                            <li>雪の結晶</li>
+                        </ol>
+                        <p>まず「きれい」「壊れた」「模様が出た」を優先するルートです。感覚を先に作れます。</p>
+                    </article>
+                    <article class="route-card warm-card">
+                        <p class="card-label">Route 2</p>
+                        <h3>予測不能をたどる</h3>
+                        <ol>
+                            <li>カオス現象</li>
+                            <li>Lyapunov 指数</li>
+                            <li>二重振り子</li>
+                            <li>ポアンカレ写像</li>
+                        </ol>
+                        <p>「なぜ法則に従うのに読めないのか」を、概念から具体例へつないでいくルートです。</p>
+                    </article>
+                    <article class="route-card">
+                        <p class="card-label">Route 3</p>
+                        <h3>研究テーマとして整える</h3>
+                        <ol>
+                            <li>シミュレーションとは</li>
+                            <li>統計と誤差解析</li>
+                            <li>レポート作成法</li>
+                        </ol>
+                        <p>動くものを見たあと、研究としてどう説明し、どう信用を積むかを整理する流れです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>一覧の外側へ進むなら</h2>
+                    <p>シミュレーションだけでなく、背景理論や研究の進め方までつなげる入口です。</p>
+                </div>
+                <div class="next-grid">
+                    <article class="next-card feature-primary">
+                        <p class="card-label">Guide Hub</p>
+                        <h3>物理解説トップへ戻る</h3>
+                        <p>量子、時空、通信、研究法まで含めた全体マップに戻れます。</p>
+                        <a class="button button-primary" href="physics.html">物理解説トップへ</a>
+                    </article>
+                    <article class="next-card">
+                        <p class="card-label">Support</p>
+                        <h3>研究サポートの入口</h3>
+                        <p>テーマ設計、シミュレーション支援、発表準備まで含めて見たい場合はこちらです。</p>
+                        <a class="button button-secondary" href="index.html">トップページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace Simulation Hub</p>
+                <p>動くページは今後も増やしていく前提で、この一覧を入口として更新していきます。</p>
+            </div>
+            <div class="footer-links">
+                <a href="boids.html">鳥の集団</a>
+                <a href="simulation.html">シミュレーションとは</a>
+                <a href="physics.html">物理解説トップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="simulations.js"></script>
+</body>
+</html>
