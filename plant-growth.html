@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>植物の呼吸と光合成シミュレーション | 光・CO2・O2で成長が変わる</title>
+    <meta name="description" content="昼は CO2 を使って栄養と O2 を作り、夜は O2 と栄養を消費する。植物の光合成・呼吸・成長を同じ画面で観察できる簡易シミュレーションです。">
+    <meta name="theme-color" content="#eef8ea">
+    <link rel="canonical" href="https://readerspace.github.io/plant-growth.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="植物の呼吸と光合成シミュレーション | 光・CO2・O2で成長が変わる">
+    <meta property="og:description" content="昼は光合成、夜は呼吸。CO2、O2、栄養、元気度がどう変わり、植物サイズがどう伸びるかを試せるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/plant-growth.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="植物の呼吸と光合成シミュレーション | 光・CO2・O2で成長が変わる">
+    <meta name="twitter:description" content="昼は作り、夜は使う。光合成と呼吸の切り替わりを、成長と枯死まで含めて観察できます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="plant-growth.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Plant / Photosynthesis / Respiration</p>
+                    <h1>植物は、昼に作り<br>夜に使う。</h1>
+                    <p class="stage-lead">
+                        光がある昼は、植物は CO2 を使って栄養と O2 を作ります。<br>
+                        光がない夜は、栄養と O2 を使って呼吸し、栄養不足が続くと弱って枯れ、余裕があれば少しずつ成長します。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>太陽光・CO2・O2 を変える</span>
+                        <span>昼と夜を切り替える</span>
+                        <span>栄養不足で枯れ、余剰で成長する</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell" id="playgroundShell">
+                    <canvas id="plantCanvas" aria-label="植物の呼吸と光合成シミュレーション"></canvas>
+
+                    <div class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>植物の代謝シミュレーション</h2>
+                            <p>昼は光合成で CO2 を消費し、栄養と O2 を作ります。夜は呼吸で O2 と栄養を消費し、CO2 を出します。栄養が尽きると枯れ、余裕があると植物サイズが育ちます。</p>
+                        </div>
+
+                        <p class="subheading">環境を変える</p>
+
+                        <label class="control" for="sunlight">
+                            <span>太陽光の強さ</span>
+                            <strong id="sunText">70 %</strong>
+                            <input id="sunlight" type="range" min="0" max="100" value="70" step="1">
+                        </label>
+
+                        <label class="control" for="co2">
+                            <span>二酸化炭素 CO2</span>
+                            <strong id="co2Text">55 %</strong>
+                            <input id="co2" type="range" min="0" max="100" value="55" step="1">
+                        </label>
+
+                        <label class="control" for="o2">
+                            <span>酸素 O2</span>
+                            <strong id="o2Text">45 %</strong>
+                            <input id="o2" type="range" min="0" max="100" value="45" step="1">
+                        </label>
+
+                        <div class="button-grid">
+                            <button id="setDay" class="day-action" type="button">昼にする</button>
+                            <button id="setNight" class="night-action" type="button">夜にする</button>
+                        </div>
+
+                        <div class="button-grid action-grid">
+                            <button id="addNutrients" class="feed-action" type="button">栄養を少し追加</button>
+                            <button id="resetSim" class="reset-action" type="button">リセット</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>状態</span>
+                                <strong id="modeStat">光合成</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>植物サイズ</span>
+                                <strong id="sizeStat">1.00</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>栄養</span>
+                                <strong id="nutrientStat">45 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>元気度</span>
+                                <strong id="healthStat">100 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>光合成速度</span>
+                                <strong id="photoRateStat">0.00</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>呼吸速度</span>
+                                <strong id="respRateStat">0.00</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデル: 光合成は CO2 + 光 → 栄養 + O2、呼吸は 栄養 + O2 → CO2 として扱います。実際には水、温度、葉面積、気孔、酵素反応なども関係します。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">昼は CO2 を使って栄養と O2 を作り、夜は O2 と栄養を使って CO2 を出します。栄養が余ると成長し、尽きると枯れます。</p>
+                    </div>
+
+                    <div class="floating-hint" id="hintText">
+                        操作: まず昼と夜を切り替えて、栄養と元気度の変化を見てください。次に CO2 や O2 を絞ると、昼でも光合成が進みにくくなったり、夜に弱りやすくなったりします。
+                    </div>
+
+                    <div class="stage-stats" aria-label="現在の状態">
+                        <article>
+                            <span>日光</span>
+                            <strong id="quickSun">70 %</strong>
+                        </article>
+                        <article>
+                            <span>CO2</span>
+                            <strong id="quickCo2">55 %</strong>
+                        </article>
+                        <article>
+                            <span>栄養</span>
+                            <strong id="quickNutrients">45 %</strong>
+                        </article>
+                        <article>
+                            <span>状態</span>
+                            <strong id="quickMode">光合成</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">植物は、昼にため、夜に使い、その差分で育つ。</p>
+                <p class="signal-sub">光合成で作る量が呼吸で使う量を上回れば栄養が貯まり、植物は少しずつ大きくなります。逆に、夜が長い、CO2 が少ない、O2 が少ない、栄養が足りないと、元気度が下がって枯死へ向かいます。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで計算していること</h2>
+                    <p>本物の植物全体を再現するのではなく、昼と夜で代謝が切り替わり、成長や枯死にどうつながるかが見えるように単純化したモデルです。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card strong-card">
+                        <p class="card-label">01</p>
+                        <h3>昼は光合成</h3>
+                        <p>光の強さ、CO2、葉の大きさ、元気度をもとに、昼は CO2 を消費して栄養と O2 を増やします。</p>
+                    </article>
+                    <article class="model-card air-card">
+                        <p class="card-label">02</p>
+                        <h3>夜は呼吸</h3>
+                        <p>光が弱いほど呼吸の寄与が大きくなり、O2 と栄養を使って CO2 を出します。夜に O2 が足りないと弱りやすくなります。</p>
+                    </article>
+                    <article class="model-card growth-card">
+                        <p class="card-label">03</p>
+                        <h3>栄養に余裕があると成長</h3>
+                        <p>栄養が十分あり、元気度が高いと、余った栄養を使って植物サイズが少しずつ増えます。大きくなるほど昼の生産も増えます。</p>
+                    </article>
+                    <article class="model-card soil-card">
+                        <p class="card-label">04</p>
+                        <h3>不足すると弱り、尽きると枯れる</h3>
+                        <p>栄養不足、夜の O2 不足、昼の CO2 不足が続くと元気度が下がります。栄養がほぼ尽きると枯死として扱います。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>試すと違いが出やすい観察ポイント</h2>
+                    <p>単に植物が大きくなるかどうかではなく、どの条件が「昼の収支」を黒字にし、どの条件が夜の消耗を強めるかを見ると、代謝の役割がつかみやすくなります。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card strong-card">
+                        <h3>明るくて CO2 が多いと栄養がたまる</h3>
+                        <p>日光と CO2 が十分あると、昼の光合成速度が上がり、栄養と O2 が増えやすくなります。成長はその余剰から始まります。</p>
+                    </article>
+                    <article class="observation-card air-card">
+                        <h3>夜は O2 と栄養を削る</h3>
+                        <p>夜は光合成が止まり、呼吸だけが残ります。O2 が低いまま夜にすると、元気度が下がりやすくなります。</p>
+                    </article>
+                    <article class="observation-card growth-card">
+                        <h3>大きい植物は有利だが消費もある</h3>
+                        <p>植物サイズが大きいと昼の生産力も上がりますが、夜の呼吸でもある程度のコストがかかります。昼夜の収支差を比べてみてください。</p>
+                    </article>
+                    <article class="observation-card soil-card">
+                        <h3>栄養追加で回復できる</h3>
+                        <p>弱ってから栄養を足すと、元気度が少し戻り、条件が良ければまた成長に転じます。ただし完全に枯れた後は元の勢いには戻りません。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>化学や生命っぽいモデルを広げるなら</h2>
+                    <p>このページは植物代謝の入り口です。濃度変化や反応の考え方を別のモデルでも見比べると、何を近似しているかがよりはっきりします。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解するページを入口別にまとめて見たいときのハブです。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Chemistry</p>
+                        <h3>酸と塩基の pH 混合</h3>
+                        <p>濃度や反応量の考え方を、H+ と OH- の中和モデルで見たいときの関連ページです。</p>
+                        <a class="button button-secondary" href="ph.html">関連ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Pattern</p>
+                        <h3>反応拡散</h3>
+                        <p>生物らしい模様がどのような反応と拡散から立ち上がるかを、別の観点で見られるページです。</p>
+                        <a class="button button-secondary" href="reaction-diffusion.html">反応拡散を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Theory</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何を残し、何を省略したモデルなのかを整理し直したいときの基礎ページです。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>見えにくい代謝も、昼夜の切り替え、気体の出入り、栄養収支、成長という形にすると手で追えるモデルになります。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="ph.html">酸と塩基の pH 混合</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="plant-growth.js"></script>
+</body>
+</html>
