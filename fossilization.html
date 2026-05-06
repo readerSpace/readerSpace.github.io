@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+
+        gtag("config", "G-G6WJJGWBCG");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>化石のでき方シミュレーション | 埋没・酸素不足・鉱物化で残る条件を見る</title>
+    <meta name="description" content="死骸が土砂に埋まり、酸素が減り、鉱物がしみこみ、岩石化してから侵食で見つかるまでを、ブラウザ上で動かして学べる化石化シミュレーションです。">
+    <meta name="theme-color" content="#4f3822">
+    <link rel="canonical" href="https://readerspace.github.io/fossilization.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="化石のでき方シミュレーション | 埋没・酸素不足・鉱物化で残る条件を見る">
+    <meta property="og:description" content="土砂の量、酸素不足、地下水の鉱物量、時間の速さを変えながら、分解されるか化石になるかの分岐を観察できます。">
+    <meta property="og:url" content="https://readerspace.github.io/fossilization.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="化石のでき方シミュレーション | 埋没・酸素不足・鉱物化で残る条件を見る">
+    <meta name="twitter:description" content="埋没、酸素不足、分解抑制、鉱物化、岩石化、侵食による発見までを、簡略モデルで直感的に追える教材ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fossilization.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#simulator">シミュレーション</a>
+                <a href="#process">流れ</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次へ</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible" id="simulator">
+                <div class="hero-copy">
+                    <p class="eyebrow">Paleontology / Burial / Mineralization / Erosion</p>
+                    <h1>化石は、<br>ただ古いだけでは残らない。</h1>
+                    <p class="hero-lead">
+                        死骸はそのままでは分解されやすく、化石になるには <strong>すばやい埋没</strong>、<strong>酸素不足</strong>、<strong>鉱物のしみこみ</strong>、<strong>長い時間の岩石化</strong> が必要です。<br>
+                        このページでは、土砂の量、酸素不足、地下水の鉱物量、時間の速さを動かしながら、どの条件で残り、どの条件で消えやすいかを 2D 断面モデルで見比べられます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#simShell">化石化を動かす</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>土砂が多いほど死骸が早く埋まり、分解から守られやすくなる</li>
+                        <li>酸素が少ないほど腐敗や微生物分解が進みにくくなる</li>
+                        <li>地下水の鉱物量が多いほど骨や殻に鉱物が入り、化石として残りやすくなる</li>
+                    </ul>
+                </div>
+
+                <div class="sim-shell" id="simShell">
+                    <div class="canvas-shell">
+                        <canvas id="fossilCanvas" aria-label="化石のでき方シミュレーション"></canvas>
+                    </div>
+
+                    <article class="panel controls-panel">
+                        <div class="panel-header">
+                            <p class="card-label">Interactive Model</p>
+                            <h2>化石化の条件を比べる</h2>
+                            <p>死骸の保存は、埋没の速さ、酸素不足、鉱物化、長時間の地層変化の掛け合わせです。条件を変えて、分解と保存の綱引きを見てください。</p>
+                        </div>
+
+                        <label class="control" for="speed">
+                            <span>時間の速さ</span>
+                            <strong id="speedValue">1.0x</strong>
+                            <input id="speed" class="range-input" type="range" min="0.2" max="5" step="0.1" value="1">
+                        </label>
+
+                        <label class="control" for="sediment">
+                            <span>土砂の量</span>
+                            <strong id="sedimentValue">普通</strong>
+                            <input id="sediment" class="range-input" type="range" min="0" max="100" step="1" value="55">
+                        </label>
+
+                        <label class="control" for="oxygen">
+                            <span>酸素不足の強さ</span>
+                            <strong id="oxygenValue">普通</strong>
+                            <input id="oxygen" class="range-input" type="range" min="0" max="100" step="1" value="65">
+                        </label>
+
+                        <label class="control" for="mineral">
+                            <span>地下水の鉱物量</span>
+                            <strong id="mineralValue">普通</strong>
+                            <input id="mineral" class="range-input" type="range" min="0" max="100" step="1" value="60">
+                        </label>
+
+                        <div class="button-grid">
+                            <button class="button button-primary" id="toggleButton" type="button">進行: ON</button>
+                            <button class="button button-secondary" id="resetButton" type="button">リセット</button>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在の読み取り</p>
+                            <h3 id="observeTitle">埋まる前に分解が進むかが最初の分岐</h3>
+                            <p id="summaryText">土砂が少ないと死骸が地表近くに残り、分解が先に進んでしまいます。まずは埋没が間に合うかを見てください。</p>
+                        </div>
+
+                        <div class="stats-grid" aria-label="現在の状態">
+                            <article class="stat-card">
+                                <span>経過時間</span>
+                                <strong id="yearText">0 年</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>現在の段階</span>
+                                <strong id="stageText">死亡直後</strong>
+                            </article>
+                            <article class="stat-card progress-card">
+                                <span>化石化の進み具合</span>
+                                <strong id="fossilText">0 %</strong>
+                                <div class="progress-track"><div id="fossilBar"></div></div>
+                            </article>
+                            <article class="stat-card progress-card">
+                                <span>分解の進み具合</span>
+                                <strong id="decayText">0 %</strong>
+                                <div class="progress-track danger"><div id="decayBar"></div></div>
+                            </article>
+                            <article class="stat-card progress-card">
+                                <span>埋没の深さ</span>
+                                <strong id="burialText">0 %</strong>
+                                <div class="progress-track earth"><div id="burialBar"></div></div>
+                            </article>
+                            <article class="stat-card progress-card">
+                                <span>岩石化</span>
+                                <strong id="rockText">0 %</strong>
+                                <div class="progress-track stone"><div id="rockBar"></div></div>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデル: 本物の化石化には温度、圧力、pH、微生物、堆積環境、地殻変動などが関わります。このページでは「埋没 → 酸素不足 → 分解抑制 → 鉱物化 → 岩石化 → 隆起と侵食で発見」という教育用の流れに絞って表現しています。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">土砂、酸素不足、鉱物量を変えると、分解が先に進むか、化石化が間に合うかの分岐が見やすくなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">化石は、「残る条件」が重なったときだけ地質記録になる。</p>
+                <p class="signal-sub">死骸がそのまま放置されれば、多くは分解されて消えます。すばやい埋没と酸素不足で分解を抑え、さらに鉱物が入りこみ、長い時間の地層変化に耐えてはじめて、化石として発見されます。</p>
+            </section>
+
+            <section class="section reveal" id="process">
+                <div class="section-heading">
+                    <p class="eyebrow">Process</p>
+                    <h2>化石化の流れ</h2>
+                    <p>化石は一瞬でできるものではありません。各段階で条件が足りないと、骨や殻は途中で失われます。</p>
+                </div>
+
+                <div class="process-grid">
+                    <article class="step-card" data-stage-card="burial">
+                        <p class="card-label">01</p>
+                        <h3>埋没</h3>
+                        <p>土砂が早く積もるほど、死骸は空気や捕食者から遠ざかり、保存への第一関門を越えやすくなります。</p>
+                    </article>
+                    <article class="step-card" data-stage-card="oxygen">
+                        <p class="card-label">02</p>
+                        <h3>酸素不足</h3>
+                        <p>埋まった場所に酸素が届きにくいと、腐敗や微生物分解の速度が落ちます。</p>
+                    </article>
+                    <article class="step-card" data-stage-card="preservation">
+                        <p class="card-label">03</p>
+                        <h3>分解抑制</h3>
+                        <p>埋没と酸素不足が組み合わさると、骨や殻が原形を残したまま時間を稼げます。</p>
+                    </article>
+                    <article class="step-card" data-stage-card="mineral">
+                        <p class="card-label">04</p>
+                        <h3>鉱物がしみこむ</h3>
+                        <p>地下水中の鉱物がすき間へ入り、元の組織を埋めたり置き換えたりして強く残りやすくなります。</p>
+                    </article>
+                    <article class="step-card" data-stage-card="rock">
+                        <p class="card-label">05</p>
+                        <h3>岩石化</h3>
+                        <p>堆積物が圧密され、地層が硬い岩石に近づくと、化石を含む層として長期間保存されます。</p>
+                    </article>
+                    <article class="step-card" data-stage-card="discovery">
+                        <p class="card-label">06</p>
+                        <h3>隆起・侵食で発見</h3>
+                        <p>地層が持ち上がったり削られたりして、深く埋まっていた化石が地表近くへ現れます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>条件を変えると見えやすい違い</h2>
+                    <p>土砂、酸素不足、鉱物量のどれか一つだけでは足りません。どの条件がどの段階に効いているかを分けて見るのがポイントです。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Burial</p>
+                        <h3>土砂が少ないと最初に負ける</h3>
+                        <p>埋没が遅いと、酸素不足や鉱物化の恩恵を受ける前に分解が進みます。まずは「埋まるかどうか」が入口です。</p>
+                    </article>
+                    <article class="info-card mineral-card">
+                        <p class="card-label">Low Oxygen</p>
+                        <h3>酸素不足は分解を遅らせる</h3>
+                        <p>酸素が少ないと腐敗が鈍り、骨や殻が残る時間が伸びます。ただし、埋没が弱いと効果は限定的です。</p>
+                    </article>
+                    <article class="info-card earth-card">
+                        <p class="card-label">Mineral</p>
+                        <h3>鉱物量が多いほど残りやすい</h3>
+                        <p>地下水の鉱物が多いと、骨や殻の空隙に入りこんで硬く残りやすくなります。保存を化石へ押し切る役目です。</p>
+                    </article>
+                    <article class="info-card discover-card">
+                        <p class="card-label">Discovery</p>
+                        <h3>できても見つかるとは限らない</h3>
+                        <p>化石ができても、地中深く埋まったままなら見つかりません。発見には地層の隆起や侵食が必要です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>地球や物質の変化を広げて見る</h2>
+                    <p>化石化は、堆積、地下水、時間、地層変化の組み合わせです。別のページと並べると、何を単純化しているかが見えやすくなります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card discover-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧</h3>
+                        <p>物質、波、生命、気候などの動く教材を入口別にまとめたページです。</p>
+                        <a class="text-link" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="info-card earth-card">
+                        <p class="card-label">Geology</p>
+                        <h3>溶岩の固まり方</h3>
+                        <p>冷え方や粘性の違いで、表面と内部の状態がどう変わるかを見たいときの関連ページです。</p>
+                        <a class="text-link" href="lava-solidification.html">溶岩のページへ</a>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Planet</p>
+                        <h3>地球の気温</h3>
+                        <p>別のスケールで、時間をかけて環境条件がどう変化するかを見たいときの関連ページです。</p>
+                        <a class="text-link" href="earth-temperature.html">地球の気温へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>化石は、死骸が残るだけでなく、残る条件が何段階も重なってはじめて地質記録になります。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="lava-solidification.html">溶岩のページへ</a>
+                <a href="earth-temperature.html">地球の気温へ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="fossilization.js"></script>
+</body>
+</html>
