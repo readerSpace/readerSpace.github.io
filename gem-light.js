@@ -9,6 +9,7 @@ const COLORS = [
 ];
 
 const DEFAULTS = {
+    gemType: "round",
     refract: 2.4,
     light: 80,
     dispersion: 60,
@@ -18,6 +19,7 @@ const DEFAULTS = {
 const dom = {
     canvas: document.querySelector("#canvas"),
     canvasShell: document.querySelector("#canvasShell"),
+    gemType: document.querySelector("#gemType"),
     refract: document.querySelector("#refract"),
     light: document.querySelector("#light"),
     dispersion: document.querySelector("#dispersion"),
@@ -188,18 +190,64 @@ function raySegmentIntersection(origin, direction, a, b) {
     };
 }
 
-function buildGem(cx, cy, radius, angle) {
-    const baseShape = [
-        vector(-0.40, -1.0),
-        vector(0.40, -1.0),
-        vector(0.84, -0.48),
-        vector(0.68, 0.04),
-        vector(0.28, 0.84),
-        vector(0, 1.14),
-        vector(-0.28, 0.84),
-        vector(-0.68, 0.04),
-        vector(-0.84, -0.48)
-    ];
+function createEllipseShape(stepCount, radiusX, radiusY) {
+    return Array.from({ length: stepCount }, (_, index) => {
+        const angle = (-Math.PI / 2) + ((index / stepCount) * Math.PI * 2);
+        return vector(Math.cos(angle) * radiusX, Math.sin(angle) * radiusY);
+    });
+}
+
+const GEM_TYPES = {
+    round: {
+        label: "ラウンド風カット",
+        summaryLead: "ラウンド風カットは面のバランスがよく、反射と透過の切り替わりを比較しやすい形です。",
+        observeLead: "回転による光の抜け口の変化が素直に見えるので、基準形として比較に向いています。",
+        baseShape: [
+            vector(-0.40, -1.0),
+            vector(0.40, -1.0),
+            vector(0.84, -0.48),
+            vector(0.68, 0.04),
+            vector(0.28, 0.84),
+            vector(0, 1.14),
+            vector(-0.28, 0.84),
+            vector(-0.68, 0.04),
+            vector(-0.84, -0.48)
+        ]
+    },
+    oval: {
+        label: "楕円形",
+        summaryLead: "楕円形では側面の角度変化がなだらかで、回転すると光の抜け口が滑らかに移りやすくなります。",
+        observeLead: "左右の肩に沿って出射光が流れるように動く点に注目すると、丸みに近い形の効果が見やすくなります。",
+        baseShape: createEllipseShape(14, 0.94, 1.12)
+    },
+    diamond: {
+        label: "ダイアモンドカット",
+        summaryLead: "ダイアモンドカットは鋭い面が多く、条件が合うと限られた面から強いフラッシュが返りやすい形です。",
+        observeLead: "角の立った面で全反射の切り替わりが起きやすく、明暗の差がはっきり出ます。",
+        baseShape: [
+            vector(-0.22, -1.0),
+            vector(0.22, -1.0),
+            vector(0.54, -0.84),
+            vector(0.84, -0.50),
+            vector(1.02, -0.06),
+            vector(0.76, 0.30),
+            vector(0.38, 0.74),
+            vector(0, 1.22),
+            vector(-0.38, 0.74),
+            vector(-0.76, 0.30),
+            vector(-1.02, -0.06),
+            vector(-0.84, -0.50),
+            vector(-0.54, -0.84)
+        ]
+    }
+};
+
+function getGemTypeDefinition(gemType) {
+    return GEM_TYPES[gemType] || GEM_TYPES[DEFAULTS.gemType];
+}
+
+function buildGem(cx, cy, radius, angle, gemType = DEFAULTS.gemType) {
+    const baseShape = getGemTypeDefinition(gemType).baseShape;
 
     return baseShape.map((point) => {
         const rotated = rotatePoint(point, angle);
@@ -369,41 +417,42 @@ function classifyBrilliance(stats, refractiveIndex, dispersion) {
     return "やわらかい輝き";
 }
 
-function describeScene(stats, refractiveIndex, dispersion) {
+function describeScene(stats, refractiveIndex, dispersion, gemType) {
     const critical = stats.criticalAngle;
+    const gemDefinition = getGemTypeDefinition(gemType);
 
     if (refractiveIndex < 1.4) {
         return {
-            summary: `屈折率 ${formatNumber(refractiveIndex, 2)} では光がそれほど強く曲がらず、内部に長く閉じ込められません。多くの光は比較的素直に抜けていきます。`,
+            summary: `${gemDefinition.summaryLead} 屈折率 ${formatNumber(refractiveIndex, 2)} では光がそれほど強く曲がらず、内部に長く閉じ込められません。多くの光は比較的素直に抜けていきます。`,
             title: "ガラスに近い抜け方",
-            text: `臨界角は ${formatNumber(critical, 1)}° と大きめで、全反射が起きる条件が限られています。内部反射より透過の印象が先に立ちます。`
+            text: `${gemDefinition.observeLead} 臨界角は ${formatNumber(critical, 1)}° と大きめで、全反射が起きる条件が限られています。内部反射より透過の印象が先に立ちます。`
         };
     }
 
     if (stats.reflections >= 18) {
         return {
-            summary: `屈折率が高く、臨界角 ${formatNumber(critical, 1)}° を下回る入射が多いため、光は宝石内で何度も跳ね返っています。出口ではまとまった明るさと色分かれが見えます。`,
+            summary: `${gemDefinition.summaryLead} 屈折率が高く、臨界角 ${formatNumber(critical, 1)}° を下回る入射が多いため、光は宝石内で何度も跳ね返っています。出口ではまとまった明るさと色分かれが見えます。`,
             title: "内部で跳ね返ってから出る",
-            text: `この条件では全反射がきらめきの主役です。宝石を回すと、どの面で光が抜けるかが入れ替わり、強いフラッシュが出やすくなります。`
+            text: `${gemDefinition.observeLead} この条件では全反射がきらめきの主役です。宝石を回すと、どの面で光が抜けるかが入れ替わり、強いフラッシュが出やすくなります。`
         };
     }
 
     if (dispersion >= 65) {
         return {
-            summary: `分散 ${formatNumber(dispersion, 0)} では色ごとの屈折率差がはっきりして、出口の虹色が大きく開きます。白い輝きよりも色のほどけ方が目立つ条件です。`,
+            summary: `${gemDefinition.summaryLead} 分散 ${formatNumber(dispersion, 0)} では色ごとの屈折率差がはっきりして、出口の虹色が大きく開きます。白い輝きよりも色のほどけ方が目立つ条件です。`,
             title: "色ごとに出口がずれる",
-            text: "赤と青で少しずつ違う向きへ出るため、同じ面から出ても束がにじむように広がります。ファイアを強調したいときの典型条件です。"
+            text: `${gemDefinition.observeLead} 赤と青で少しずつ違う向きへ出るため、同じ面から出ても束がにじむように広がります。ファイアを強調したいときの典型条件です。`
         };
     }
 
     return {
-        summary: `屈折と内部反射のバランスが取れた条件です。光は一部が内部を回り、一部は早めに抜けるので、白い返り光と淡い色分かれが同時に見えます。`,
+        summary: `${gemDefinition.summaryLead} 屈折と内部反射のバランスが取れた条件です。光は一部が内部を回り、一部は早めに抜けるので、白い返り光と淡い色分かれが同時に見えます。`,
         title: "白いきらめきと色分かれの中間",
-        text: "屈折率か分散を少しずつ動かすと、どこから先に全反射が増えるか、どこから色の開きが強く見えるかを比較しやすい領域です。"
+        text: `${gemDefinition.observeLead} 屈折率か分散を少しずつ動かすと、どこから先に全反射が増えるか、どこから色の開きが強く見えるかを比較しやすい領域です。`
     };
 }
 
-function updateStats(stats, refractiveIndex, dispersion) {
+function updateStats(stats, refractiveIndex, dispersion, gemType) {
     state.latestStats = stats;
     dom.criticalText.textContent = `${formatNumber(stats.criticalAngle, 1)}°`;
     dom.reflectionText.textContent = String(stats.reflections);
@@ -411,7 +460,7 @@ function updateStats(stats, refractiveIndex, dispersion) {
     dom.brillianceText.textContent = classifyBrilliance(stats, refractiveIndex, dispersion);
     dom.modeChip.textContent = dom.brillianceText.textContent;
 
-    const description = describeScene(stats, refractiveIndex, dispersion);
+    const description = describeScene(stats, refractiveIndex, dispersion, gemType);
     dom.summaryText.textContent = description.summary;
     dom.observeTitle.textContent = description.title;
     dom.observeText.textContent = description.text;
@@ -517,6 +566,7 @@ function drawGemGlow(center, radius, lightPower) {
 function renderScene() {
     const width = state.viewport.width;
     const height = state.viewport.height;
+    const gemType = dom.gemType.value;
     const refractiveIndex = Number(dom.refract.value);
     const lightPower = Number(dom.light.value);
     const dispersion = Number(dom.dispersion.value);
@@ -529,7 +579,7 @@ function renderScene() {
 
     const center = vector(width * 0.62, height * 0.52);
     const radius = Math.min(width, height) * 0.26;
-    const polygon = buildGem(center.x, center.y, radius, state.angle);
+    const polygon = buildGem(center.x, center.y, radius, state.angle, gemType);
     const beamDirection = normalize(vector(1, 0.22));
     const beamNormal = normalize(perpendicular(beamDirection));
     const start = vector(width * 0.1, height * 0.24);
@@ -639,7 +689,8 @@ function renderScene() {
             spread
         },
         refractiveIndex,
-        dispersion
+        dispersion,
+        gemType
     );
 }
 
@@ -658,7 +709,7 @@ dom.resetBtn.addEventListener("click", () => {
     state.angle = DEFAULTS.angle;
 });
 
-[dom.refract, dom.light, dom.dispersion].forEach((element) => {
+[dom.gemType, dom.refract, dom.light, dom.dispersion].forEach((element) => {
     element.addEventListener("input", updateLabels);
 });
 
@@ -669,6 +720,7 @@ const resizeObserver = new ResizeObserver(() => {
 resizeObserver.observe(dom.canvasShell);
 window.addEventListener("resize", resizeCanvas);
 
+dom.gemType.value = DEFAULTS.gemType;
 updateLabels();
 resizeCanvas();
 requestAnimationFrame(loop);

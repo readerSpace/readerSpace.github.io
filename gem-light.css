@@ -338,6 +338,24 @@ textarea {
     font-weight: 700;
 }
 
+.select-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.05));
+    color: var(--ink-1);
+}
+
+.select-input:focus-visible {
+    outline: 2px solid rgba(135, 221, 255, 0.45);
+    outline-offset: 2px;
+}
+
+.select-input option {
+    color: #08101b;
+}
+
 .range-input {
     width: 100%;
     accent-color: var(--accent-ice);
