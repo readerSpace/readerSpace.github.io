@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虹の原理をさわれるページ | 屈折・反射・分散で主虹と副虹を見る</title>
+    <meta name="description" content="太陽光が水滴へ入り、屈折、内部反射、再屈折を経て色ごとに分かれる流れを、主虹・副虹の切り替えつきで学べる教育用シミュレーションです。">
+    <meta name="theme-color" content="#b7e3ff">
+    <link rel="canonical" href="https://readerspace.github.io/rainbow.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="虹の原理をさわれるページ | 屈折・反射・分散で主虹と副虹を見る">
+    <meta property="og:description" content="入射位置、太陽光の傾き、水滴サイズ、白色光と単色光、主虹と副虹を切り替えながら、虹ができる光の道筋を観察できます。">
+    <meta property="og:url" content="https://readerspace.github.io/rainbow.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="虹の原理をさわれるページ | 屈折・反射・分散で主虹と副虹を見る">
+    <meta name="twitter:description" content="虹は屈折して終わりではなく、水滴の中で反射してから再び屈折します。その流れを高校生向けに見やすくしたページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="rainbow.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">虹を見る</a>
+                <a href="#reading">読み方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Rainbow / Refraction / Internal Reflection / Dispersion</p>
+                    <h1>虹は、<br>水滴の中で光が一度遊んでから見える。</h1>
+                    <p class="hero-lead">
+                        太陽光は水滴に入るときに曲がり、水滴の内側で反射し、外へ出るときにもう一度曲がります。その途中で色ごとに曲がり方が少し違うため、赤や紫へ分かれて見えます。<br>
+                        このページでは <strong>入射位置</strong>、<strong>太陽光の傾き</strong>、<strong>水滴サイズ</strong>、<strong>白色光と単色光</strong>、<strong>主虹と副虹</strong> を切り替えながら、虹の原理を高校生向けに追えます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">シミュレーターを開く</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>虹は「屈折して終わり」ではなく、屈折、内部反射、再屈折の 3 段階で見える</li>
+                        <li>赤と紫では屈折率がわずかに違うため、出ていく向きが少しずれる</li>
+                        <li>主虹は内部反射 1 回、副虹は 2 回で、色の並びが逆になる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Primary</p>
+                        <h2>主虹では、赤が外側、紫が内側に並ぶ</h2>
+                        <p>内部反射が 1 回のとき、出射角はおよそ 42° 付近へ集まりやすく、赤は少し外側、紫は少し内側に現れます。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Secondary</p>
+                        <h2>副虹では、反射がもう 1 回増えて色の順序が逆になる</h2>
+                        <p>内部反射が 2 回になると、光の向きがさらに変わり、より外側に淡い虹ができ、色の並びも反転します。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>白色光で主虹と副虹を切り替えたときの色順の違い</strong>と、<strong>単色光にしたときに 1 本の光線だけがどう曲がるか</strong>を見比べると、虹の原理がかなり掴みやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">虹は水滴の表面 1 回で終わる現象ではなく、水滴の中を通る光線の角度選別として見える。</p>
+                <p class="signal-sub">このページでは 1 個の水滴断面と数本の光線だけを使い、どの入射条件でどの色がどの角度へ出ていくかを見える形へ単純化しています。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>水滴の中の光路を追う</h2>
+                    <p>左上から来る平行光線が水滴へ入り、反射して外へ出る道筋を描きます。白色光では複数色を同時表示し、単色光では 1 色だけの曲がり方を見られます。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="impact">入射位置</label>
+                                    <span class="control-value" id="impactText">0.50</span>
+                                </div>
+                                <input id="impact" class="range-input" type="range" min="-0.92" max="0.92" step="0.01" value="0.50">
+                                <p class="control-copy">水滴の中心からどれだけずれた位置へ光が入るかです。虹を作る角度が出やすいのは中心から少し外れた入射です。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="sunAngle">太陽光の傾き</label>
+                                    <span class="control-value" id="angleText">0.0°</span>
+                                </div>
+                                <input id="sunAngle" class="range-input" type="range" min="-18" max="18" step="0.5" value="0">
+                                <p class="control-copy">ここでは太陽光を平行光線として扱い、光の入ってくる向きだけを変えています。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="radius">水滴サイズ</label>
+                                    <span class="control-value" id="radiusText">125 px</span>
+                                </div>
+                                <input id="radius" class="range-input" type="range" min="70" max="180" step="1" value="125">
+                                <p class="control-copy">幾何光学では虹の代表角はあまり変わりませんが、経路の長さや見え方は追いやすくなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-title" for="mode">表示する光</label>
+                                <select id="mode" class="select-input">
+                                    <option value="white">白色光: 虹色に分散</option>
+                                    <option value="red">赤だけ</option>
+                                    <option value="green">緑だけ</option>
+                                    <option value="violet">紫だけ</option>
+                                </select>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-title" for="bounces">反射回数</label>
+                                <select id="bounces" class="select-input">
+                                    <option value="1">1回: 主虹</option>
+                                    <option value="2">2回: 副虹</option>
+                                </select>
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="resetBtn" type="button">おすすめ設定に戻す</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在のモデル</p>
+                            <p class="summary-text" id="summaryText"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="observeTitle"></h3>
+                            <p id="observeText"></p>
+                        </article>
+                    </article>
+
+                    <article class="panel canvas-panel">
+                        <div class="canvas-top">
+                            <div>
+                                <p class="control-label">Simulation</p>
+                                <h3>虹の断面モデル</h3>
+                            </div>
+                            <div class="canvas-chip" id="modeChip">主虹</div>
+                        </div>
+                        <div class="canvas-shell" id="canvasShell">
+                            <canvas id="canvas"></canvas>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-chip">白線: 入射する太陽光</span>
+                            <span class="legend-chip warm">色線: 分散した光</span>
+                            <span class="legend-chip neutral">灰破線: 法線</span>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">虹の種類</p>
+                        <p class="stat-value" id="typeStat">主虹</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">代表的な出射角</p>
+                        <p class="stat-value" id="angleStat">42.0°</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">色の広がり</p>
+                        <p class="stat-value" id="spreadStat">2.0°</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">色の並び</p>
+                        <p class="stat-value" id="orderStat">外側 赤 / 内側 紫</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>虹の見方</h2>
+                    <p>学校の教科書では「屈折して虹になる」と短く書かれがちですが、実際には内部反射と色ごとの屈折率差まで含めて見ると理解しやすくなります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Refraction</p>
+                        <h3>屈折</h3>
+                        <p>空気から水へ入るとき、光は曲がります。水から空気へ出るときにも再び曲がり、その 2 回の屈折が出射方向を決めます。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Internal Reflection</p>
+                        <h3>内部反射</h3>
+                        <p>主虹では水滴内で 1 回、副虹では 2 回反射します。反射回数が増えると光の進行方向がさらに変わり、虹の位置も色順も変わります。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Dispersion</p>
+                        <h3>分散</h3>
+                        <p>赤は少し曲がりにくく、紫は少し曲がりやすいので、同じ白色光でも色ごとに出ていく角度がずれます。これが虹色に見える理由です。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Geometry</p>
+                        <h3>主虹と副虹</h3>
+                        <p>主虹はおよそ 42°、副虹はおよそ 51° 付近へ出やすく、副虹は内部反射が 1 回多いため色の順番が逆になります。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>虹は「水滴が色づく」のではなく、「水滴ごとに特定角度の色だけを観察者へ返す」ことで見える</h3>
+                    <p>実際の空には無数の水滴があります。そのうち、ちょうど観察者の目へ赤や紫を返す角度にある水滴だけが、虹の輪の一部として見えています。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>光の曲がり方をほかでも見る</h2>
+                    <p>虹が分かったら、宝石のファイアや、波としての光のふるまいも並べると、光の見え方の違いがつながります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Optics</p>
+                        <h3>宝石の光り方</h3>
+                        <p>屈折率と分散が強いと、虹とは別の形で色のきらめきが出ます。内部反射の多い系として比べられます。</p>
+                        <a class="text-link" href="gem-light.html">宝石のページへ</a>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Wave</p>
+                        <h3>水面の波と干渉</h3>
+                        <p>屈折とは別に、波同士が重なることでできる縞や回り込みも見られます。</p>
+                        <a class="text-link" href="wave.html">波のページへ</a>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧</h3>
+                        <p>光、波、電磁気、回転など、ほかの動くページも入口別にまとめています。</p>
+                        <a class="text-link" href="simulations.html">一覧を見る</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>虹は、太陽光が水滴で 2 回曲がり、途中で反射し、色ごとに別の角度へほどけることで見えます。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="wave.html">水面の波へ</a>
+                <a href="physics.html">物理解説トップへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="rainbow.js"></script>
+</body>
+</html>

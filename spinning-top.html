@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コマの回転と歳差運動をさわれるページ | 横からの傾きと上からの軸の回転を見る</title>
+    <meta name="description" content="自転速度、傾き、重力、摩擦を変えながら、コマの歳差運動と減衰して倒れていく様子を横視点と上視点で同時に観察できる教育用シミュレーションです。">
+    <meta name="theme-color" content="#140f22">
+    <link rel="canonical" href="https://readerspace.github.io/spinning-top.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="コマの回転と歳差運動をさわれるページ | 横からの傾きと上からの軸の回転を見る">
+    <meta property="og:description" content="横から見た傾きと、上から見た軸の回転を同時に表示しながら、歳差運動、摩擦による減衰、倒れ込みを直感的に学べます。">
+    <meta property="og:url" content="https://readerspace.github.io/spinning-top.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="コマの回転と歳差運動をさわれるページ | 横からの傾きと上からの軸の回転を見る">
+    <meta name="twitter:description" content="回転速度、重力、傾き、摩擦を動かして、コマが倒れずに向きを変える歳差運動と、失速して崩れていく流れを見比べられるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="spinning-top.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">コマを回す</a>
+                <a href="#reading">読み方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Rotation / Angular Momentum / Torque / Precession</p>
+                    <h1>速く回るコマは、<br>すぐには倒れず横へ向きを変える。</h1>
+                    <p class="hero-lead">
+                        重力はコマを倒そうとしますが、十分に速く自転していると、軸はそのまま倒れる代わりにゆっくり方位を変えます。<br>
+                        このページでは <strong>自転速度</strong>、<strong>初期傾き</strong>、<strong>重力</strong>、<strong>摩擦</strong> を動かしながら、<strong>横から見た傾き</strong>と<strong>上から見た軸の軌跡</strong>を同時に観察できます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">シミュレーターを開く</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>自転が速いと角運動量が大きく、重力トルクを受けてもすぐ倒れずに歳差運動が見える</li>
+                        <li>摩擦で自転が落ちると安定が崩れ、傾きが増えて倒れ込みへ向かう</li>
+                        <li>本格的な剛体方程式ではなく、教材向けに現象の関係を見やすくした簡易モデルを使っている</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Precession</p>
+                        <h2>重力は「倒す力」でもあり、向きを変えるきっかけでもある</h2>
+                        <p>高速回転中のコマでは、重力トルクがそのまま転倒へ行かず、軸の先端が横向きに回る歳差として現れます。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Damping</p>
+                        <h2>摩擦が角運動量を奪うと、安定は急に弱くなる</h2>
+                        <p>回転が十分速い間は持ちこたえていても、摩擦で自転が落ちると歳差が速まり、やがて軸の傾きが増えて崩れ始めます。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>自転速度を高くしたときのゆっくりした歳差</strong>と、<strong>摩擦を増やしたときに軸が外へ膨らみながら倒れていく変化</strong>を見比べると、このモデルの狙いが掴みやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">高速回転中のコマは、重力で即座に倒れるのではなく、角運動量の向きが少しずつ横へ回ることで歳差運動を示す。</p>
+                <p class="signal-sub">教材としてはおおよそ <span class="inline-code">Ω ≈ τ / L</span>、つまり「歳差の速さ ≈ 重力トルク / 角運動量」という関係を見るのが核心です。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>横視点と上視点でコマを追う</h2>
+                    <p>左は地面から見た軸の傾き、右は上空から見た軸先端の軌跡です。条件を動かすと、安定した歳差、減衰、倒れ込みの境目が変わります。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="spin">自転速度</label>
+                                    <span class="control-value" id="spinText">80</span>
+                                </div>
+                                <input id="spin" class="range-input" type="range" min="10" max="160" step="1" value="80">
+                                <p class="control-copy">大きいほど角運動量が増え、重力トルクに対して倒れにくくなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="tilt">初期傾き</label>
+                                    <span class="control-value" id="tiltText">25°</span>
+                                </div>
+                                <input id="tilt" class="range-input" type="range" min="3" max="70" step="1" value="25">
+                                <p class="control-copy">軸が鉛直からどれだけずれて始まるかを決めます。傾きが大きいほど重力トルクも大きくなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="gravity">重力</label>
+                                    <span class="control-value" id="gravityText">1.00</span>
+                                </div>
+                                <input id="gravity" class="range-input" type="range" min="0" max="3" step="0.05" value="1">
+                                <p class="control-copy">大きいほどトルクが強くなり、同じ自転速度でも歳差は速くなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="friction">摩擦</label>
+                                    <span class="control-value" id="frictionText">0.20</span>
+                                </div>
+                                <input id="friction" class="range-input" type="range" min="0" max="1.5" step="0.01" value="0.2">
+                                <p class="control-copy">摩擦が大きいほど自転が早く落ち、軸の安定が失われて倒れ込みやすくなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="speed">表示速度</label>
+                                    <span class="control-value" id="speedText">1.0×</span>
+                                </div>
+                                <input id="speed" class="range-input" type="range" min="0.2" max="3" step="0.1" value="1">
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="pauseBtn" type="button">停止</button>
+                                <button class="button button-secondary" id="resetBtn" type="button">リセット</button>
+                                <button class="button button-secondary" id="stableBtn" type="button">安定歳差</button>
+                                <button class="button button-secondary" id="wobbleBtn" type="button">倒れ込み強め</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在のモデル</p>
+                            <p class="summary-text" id="summaryText"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="observeTitle"></h3>
+                            <p id="observeText"></p>
+                        </article>
+                    </article>
+
+                    <div class="views-grid">
+                        <article class="panel view-panel">
+                            <div class="view-top">
+                                <div>
+                                    <p class="control-label">Side View</p>
+                                    <h3>横から見た傾き</h3>
+                                </div>
+                                <div class="view-chip" id="stateChip">歳差運動中</div>
+                            </div>
+                            <div class="canvas-shell">
+                                <canvas id="sideCanvas"></canvas>
+                            </div>
+                            <div class="legend-row">
+                                <span class="legend-chip">赤: コマ軸</span>
+                                <span class="legend-chip warm">灰破線: 鉛直方向</span>
+                                <span class="legend-chip neutral">胴体の明暗は自転の見かけ</span>
+                            </div>
+                        </article>
+
+                        <article class="panel view-panel top-panel">
+                            <div class="view-top">
+                                <div>
+                                    <p class="control-label">Top View</p>
+                                    <h3>上から見た軸の回転</h3>
+                                </div>
+                                <div class="view-chip secondary" id="trackChip">軌跡を表示</div>
+                            </div>
+                            <div class="canvas-shell">
+                                <canvas id="topCanvas"></canvas>
+                            </div>
+                            <div class="legend-row">
+                                <span class="legend-chip">青: 軸先端の軌跡</span>
+                                <span class="legend-chip warm">赤: 現在の軸方向</span>
+                                <span class="legend-chip neutral">円周: 同じ傾きならこの半径</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">歳差角速度</p>
+                        <p class="stat-value" id="precessionStat">0.00 rad/s</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">自転速度</p>
+                        <p class="stat-value" id="spinStat">80.0</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">傾き</p>
+                        <p class="stat-value" id="tiltStat">25.0°</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">重力トルク</p>
+                        <p class="stat-value" id="torqueStat">17.75</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">見かけの安定度</p>
+                        <p class="stat-value" id="stabilityStat">安定</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">状態</p>
+                        <p class="stat-value" id="stateStat">歳差運動中</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>歳差運動の見方</h2>
+                    <p>このページは厳密な剛体解ではなく、回転が速いときの角運動量、重力トルク、摩擦による減衰の関係を直感で掴むための教材モデルです。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Precession</p>
+                        <h3>歳差運動とは</h3>
+                        <p>コマの軸が鉛直軸の周りをゆっくり回る運動です。横視点では傾きが保たれ、上視点では軸先端が円やらせん状の軌跡を描きます。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Angular Momentum</p>
+                        <h3>なぜすぐ倒れないのか</h3>
+                        <p>高速回転していると角運動量が大きく、重力トルクを受けたときに「倒れる」より先に向きが横へ変わります。これが歳差として見えます。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Approximation</p>
+                        <h3>近似式</h3>
+                        <p>高速回転するコマでは、おおよそ <span class="inline-code">Ω ≈ τ / L</span> とみなせます。重力トルク τ が大きいほど速く、角運動量 L が大きいほど遅く歳差します。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Limits</p>
+                        <h3>この教材モデル</h3>
+                        <p>ナテーションや本格的な慣性モーメントの差までは入れず、摩擦で自転が落ちると安定が崩れる、という学習上重要な流れを見やすく残しています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>回転と力学を広げて見る</h2>
+                    <p>歳差運動の直感が掴めたら、自由度が増えた系や、回転と波の別の見え方を並べると理解がつながります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Chaos</p>
+                        <h3>二重振り子</h3>
+                        <p>自由度が 1 つ増えるだけで、将来の予測が急に難しくなる様子を見られます。</p>
+                        <a class="text-link" href="double-pendulum.html">二重振り子へ</a>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーション一覧</h3>
+                        <p>力学、波、カオス、反応など、ほかの動くページを入口別にまとめています。</p>
+                        <a class="text-link" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Wave</p>
+                        <h3>クラドニ図形</h3>
+                        <p>回転の安定とは違う形で、節と腹が固定された模様として秩序が現れます。</p>
+                        <a class="text-link" href="chladni.html">クラドニ図形へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>回転、波、カオス、気候、反応まで、動かして理解するためのページを少しずつ増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="index.html">トップページ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="spinning-top.js"></script>
+</body>
+</html>

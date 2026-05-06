@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宝石に光を当てたときの光り方をさわれるページ | 屈折・全反射・分散で輝きを見る</title>
+    <meta name="description" content="宝石に入る光が、屈折率と分散によって内部反射しながら色分かれして出てくる様子を、2D レイトレースの簡易モデルで学べる教育用シミュレーションです。">
+    <meta name="theme-color" content="#08101f">
+    <link rel="canonical" href="https://readerspace.github.io/gem-light.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="宝石に光を当てたときの光り方をさわれるページ | 屈折・全反射・分散で輝きを見る">
+    <meta property="og:description" content="屈折率、光の強さ、分散、宝石の回転を変えながら、宝石内部で光が反射し、虹色に分かれて出る様子を見られるインタラクティブ教材です。">
+    <meta property="og:url" content="https://readerspace.github.io/gem-light.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="宝石に光を当てたときの光り方をさわれるページ | 屈折・全反射・分散で輝きを見る">
+    <meta name="twitter:description" content="宝石の中で光が曲がり、跳ね返り、色ごとに少しずつ違う向きへほどける流れを、教育用に単純化したレイトレースで直感的に学べるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gem-light.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">輝きを見る</a>
+                <a href="#reading">読み方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Optics / Refraction / Total Internal Reflection / Dispersion</p>
+                    <h1>宝石は、<br>光をただ通すだけではない。</h1>
+                    <p class="hero-lead">
+                        空気から入った光は、宝石の中で屈折し、面で反射し、ときには色ごとに少し違う向きへ分かれて出てきます。<br>
+                        このページでは <strong>屈折率</strong>、<strong>光の強さ</strong>、<strong>分散</strong>、<strong>宝石の回転</strong> を動かしながら、<strong>内部反射</strong>と<strong>虹色の広がり</strong>を 2D 断面モデルで観察できます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">シミュレーターを開く</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>屈折率が高いほど光は強く曲がり、内部で跳ね返りやすくなる</li>
+                        <li>分散が大きいほど、色ごとに進路がずれて虹色の広がりが見えやすくなる</li>
+                        <li>本物の 3D 宝石ではなく、断面内の光線だけを残した教材用の簡易レイトレースを使っている</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Refraction</p>
+                        <h2>宝石に入った瞬間から、光は空気中とは別の角度で進む</h2>
+                        <p>屈折率が高いほど、光線は法線方向へ強く曲がります。そのため、出ていく前に内部面へ何度も当たりやすくなります。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Fire</p>
+                        <h2>虹色のきらめきは、色ごとの曲がり方の差から生まれる</h2>
+                        <p>赤と青ではわずかに屈折率が違うので、出射方向にも差が出ます。この小さなずれが、宝石のファイアとして見えます。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>屈折率を上げたときに内部反射が増える変化</strong>と、<strong>分散を上げたときに出口の虹色が広がる変化</strong>を並べると、このモデルの狙いが掴みやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">宝石の輝きは、単なる透明さではなく、屈折、全反射、分散が同時に起きることで強く見える。</p>
+                <p class="signal-sub">このページでは、宝石断面の多角形と複数の光線だけを使い、どの条件で内部反射が増え、どの条件で虹色が開くかを見やすくしています。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>宝石の中で光を追う</h2>
+                    <p>白い入射光が宝石断面へ入り、内部で反射し、色ごとに少しずれた角度で出ていく様子を観察します。光線は説明用に強調して描いています。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="refract">屈折率</label>
+                                    <span class="control-value" id="refractText">2.40</span>
+                                </div>
+                                <input id="refract" class="range-input" type="range" min="1" max="3" step="0.01" value="2.4">
+                                <p class="control-copy">高いほど光は強く曲がり、内部面で全反射しやすくなります。ダイヤモンドは高い屈折率を持つ代表例です。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="light">光の強さ</label>
+                                    <span class="control-value" id="lightText">80</span>
+                                </div>
+                                <input id="light" class="range-input" type="range" min="20" max="120" step="1" value="80">
+                                <p class="control-copy">強いほど入射ビームと、宝石から出る色光の輝度を高く描きます。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="dispersion">分散</label>
+                                    <span class="control-value" id="dispersionText">60</span>
+                                </div>
+                                <input id="dispersion" class="range-input" type="range" min="0" max="100" step="1" value="60">
+                                <p class="control-copy">高いほど色ごとの屈折率差を大きくし、出口での虹色の開きを強調します。</p>
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="rotateBtn" type="button">自動回転: ON</button>
+                                <button class="button button-secondary" id="resetBtn" type="button">角度を戻す</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在のモデル</p>
+                            <p class="summary-text" id="summaryText"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="observeTitle"></h3>
+                            <p id="observeText"></p>
+                        </article>
+                    </article>
+
+                    <article class="panel canvas-panel">
+                        <div class="canvas-top">
+                            <div>
+                                <p class="control-label">Simulation</p>
+                                <h3>宝石断面のレイトレース</h3>
+                            </div>
+                            <div class="canvas-chip" id="modeChip">高輝度</div>
+                        </div>
+                        <div class="canvas-shell" id="canvasShell">
+                            <canvas id="canvas"></canvas>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-chip">白線: 入射光</span>
+                            <span class="legend-chip warm">虹色: 色ごとの出射光</span>
+                            <span class="legend-chip neutral">内部の光線: 宝石内での反射経路</span>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">臨界角</p>
+                        <p class="stat-value" id="criticalText">24.6°</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">内部反射回数</p>
+                        <p class="stat-value" id="reflectionText">0</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">虹色の広がり</p>
+                        <p class="stat-value" id="spreadText">0 px</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">輝きの印象</p>
+                        <p class="stat-value" id="brillianceText">やわらかい輝き</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>宝石の輝きの見方</h2>
+                    <p>宝石がきれいに見える理由は、透明であることだけではありません。光がどう入って、どこで跳ね返り、どんな色で出るかが効いています。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Refraction</p>
+                        <h3>屈折</h3>
+                        <p>空気から宝石へ入るとき、光は曲がります。屈折率が高いほど曲がり方が大きくなり、内部面へ当たる角度も変わります。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Total Internal Reflection</p>
+                        <h3>全反射</h3>
+                        <p>宝石内部から空気へ出ようとする光が、ある角度より浅いと外へ出られず、面で反射します。これが強いきらめきの一因です。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Dispersion</p>
+                        <h3>分散</h3>
+                        <p>色によって屈折率が少し違うため、赤と青では出ていく向きがずれます。そのずれが虹色のファイアとして見えます。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Model</p>
+                        <h3>この教材モデル</h3>
+                        <p>本物の宝石は 3D で、面数ももっと多く、光源環境も複雑です。このページでは断面内の光線だけに絞って、関係を見やすくしています。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>「光が通る」ではなく、「光が中で遊んでから出る」と考えると、宝石の見え方の違いがかなり理解しやすい</h3>
+                    <p>屈折率が低いと光は素直に抜けやすく、高いと内部に閉じ込められやすくなります。さらに分散があると、出口で色がほどけて見えます。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>光の別の見え方へ進む</h2>
+                    <p>宝石での光の曲がりを見たら、波としての光や、電磁気とのつながりも並べてみると理解が広がります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Wave</p>
+                        <h3>水面の波と干渉</h3>
+                        <p>屈折とは別に、波同士が重なって縞を作る干渉と回折の見え方を試せます。</p>
+                        <a class="text-link" href="wave.html">水面の波へ</a>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Electric / Magnetic</p>
+                        <h3>電気と磁気</h3>
+                        <p>光の背後にある電磁気の基本を、場のイメージからたどれます。</p>
+                        <a class="text-link" href="electric-magnetic.html">電気と磁気へ</a>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧</h3>
+                        <p>光、波、回転、反応など、ほかの動くページも入口別にまとめています。</p>
+                        <a class="text-link" href="simulations.html">一覧を見る</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>宝石の輝きは、光が曲がり、跳ね返り、色ごとに少しずつ違う向きへほどけることで生まれます。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="electric-magnetic.html">電気と磁気へ</a>
+                <a href="physics.html">物理解説トップへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="gem-light.js"></script>
+</body>
+</html>

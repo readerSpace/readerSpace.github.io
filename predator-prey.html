@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>捕食関係の波をさわれるページ | ウサギとキツネで見る個体数の増減</title>
+    <meta name="description" content="草、ウサギ、キツネの個体数が遅れて増減する生態系の波を、粒子の動きと個体数グラフで観察できる教育用シミュレーションです。">
+    <meta name="theme-color" content="#1f3c28">
+    <link rel="canonical" href="https://readerspace.github.io/predator-prey.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="捕食関係の波をさわれるページ | ウサギとキツネで見る個体数の増減">
+    <meta property="og:description" content="ロトカ＝ヴォルテラ風の考え方に、繁殖、捕食、餓死を加えた直感的な生態系シミュレーションです。">
+    <meta property="og:url" content="https://readerspace.github.io/predator-prey.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="捕食関係の波をさわれるページ | ウサギとキツネで見る個体数の増減">
+    <meta name="twitter:description" content="草を食べるウサギと、それを食べるキツネの数が、時間差をもって増減する様子を粒子とグラフで追えます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="predator-prey.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#simulation">シミュレーション</a>
+                <a href="#mechanism">仕組み</a>
+                <a href="#observe">観察ポイント</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Ecology / Predator-Prey / Population Waves / Feedback</p>
+                    <h1>生態系の波は、<br>少し遅れて追いかけ合う。</h1>
+                    <p class="hero-lead">
+                        草が回復するとウサギが増え、ウサギが増えるとキツネが増えます。けれどキツネの増加は少し遅れて現れるので、<strong>被食者が先に増えて、捕食者があとから追いかける</strong>波が見えてきます。<br>
+                        このページでは、<strong>草の回復</strong>、<strong>ウサギの繁殖</strong>、<strong>キツネの捕食能力</strong>、<strong>エネルギー消費</strong>を変えながら、粒子の動きと個体数グラフを同時に追えます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#simulation">シミュレーションを開く</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>草が多いとウサギが増え、ウサギが多いとキツネが増える</li>
+                        <li>捕食者のピークは被食者のピークより遅れて現れやすい</li>
+                        <li>回復速度や捕食圧を少し変えるだけで、周期、安定性、全滅しやすさが変わる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Lag</p>
+                        <h2>ウサギが先に増え、キツネは少し遅れて増える</h2>
+                        <p>捕食者は被食者が十分に増えてから増え始めるので、2 本の個体数曲線には自然に位相差ができます。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Feedback</p>
+                        <h2>増えすぎは次の減少を呼ぶ</h2>
+                        <p>ウサギが増えすぎると草が減り、そのあとキツネが増えすぎるとウサギが減ります。正と負のフィードバックが交互に効きます。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見てほしいこと</p>
+                        <p><strong>白線のウサギが先に立ち上がり、赤線のキツネが少し遅れて山を作る</strong>ことと、草の回復速度を上げたときに波の振幅がどう変わるかを見比べてください。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">捕食関係は「多い方が勝つ」ではなく、資源、繁殖、捕食、餓死が時間差つきでつながることで周期的な波として現れる。</p>
+                <p class="signal-sub">このモデルは厳密な生態学そのものではなく、ロトカ＝ヴォルテラ風の考え方を、草、ウサギ、キツネの粒子とエネルギー管理へ落とし込んだ直感用の教材です。</p>
+            </section>
+
+            <section class="section reveal" id="simulation">
+                <div class="section-heading">
+                    <p class="eyebrow">Simulation</p>
+                    <h2>草、ウサギ、キツネの波を動かす</h2>
+                    <p>上のフィールドでは個体が動き、下のグラフでは個体数の波が残ります。パラメータを変えると、周期の長さや崩れやすさがかなり変わります。</p>
+                </div>
+
+                <div class="simulation-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <label class="control-title" for="preset">プリセット</label>
+                                <select id="preset" class="select-input">
+                                    <option value="balanced">バランス型</option>
+                                    <option value="grass-rich">草が豊富</option>
+                                    <option value="predator-pressure">捕食圧が高い</option>
+                                    <option value="fragile">不安定で崩れやすい</option>
+                                </select>
+                                <p class="control-copy">まずはバランス型で波の基本形を見てから、ほかの設定へ切り替えるのが見やすいです。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="grassRate">草の回復速度</label>
+                                    <span class="control-value" id="grassValue">0.012</span>
+                                </div>
+                                <input id="grassRate" class="range-input" type="range" min="0.002" max="0.035" step="0.001" value="0.012">
+                                <p class="control-copy">高いほど被食者の餌が戻りやすくなり、ウサギの増加を支えます。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="rabbitBirth">ウサギの繁殖しやすさ</label>
+                                    <span class="control-value" id="rabbitBirthValue">0.014</span>
+                                </div>
+                                <input id="rabbitBirth" class="range-input" type="range" min="0.001" max="0.04" step="0.001" value="0.014">
+                                <p class="control-copy">ウサギが十分にエネルギーを持つと増えます。高すぎると資源を先に食べ尽くしやすくなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="huntPower">キツネの捕食能力</label>
+                                    <span class="control-value" id="huntValue">1.3</span>
+                                </div>
+                                <input id="huntPower" class="range-input" type="range" min="0.5" max="3.0" step="0.1" value="1.3">
+                                <p class="control-copy">高いほどウサギを捕まえやすくなります。強すぎると被食者の谷が深くなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="foxCost">キツネのエネルギー消費</label>
+                                    <span class="control-value" id="foxCostValue">0.08</span>
+                                </div>
+                                <input id="foxCost" class="range-input" type="range" min="0.03" max="0.18" step="0.01" value="0.08">
+                                <p class="control-copy">高いほど、獲物を十分に捕れないキツネは早く減ります。低いと捕食者が居座りやすくなります。</p>
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="pauseBtn" type="button">一時停止</button>
+                                <button class="button button-secondary" id="resetBtn" type="button">リセット</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在の波</p>
+                            <p class="summary-text" id="phaseText">被食者の増加が先に始まり、捕食者があとから追う典型的な周期です。</p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="observeTitle">被食者の山のあとに捕食者の山が来る</h3>
+                            <p id="observeText">白いウサギが増えた直後ではなく、少し遅れて赤いキツネの数が増えるところに注目してください。</p>
+                        </article>
+                    </article>
+
+                    <article class="panel stage-panel">
+                        <div class="stage-top">
+                            <div>
+                                <p class="control-label">Field + Graph</p>
+                                <h3>捕食関係のフィールド</h3>
+                            </div>
+                            <div class="status-chip" id="statusChip">動作中</div>
+                        </div>
+                        <div class="canvas-shell" id="canvasShell">
+                            <canvas id="canvas"></canvas>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-chip grass">緑: 草</span>
+                            <span class="legend-chip rabbit">白: ウサギ</span>
+                            <span class="legend-chip fox">赤: キツネ</span>
+                            <span class="legend-chip neutral">下段: 個体数グラフ</span>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="stats-grid" aria-live="polite">
+                    <article class="stat-card">
+                        <p class="stat-label">ウサギ</p>
+                        <p class="stat-value" id="rabbitCount">0</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">キツネ</p>
+                        <p class="stat-value" id="foxCount">0</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">草の回復度</p>
+                        <p class="stat-value" id="grassCoverage">0%</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">位相</p>
+                        <p class="stat-value" id="phaseStat">初期化中</p>
+                    </article>
+                    <article class="stat-card stat-card-wide">
+                        <p class="stat-label">捕食圧の目安</p>
+                        <p class="stat-value compact" id="balanceStat">ウサギ 0 / キツネ 0</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>何が起きているか</h2>
+                    <p>草は時間とともに回復し、ウサギは草を食べてエネルギーを貯め、キツネはウサギを捕まえて生き延びます。個体数そのものを式で直接更新する代わりに、粒子の行動を通じて波が立ち上がる形にしています。</p>
+                </div>
+
+                <div class="notes-grid three-up">
+                    <article class="note-card">
+                        <p class="card-label">Resource</p>
+                        <h3>草の回復</h3>
+                        <p>草は格子ごとに少しずつ回復します。草が十分に残っている場所へ入ったウサギはエネルギーを回復できます。</p>
+                    </article>
+                    <article class="note-card strong-card">
+                        <p class="card-label">Prey</p>
+                        <h3>ウサギの繁殖</h3>
+                        <p>ウサギはキツネを避けながら動き、十分なエネルギーがあると増えます。増えすぎると草の不足であとから減ります。</p>
+                    </article>
+                    <article class="note-card warm-card">
+                        <p class="card-label">Predator</p>
+                        <h3>キツネの捕食</h3>
+                        <p>キツネは近いウサギを追いかけます。獲物を捕れなければエネルギーが減り、捕食者もまた減少へ向かいます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observe">
+                <div class="section-heading">
+                    <p class="eyebrow">Observe</p>
+                    <h2>観察ポイント</h2>
+                    <p>個体数の多さだけでなく、山と谷のタイミング差を見ると、生態系の波がかなり読みやすくなります。</p>
+                </div>
+
+                <div class="notes-grid">
+                    <article class="note-card">
+                        <p class="card-label">Grass Rich</p>
+                        <h3>草が多いと、被食者の波が大きくなりやすい</h3>
+                        <p>草の回復が速いと、ウサギが広く生き残れて増加しやすくなります。そのあとでキツネも増えるので、全体の振幅が大きくなりがちです。</p>
+                    </article>
+                    <article class="note-card strong-card">
+                        <p class="card-label">Predator Pressure</p>
+                        <h3>捕食圧が高いと谷が深くなる</h3>
+                        <p>キツネが捕まえやすい設定では、ウサギが急減し、その結果としてキツネも少し遅れて減ります。波が鋭くなりやすい設定です。</p>
+                    </article>
+                    <article class="note-card warm-card">
+                        <p class="card-label">Collapse</p>
+                        <h3>不安定な設定では全滅に近づく</h3>
+                        <p>繁殖が速すぎたり、草が少なすぎたりすると、どちらかの個体群が極端に減り、周期が崩れます。自然界でも平衡は自動ではありません。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>ロトカ＝ヴォルテラの「連立方程式の波」を、資源と個体のふるまいへ訳し直して見ている</h3>
+                    <p>教科書では被食者と捕食者の微分方程式として学ぶことが多いですが、ここでは草という資源と個体のエネルギーまで入れて、なぜその波が生まれるのかを直感側から見られるようにしています。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>集団の変化をほかでも見る</h2>
+                    <p>生態系の波が見えたら、進化や創発のページも並べると、局所ルールから全体の変化が出る見方がつながります。</p>
+                </div>
+
+                <div class="notes-grid three-up">
+                    <article class="note-card">
+                        <p class="card-label">Evolution</p>
+                        <h3>花の色の遺伝</h3>
+                        <p>個体差と選択圧が積み重なると、集団全体の性質がどう変わるかを見られます。</p>
+                        <a class="text-link" href="flower-evolution.html">花の色の遺伝へ</a>
+                    </article>
+                    <article class="note-card strong-card">
+                        <p class="card-label">Collective</p>
+                        <h3>鳥の集団 Boids</h3>
+                        <p>捕食関係とは別に、局所ルールからまとまりが立ち上がる創発の見本です。</p>
+                        <a class="text-link" href="boids.html">Boids へ</a>
+                    </article>
+                    <article class="note-card warm-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧</h3>
+                        <p>生態、波、進化、気候、光学など、ほかの動くページも入口別にまとめています。</p>
+                        <a class="text-link" href="simulations.html">一覧を見る</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>捕食関係の波は、資源、繁殖、捕食、餓死が時間差つきでつながることで現れます。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="flower-evolution.html">花の色の遺伝へ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="predator-prey.js"></script>
+</body>
+</html>
