@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古典ビット回路 vs 2量子ビット回路 | CNOT と Bell 状態を触って比べる</title>
+    <meta name="description" content="古典ビット回路と 2 量子ビット回路を左右に並べ、AND・OR・X・H・Z・CNOT・SWAP と Bell 状態、測定確率の違いを比べられる教材ページです。">
+    <meta name="theme-color" content="#10304a">
+    <link rel="canonical" href="https://readerspace.github.io/classical-quantum.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="古典ビット回路 vs 2量子ビット回路 | CNOT と Bell 状態を触って比べる">
+    <meta property="og:description" content="NOT・AND・OR の古典回路と、2 量子ビットの X・H・Z・CNOT・SWAP 回路を並べて、Bell 状態ともつれを直感的に比べられます。">
+    <meta property="og:url" content="https://readerspace.github.io/classical-quantum.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="古典ビット回路 vs 2量子ビット回路 | CNOT と Bell 状態を触って比べる">
+    <meta name="twitter:description" content="古典ビットと 2 量子ビットの回路を同時に触り、AND・OR・CNOT・SWAP・Bell 状態・測定確率の違いを比較できるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="classical-quantum.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#compare">回路比較</a>
+                <a href="#experiments">試し方</a>
+                <a href="#notes">観察ポイント</a>
+                <a href="quantum.html">量子解説</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Classical Bit / Two Qubits / CNOT / Bell State</p>
+                    <h1>古典回路と 2 量子ビット回路を、<br>同じ手つきで比べる。</h1>
+                    <p class="hero-lead">
+                        左は 1 ビットと補助ビットを使う古典回路、右は 2 量子ビット回路です。<br>
+                        古典側では AND と OR、量子側では X・H・Z・CNOT・SWAP を組み合わせて、論理演算と量子相関の違いを同じ画面で追えます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#compare">シミュレーションを開く</a>
+                        <a class="button button-secondary" href="quantum.html">量子の解説へ戻る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>古典側は補助ビットを使って AND と OR を試せる</li>
+                        <li>2 量子ビットでは |00⟩, |01⟩, |10⟩, |11⟩ の 4 基底を持つ</li>
+                        <li>H(q0) のあと CNOT をかけると Bell 状態ができる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Classical</p>
+                        <h2>論理値を順番に更新する</h2>
+                        <p>NOT と BUF に加えて、補助ビットとの AND / OR も試せます。古典側では、途中で見ても値は常に 0 か 1 のどちらかです。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Quantum</p>
+                        <h2>振幅を 4 状態の上で回して、最後に測る</h2>
+                        <p>X・H・Z は q0 と q1 のどちらにもかけられます。CNOT は両方向、SWAP は 2 つの量子ビットの役割入れ替えとして使えます。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見てほしいこと</p>
+                        <p><strong>同じ「ゲートを並べる」という操作でも、古典回路は値を更新し、2 量子ビット回路は 4 つの基底状態への振幅配置を作る</strong>という違いがあります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">2 量子ビットになると、「重ね合わせ」だけでなく「相関を作るゲート」が計算資源になる。</p>
+                <p class="signal-sub">このページでは 2 量子ビットに絞り、各量子ビットへの X・H・Z、両方向の CNOT、SWAP が 4 基底の振幅と測定確率をどう変えるかを、古典側の AND / OR と並べて見られるようにしています。</p>
+            </section>
+
+            <section class="section reveal" id="compare">
+                <div class="section-heading">
+                    <p class="eyebrow">Compare</p>
+                    <h2>左右を同時に触って、回路の意味を比べる</h2>
+                    <p>古典側はメイン入力ビットと補助ビットを使った論理値の変化、量子側は 4 成分の状態ベクトルと |00⟩, |01⟩, |10⟩, |11⟩ の測定確率を表示します。量子側の設定を変えると、測定履歴は自動でリセットされます。</p>
+                </div>
+
+                <div class="comparison-grid">
+                    <article class="sim-panel classical-panel" aria-labelledby="classicalTitle">
+                        <div class="panel-header">
+                            <div>
+                                <p class="panel-kicker">Bit Circuit</p>
+                                <h3 id="classicalTitle">古典回路</h3>
+                            </div>
+                            <div class="panel-mark" aria-hidden="true">0101</div>
+                        </div>
+
+                        <section class="control-card">
+                            <div class="control-top">
+                                <p class="control-label">入力ビット</p>
+                            </div>
+                            <div class="choice-row" id="classicalInputButtons"></div>
+                        </section>
+
+                        <section class="control-card">
+                            <div class="control-top">
+                                <p class="control-label">補助ビット</p>
+                                <p class="helper-text">AND / OR で参照する値</p>
+                            </div>
+                            <div class="choice-row" id="classicalAuxButtons"></div>
+                        </section>
+
+                        <section class="control-card">
+                            <div class="control-top">
+                                <p class="control-label">追加できるゲート</p>
+                                <button class="mini-button" id="clearClassicalCircuit" type="button">回路を消去</button>
+                            </div>
+                            <div class="gate-bank" id="classicalGateButtons"></div>
+                        </section>
+
+                        <section class="circuit-card">
+                            <div class="control-top">
+                                <p class="control-label">現在の回路</p>
+                                <p class="helper-text">左から右へ順に適用</p>
+                            </div>
+                            <div class="circuit-flow" id="classicalCircuitFlow" aria-live="polite"></div>
+                            <div class="diagram-shell">
+                                <p class="helper-text">ワイヤ図で見る古典回路</p>
+                                <div class="diagram-frame" id="classicalCircuitDiagram" aria-live="polite"></div>
+                            </div>
+                        </section>
+
+                        <section class="result-card result-classical">
+                            <p class="result-label">出力</p>
+                            <p class="result-value" id="classicalResultValue">0</p>
+                            <p class="result-note" id="classicalResultNote">古典ビットは、補助ビットを使った AND / OR を含めても各時点で 0 か 1 のどちらか 1 つです。</p>
+                        </section>
+
+                        <section class="steps-card">
+                            <div class="control-top">
+                                <p class="control-label">途中結果</p>
+                                <p class="helper-text">各ゲートの直後</p>
+                            </div>
+                            <ol class="step-list" id="classicalSteps"></ol>
+                        </section>
+                    </article>
+
+                    <article class="sim-panel quantum-panel" aria-labelledby="quantumTitle">
+                        <div class="panel-header">
+                            <div>
+                                <p class="panel-kicker">Two-Qubit Circuit</p>
+                                <h3 id="quantumTitle">2 量子ビット回路</h3>
+                            </div>
+                            <div class="panel-mark panel-mark-quantum" aria-hidden="true">|ψ⟩₂</div>
+                        </div>
+
+                        <section class="control-card">
+                            <div class="control-top">
+                                <p class="control-label">入力 2 量子ビット</p>
+                            </div>
+                            <div class="choice-row" id="quantumInputButtons"></div>
+                        </section>
+
+                        <section class="control-card">
+                            <div class="control-top">
+                                <p class="control-label">追加できるゲート</p>
+                                <button class="mini-button" id="clearQuantumCircuit" type="button">回路を消去</button>
+                            </div>
+                            <div class="gate-bank" id="quantumGateButtons"></div>
+                        </section>
+
+                        <section class="circuit-card">
+                            <div class="control-top">
+                                <p class="control-label">現在の回路</p>
+                                <p class="helper-text">測定は最後に行う</p>
+                            </div>
+                            <div class="circuit-flow" id="quantumCircuitFlow" aria-live="polite"></div>
+                            <div class="diagram-shell">
+                                <p class="helper-text">ワイヤ図で見る量子回路</p>
+                                <div class="diagram-frame" id="quantumCircuitDiagram" aria-live="polite"></div>
+                            </div>
+                        </section>
+
+                        <section class="result-card result-quantum">
+                            <div class="result-top">
+                                <div>
+                                    <p class="result-label">現在の量子状態</p>
+                                    <p class="state-value" id="quantumStateValue">1.00|00⟩</p>
+                                </div>
+                                <p class="phase-note" id="quantumPhaseNote">H(q0) のあと CNOT で Bell 状態を作れます。</p>
+                            </div>
+                            <div class="probability-grid" id="basisProbabilityGrid" aria-label="基底状態ごとの測定確率">
+                            </div>
+                        </section>
+
+                        <section class="measure-card">
+                            <div class="measure-actions">
+                                <button class="button button-primary button-inline" id="measureQuantum" type="button">測定してみる</button>
+                                <button class="button button-secondary button-inline" id="resetMeasurements" type="button">測定履歴をリセット</button>
+                            </div>
+                            <p class="helper-text">回路や入力を変えると履歴は自動でクリアされます。</p>
+                            <div class="measurement-summary" id="measurementSummary" aria-live="polite">まだ測定していません。</div>
+                            <div class="measurement-history" id="measurementHistory" aria-live="polite"></div>
+                        </section>
+
+                        <section class="steps-card">
+                            <div class="control-top">
+                                <p class="control-label">途中結果</p>
+                                <p class="helper-text">振幅の変化を見る</p>
+                            </div>
+                            <ol class="step-list" id="quantumSteps"></ol>
+                        </section>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="experiments">
+                <div class="section-heading">
+                    <p class="eyebrow">Try These</p>
+                    <h2>まずはこの 4 パターンを見る</h2>
+                    <p>回路の組み方で、何が変わって何が変わらないのかを短時間で掴めます。ボタンを押すと両側の設定をまとめて読み込みます。</p>
+                </div>
+
+                <div class="experiment-grid">
+                    <article class="experiment-card">
+                        <p class="card-label">Classical</p>
+                        <h3>NOT を 2 回かける</h3>
+                        <p>古典ビットでは反転を 2 回繰り返すと元に戻ります。途中結果も 0 → 1 → 0 と 1 本の列で追えます。</p>
+                        <button class="button button-secondary example-load" type="button" data-example="classical-double-not">この例を読み込む</button>
+                    </article>
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">Superposition</p>
+                        <h3>|00⟩ に H(q0) を 1 回</h3>
+                        <p>上側の量子ビットだけを重ね合わせにすると、|00⟩ と |10⟩ が半々に出る状態になります。1 量子ビット版の H を 2 量子ビットへ広げた見え方です。</p>
+                        <button class="button button-primary example-load" type="button" data-example="quantum-superposition">この例を読み込む</button>
+                    </article>
+                    <article class="experiment-card">
+                        <p class="card-label">Controlled Gate</p>
+                        <h3>|10⟩ に CNOT をかける</h3>
+                        <p>q0 が 1 のときだけ q1 を反転するので、|10⟩ は |11⟩ に移ります。制御付きゲートが 2 量子ビットの本質です。</p>
+                        <button class="button button-secondary example-load" type="button" data-example="quantum-cnot">この例を読み込む</button>
+                    </article>
+                    <article class="experiment-card warm-card">
+                        <p class="card-label">Bell State</p>
+                        <h3>|00⟩ に H(q0) → CNOT</h3>
+                        <p>|00⟩ と |11⟩ が半々に出る Bell 状態になります。片方だけではなく、2 量子ビット全体がひとつの状態として結びついています。</p>
+                        <button class="button button-secondary example-load" type="button" data-example="quantum-bell">この例を読み込む</button>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="notes">
+                <div class="section-heading">
+                    <p class="eyebrow">Observation</p>
+                    <h2>観察ポイント</h2>
+                    <p>単に結果だけを見るより、どのゲートが「単独の量子ビット」を回し、どのゲートが「2 つの量子ビットの相関」を作るのかに注目すると理解が進みます。</p>
+                </div>
+
+                <div class="notes-grid">
+                    <article class="note-card">
+                        <p class="card-label">古典ゲート</p>
+                        <h3>途中結果をそのまま読める</h3>
+                        <p>古典回路では、途中状態を見ても 0 か 1 のどちらかです。回路は確定した値を並べ替えているだけです。</p>
+                    </article>
+                    <article class="note-card strong-card">
+                        <p class="card-label">H ゲート</p>
+                        <h3>1 つの量子ビットを重ね合わせへ広げる</h3>
+                        <p>2 量子ビット系でも、H(q0) なら |00⟩ と |10⟩、H(q1) なら |00⟩ と |01⟩ のように、対象の量子ビットだけを半々へ広げます。</p>
+                    </article>
+                    <article class="note-card warm-card">
+                        <p class="card-label">CNOT</p>
+                        <h3>1 量子ビットでは出せない相関を作る</h3>
+                        <p>CNOT は q0 が 1 のときだけ q1 を反転します。重ね合わせのあとに使うと、2 量子ビットを独立では書けない状態へ押し込みます。</p>
+                    </article>
+                    <article class="note-card">
+                        <p class="card-label">Bell</p>
+                        <h3>もつれは 2 量子ビット全体の性質</h3>
+                        <p>Bell 状態では、各量子ビットを単独で見るとランダムでも、2 つを同時に測ると強い相関が見えます。SWAP や逆向き CNOT を足すと、その相関の見え方を別の向きから試せます。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>2 量子ビット回路は「最後の 00 / 01 / 10 / 11」より前に、見えない相関の配置を作っている</h3>
+                    <p>このページでは複素数を省略して実数振幅だけにしていますが、それでも H、Z、CNOT の組み合わせで干渉と相関がどう働くかの骨格は追えます。Bell 状態はその最初の典型例です。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>量子計算を理解する入口は、壮大な話より先に「CNOT と Bell 状態で何が古典と違うのか」を手で確かめることです。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="quantum.html">量子解説へ</a>
+                <a href="physics.html">物理解説トップへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="classical-quantum.js"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花の色が進化する遺伝的アルゴリズム | RGB 遺伝子で見る選択・交叉・突然変異</title>
+    <meta name="description" content="花の色を RGB 遺伝子として持つ集団が、虫の好む色に向かって世代ごとに進化する遺伝的アルゴリズムのシミュレーションです。選択、交叉、突然変異を動かしながら色の進化を観察できます。">
+    <meta name="theme-color" content="#1f4b3a">
+    <link rel="canonical" href="https://readerspace.github.io/flower-evolution.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="花の色が進化する遺伝的アルゴリズム | RGB 遺伝子で見る選択・交叉・突然変異">
+    <meta property="og:description" content="虫が好む色に近い花ほど生き残りやすい設定で、RGB 遺伝子の集団が世代ごとにどう進化するかを可視化します。">
+    <meta property="og:url" content="https://readerspace.github.io/flower-evolution.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="花の色が進化する遺伝的アルゴリズム | RGB 遺伝子で見る選択・交叉・突然変異">
+    <meta name="twitter:description" content="花の色を RGB 遺伝子として表し、選択・交叉・突然変異で世代ごとに色が進化する様子を観察できるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="flower-evolution.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#simulation">シミュレーション</a>
+                <a href="#mechanism">仕組み</a>
+                <a href="#observe">観察ポイント</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Genetic Algorithm / Flower Color / Selection / Mutation</p>
+                    <h1>花の色は、<br>選ばれ方で変わっていく。</h1>
+                    <p class="hero-lead">
+                        1 本ごとの花は <strong>RGB の 3 遺伝子</strong>を持ちます。<br>
+                        虫が好む色に近い個体ほど親として選ばれやすくなるようにすると、集団全体の色は世代ごとに少しずつ偏っていきます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#simulation">シミュレーションを開く</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>花の色は R, G, B の 3 つの遺伝子で表す</li>
+                        <li>虫が好む色に近いほど適応度が高くなる</li>
+                        <li>選択、交叉、突然変異で色分布が世代ごとに動く</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Genes</p>
+                        <h2>色そのものを遺伝子にする</h2>
+                        <p>赤、緑、青の 3 値をそのまま遺伝子として持たせると、連続的な形質の進化をかなり直感的に観察できます。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Selection</p>
+                        <h2>環境は「好みの色」で与える</h2>
+                        <p>ここでは虫の好みを目標色として与えます。色距離が小さい花ほど、次世代の親として選ばれやすくなります。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見てほしいこと</p>
+                        <p><strong>突然変異率と選択圧の 2 つを変えるだけで、集団が収束する速さと多様性の残り方がかなり変わる</strong>ことを観察できます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">進化は「最適解を一発で探す」より、「選ばれやすい傾向が少しずつ積み重なる」過程として見ると理解しやすい。</p>
+                <p class="signal-sub">このページでは、花の色という連続量を材料にして、遺伝的アルゴリズムの選択・交叉・突然変異が集団の見た目をどう変えるかをその場で追えるようにしています。</p>
+            </section>
+
+            <section class="section reveal" id="simulation">
+                <div class="section-heading">
+                    <p class="eyebrow">Simulation</p>
+                    <h2>花の集団を進化させる</h2>
+                    <p>虫の好む色、突然変異率、選択の強さを調整しながら、集団全体の花色がどの方向へ寄っていくかを観察します。自動進化を使うと、色の収束と多様性の変化が見やすくなります。</p>
+                </div>
+
+                <div class="control-grid">
+                    <article class="control-card">
+                        <div class="control-top">
+                            <p class="control-label">虫が好む色</p>
+                            <span class="helper-chip" id="targetColorHex">#FF4FA3</span>
+                        </div>
+                        <input class="color-input" id="targetColor" type="color" value="#ff4fa3">
+                        <p class="helper-text">この色に近い花ほど、次世代の親として選ばれやすくなります。</p>
+                    </article>
+
+                    <article class="control-card">
+                        <div class="control-top">
+                            <p class="control-label">突然変異率</p>
+                            <span class="helper-chip"><span id="mutationRateText">8</span>%</span>
+                        </div>
+                        <input id="mutationRate" type="range" min="0" max="40" value="8">
+                        <p class="helper-text">高いほどランダムな色ずれが増え、収束しにくくなる代わりに新しい色も出やすくなります。</p>
+                    </article>
+
+                    <article class="control-card">
+                        <div class="control-top">
+                            <p class="control-label">選択の強さ</p>
+                            <span class="helper-chip" id="selectionPowerText">2.0</span>
+                        </div>
+                        <input id="selectionPower" type="range" min="0.5" max="6" step="0.1" value="2">
+                        <p class="helper-text">高いほど好みの色に近い個体だけが強く残りやすくなります。</p>
+                    </article>
+
+                    <article class="control-card action-card">
+                        <div class="action-row">
+                            <button class="button button-primary" id="nextBtn" type="button">1世代進める</button>
+                            <button class="button button-secondary" id="autoBtn" type="button">自動進化</button>
+                            <button class="button button-secondary" id="resetBtn" type="button">リセット</button>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="stats-grid" aria-live="polite">
+                    <article class="stat-card">
+                        <p class="stat-label">世代</p>
+                        <p class="stat-value" id="generation">0</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">最高適応度</p>
+                        <p class="stat-value" id="bestFitness">0.00</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">平均適応度</p>
+                        <p class="stat-value" id="avgFitness">0.00</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">多様性</p>
+                        <p class="stat-value" id="diversityValue">0.00</p>
+                    </article>
+                    <article class="stat-card stat-card-wide">
+                        <p class="stat-label">最良個体の RGB</p>
+                        <p class="stat-rgb" id="bestRGB">---</p>
+                    </article>
+                </div>
+
+                <div class="simulation-grid">
+                    <article class="stage-card">
+                        <div class="control-top">
+                            <p class="control-label">集団の様子</p>
+                            <p class="helper-text">大きい花ほど適応度が高い</p>
+                        </div>
+                        <div class="canvas-shell">
+                            <canvas id="canvas"></canvas>
+                        </div>
+                        <div class="legend">
+                            <span class="legend-chip">花 = 個体</span>
+                            <span class="legend-chip">色 = 遺伝子</span>
+                            <span class="legend-chip">上の目印 = 虫が好む色</span>
+                            <span class="legend-chip">大きさ = 適応度</span>
+                        </div>
+                    </article>
+
+                    <aside class="side-panel">
+                        <article class="best-card">
+                            <p class="card-label">Best Individual</p>
+                            <h3>現在の最良個体</h3>
+                            <div class="flower-preview" id="bestFlower" aria-hidden="true"></div>
+                            <div class="best-description" id="bestDescription">---</div>
+                        </article>
+
+                        <article class="best-card target-card">
+                            <p class="card-label">Target</p>
+                            <h3>虫が好む色</h3>
+                            <div class="target-swatch" id="targetSwatch"></div>
+                            <p class="helper-text" id="targetRGBText">RGB(255, 79, 163)</p>
+                        </article>
+
+                        <article class="best-card history-card">
+                            <p class="card-label">History</p>
+                            <h3>最近の最良色</h3>
+                            <div class="history-swatches" id="historySwatches"></div>
+                            <p class="helper-text">世代ごとに最良個体の色だけを並べた履歴です。</p>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>何が起きているか</h2>
+                    <p>花 1 本ごとに RGB 値を持たせ、目標色との距離から適応度を計算します。次世代は、適応度の高い親ほど選ばれやすいという偏りを通じて作られます。</p>
+                </div>
+
+                <div class="notes-grid three-up">
+                    <article class="note-card">
+                        <p class="card-label">Selection</p>
+                        <h3>選択</h3>
+                        <p>目標色に近い花ほど親として選ばれやすくなります。これが環境からの選択圧です。</p>
+                    </article>
+                    <article class="note-card strong-card">
+                        <p class="card-label">Crossover</p>
+                        <h3>交叉</h3>
+                        <p>2 つの親の R, G, B を混ぜて子を作るので、色は段階的に中間へ寄りながら変化します。</p>
+                    </article>
+                    <article class="note-card warm-card">
+                        <p class="card-label">Mutation</p>
+                        <h3>突然変異</h3>
+                        <p>ときどき色成分がランダムにずれることで、新しい色の候補が集団へ入り続けます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observe">
+                <div class="section-heading">
+                    <p class="eyebrow">Observe</p>
+                    <h2>観察ポイント</h2>
+                    <p>数字だけでなく、画面全体の色分布がどう変わるかを見ると、進化の振る舞いがかなり掴みやすくなります。</p>
+                </div>
+
+                <div class="notes-grid">
+                    <article class="note-card">
+                        <p class="card-label">低突然変異率</p>
+                        <h3>速く揃うが、色が固まりやすい</h3>
+                        <p>選択圧が強いと、集団はかなり速く目標色の周辺へ集まります。その代わり、外れた色は残りにくくなります。</p>
+                    </article>
+                    <article class="note-card strong-card">
+                        <p class="card-label">高突然変異率</p>
+                        <h3>多様性は残るが、収束は遅い</h3>
+                        <p>ランダムな色変化が大きいと、集団は散らばりやすくなります。進化は止まりませんが、方向性はぼやけます。</p>
+                    </article>
+                    <article class="note-card warm-card">
+                        <p class="card-label">選択圧</p>
+                        <h3>環境が厳しいほど最良個体へ寄る</h3>
+                        <p>選択の強さを上げると、少し有利な色でも差が大きく扱われるため、集団の偏りが急速に進みます。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>これは生物の全てを再現する模型ではなく、「選ばれ方が形質分布をどう押すか」を見るための最小モデル</h3>
+                    <p>本物の進化には繁殖成功、環境変動、遺伝形式、空間分布など多くの要素があります。それでも、選択・交叉・突然変異の 3 つだけで「進化らしい変化」がかなり見えることが、このモデルの面白さです。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>遺伝的アルゴリズムは、答えを直接書くのではなく、選ばれやすい傾向を何世代も積み重ねて形を作る考え方です。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="plant-growth.html">植物成長へ</a>
+                <a href="statistics.html">統計へ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="flower-evolution.js"></script>
+</body>
+</html>
