@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+
+        gtag("config", "G-G6WJJGWBCG");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星内部の核融合シミュレーション | pp連鎖・CNO・三重アルファ・重元素燃焼を見る</title>
+    <meta name="description" content="主系列星、赤色巨星、大質量星の中心核を切り替えながら、pp連鎖、CNOサイクル、三重アルファ反応、炭素からケイ素燃焼までを教育用の簡略モデルで見られるページです。">
+    <meta name="theme-color" content="#0a1020">
+    <link rel="canonical" href="https://readerspace.github.io/stellar-fusion.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="星内部の核融合シミュレーション | pp連鎖・CNO・三重アルファ・重元素燃焼を見る">
+    <meta property="og:description" content="温度、密度、星のタイプ、時間の速さを変えて、星内部の核融合段階がどう入れ替わるかを代表反応式つきで観察できます。">
+    <meta property="og:url" content="https://readerspace.github.io/stellar-fusion.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="星内部の核融合シミュレーション | pp連鎖・CNO・三重アルファ・重元素燃焼を見る">
+    <meta name="twitter:description" content="太陽型主系列星から超巨星中心核まで切り替えながら、核融合の主役がどの反応へ移るかを体感できる教育用ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stellar-fusion.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">見どころ</a>
+                <a href="#next">次へ</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Stellar Core / Nuclear Fusion / Temperature / Density</p>
+                    <h1>星は、中心で<br>原子核を組み替えて光る。</h1>
+                    <p class="hero-lead">
+                        低温側では <strong>pp 連鎖</strong>、より高温では <strong>CNO サイクル</strong>、水素が減れば <strong>三重アルファ反応</strong>、さらに大質量星では <strong>炭素・ネオン・酸素・ケイ素燃焼</strong> へ進みます。<br>
+                        このページでは、星のタイプ、中心温度、中心密度、時間の速さを動かして、どの核融合が主役になるかを代表式だけに絞って観察できます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">核融合を動かす</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>温度が上がるほど、より重い元素を燃やす反応が有利になりやすい</li>
+                        <li>低質量星では pp 連鎖、高温の大質量星では CNO サイクルの寄与が大きい</li>
+                        <li>鉄に近づくと核融合で得られるエネルギー余地が小さくなり、中心核状態が変わる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Hydrogen Burning</p>
+                        <h2>主系列星では、水素からヘリウムを作る反応が主役</h2>
+                        <p>太陽型では pp 連鎖が中心で、より高温の大質量主系列星では CNO サイクルが強くなります。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Helium Burning</p>
+                        <h2>中心が縮んで高温になると、ヘリウムから炭素が作られる</h2>
+                        <p>赤色巨星では三重アルファ反応が立ち上がり、条件によって炭素から酸素へのアルファ捕獲も進みます。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>星のタイプを切り替えたときに主反応がどう入れ替わるか</strong>と、<strong>温度を上げたときに重い元素燃焼がどこから始まるか</strong>を並べると、この教育モデルの狙いが掴みやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">星の明るさは、中心核でどの融合反応が主役かで大きく変わる。</p>
+                <p class="signal-sub">このページは、反応ネットワークや流体計算をすべて解く代わりに、温度、密度、燃料量で代表反応の速さが変わる簡略モデルを使っています。どの核融合が支配的かを直感でつかむための教材です。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>中心核の燃焼段階を切り替える</h2>
+                    <p>粒子は核融合そのものを正確に再現しているわけではなく、中心核内でどの元素が主に反応し、どの生成物が増えやすいかを見せるための可視化です。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="panel-header">
+                            <p class="card-label">Interactive Model</p>
+                            <h3>中心温度と燃焼段階を動かす</h3>
+                            <p>星のタイプに応じて初期燃料と反応の重みづけを変えています。同じ温度でも、燃料の残り方によって主反応は変わります。</p>
+                        </div>
+
+                        <label class="control" for="starType">
+                            <span>星のタイプ</span>
+                            <select id="starType" class="select-input">
+                                <option value="sun">太陽型主系列星: pp 連鎖中心</option>
+                                <option value="massive">大質量主系列星: CNO 中心</option>
+                                <option value="redgiant">赤色巨星中心核: He 燃焼</option>
+                                <option value="supergiant-carbon">超巨星中心核: 炭素燃焼段階</option>
+                                <option value="supergiant-neon">超巨星中心核: ネオン燃焼段階</option>
+                                <option value="supergiant-oxygen">超巨星中心核: 酸素燃焼段階</option>
+                                <option value="supergiant-silicon">超巨星中心核: ケイ素燃焼段階</option>
+                            </select>
+                        </label>
+
+                        <label class="control" for="temp">
+                            <span>中心温度</span>
+                            <strong id="tempText">15.0 MK</strong>
+                            <input id="temp" class="range-input" type="range" min="6" max="45" step="0.2" value="15">
+                        </label>
+
+                        <label class="control" for="density">
+                            <span>中心密度</span>
+                            <strong id="densityText">20</strong>
+                            <input id="density" class="range-input" type="range" min="1" max="100" step="1" value="20">
+                        </label>
+
+                        <label class="control" for="speed">
+                            <span>時間の速さ</span>
+                            <strong id="speedText">1.0x</strong>
+                            <input id="speed" class="range-input" type="range" min="0.2" max="8" step="0.1" value="1">
+                        </label>
+
+                        <div class="button-row">
+                            <button class="button button-primary" id="toggleButton" type="button">進行: OFF</button>
+                            <button class="button button-secondary" id="resetButton" type="button">リセット</button>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在の読み取り</p>
+                            <h3 id="observeTitle">太陽型では pp 連鎖が主役になりやすい</h3>
+                            <p id="summaryText">温度がそれほど高くない主系列星では、pp 連鎖が水素燃焼の主役です。高温側へ寄せると CNO の寄与が目立ち始めます。</p>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <p class="stat-label">経過時間</p>
+                                <p class="stat-value" id="timeText">0.0</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">主反応</p>
+                                <p class="stat-value" id="stageText">停止</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">相対発熱</p>
+                                <p class="stat-value" id="lumText">0</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">中心核状態</p>
+                                <p class="stat-value" id="coreText">安定</p>
+                            </article>
+                        </div>
+
+                        <div class="top-reactions-panel">
+                            <div class="fuel-heading">
+                                <p class="control-label">反応上位 3</p>
+                                <p id="reactionTrendLabel">rate が高い順</p>
+                            </div>
+                            <div id="topReactions" class="reaction-ranking-list"></div>
+                        </div>
+
+                        <div class="fuel-panel">
+                            <div class="fuel-heading">
+                                <p class="control-label">燃料と生成物</p>
+                                <p id="mixLabel">H と He が中心</p>
+                            </div>
+                            <div id="fuelBars" class="fuel-bars"></div>
+                        </div>
+                    </article>
+
+                    <article class="panel canvas-panel">
+                        <div class="canvas-top">
+                            <div>
+                                <p class="control-label">Core Visualization</p>
+                                <h3>中心核の核融合</h3>
+                            </div>
+                            <div class="canvas-chip" id="modeChip">待機中</div>
+                        </div>
+                        <div class="canvas-shell" id="canvasShell">
+                            <canvas id="fusionCanvas"></canvas>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-chip">粒子色: 元素の代表</span>
+                            <span class="legend-chip warm">白い閃光: 反応が目立つ瞬間</span>
+                            <span class="legend-chip neutral">同心円: 中心核の層イメージ</span>
+                        </div>
+                    </article>
+
+                    <article class="panel reaction-panel">
+                        <div class="panel-header">
+                            <p class="card-label">Representative Reactions</p>
+                            <h3>代表式</h3>
+                            <p>現実の星では分岐反応が多数あります。ここでは段階の違いが見える最小限の代表式だけを並べています。</p>
+                        </div>
+                        <div class="equations" id="equations"></div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで単純化していること</h2>
+                    <p>本物の恒星進化計算では、量子トンネル、放射輸送、対流、縮退圧、ニュートリノ損失、重力収縮なども重要です。このページでは、どの反応が主役になるかに注目して簡略化しています。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Temperature</p>
+                        <h3>温度で反応の立ち上がりが変わる</h3>
+                        <p>反応ごとに必要温度を置き、しきい値を超えると速さが強く伸びるようにしています。pp 連鎖は低め、重元素燃焼ほど高温寄りです。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Density</p>
+                        <h3>密度は衝突頻度の押し上げ役</h3>
+                        <p>中心密度が高いほど核どうしが出会いやすいとして、全体の反応率を押し上げています。</p>
+                    </article>
+                    <article class="info-card violet-card">
+                        <p class="card-label">Fuel</p>
+                        <h3>燃料が減ると主反応も移る</h3>
+                        <p>水素やヘリウムが減り、炭素や酸素がたまると、同じ星タイプでも優勢な反応が変わります。</p>
+                    </article>
+                    <article class="info-card iron-card">
+                        <p class="card-label">Limit</p>
+                        <h3>鉄に近づくと中心核状態が変わる</h3>
+                        <p>ケイ素燃焼の先で鉄族元素が増えると、発熱源としての余地が小さくなり、中心核状態の表示も変わります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>見比べると違いが出やすいポイント</h2>
+                    <p>星のタイプ、温度、燃料組成の 3 つを分けて見ると、同じ「核融合」でも反応の顔つきがかなり違うことがわかります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Main Sequence</p>
+                        <h3>太陽型では pp 連鎖が粘り強い</h3>
+                        <p>低めの中心温度でも進みやすく、主系列星の長い寿命を支える主役として振る舞います。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Massive Star</p>
+                        <h3>大質量星では CNO が温度に敏感</h3>
+                        <p>高温にすると CNO サイクルの寄与が急に強くなり、相対発熱も上がりやすくなります。</p>
+                    </article>
+                    <article class="info-card violet-card">
+                        <p class="card-label">Red Giant</p>
+                        <h3>ヘリウム燃焼は主系列の次の段階</h3>
+                        <p>水素が主役だった時期を過ぎると、中心縮退や加熱を経て三重アルファ反応が立ち上がります。</p>
+                    </article>
+                    <article class="info-card iron-card">
+                        <p class="card-label">Supergiant</p>
+                        <h3>重元素燃焼は短く激しい</h3>
+                        <p>炭素、ネオン、酸素、ケイ素燃焼は高温で急速に進み、鉄族元素の蓄積が中心核の運命を左右します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next</p>
+                    <h2>宇宙や高エネルギーの見方を広げるなら</h2>
+                    <p>核融合の段階を見たあとで、重力や宇宙の時間発展も並べると、星がどんなスケールで進化するかをつかみやすくなります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Orbit</p>
+                        <h3>天体シミュレーション</h3>
+                        <p>星の内部ではなく、重力の外側の運動を見たいときの関連ページです。</p>
+                        <a class="text-link" href="celestial.html">天体シミュレーションへ</a>
+                    </article>
+                    <article class="info-card iron-card">
+                        <p class="card-label">Extreme Gravity</p>
+                        <h3>ブラックホール</h3>
+                        <p>星の終末や強重力側へ話を広げたいときの入り口です。</p>
+                        <a class="text-link" href="blackhole.html">ブラックホールへ</a>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧</h3>
+                        <p>ほかの物理・宇宙・生命系の動くページも入口別に探せます。</p>
+                        <a class="text-link" href="simulations.html">一覧を見る</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>星内部の核融合は、温度、密度、燃料組成で主役が移りながら進む段階的なエネルギー生成です。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="celestial.html">天体シミュレーションへ</a>
+                <a href="blackhole.html">ブラックホールへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="stellar-fusion.js"></script>
+</body>
+</html>
