@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>複素平面の変形をさわれるページ | 複素関数で格子がどう曲がるかを見る</title>
+    <meta name="description" content="複素数 z = x + iy の格子を z^2、z^3、1/z、e^z、sin z、log z などの複素関数に通し、複素平面がどう変形されるかを左右のキャンバスで見比べられるページです。">
+    <meta name="theme-color" content="#13364a">
+    <link rel="canonical" href="https://readerspace.github.io/complex-plane.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="複素平面の変形をさわれるページ | 複素関数で格子がどう曲がるかを見る">
+    <meta property="og:description" content="複素平面の格子を複素関数に通し、等角写像、特異点、枝切りの直感を左右比較で学べるインタラクティブ教材です。">
+    <meta property="og:url" content="https://readerspace.github.io/complex-plane.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="複素平面の変形をさわれるページ | 複素関数で格子がどう曲がるかを見る">
+    <meta name="twitter:description" content="z = x + iy の格子を z^2、1/z、e^z、sin z、log z などに通して、複素平面の変形を見られるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="complex-plane.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">変形を見る</a>
+                <a href="#reading">読み方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Complex Analysis / Mapping / Grid / Conformal View</p>
+                    <h1>複素関数は、<br>平面そのものを曲げる。</h1>
+                    <p class="hero-lead">
+                        点 <strong>z = x + iy</strong> を 1 つずつ計算するだけでは見えにくいことも、格子全体を <strong>w = f(z)</strong> に通すと急に分かりやすくなります。<br>
+                        左の複素平面を右の出力平面へ写し、<strong>z<sup>2</sup></strong>、<strong>z<sup>3</sup></strong>、<strong>1 / z</strong>、<strong>e<sup>z</sup></strong>、<strong>sin z</strong>、<strong>log z</strong> が格子をどう曲げるかを比較できます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">複素平面を動かす</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>左は入力平面 z、右は出力平面 w = f(z) を同時表示する</li>
+                        <li>格子線の曲がり方から、複素関数の伸び縮みや回転が直感的に見える</li>
+                        <li>逆数や対数のように、特異点や枝切りを持つ関数の癖も確認できる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Mapping</p>
+                        <h2>複素関数は点の計算であり、平面の変形でもある</h2>
+                        <p>複素平面の格子をそのまま写すと、関数が「どこを引き伸ばし、どこを折り返し、どこで飛ばすか」が一度に見えてきます。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Geometry</p>
+                        <h2>角度を保つ場所と、壊れる場所を見分ける</h2>
+                        <p>解析関数は多くの点で角度を保ちますが、特異点や枝切りの近くでは格子の振る舞いが急に変わります。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>同心円や放射線がどんな曲線へ変わるか、原点の近くが圧縮されるのか吹き飛ぶのか、負の実軸で切れ目が出るのか</strong>を追うと、関数ごとの差が掴みやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">複素関数は「数式」より先に「平面の変形」として見ると、役割の違いがかなり読みやすくなる。</p>
+                <p class="signal-sub">実軸方向の線、虚軸方向の線、特別な点 1・i・-1・-i を同時に眺めると、回転、圧縮、伸長、周期、枝切りの位置が一目で分かります。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>複素平面の格子を変形する</h2>
+                    <p>関数、表示範囲、格子の細かさを変えながら、左の入力平面が右でどんな形へ写るかを観察します。左キャンバスにマウスを置くと、その点の像も確認できます。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <label class="control-title" for="functionSelect">解析関数</label>
+                                <select id="functionSelect" class="select-input"></select>
+                                <p class="control-copy">複素数 z を関数に通し、出力平面 w への写り方を見ます。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="domainScale">入力平面の表示範囲</label>
+                                    <span class="control-value" id="domainScaleText"></span>
+                                </div>
+                                <input id="domainScale" class="range-input" type="range" min="1" max="5" step="0.1" value="2.5">
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="rangeScale">出力平面の表示範囲</label>
+                                    <span class="control-value" id="rangeScaleText"></span>
+                                </div>
+                                <input id="rangeScale" class="range-input" type="range" min="1" max="12" step="0.1" value="5">
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="gridCount">格子の細かさ</label>
+                                    <span class="control-value" id="gridText"></span>
+                                </div>
+                                <input id="gridCount" class="range-input" type="range" min="9" max="29" step="2" value="17">
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="animateBtn" type="button">変形アニメーション</button>
+                                <button class="button button-secondary" id="resetBtn" type="button">表示リセット</button>
+                            </div>
+                        </div>
+
+                        <div class="formula-box">
+                            <p class="control-label">現在の式</p>
+                            <p class="formula" id="formula"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="effectTitle"></h3>
+                            <p id="effectText"></p>
+                        </article>
+                    </article>
+
+                    <div class="planes-grid">
+                        <article class="panel plane-panel">
+                            <div class="plane-top">
+                                <div>
+                                    <p class="control-label">Input Plane</p>
+                                    <h3>入力平面 z</h3>
+                                </div>
+                                <div class="plane-chip" id="domainChip"></div>
+                            </div>
+                            <div class="canvas-shell">
+                                <canvas id="zCanvas"></canvas>
+                            </div>
+                            <div class="legend-row">
+                                <span class="legend-chip">青: 実部方向の線</span>
+                                <span class="legend-chip warm">橙: 虚部方向の線</span>
+                                <span class="legend-chip neutral">点 1 / i / -1 / -i を表示</span>
+                            </div>
+                        </article>
+
+                        <article class="panel plane-panel output-panel">
+                            <div class="plane-top">
+                                <div>
+                                    <p class="control-label">Output Plane</p>
+                                    <h3>出力平面 w = f(z)</h3>
+                                </div>
+                                <div class="plane-chip" id="rangeChip"></div>
+                            </div>
+                            <div class="canvas-shell">
+                                <canvas id="wCanvas"></canvas>
+                            </div>
+                            <div class="legend-row">
+                                <span class="legend-chip">格子の曲がり = 関数の作用</span>
+                                <span class="legend-chip neutral" id="mouseInfo">マウス: ---</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">現在の関数</p>
+                        <p class="stat-value" id="functionStat"></p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">代表点 f(1 + i)</p>
+                        <p class="stat-value" id="sampleStat"></p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">変形の特徴</p>
+                        <p class="stat-value" id="behaviorStat"></p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">注意点</p>
+                        <p class="stat-value" id="branchStat"></p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>複素平面の見方</h2>
+                    <p>複素関数を読むときは、式を追うだけでなく、格子・同心円・放射線・特異点がどう振る舞うかを見ると理解しやすくなります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Complex Plane</p>
+                        <h3>複素数は平面の点</h3>
+                        <p>z = x + iy は、横方向が実部、縦方向が虚部の点です。複素関数は、その点を別の点へ送る平面の変形と見なせます。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Analytic</p>
+                        <h3>解析関数は角度を保ちやすい</h3>
+                        <p>特異点を除けば、細かい格子の交差角が保たれることが多く、これが等角写像の直感になります。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Singularity</p>
+                        <h3>逆数と対数は原点に注意</h3>
+                        <p>1 / z は原点で発散し、log z は原点で未定義です。さらに log z では負の実軸に枝切りが入り、線のつながりが切れます。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Comparison</p>
+                        <h3>関数ごとに格子の癖が違う</h3>
+                        <p>z² と z³ は角度を倍化し、e^z は縞を円筒状に巻き、sin z は周期性と双曲的な広がりを同時に持ちます。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>最初は「どこが危ないか」と「どこが規則的か」を分けて見ると追いやすい</h3>
+                    <p>原点や負の実軸のように振る舞いが急に変わる場所を先に押さえ、そのうえで格子の向きや間隔がどう変わるかを見ると、複素関数ごとの幾何学的な役割が見やすくなります。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>複素関数は、点の計算だけでなく平面の変形として眺めると、式の意味がかなり幾何学的に見えてきます。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="function-shapes.html">関数の形へ</a>
+                <a href="physics.html">物理解説トップへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="complex-plane.js"></script>
+</body>
+</html>

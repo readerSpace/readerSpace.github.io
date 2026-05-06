@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雷と避雷針をさわれるページ | 枝分かれする落雷と電場の引き寄せを見る</title>
+    <meta name="description" content="避雷針あり・なしを切り替えながら、雲から地面へ枝分かれして進む雷の簡易シミュレーションを見られるページです。避雷針ありでは先端付近へ引き寄せる電場の簡易モデルも入れています。">
+    <meta name="theme-color" content="#101c33">
+    <link rel="canonical" href="https://readerspace.github.io/lightning.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="雷と避雷針をさわれるページ | 枝分かれする落雷と電場の引き寄せを見る">
+    <meta property="og:description" content="避雷針の有無で、落雷の進み方と着地点がどう変わるかを、枝分かれする雷の簡易モデルで学べるインタラクティブ教材です。">
+    <meta property="og:url" content="https://readerspace.github.io/lightning.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="雷と避雷針をさわれるページ | 枝分かれする落雷と電場の引き寄せを見る">
+    <meta name="twitter:description" content="避雷針あり・なしを切り替え、枝分かれしながら落ちる雷がどこへ向かうかを観察できるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lightning.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">落雷を見る</a>
+                <a href="#reading">読み方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Lightning / Electric Field / Branching / Lightning Rod</p>
+                    <h1>雷は、<br>まっすぐ落ちるとは限らない。</h1>
+                    <p class="hero-lead">
+                        雲から地面へ向かう雷は、先端が少しずつ進みながら枝分かれし、進路を探すように下っていきます。<br>
+                        このページでは <strong>避雷針あり・なし</strong> を切り替え、先端付近で電場が強くなる簡易モデルを入れながら、<strong>どこへ落ちやすくなるか</strong>を比較できます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">雷を落として比べる</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>雷は主放電が下向きに進みつつ、横へ揺らぎ、途中で枝分かれする</li>
+                        <li>避雷針ありでは、先端へ向かう横方向の引き寄せを簡易モデルで加える</li>
+                        <li>本物の雷を完全再現せず、経路選択と避雷針の役割を直感的に学ぶ教材として設計している</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Branching</p>
+                        <h2>雷は一本の線ではなく、枝を出しながら進む</h2>
+                        <p>先導放電は少しずつ進みながら、いくつかの枝を伸ばします。その枝のうち、通りやすい経路が主な落雷経路になります。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Attraction</p>
+                        <h2>避雷針は落雷の場所を安全な経路へ寄せる</h2>
+                        <p>避雷針は雷を消す装置ではなく、先端付近の電場を強めて、より落ちやすい場所を用意する装置として働きます。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>避雷針なしでは雷が地面へばらけやすく、避雷針ありでは先端付近へ経路が寄りやすくなる</strong>ことを見比べると、このモデルの狙いが掴みやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">避雷針は雷を止める装置ではなく、落ちる場所を「ここにしてほしい」と誘導する装置として見ると分かりやすい。</p>
+                <p class="signal-sub">このシミュレーションでは、下向きの進行、ランダムな揺らぎ、枝分かれ、避雷針先端への引き寄せだけを残し、教材として差が見えるように単純化しています。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>雷と避雷針を比べる</h2>
+                    <p>避雷針の有無、枝分かれの強さ、揺らぎを変えながら、落雷の進み方と着地点がどう変わるかを観察します。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <label class="control-title" for="rodMode">避雷針</label>
+                                <select id="rodMode" class="select-input">
+                                    <option value="on">あり</option>
+                                    <option value="off">なし</option>
+                                </select>
+                                <p class="control-copy">ありの場合、先端付近に横方向の引き寄せを加える簡易モデルを使います。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="branchRate">枝分かれ</label>
+                                    <span class="control-value"><span id="branchText"></span>%</span>
+                                </div>
+                                <input id="branchRate" class="range-input" type="range" min="0" max="60" value="25">
+                                <p class="control-copy">高いほど、主放電から横枝が出やすくなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="noise">揺らぎ</label>
+                                    <span class="control-value" id="noiseText"></span>
+                                </div>
+                                <input id="noise" class="range-input" type="range" min="0" max="90" value="45">
+                                <p class="control-copy">高いほど、進路が左右へランダムに曲がります。</p>
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="strikeBtn" type="button">雷を落とす</button>
+                                <button class="button button-secondary" id="clearBtn" type="button">消去</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在のモデル</p>
+                            <p class="summary-text" id="summaryText"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="observeTitle"></h3>
+                            <p id="observeText"></p>
+                        </article>
+                    </article>
+
+                    <article class="panel canvas-panel">
+                        <div class="canvas-top">
+                            <div>
+                                <p class="control-label">Simulation</p>
+                                <h3>雲から地面へ進む雷</h3>
+                            </div>
+                            <div class="canvas-chip" id="modeChip"></div>
+                        </div>
+                        <div class="canvas-shell">
+                            <canvas id="canvas"></canvas>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-chip">雲: 負電荷</span>
+                            <span class="legend-chip warm">地面: 正電荷</span>
+                            <span class="legend-chip neutral">黄色い光: 着地点のフラッシュ</span>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">結果</p>
+                        <p class="stat-value" id="resultText">---</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">落雷地点</p>
+                        <p class="stat-value" id="hitText">---</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">避雷針先端までの距離</p>
+                        <p class="stat-value" id="distanceText">---</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">枝の数</p>
+                        <p class="stat-value" id="branchCountText">---</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>雷と避雷針の見方</h2>
+                    <p>このモデルでは、雷のすべてを再現する代わりに、教材として大事な差が見える部分だけを残しています。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Role</p>
+                        <h3>避雷針の役割</h3>
+                        <p>避雷針は雷を消す装置ではなく、雷が落ちる場所を安全な経路へ誘導しやすくする装置です。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Tip Effect</p>
+                        <h3>なぜ先端に落ちやすい？</h3>
+                        <p>尖った先端では電場が強くなりやすく、放電の通り道ができやすくなります。このページではその効果を横方向の引き寄せで簡易化しています。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Model</p>
+                        <h3>この教材モデル</h3>
+                        <p>本物の雷の詳細なプラズマ物理は入れず、下向きの進行、ランダムな揺らぎ、枝分かれ、避雷針先端への引き寄せだけを残しています。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Observation</p>
+                        <h3>観察ポイント</h3>
+                        <p>避雷針なしでは着地点がばらけやすく、避雷針ありでは主放電が途中から先端へ寄りやすいかを見てください。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>「雷を防ぐ」ではなく、「安全な場所へ通す」と考えると、避雷針の働きがかなり理解しやすい</h3>
+                    <p>実際の装置も、落雷そのものを消すわけではありません。重要なのは、落ちたときに建物や人へ被害を広げにくい経路を準備することです。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>雷はまっすぐな一本線ではなく、進路を探すように枝分かれしながら進みます。避雷針はその経路を安全側へ寄せるための装置です。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="electric-magnetic.html">電気と磁気へ</a>
+                <a href="physics.html">物理解説トップへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="lightning.js"></script>
+</body>
+</html>

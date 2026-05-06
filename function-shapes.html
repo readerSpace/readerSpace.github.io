@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>関数の形を見て学ぶページ | パラメータでグラフが変わる</title>
+    <meta name="description" content="1次関数、2次関数、3次関数、三角関数、指数関数、対数関数、ガウス関数を切り替えながら、スライダーでパラメータを動かしてグラフの形の変化を学べるページです。">
+    <meta name="theme-color" content="#153250">
+    <link rel="canonical" href="https://readerspace.github.io/function-shapes.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="関数の形を見て学ぶページ | パラメータでグラフが変わる">
+    <meta property="og:description" content="関数の種類を切り替え、係数や移動量を動かしながら、グラフの形がどう変わるかを直感的に学べるインタラクティブ教材です。">
+    <meta property="og:url" content="https://readerspace.github.io/function-shapes.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="関数の形を見て学ぶページ | パラメータでグラフが変わる">
+    <meta name="twitter:description" content="1次、2次、3次、三角、指数、対数、ガウス関数を切り替えて、パラメータで形がどう変わるかを見られるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="function-shapes.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">グラフを見る</a>
+                <a href="#families">関数の見方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Functions / Graphs / Parameters / Shapes</p>
+                    <h1>関数は、<br>係数を動かすと顔つきが変わる。</h1>
+                    <p class="hero-lead">
+                        パラメータをスライダーで変えると、グラフはその場で形を変えます。<br>
+                        1次関数、2次関数、3次関数、三角関数、指数関数、対数関数、ガウス関数を切り替えながら、式と形のつながりを直感で追えるようにしています。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">グラフを動かす</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>関数の種類を切り替えると、形の違いがすぐ比較できる</li>
+                        <li>スライダーで係数や移動量を動かすと、式とグラフが同時に変わる</li>
+                        <li>対数関数のような定義域の制限も、描画を通して確認できる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Shape</p>
+                        <h2>形はパラメータの役割を映す</h2>
+                        <p>開き方、傾き、振幅、中心、広がりといった言葉は、式の中だけでなくグラフの形としてそのまま見えてきます。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Comparison</p>
+                        <h2>同じ「関数」でも動き方はかなり違う</h2>
+                        <p>多項式は曲がり方、三角関数は周期、指数と対数は増え方、ガウス関数は山の広がりに注目すると見やすくなります。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見てほしいこと</p>
+                        <p><strong>式の文字を 1 つ動かしただけで、頂点、傾き、周期、左右移動、定義域が視覚的にどう変わるか</strong>をまとめて確認できます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">式を読む力は、形の変化を何度も見て「この文字はここを動かす」と結びつけると一気に上がる。</p>
+                <p class="signal-sub">このページでは、関数のタイプごとに重要なパラメータだけを残し、スライダーで動かした結果を即座にグラフへ反映することで、式と形の対応を学びやすくしています。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>関数の形をその場で動かす</h2>
+                    <p>左で関数の種類とパラメータを選び、右でグラフを観察します。マウスを動かすと現在の x と、そのときの関数値 y も確認できます。</p>
+                </div>
+
+                <div class="layout-grid">
+                    <article class="panel controls-panel">
+                        <div class="panel-top">
+                            <p class="control-label">関数の種類</p>
+                        </div>
+                        <div class="tabs" id="tabs" aria-label="関数の種類"></div>
+
+                        <div class="formula-box">
+                            <p class="control-label">現在の式</p>
+                            <p class="formula" id="formula"></p>
+                        </div>
+
+                        <div class="controls-list" id="controls"></div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <p id="hint"></p>
+                        </article>
+                    </article>
+
+                    <article class="panel graph-panel">
+                        <div class="graph-top">
+                            <div>
+                                <p class="control-label">グラフ</p>
+                                <h3 id="functionNameHeading">2次関数</h3>
+                            </div>
+                            <div class="graph-chip">x = -10 〜 10 / y = -10 〜 10</div>
+                        </div>
+
+                        <div class="canvas-shell">
+                            <canvas id="graph"></canvas>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <p class="stat-label">現在の関数</p>
+                                <p class="stat-value stat-text" id="nameStat"></p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">基準点 x = 0</p>
+                                <p class="stat-value stat-text" id="originStat"></p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">定義域メモ</p>
+                                <p class="stat-value stat-text" id="domainStat"></p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">マウス位置</p>
+                                <p class="stat-value stat-text" id="mouseStat">---</p>
+                            </article>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="families">
+                <div class="section-heading">
+                    <p class="eyebrow">Families</p>
+                    <h2>関数ごとの見方</h2>
+                    <p>それぞれの関数は、見るべきパラメータが違います。どこを先に見ると理解しやすいかを、関数の種類ごとに整理しています。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Polynomial</p>
+                        <h3>1次・2次・3次関数</h3>
+                        <p>傾き、頂点、S字の向きなど、係数が曲がり方をどう決めるかに注目すると読みやすくなります。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Periodic</p>
+                        <h3>三角関数</h3>
+                        <p>振幅、周期、位相ずれ、上下移動の 4 つに分けて見ると、波の変化を整理しやすくなります。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Growth</p>
+                        <h3>指数関数・対数関数</h3>
+                        <p>指数関数は増え方が速くなり、対数関数は増え方が遅くなります。互いに逆向きの性質も意識すると理解しやすいです。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Bell Shape</p>
+                        <h3>ガウス関数</h3>
+                        <p>中心と広がりで山の位置と幅が決まります。統計やぼかし、誤差分布でよく出てくる形です。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>関数を覚えるより、「この文字は何を動かすか」を覚える方が応用が利く</h3>
+                    <p>式を丸ごと暗記するより、係数が縦方向の伸びを作るのか、横移動を作るのか、周期を変えるのかを見分けられるようになると、新しい関数に出会っても形を予想しやすくなります。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>関数のグラフは、式を図にしたものです。文字を動かしたときの形の変化を何度も見ると、式の読み方がかなり楽になります。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="statistics.html">統計へ</a>
+                <a href="physics.html">物理解説トップへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="function-shapes.js"></script>
+</body>
+</html>
