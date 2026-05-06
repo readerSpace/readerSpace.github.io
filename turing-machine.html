@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チューリングマシンをさわれるページ | テープ・ヘッド・状態遷移を1ステップで追う</title>
+    <meta name="description" content="チューリングマシンのテープ、ヘッド、状態、遷移規則を見ながら、1ステップ実行と自動実行で計算の流れを追えるインタラクティブ教材ページです。">
+    <meta name="theme-color" content="#15304a">
+    <link rel="canonical" href="https://readerspace.github.io/turing-machine.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="チューリングマシンをさわれるページ | テープ・ヘッド・状態遷移を1ステップで追う">
+    <meta property="og:description" content="1の列に1を追加する機械や 0/1 を反転する機械を切り替えながら、テープと状態遷移を観察できる教材ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/turing-machine.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="チューリングマシンをさわれるページ | テープ・ヘッド・状態遷移を1ステップで追う">
+    <meta name="twitter:description" content="テープ、ヘッド、状態、遷移規則を見ながら、チューリングマシンの動作を1ステップずつ追えます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="turing-machine.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">機械を見る</a>
+                <a href="#rules">規則</a>
+                <a href="#reading">読み方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Computation / Tape / Head / State Transition</p>
+                    <h1>計算は、<br>テープを一歩ずつ書き換える。</h1>
+                    <p class="hero-lead">
+                        チューリングマシンは、<strong>無限に長いテープ</strong>、<strong>1 マスを読むヘッド</strong>、<strong>内部状態</strong>、そして <strong>遷移規則</strong>だけで計算を表すモデルです。<br>
+                        このページでは、サンプル機械を切り替えながら、<strong>1 ステップ実行</strong>と<strong>自動実行</strong>で、どの規則が適用されて何が書き換わったかを追えます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">シミュレーターを開く</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>テープ、ヘッド位置、現在状態、適用規則を同時に見られる</li>
+                        <li>「1 の列の末尾に 1 を追加」と「0/1 を反転」のサンプルをすぐ試せる</li>
+                        <li>規則を書き換えて、自分で別の機械を作って動かせる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Tape</p>
+                        <h2>記憶はテープに並ぶ</h2>
+                        <p>1 マスずつ読むだけでも、状態と規則を組み合わせればかなり複雑な計算を表せます。ここでは空白を <span class="inline-code">_</span> で表します。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Transition</p>
+                        <h2>次の動きは「状態」と「読んだ記号」で決まる</h2>
+                        <p>たとえば <span class="inline-code">q0 1 1 R q0</span> なら、状態 <span class="inline-code">q0</span> で <span class="inline-code">1</span> を読んだとき、1 を書いて右へ進み、状態は変えません。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>ヘッドがどこを読んで、どの規則を選び、その結果どの記号に書き換えたか</strong>だけを追うと、停止までの流れがかなり明瞭に見えます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">少数の規則でも、状態とテープがあるだけで、計算の手続きをかなり一般的に表せる。</p>
+                <p class="signal-sub">この教材では、実機の計算機を再現する代わりに、チューリングマシンの核である「読む・書く・動く・状態を変える」をそのまま観察できるようにしています。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>チューリングマシンを動かす</h2>
+                    <p>サンプルを読み込んでから 1 ステップずつ進めるか、自動実行で停止まで流してください。規則を書き換えると、その場で別の機械も試せます。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <label class="control-title" for="sampleSelect">サンプル機械</label>
+                                <select id="sampleSelect" class="select-input"></select>
+                                <p class="control-copy">代表的な規則と入力テープをすぐ読み込めます。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-title" for="inputTape">入力テープ</label>
+                                <input id="inputTape" class="text-input" type="text" value="111" spellcheck="false">
+                                <p class="control-copy">空白は <span class="inline-code">_</span> として扱います。スペースを入れた場合も内部では空白記号へ変換します。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="speed">自動実行の速度</label>
+                                    <span class="control-value"><span id="speedText">300</span> ms</span>
+                                </div>
+                                <input id="speed" class="range-input" type="range" min="50" max="1000" step="50" value="300">
+                                <p class="control-copy">速度を上げると計算の流れを確認しやすく、下げると規則の追跡がしやすくなります。</p>
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="loadBtn" type="button">読み込み</button>
+                                <button class="button button-secondary" id="stepBtn" type="button">1 ステップ</button>
+                                <button class="button button-secondary" id="runBtn" type="button">自動実行</button>
+                                <button class="button button-ghost" id="resetBtn" type="button">リセット</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">サンプルの狙い</p>
+                            <p class="summary-text" id="sampleSummary"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="observeTitle"></h3>
+                            <p id="observeText"></p>
+                        </article>
+                    </article>
+
+                    <article class="panel machine-panel">
+                        <div class="machine-top">
+                            <div>
+                                <p class="control-label">Machine State</p>
+                                <h3>テープと状態遷移</h3>
+                            </div>
+                            <div class="chip-row">
+                                <span class="status-chip" id="statusChip">待機中</span>
+                                <span class="state-badge" id="stateBadge">q0</span>
+                            </div>
+                        </div>
+
+                        <p class="message-line" id="message">準備完了</p>
+
+                        <div class="tape-shell">
+                            <div class="tape-wrap">
+                                <div id="tape" class="tape" aria-live="polite"></div>
+                            </div>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <p class="stat-label">ステップ数</p>
+                                <p class="stat-value" id="stepCount">0</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">ヘッド位置</p>
+                                <p class="stat-value" id="headPos">0</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">読んだ記号</p>
+                                <p class="stat-value" id="readSymbol">_</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="stat-label">出力テープ</p>
+                                <p class="stat-value stat-output" id="outputTape">111</p>
+                            </article>
+                        </div>
+
+                        <div class="rule-focus" id="currentRuleBox">現在適用される規則がここに表示されます。</div>
+                    </article>
+                </div>
+
+                <div class="rules-grid" id="rules">
+                    <article class="panel rules-panel">
+                        <div class="rules-top">
+                            <div>
+                                <p class="control-label">Rules</p>
+                                <h3>遷移規則を編集する</h3>
+                            </div>
+                            <p class="rules-format">形式: <span class="inline-code">現在状態 読む記号 書く記号 移動 次状態</span></p>
+                        </div>
+                        <textarea id="rulesText" class="rules-textarea" spellcheck="false"></textarea>
+                        <p class="small-note">移動は <span class="inline-code">R</span> が右、<span class="inline-code">L</span> が左、<span class="inline-code">N</span> がその場です。<span class="inline-code">HALT</span> 状態へ入るか、適用規則がないと停止します。</p>
+                        <p class="parse-note" id="parseNote">規則を読み込みました。</p>
+                    </article>
+
+                    <article class="panel table-panel">
+                        <div class="rules-top compact">
+                            <div>
+                                <p class="control-label">Rule Table</p>
+                                <h3>現在の遷移一覧</h3>
+                            </div>
+                            <p class="legend-note">次に使う規則と、直前に使った規則を色で示します。</p>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="rule-table" id="ruleTable"></table>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>このモデルの読み方</h2>
+                    <p>チューリングマシンの本質は、強い部品の多さではなく、少ない操作を何度でも繰り返せることにあります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Tape</p>
+                        <h3>テープは記憶装置</h3>
+                        <p>このページでは見えている範囲だけを描いていますが、理論上のテープは左右に無限です。空白も計算に参加します。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Head</p>
+                        <h3>ヘッドは 1 マスしか見ない</h3>
+                        <p>それでも、状態を切り替えながら 1 マスずつ進めば、探索、反転、末尾追加、繰り上がりのような手続きが記述できます。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Transition</p>
+                        <h3>規則表はプログラム本体</h3>
+                        <p>どの状態でどの記号を読んだかに対して、何を書くか・どちらへ動くか・次の状態は何かを決めた表が、そのまま計算手順になります。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Halting</p>
+                        <h3>停止の仕方も重要</h3>
+                        <p><span class="inline-code">HALT</span> に入る場合と、規則不足で止まる場合では意味が違います。意図した停止か、表の抜けかを見分けてください。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>「答え」よりも、「どの規則が何回選ばれたか」を追うと、計算モデルとしての面白さが見えやすい</h3>
+                    <p>末尾に 1 を追加する機械は「右へ進み続けて空白を見つけたら書く」だけですし、反転機械は「0 を見たら 1、1 を見たら 0」を繰り返すだけです。複雑さは規則の組み合わせから立ち上がります。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>チューリングマシンは、読む・書く・動く・状態を変える、という最小限の操作で計算を記述するためのモデルです。少ない規則でも、手続きをかなり豊かに表せます。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="life-game.html">ライフゲームへ</a>
+                <a href="simulation.html">シミュレーションとはへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="turing-machine.js"></script>
+</body>
+</html>

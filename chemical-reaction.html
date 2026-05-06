@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>化学反応と酵素反応をさわれるページ | 衝突・活性化エネルギー・酵素で反応速度を見る</title>
+    <meta name="description" content="A + B → C の通常反応と E + S → ES → E + P の酵素反応を切り替えながら、温度、活性化エネルギー、濃度、酵素量が反応速度へどう効くかを粒子の衝突で学べるシミュレーションです。">
+    <meta name="theme-color" content="#143122">
+    <link rel="canonical" href="https://readerspace.github.io/chemical-reaction.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="化学反応と酵素反応をさわれるページ | 衝突・活性化エネルギー・酵素で反応速度を見る">
+    <meta property="og:description" content="粒子が衝突して反応する様子と、酵素が活性化エネルギーの壁を下げて反応を速める様子を、同じ画面で比較できます。">
+    <meta property="og:url" content="https://readerspace.github.io/chemical-reaction.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="化学反応と酵素反応をさわれるページ | 衝突・活性化エネルギー・酵素で反応速度を見る">
+    <meta name="twitter:description" content="通常反応と酵素反応を切り替えて、温度、活性化エネルギー、濃度、酵素量が反応速度へどう効くかを学べるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="chemical-reaction.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">反応を見る</a>
+                <a href="#reading">読み方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Chemistry / Collision / Activation Energy / Enzyme Catalysis</p>
+                    <h1>反応は、<br>ぶつかれば必ず起こるわけではない。</h1>
+                    <p class="hero-lead">
+                        粒子どうしが衝突しても、十分なエネルギーがなければ反応は進みません。そこに酵素が入ると、反応経路が変わり、越えるべきエネルギーの壁が低くなります。<br>
+                        このページでは <strong>A + B → C</strong> の通常反応と、<strong>E + S → ES → E + P</strong> の酵素反応を切り替えながら、<strong>温度</strong>、<strong>活性化エネルギー</strong>、<strong>濃度</strong>、<strong>酵素量</strong>が反応速度へどう効くかを観察できます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">シミュレーターを開く</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>通常反応では、A と B が衝突しても十分なエネルギーがないと C にはならない</li>
+                        <li>酵素反応では、E が S をつかんで ES 複合体を作り、P を放して E は再利用される</li>
+                        <li>温度、濃度、酵素量は反応速度を変えるが、酵素は反応物そのものではなく触媒として働く</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Collision</p>
+                        <h2>衝突回数が多いほど反応しやすい</h2>
+                        <p>温度が高いほど粒子は速く動き、濃度が高いほど出会う回数も増えます。だから反応速度は、粒子の運動と個数の両方に左右されます。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Catalysis</p>
+                        <h2>酵素は、反応物を消費せずに反応経路だけを変える</h2>
+                        <p>酵素は基質を活性部位へ結びつけ、より進みやすい経路を用意することで、見かけ上の活性化エネルギーを下げます。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>通常反応で活性化エネルギーを上げたときに反応が止まりやすくなること</strong>と、<strong>酵素反応へ切り替えると同じ条件でも反応が進みやすくなること</strong>を見比べると、このページの狙いが分かりやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">反応速度は「ぶつかる回数」だけでは決まらず、「その衝突が壁を越えられるか」で決まる。</p>
+                <p class="signal-sub">この教材では、詳細な分子軌道や本格的な速度論ではなく、粒子の衝突、活性化エネルギー、酵素-基質複合体という最低限の骨組みだけを残して視覚化しています。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>通常反応と酵素反応を比べる</h2>
+                    <p>温度や活性化エネルギーを動かし、粒子の動き、反応回数、生成物の増え方がどう変わるかを追ってください。酵素モードでは E と S が結合して ES になり、P を放します。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="formula-box" id="formula">A + B → C</div>
+
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <label class="control-title" for="mode">反応モード</label>
+                                <select id="mode" class="select-input">
+                                    <option value="normal">通常反応 A + B → C</option>
+                                    <option value="enzyme">酵素反応 E + S → ES → E + P</option>
+                                </select>
+                                <p class="control-copy">酵素反応では、酵素は消費されずに何度も基質と結びつき、反応を助けます。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="temp">温度</label>
+                                    <span class="control-value" id="tempText">50</span>
+                                </div>
+                                <input id="temp" class="range-input" type="range" min="5" max="100" value="50">
+                                <p class="control-copy">高いほど粒子が速く動き、衝突頻度と有効衝突の割合が増えます。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="ea">活性化エネルギー</label>
+                                    <span class="control-value" id="eaText">55</span>
+                                </div>
+                                <input id="ea" class="range-input" type="range" min="10" max="95" value="55">
+                                <p class="control-copy">高いほど越える壁が高くなり、酵素なしでは反応しにくくなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="conc">初期濃度</label>
+                                    <span class="control-value" id="concText">60</span>
+                                </div>
+                                <input id="conc" class="range-input" type="range" min="20" max="120" value="60">
+                                <p class="control-copy">粒子数が多いほど衝突の機会が増え、反応の出だしも速くなります。</p>
+                            </div>
+
+                            <div class="control-group" id="enzymeControl">
+                                <div class="control-top">
+                                    <label class="control-title" for="enzymeCount">酵素量</label>
+                                    <span class="control-value" id="enzymeText">8</span>
+                                </div>
+                                <input id="enzymeCount" class="range-input" type="range" min="1" max="25" value="8">
+                                <p class="control-copy">酵素が多いほど、同時に複数の基質を処理しやすくなります。</p>
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="startBtn" type="button">一時停止</button>
+                                <button class="button button-secondary" id="resetBtn" type="button">リセット</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在のモデル</p>
+                            <p class="summary-text" id="summaryText"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="observeTitle"></h3>
+                            <p id="observeText"></p>
+                        </article>
+                    </article>
+
+                    <article class="panel canvas-panel">
+                        <div class="canvas-top">
+                            <div>
+                                <p class="control-label">Reaction Chamber</p>
+                                <h3>粒子の衝突と反応</h3>
+                            </div>
+                            <div class="canvas-chip" id="modeChip">通常反応 / 衝突モデル</div>
+                        </div>
+
+                        <div class="canvas-shell">
+                            <canvas id="canvas"></canvas>
+                        </div>
+
+                        <div class="legend-row" id="legend"></div>
+                    </article>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">反応回数</p>
+                        <p class="stat-value" id="reactionCount">0</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">反応速度</p>
+                        <p class="stat-value" id="rateStat">0 /s</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">残り基質</p>
+                        <p class="stat-value" id="substrateStat">0</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">生成物</p>
+                        <p class="stat-value" id="productStat">0</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>化学反応モデルの読み方</h2>
+                    <p>ここでの粒子は本物の分子をそのまま再現しているわけではありませんが、衝突、有効衝突、触媒作用という化学の基本概念はかなり直感的に見えるようになります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Normal Reaction</p>
+                        <h3>通常反応</h3>
+                        <p><span class="inline-code">A</span> と <span class="inline-code">B</span> がぶつかっても、十分なエネルギーがなければ <span class="inline-code">C</span> にはなりません。衝突の回数と質の両方が重要です。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Enzyme</p>
+                        <h3>酵素反応</h3>
+                        <p>酵素 <span class="inline-code">E</span> は基質 <span class="inline-code">S</span> を活性部位へ結びつけて <span class="inline-code">ES</span> を作り、反応後に <span class="inline-code">P</span> を放して再び自由な <span class="inline-code">E</span> に戻ります。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Activation Energy</p>
+                        <h3>活性化エネルギー</h3>
+                        <p>反応開始に必要なエネルギーの壁です。酵素は反応物を消費せず、この壁を低くした別経路を与えることで反応を速くします。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Model Limits</p>
+                        <h3>この教材モデル</h3>
+                        <p>実際の分子動力学、軌道、立体構造、詳細な速度論は省いています。代わりに、衝突、壁、酵素-基質複合体だけを残して、反応速度の考え方を見やすくしています。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>「何個できたか」だけでなく、「なぜその条件で速くなったか」を追うと、速度論の骨組みがつかみやすい</h3>
+                    <p>温度を上げると衝突も速さも増えますし、濃度を上げると出会いが増えます。酵素はそこにさらに別の反応経路を与えて、壁の高さそのものを変える、と整理すると理解しやすくなります。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>化学反応は、ただぶつかれば起きるのではなく、十分なエネルギーを持つ衝突が必要です。酵素はその壁を下げ、反応を進みやすくします。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="ph.html">酸と塩基の pH 混合へ</a>
+                <a href="boiling-concentration.html">沸騰と濃度へ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="chemical-reaction.js"></script>
+</body>
+</html>

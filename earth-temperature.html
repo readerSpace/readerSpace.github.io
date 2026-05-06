@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地球の気温をさわれるページ | 温室効果・太陽距離・雲量で平均気温を見る</title>
+    <meta name="description" content="温室効果ガス濃度、太陽との距離、雲量、海の割合を動かしながら、地球の平均気温と雪・氷・海・植生の見た目の変化を学べる教育用シミュレーションです。">
+    <meta name="theme-color" content="#081a2a">
+    <link rel="canonical" href="https://readerspace.github.io/earth-temperature.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="地球の気温をさわれるページ | 温室効果・太陽距離・雲量で平均気温を見る">
+    <meta property="og:description" content="簡易放射平衡モデルで、温室効果ガス・太陽距離・雲量・海の割合が平均気温と氷・乾燥・海色へどう効くかを試せます。">
+    <meta property="og:url" content="https://readerspace.github.io/earth-temperature.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="地球の気温をさわれるページ | 温室効果・太陽距離・雲量で平均気温を見る">
+    <meta name="twitter:description" content="地球の平均気温を左右する放射平衡、温室効果、氷-アルベドフィードバックを、見た目の変化と一緒に学べるページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="earth-temperature.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">気温を見る</a>
+                <a href="#reading">読み方</a>
+                <a href="simulations.html">一覧</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Climate / Radiation Balance / Ice-Albedo / Greenhouse Effect</p>
+                    <h1>地球の気温は、<br>受け取る光と逃げる熱で決まる。</h1>
+                    <p class="hero-lead">
+                        温室効果ガスが増えると赤外線が逃げにくくなり、太陽に近づくと受け取るエネルギーは強まり、雲や雪が増えると光をはね返しやすくなります。<br>
+                        このページでは <strong>温室効果ガス濃度</strong>、<strong>太陽との距離</strong>、<strong>雲量</strong>、<strong>海の割合</strong> を動かしながら、<strong>平均気温</strong>と<strong>見た目の変化</strong>を同時に観察できます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#viewer">シミュレーターを開く</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>気温が低いほど氷と雪が増え、さらに反射率が上がって冷えやすくなる</li>
+                        <li>気温が高いほど乾燥した色が増え、海が少ないほど極端な気候になりやすい</li>
+                        <li>実際の気候を完全再現せず、放射平衡とフィードバックの基本だけを残した教材モデルにしている</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="hero-note strong-card">
+                        <p class="card-label">Energy Balance</p>
+                        <h2>地球は、太陽光を受け取って、赤外線として熱を逃がす</h2>
+                        <p>受け取るエネルギーと逃げるエネルギーがつり合う温度が、まず気温の基準になります。そこへ温室効果と反射率の変化が重なります。</p>
+                    </article>
+                    <article class="hero-note warm-card">
+                        <p class="card-label">Feedback</p>
+                        <h2>氷が増えると、さらに冷えやすくなる</h2>
+                        <p>雪や氷は白くて光を強く反射するため、寒いほど反射率が上がり、気温がさらに下がる氷-アルベドフィードバックが起きます。</p>
+                    </article>
+                    <div class="hero-summary">
+                        <p class="summary-title">まず見るべきこと</p>
+                        <p><strong>温室効果ガスを増やしたときの温度上昇</strong>と、<strong>太陽を遠ざけたときの氷の急増</strong>を見比べると、このモデルの狙いがつかみやすくなります。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">気温は 1 つの原因で決まるのではなく、「受け取り」「反射」「温室効果」「熱容量」が同時に効いた結果として決まる。</p>
+                <p class="signal-sub">このページでは、現実の大気大循環や海流までは入れず、太陽定数、アルベド、温室効果、海の緩和効果だけを残して、見た目にも差が分かるようにしています。</p>
+            </section>
+
+            <section class="section reveal" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Viewer</p>
+                    <h2>地球の平均気温を動かす</h2>
+                    <p>スライダーで条件を変えると、平均気温だけでなく、海色、氷の広がり、雲の濃さ、植生と乾燥の色味も連動して変わります。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="ghg">温室効果ガス濃度</label>
+                                    <span class="control-value" id="ghgText">1.00 × 現代地球</span>
+                                </div>
+                                <input id="ghg" class="range-input" type="range" min="0" max="5" step="0.05" value="1">
+                                <p class="control-copy">高いほど赤外線が逃げにくくなり、放射平衡温度に対して上乗せされる温室効果が強くなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="distance">太陽との距離</label>
+                                    <span class="control-value" id="distanceText">1.00 AU</span>
+                                </div>
+                                <input id="distance" class="range-input" type="range" min="0.5" max="2" step="0.01" value="1">
+                                <p class="control-copy">太陽から受けるエネルギーはおおよそ <span class="inline-code">1 / r²</span> に比例します。遠ざかるほど急速に弱まります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="cloud">雲量</label>
+                                    <span class="control-value" id="cloudText">40%</span>
+                                </div>
+                                <input id="cloud" class="range-input" type="range" min="0" max="100" step="1" value="40">
+                                <p class="control-copy">雲は太陽光を反射して冷やす方向へ働く、とまずは簡略化して考えます。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="ocean">海の割合</label>
+                                    <span class="control-value" id="oceanText">70%</span>
+                                </div>
+                                <input id="ocean" class="range-input" type="range" min="0" max="100" step="1" value="70">
+                                <p class="control-copy">海が多いほど熱をため込みやすく、このモデルでは極端な高温・低温が少し和らぐようにしています。</p>
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="earthBtn" type="button">地球に戻す</button>
+                                <button class="button button-secondary" id="snowBtn" type="button">氷の惑星</button>
+                                <button class="button button-secondary" id="hotBtn" type="button">灼熱惑星</button>
+                                <button class="button button-secondary" id="venusBtn" type="button">金星型</button>
+                                <button class="button button-secondary" id="marsBtn" type="button">火星型</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在のモデル</p>
+                            <p class="summary-text" id="summaryText"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">見どころ</p>
+                            <h3 id="observeTitle"></h3>
+                            <p id="observeText"></p>
+                        </article>
+                    </article>
+
+                    <article class="panel canvas-panel">
+                        <div class="canvas-top">
+                            <div>
+                                <p class="control-label">Climate Globe</p>
+                                <h3>放射平衡で見る地球の見た目</h3>
+                            </div>
+                            <div class="canvas-chip" id="modeChip">温暖</div>
+                        </div>
+
+                        <div class="canvas-shell">
+                            <canvas id="canvas"></canvas>
+                        </div>
+
+                        <div class="legend-row">
+                            <span class="legend-chip ocean">青: 海</span>
+                            <span class="legend-chip land">緑から赤茶: 陸の植生と乾燥</span>
+                            <span class="legend-chip ice">白: 雪と氷</span>
+                            <span class="legend-chip cloud">白い帯: 雲</span>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">平均気温</p>
+                        <p class="stat-value" id="tempStat">15°C</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">状態</p>
+                        <p class="stat-value" id="climateStat">温暖</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">入射太陽エネルギー</p>
+                        <p class="stat-value" id="solarStat">1361 W/m²</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">氷の割合</p>
+                        <p class="stat-value" id="iceStat">12%</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">反射率</p>
+                        <p class="stat-value" id="albedoStat">0.30</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">温室加算</p>
+                        <p class="stat-value" id="greenhouseStat">+33°C</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>気温モデルの読み方</h2>
+                    <p>ここで見ているのは詳細な気候シミュレーションではなく、エネルギー収支の骨組みです。だからこそ、何が効いているかが見やすくなります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Greenhouse</p>
+                        <h3>温室効果</h3>
+                        <p>大気中の CO₂ や水蒸気は、地球が出す赤外線を吸収し、熱を宇宙へ逃がしにくくします。このページではその効果を温度の上乗せとして簡略化しています。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Solar Distance</p>
+                        <h3>太陽距離</h3>
+                        <p>太陽から受けるエネルギーは <span class="inline-code">1 / r²</span> で減ります。少し遠ざかるだけでも、入射エネルギーはかなり弱くなります。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Ice-Albedo</p>
+                        <h3>雪と氷のフィードバック</h3>
+                        <p>雪や氷は白くて反射率が高いため、寒くなるほど日射を跳ね返してさらに冷えやすくなります。これが氷-アルベドフィードバックです。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Model Limits</p>
+                        <h3>この教材モデル</h3>
+                        <p>雲の温室効果、海流、地形、季節、大気循環までは入れていません。代わりに、放射平衡、温室効果、反射率、海の熱容量だけを分かりやすく残しています。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Reading Tip</p>
+                    <h3>「何度になったか」だけでなく、「どのフィードバックがその温度を押したか」を見ると、気候の考え方が整理しやすい</h3>
+                    <p>たとえば冷えた惑星では、単に太陽が遠いから寒いだけではなく、氷が増えて反射率が上がることでさらに冷えます。高温側では、温室効果と海の少なさが極端さを強めます。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>地球の気温は、受ける日射、はね返す割合、熱を抱え込む大気、そして熱をためる海の組み合わせで決まります。単純化しても、気候の考え方の骨格はかなり見えてきます。</p>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="sky.html">空はなぜ青いのかへ</a>
+                <a href="simulation.html">シミュレーションとはへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="earth-temperature.js"></script>
+</body>
+</html>
