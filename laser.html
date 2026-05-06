@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レーザーはどう発振するのか？ | 反転分布と誘導放出</title>
+    <meta name="description" content="ポンプ励起、反転分布、誘導放出、共振器、しきい値発振までを、レーザーのJSシミュレーションで一続きに理解できる教育ページ。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="laser.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a href="index.html" class="brand">Reader's Space</a>
+            <nav class="site-nav" aria-label="サイト内ナビゲーション">
+                <a href="index.html">トップ</a>
+                <a href="physics.html">物理学トップ</a>
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="quantum.html">量子</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero reveal section">
+                <div class="hero-copy">
+                    <p class="eyebrow">Laser Physics / Threshold Oscillation</p>
+                    <h1>レーザーはどう<br>発振するのか？</h1>
+                    <p class="hero-lead">
+                        レーザーは「光が強い装置」ではなく、反転分布を作った媒質に種光を通し、
+                        誘導放出で同じ位相・同じ向きの光を増やし、共振器の往復でそれを残す仕組みです。
+                        1 往復の利得が損失を上回ると、しきい値を超えて発振が立ち上がります。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">シミュレーションを見る</a>
+                        <a class="button button-secondary" href="#principle">4 段階で理解する</a>
+                    </div>
+                    <ul class="hero-points">
+                        <li>ポンプで励起原子を増やすと反転分布ができる</li>
+                        <li>種光が通ると同位相・同方向の光子が追加される</li>
+                        <li>共振器が増幅を何往復も積み上げ、損失との勝負を決める</li>
+                    </ul>
+                </div>
+                <div class="hero-panel">
+                    <div class="cavity-illustration" aria-hidden="true">
+                        <span class="cavity-mirror left"></span>
+                        <span class="cavity-mirror right"></span>
+                        <span class="cavity-wave wave-a"></span>
+                        <span class="cavity-wave wave-b"></span>
+                        <span class="cavity-wave wave-c"></span>
+                        <span class="cavity-atom atom-a"></span>
+                        <span class="cavity-atom atom-b"></span>
+                        <span class="cavity-atom atom-c"></span>
+                        <span class="cavity-atom atom-d"></span>
+                        <span class="cavity-atom atom-e"></span>
+                        <span class="cavity-pump"></span>
+                        <span class="cavity-label label-left">全反射鏡</span>
+                        <span class="cavity-label label-right">半透鏡</span>
+                        <span class="cavity-label label-center">誘導放出で同じ波が増える</span>
+                    </div>
+                    <div class="hero-note">
+                        <p class="note-title">しきい値の見方</p>
+                        <p>
+                            反転分布そのものが発振ではありません。共振器の中で増えた光が 1 往復後にも残るか、
+                            つまり「利得 &gt; 損失」になるかが勝負です。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal section" aria-label="ハイライト">
+                <p class="signal-kicker">Threshold</p>
+                <p class="signal-main">反転分布は燃料、誘導放出は複製、共振器は往復路、しきい値は継続条件。</p>
+                <p class="signal-sub">
+                    下の実演では、赤い点が励起原子、黄色い粒が共振器内の光子です。
+                    ポンプを上げて損失を下げると、種光が同じ向きの列へ育ち、右側の半透鏡から出力ビームが現れます。
+                </p>
+            </section>
+
+            <section class="section reveal" id="principle">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>レーザーを 4 ピースで組み立てる</h2>
+                    <p>
+                        レーザー発振は 1 個の魔法ではなく、励起・反転分布・誘導放出・共振器という役割分担で成立します。
+                        どこが欠けても、持続する光の増幅にはなりません。
+                    </p>
+                </div>
+                <div class="principle-grid">
+                    <article class="step-card">
+                        <span class="card-label">Step 01</span>
+                        <h3>ポンプで上の準位へ押し上げる</h3>
+                        <p>
+                            電流・光励起・放電などで原子やイオンを高いエネルギー準位へ送り、
+                            基底状態より励起状態の数を増やす準備をします。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 02</span>
+                        <h3>反転分布をためる</h3>
+                        <p>
+                            通常は低い準位に粒子が多いので、光は吸収されがちです。
+                            反転分布ではその関係を逆転させ、光が来たときに増幅側へ傾く媒質を作ります。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 03</span>
+                        <h3>誘導放出で同じ光を複製する</h3>
+                        <p>
+                            既存の光子が励起原子に当たると、同じ周波数・位相・進行方向の光子が 1 つ追加されます。
+                            ここで「そろった光」が指数的に育つ入口ができます。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 04</span>
+                        <h3>共振器がしきい値を決める</h3>
+                        <p>
+                            2 枚の鏡で光を往復させると、増幅の機会が何度も得られます。
+                            ただし鏡の透過・散乱・吸収による損失もあるため、利得がそれを超えた瞬間だけ発振が立ち上がります。
+                        </p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <span class="card-label">Idea</span>
+                        <p class="formula-block">1 往復の正味増幅 = 誘導放出による利得 − 共振器損失</p>
+                        <p>
+                            反転分布が大きいほど利得は増え、鏡の透過・散乱・吸収が大きいほど損失は増えます。
+                        </p>
+                    </article>
+                    <article class="formula-card">
+                        <span class="card-label">What to watch</span>
+                        <p class="formula-block">しきい値以下: 光子数は増えてもすぐ減衰 / しきい値以上: 往復後も残る</p>
+                        <p>
+                            シミュレーションでは、光子数の履歴と右向き出力の立ち上がりを同時に見ると、
+                            発振条件が視覚的に追えます。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>しきい値を越える瞬間を観察する</h2>
+                    <p>
+                        ポンプ強度・共振器損失・種光を動かして、反転分布がどこまで育つか、
+                        そして誘導放出が本当に持続的な光増幅へ変わるかを見比べてください。
+                    </p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="preset-row" id="presetRow">
+                            <button class="preset-chip" data-preset="below" type="button">しきい値以下</button>
+                            <button class="preset-chip is-active" data-preset="threshold" type="button">しきい値付近</button>
+                            <button class="preset-chip" data-preset="above" type="button">しきい値以上</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control">
+                                <span>ポンプ強度 <strong id="pumpVal">0.42</strong></span>
+                                <input type="range" id="pumpRange" min="0.10" max="0.90" step="0.01" value="0.42">
+                            </label>
+                            <label class="control">
+                                <span>共振器損失 <strong id="lossVal">0.12</strong></span>
+                                <input type="range" id="lossRange" min="0.04" max="0.24" step="0.01" value="0.12">
+                            </label>
+                            <label class="control">
+                                <span>種光 <strong id="seedVal">8</strong></span>
+                                <input type="range" id="seedRange" min="0" max="20" step="1" value="8">
+                            </label>
+                        </div>
+                        <p class="demo-note" id="demoNarration">
+                            しきい値付近では、反転分布と損失が競り合い、光子数と出力が揺れながら立ち上がります。
+                        </p>
+                        <div class="stat-grid">
+                            <article>
+                                <span>反転分布</span>
+                                <strong id="statExcited">0 %</strong>
+                            </article>
+                            <article>
+                                <span>共振器内光子</span>
+                                <strong id="statPhotons">0</strong>
+                            </article>
+                            <article>
+                                <span>出力ビーム</span>
+                                <strong id="statOutput">0.00</strong>
+                            </article>
+                            <article>
+                                <span>しきい値判定</span>
+                                <strong id="statThreshold" data-state="warn">利得 &lt; 損失</strong>
+                            </article>
+                        </div>
+                        <div class="legend" aria-label="凡例">
+                            <span class="legend-item"><i class="legend-swatch excited"></i>励起原子</span>
+                            <span class="legend-item"><i class="legend-swatch ground"></i>基底状態</span>
+                            <span class="legend-item"><i class="legend-swatch photon"></i>共振器内光子</span>
+                            <span class="legend-item"><i class="legend-swatch output"></i>出力ビーム</span>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="laserCanvas" class="demo-canvas" width="760" height="560"
+                            aria-label="レーザー媒質の反転分布、共振器内の光子、しきい値発振の履歴を示すシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>
+                            上半分が共振器、下の折れ線が履歴です。黄色の光子が赤い原子を通るたびに、
+                            同位相・同方向の光が追加されます。しきい値を超えると右側の出力ビームが連続的に現れます。
+                        </p>
+                        <div class="macro-panel">
+                            <div class="macro-heading">
+                                <div>
+                                    <p class="card-label">Macro view</p>
+                                    <h3>光の強さだけを見るマクロ描像</h3>
+                                </div>
+                                <p class="macro-heading-note">上のミクロ状態を集約した表示</p>
+                            </div>
+                            <div class="macro-grid">
+                                <div class="macro-visual">
+                                    <canvas id="macroCanvas" class="macro-canvas" width="760" height="220"
+                                        aria-label="ミクロ状態から集約したレーザー光の強さだけを示すマクロ表示"></canvas>
+                                </div>
+                                <div class="macro-readout">
+                                    <article class="macro-card">
+                                        <span>マクロ光強度</span>
+                                        <strong id="macroIntensityVal">0 %</strong>
+                                    </article>
+                                    <article class="macro-card">
+                                        <span>ミクロからの集約</span>
+                                        <strong id="macroLinkVal">光子 0 / 出力 0.00</strong>
+                                    </article>
+                                    <article class="macro-card">
+                                        <span>マクロ状態</span>
+                                        <strong id="macroModeVal">増幅待ち</strong>
+                                    </article>
+                                </div>
+                            </div>
+                            <p class="macro-note" id="macroNarration">
+                                このパネルは、上のミクロ描像にある共振器内光子数と右向き出力を集約したものです。
+                                ミクロ側で光がたまると、少し遅れてここも明るくなります。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Interpretation</p>
+                    <h2>見え方の違いを読み解く</h2>
+                    <p>
+                        しきい値より下では、種光が入っても媒質はただの増幅器止まりです。
+                        上では共振器が「残る光」を選び、レーザーらしい細い出力に変わります。
+                    </p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <span class="card-label">Below</span>
+                        <h3>しきい値以下</h3>
+                        <p>
+                            励起原子はいても、1 往復の間に光が散逸してしまうため、光子数は小さく揺れるだけです。
+                            右側の出力は断続的で、ビームとしては育ちません。
+                        </p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <span class="card-label">Near</span>
+                        <h3>しきい値付近</h3>
+                        <p>
+                            利得と損失が拮抗するので、反転分布が少し増えるたびに光が伸び、
+                            伸びすぎると励起が食われてまた下がる、という競り合いが見えます。
+                        </p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <span class="card-label">Above</span>
+                        <h3>しきい値以上</h3>
+                        <p>
+                            種光がきっかけになって誘導放出が連鎖し、共振器内の光子数が高い水準で維持されます。
+                            半透鏡からの出力も滑らかに続き、レーザー発振らしい状態になります。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next steps</p>
+                    <h2>関連ページへ</h2>
+                    <p>光・量子・電磁波のつながりを、近い題材から広げる。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="quantum.html">
+                        <span class="card-label">Quantum</span>
+                        <h3>量子力学と量子コンピュータ</h3>
+                        <p>離散的な準位、波動関数、重ね合わせまでを、レーザーの背後にある量子の言葉で見直す。</p>
+                    </a>
+                    <a class="link-card" href="microwave.html">
+                        <span class="card-label">Electromagnetic wave</span>
+                        <h3>電子レンジの仕組み</h3>
+                        <p>同じ電磁波でも、周波数・吸収・損失の見方が変わると何が起きるかを比べる。</p>
+                    </a>
+                    <a class="link-card" href="sky.html">
+                        <span class="card-label">Optics</span>
+                        <h3>空はなぜ青いのか</h3>
+                        <p>散乱で光が減る場合と、誘導放出で光が増える場合を並べて、光と媒質の相互作用を対照する。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>© Reader's Space — 反転分布が生み、共振器が選び、しきい値が発振を決める。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理学トップ</a>
+                <a class="footer-link" href="simulations.html">シミュレーション一覧</a>
+                <a class="footer-link" href="index.html">サイトトップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="laser.js"></script>
+</body>
+</html>
