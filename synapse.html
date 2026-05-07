@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シナプス発火シミュレーション | 入力の足し算としきい値発火</title>
+    <meta name="description" content="入力刺激の蓄積、しきい値超えでの発火、不応期、シナプス伝達の遅れまでを、2つのニューロンで可視化する教育用シミュレーションページ。">
+    <meta name="theme-color" content="#1e3a5f">
+    <link rel="canonical" href="https://readerspace.github.io/synapse.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="シナプス発火シミュレーション | 入力の足し算としきい値発火">
+    <meta property="og:description" content="神経細胞が入力を足し合わせ、しきい値を超えると発火し、不応期を経て次のニューロンへ信号を渡す流れを見える形で学べます。">
+    <meta property="og:url" content="https://readerspace.github.io/synapse.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="シナプス発火シミュレーション | 入力の足し算としきい値発火">
+    <meta name="twitter:description" content="興奮入力・抑制入力、膜電位の蓄積、しきい値発火、不応期、シナプス遅延をまとめて観察できます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="synapse.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a href="index.html" class="brand">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="サイト内ナビゲーション">
+                <a href="index.html">トップ</a>
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="communication.html">情報と通信</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Neuroscience / Threshold Dynamics</p>
+                    <h1>入力がたまって、<br>しきい値を超える。</h1>
+                    <p class="hero-lead">
+                        神経細胞は刺激を受けるたびに少しずつ膜電位が変わり、
+                        それが時間的に足し合わされてしきい値を超えると発火します。
+                        発火した直後は不応期で休み、その信号はシナプスを通って少し遅れて次のニューロンへ届きます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">シミュレーションを見る</a>
+                        <a class="button button-secondary" href="#mechanism">4段階で理解する</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページで見えること">
+                        <li>興奮入力と抑制入力が膜電位をどう動かすか</li>
+                        <li>複数の入力が時間的に足し合わされる様子</li>
+                        <li>しきい値発火と不応期、その後のシナプス伝達</li>
+                    </ul>
+                </div>
+                <div class="hero-panel">
+                    <div class="hero-illustration" aria-hidden="true">
+                        <span class="cell cell-a"></span>
+                        <span class="cell cell-b"></span>
+                        <span class="input-dot input-a"></span>
+                        <span class="input-dot input-b"></span>
+                        <span class="signal-wave wave-a"></span>
+                        <span class="signal-wave wave-b"></span>
+                        <span class="signal-wave wave-c"></span>
+                        <span class="synapse-gap"></span>
+                        <span class="label label-a">入力の足し算</span>
+                        <span class="label label-b">しきい値で発火</span>
+                        <span class="label label-c">遅れて伝達</span>
+                    </div>
+                    <div class="hero-note">
+                        <p class="note-title">見るポイント</p>
+                        <p>
+                            ニューロンAに赤い興奮入力が集まると膜電位が上がり、青い抑制入力が来ると下がります。
+                            発火すると黄色く光り、不応期の間は一時的に入力を受けても反応しません。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal" aria-label="ハイライト">
+                <p class="signal-kicker">Core Sequence</p>
+                <p class="signal-main">入力刺激の足し算 → しきい値超え → 発火 → 不応期 → シナプス伝達。</p>
+                <p class="signal-sub">
+                    このページでは、ニューロンAの入力の蓄積と、ニューロンBへ届く少し遅れた信号を同時に表示します。
+                    下のグラフを見ると、目に見える発火が起こる前に膜電位がじわじわ積み上がっていることも分かります。
+                </p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>シナプス発火を 4 段階で追う</h2>
+                    <p>
+                        1発の活動電位は突然生まれるのではなく、入力の足し算と閾値判定、
+                        そして発火後の回復時間を経て、次のニューロンへ受け渡されます。
+                    </p>
+                </div>
+                <div class="step-grid">
+                    <article class="step-card">
+                        <span class="card-label">Step 01</span>
+                        <h3>入力が膜電位を押し上げる</h3>
+                        <p>興奮性入力は膜電位を上げ、抑制性入力は下げます。単発入力だけでは発火しないこともあります。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 02</span>
+                        <h3>時間的に足し合わされる</h3>
+                        <p>入力が続けて入ると、細胞体では膜電位が少しずつ積み上がります。漏れが大きいほど貯まりにくくなります。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 03</span>
+                        <h3>しきい値を超えると発火</h3>
+                        <p>膜電位がしきい値を超えた瞬間に活動電位が発生し、膜電位はリセットされます。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 04</span>
+                        <h3>不応期の後で次へ伝わる</h3>
+                        <p>発火直後は不応期で反応しにくくなり、その後シナプス遅延を伴って次のニューロンへ信号が届きます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>発火の条件をその場で変える</h2>
+                    <p>
+                        入力の強さ、しきい値、漏れ、シナプス遅延、自動入力頻度を変えながら、
+                        どの条件で発火しやすくなるか、どこで抑制されるかを見比べてください。
+                    </p>
+                </div>
+                <div class="demo-grid">
+                    <div class="control-panel">
+                        <div class="preset-row" id="presetRow">
+                            <button class="preset-chip" type="button" data-preset="quiet">溜まりにくい</button>
+                            <button class="preset-chip is-active" type="button" data-preset="balanced">しきい値付近</button>
+                            <button class="preset-chip" type="button" data-preset="burst">発火しやすい</button>
+                        </div>
+                        <div class="action-grid">
+                            <button id="toggleBtn" class="button button-primary" type="button">一時停止</button>
+                            <button id="resetBtn" class="button button-secondary" type="button">リセット</button>
+                            <button id="exciteBtn" class="button action-excite" type="button">興奮入力を送る</button>
+                            <button id="inhibitBtn" class="button action-inhibit" type="button">抑制入力を送る</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control">
+                                <span>入力の強さ <strong id="inputValue">0.80</strong></span>
+                                <input id="inputStrength" type="range" min="0.10" max="2.00" step="0.05" value="0.80">
+                            </label>
+                            <label class="control">
+                                <span>しきい値 <strong id="thresholdValue">1.00</strong></span>
+                                <input id="threshold" type="range" min="0.40" max="2.20" step="0.05" value="1.00">
+                            </label>
+                            <label class="control">
+                                <span>漏れの強さ <strong id="leakValue">0.015</strong></span>
+                                <input id="leak" type="range" min="0.001" max="0.050" step="0.001" value="0.015">
+                            </label>
+                            <label class="control">
+                                <span>シナプス遅延 <strong id="delayValue">0.45 秒</strong></span>
+                                <input id="delay" type="range" min="0.10" max="1.50" step="0.05" value="0.45">
+                            </label>
+                            <label class="control">
+                                <span>自動入力頻度 <strong id="rateValue">1.2 回/秒</strong></span>
+                                <input id="rate" type="range" min="0.0" max="5.0" step="0.1" value="1.2">
+                            </label>
+                        </div>
+                        <p class="demo-note" id="demoNarration">
+                            しきい値付近では、入力が少し続くと膜電位が積み上がり、ぎりぎりで発火する様子が見えます。
+                        </p>
+                        <div class="stat-grid">
+                            <article class="stat-card">
+                                <span>ニューロンA 膜電位</span>
+                                <strong id="vA">0.00</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>ニューロンB 膜電位</span>
+                                <strong id="vB">0.00</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>発火回数</span>
+                                <strong id="spikes">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>ニューロンA 状態</span>
+                                <strong id="stateA">静止状態</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>ニューロンB 状態</span>
+                                <strong id="stateB">静止状態</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>シナプス中の信号</span>
+                                <strong id="transitCount">0</strong>
+                            </article>
+                        </div>
+                        <div class="legend" aria-label="凡例">
+                            <span class="legend-item"><i class="legend-swatch excite"></i>興奮入力</span>
+                            <span class="legend-item"><i class="legend-swatch inhibit"></i>抑制入力</span>
+                            <span class="legend-item"><i class="legend-swatch spike"></i>発火と伝達</span>
+                            <span class="legend-item"><i class="legend-swatch refractory"></i>不応期</span>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="synapseCanvas" class="demo-canvas" width="900" height="620" aria-label="ニューロンの膜電位、発火、不応期、シナプス伝達、膜電位履歴を示すシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>
+                            上段が2つのニューロンとシナプス、下段が膜電位グラフです。
+                            赤い粒は興奮入力、青い粒は抑制入力、黄色く光った瞬間が発火です。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="interpretation">
+                <div class="section-heading">
+                    <p class="eyebrow">Interpretation</p>
+                    <h2>パラメータをどう読むか</h2>
+                    <p>見た目の変化を、神経細胞のはたらきに対応づけて読むための観察ポイントです。</p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <span class="card-label">Input</span>
+                        <h3>入力の強さを上げる</h3>
+                        <p>1回の刺激で膜電位が大きく動くので、少ない入力でしきい値に届きやすくなります。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <span class="card-label">Leak</span>
+                        <h3>漏れを大きくする</h3>
+                        <p>たまった膜電位がすぐ戻るので、入力が連続しても足し算が崩れやすくなります。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <span class="card-label">Delay</span>
+                        <h3>シナプス遅延を伸ばす</h3>
+                        <p>ニューロンAが発火しても、ニューロンBへの到着まで間が空くので、因果関係がより見やすくなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next steps</p>
+                    <h2>関連ページへ</h2>
+                    <p>信号、しきい値、局所ルールから全体が立ち上がる現象へつなげる。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="communication.html">
+                        <span class="card-label">Information</span>
+                        <h3>情報と通信</h3>
+                        <p>信号がどのように運ばれ、符号化され、伝達路を通るのかを別の視点から読む。</p>
+                    </a>
+                    <a class="link-card" href="laser.html">
+                        <span class="card-label">Threshold</span>
+                        <h3>レーザー発振のしきい値</h3>
+                        <p>別の系でも、利得の蓄積としきい値超えが立ち上がりを決めることを比べる。</p>
+                    </a>
+                    <a class="link-card" href="life-game.html">
+                        <span class="card-label">Emergence</span>
+                        <h3>ライフゲーム</h3>
+                        <p>局所ルールの繰り返しが、複雑な時間発展へつながるもう一つの代表例を見る。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>© Reader's Space — 入力は積み上がり、しきい値が発火を決め、シナプスが次へ渡す。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="index.html">サイトトップ</a>
+                <a class="footer-link" href="simulations.html">シミュレーション一覧</a>
+                <a class="footer-link" href="physics.html">物理学トップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="synapse.js"></script>
+</body>
+</html>

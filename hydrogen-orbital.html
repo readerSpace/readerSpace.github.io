@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水素原子の波動関数 | 球面調和関数と半径方向</title>
+    <meta name="description" content="水素原子の波動関数 ψ_nlm = R_nl(r) Y_l^m(θ, φ) を、角度部分だけの表示と、半径方向まで含めた全波動関数表示で切り替えて観察できる教育用シミュレーションページ。">
+    <meta name="theme-color" content="#10273b">
+    <link rel="canonical" href="https://readerspace.github.io/hydrogen-orbital.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="水素原子の波動関数 | 球面調和関数と半径方向">
+    <meta property="og:description" content="波動関数 ψ_nlm = R_nl(r) Y_l^m(θ, φ) のうち、角度部分と全波動関数を切り替えて見比べられるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/hydrogen-orbital.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="水素原子の波動関数 | 球面調和関数と半径方向">
+    <meta name="twitter:description" content="球面調和関数 Y_l^m(θ, φ) と半径方向 R_nl(r) を合わせた全波動関数まで、その場で切り替えて観察できます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="hydrogen-orbital.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#mechanism">考え方</a>
+                <a href="#demo">シミュレーション</a>
+                <a href="#reading">見方</a>
+                <a href="#next">関連ページ</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Quantum / Hydrogen Atom / Wavefunction</p>
+                    <h1>波動関数の角度と半径を、<br>回して見る。</h1>
+                    <p class="hero-lead">
+                        水素原子の電子は、古典的な粒の軌道ではなく、波動関数という広がった状態で表されます。
+                        そのうち角度方向を決めているのが球面調和関数 <strong>Y<sub>l</sub><sup>m</sup>(θ, φ)</strong> です。
+                        さらに半径方向 <strong>R<sub>nl</sub>(r)</strong> を掛け合わせると、主量子数 n に応じた殻や半径節も現れます。
+                        このページでは、角度部分だけの表示と、全波動関数 ψ<sub>nlm</sub> の表示を切り替えながら観察できます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">シミュレーションを見る</a>
+                        <a class="button button-secondary" href="#mechanism">4つの視点で理解する</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>波動関数 ψ<sub>nlm</sub> = R<sub>nl</sub>(r) Y<sub>l</sub><sup>m</sup>(θ, φ) の角度部分と全体像を切り替えられる</li>
+                        <li>n を上げると半径方向の節や外側の殻が増える</li>
+                        <li>青と赤は符号または位相帯、ふくらみは大きさを表す</li>
+                        <li>l と m を変えると節の数と方位角方向の分割が変わる</li>
+                    </ul>
+                </div>
+                <div class="hero-panel">
+                    <div class="orbital-stage" aria-hidden="true">
+                        <span class="orbital-shell shell-a"></span>
+                        <span class="orbital-shell shell-b"></span>
+                        <span class="orbital-shell shell-c"></span>
+                        <span class="orbital-lobe lobe-a"></span>
+                        <span class="orbital-lobe lobe-b"></span>
+                        <span class="orbital-lobe lobe-c"></span>
+                        <span class="orbital-lobe lobe-d"></span>
+                        <div class="stage-core">
+                            <span class="psi-mark">ψ</span>
+                            <strong>角度方向の節と位相が、<br>ローブの形として現れる</strong>
+                        </div>
+                        <span class="stage-chip chip-a">Y<sub>l</sub><sup>m</sup></span>
+                        <span class="stage-chip chip-b">nodes</span>
+                        <span class="stage-chip chip-c">phase</span>
+                    </div>
+                    <div class="hero-summary-grid">
+                        <article class="summary-card strong-card">
+                            <p class="card-label">Factorization</p>
+                            <h2>半径方向と角度方向は分かれる</h2>
+                            <p>水素原子では、波動関数を R<sub>nl</sub>(r) と Y<sub>l</sub><sup>m</sup>(θ, φ) に分けて考えられます。このページでは両方を切り替えて比較できます。</p>
+                        </article>
+                        <article class="summary-card warm-card">
+                            <p class="card-label">What the colors mean</p>
+                            <h2>正負や位相の切り替わりを見る</h2>
+                            <p>赤青の色分けは、実部の正負か、複素位相の帯を表しています。境目が節です。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal" aria-label="ハイライト">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">R<sub>nl</sub>(r) が「どの半径に広がるか」を決め、Y<sub>l</sub><sup>m</sup>(θ, φ) が「どの向きに広がるか」を決める。</p>
+                <p class="signal-sub">
+                    角度方向の模様は、ただの飾りではなく、角運動量の量子数 l と m の情報そのものです。
+                    さらに n が大きいほど半径方向の節 <strong>n - l - 1</strong> が増え、同じ角度分布のまま内外に複数の殻が現れます。
+                </p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>球面調和関数を 4 つの視点で読む</h2>
+                    <p>
+                        水素原子の波動関数は、半径方向 R<sub>nl</sub>(r) と角度方向 Y<sub>l</sub><sup>m</sup>(θ, φ) に分けて読めます。
+                        形の違いは主量子数と角運動量量子数の両方に対応しています。
+                    </p>
+                </div>
+                <div class="step-grid">
+                    <article class="step-card">
+                        <span class="card-label">Step 01</span>
+                        <h3>n が半径方向の殻を決める</h3>
+                        <p>R<sub>nl</sub>(r) は、電子雲がどの半径に出やすいかと、半径方向の節の数を決めます。</p>
+                    </article>
+                    <article class="step-card strong-card">
+                        <span class="card-label">Step 02</span>
+                        <h3>l が角度節の総数を決める</h3>
+                        <p>l はローブの数や節面の多さに関わり、s, p, d, f といった軌道の家族を分けます。</p>
+                    </article>
+                    <article class="step-card warm-card">
+                        <span class="card-label">Step 03</span>
+                        <h3>m が方位角方向の変化を決める</h3>
+                        <p>|m| が大きいほど、z 軸まわりに位相や符号が細かく切り替わります。</p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 04</span>
+                        <h3>ψ = R × Y をまとめて描く</h3>
+                        <p>全波動関数モードでは半径方向と角度方向を掛け合わせ、殻の位置とローブの向きが同時に見えるようになります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <span class="card-label">Key Formula</span>
+                        <div class="formula-block multiline" aria-label="水素原子の波動関数の分離形">
+                            <span>ψ<sub>nlm</sub>(r, θ, φ) = R<sub>nl</sub>(r) Y<sub>l</sub><sup>m</sup>(θ, φ)</span>
+                            <span>下では Y<sub>l</sub><sup>m</sup> のみと、全波動関数 ψ<sub>nlm</sub> を切り替え可能</span>
+                        </div>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <span class="card-label">Reading tip</span>
+                        <div class="formula-block multiline" aria-label="節の数の読み方">
+                            <span>半径方向の節 = n - l - 1</span>
+                            <span>角度節の総数 = l / 方位角方向の分割の強さ = |m|</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>ψ<sub>nlm</sub> と Y<sub>l</sub><sup>m</sup>(θ, φ) を切り替えて比べる</h2>
+                    <p>
+                        n を変えると半径方向の殻と節が、l と m を変えると角度方向のローブと節が変わります。
+                        ドラッグで回転、ホイールやピンチ操作で拡大縮小しながら、角度部分だけの表示と全波動関数の表示を見比べてください。
+                    </p>
+                </div>
+                <div class="demo-grid">
+                    <div class="control-panel">
+                        <div class="preset-row" id="presetRow">
+                            <button class="preset-chip" type="button" data-preset="oneS">1s: (1, 0, 0)</button>
+                            <button class="preset-chip" type="button" data-preset="threeS">3s: (3, 0, 0)</button>
+                            <button class="preset-chip is-active" type="button" data-preset="threePz">3p<sub>z</sub>: (3, 1, 0)</button>
+                            <button class="preset-chip" type="button" data-preset="threeDxz">3d<sub>xz</sub>: (3, 2, 1)</button>
+                            <button class="preset-chip" type="button" data-preset="fourDx2y2">4d<sub>x²-y²</sub>: (4, 2, 2)</button>
+                        </div>
+
+                        <div class="formula-card live-card">
+                            <span class="card-label">Current State</span>
+                            <div class="formula-block multiline" id="currentFormula" aria-live="polite">
+                                <span>ψ<sub>310</sub>(r, θ, φ)</span>
+                                <span>現在は 3p 軌道の全波動関数</span>
+                            </div>
+                            <p class="demo-note" id="stateNote">n = 3, l = 1, m = 0 なので、半径方向の節は 1 本、角度節は 1 本です。全波動関数モードでは内外 2 つの殻を持つ p 軌道が見えます。</p>
+                        </div>
+
+                        <div class="control-grid">
+                            <label class="control" for="targetSelect">
+                                <span>可視化対象 <strong id="targetVal">全波動関数 ψ</strong></span>
+                                <select id="targetSelect">
+                                    <option value="full" selected>全波動関数 ψ<sub>nlm</sub></option>
+                                    <option value="angular">角度部分 Y<sub>l</sub><sup>m</sup> のみ</option>
+                                </select>
+                            </label>
+                            <label class="control" for="nRange">
+                                <span>n: 主量子数 <strong id="nVal">3</strong></span>
+                                <input id="nRange" type="range" min="1" max="9" step="1" value="3">
+                            </label>
+                            <label class="control" for="lRange">
+                                <span>l: 軌道角運動量 <strong id="lVal">1</strong></span>
+                                <input id="lRange" type="range" min="0" max="8" step="1" value="1">
+                            </label>
+                            <label class="control" for="mRange">
+                                <span>m: 磁気量子数 <strong id="mVal">0</strong></span>
+                                <input id="mRange" type="range" min="-1" max="1" step="1" value="0">
+                                <small id="mHelp">m は -1 から 1</small>
+                            </label>
+                            <label class="control" for="modeSelect">
+                                <span>表示モード <strong id="modeVal">実部 Re[ψ]</strong></span>
+                                <select id="modeSelect">
+                                    <option value="real">実部</option>
+                                    <option value="abs">振幅</option>
+                                    <option value="prob">確率密度</option>
+                                    <option value="phase">位相帯</option>
+                                </select>
+                            </label>
+                            <label class="control" for="ampRange">
+                                <span>表示スケール <strong id="ampVal">1.40</strong></span>
+                                <input id="ampRange" type="range" min="0.20" max="3.50" step="0.05" value="1.40">
+                            </label>
+                            <label class="control" for="resRange">
+                                <span>解像度 <strong id="resVal">70</strong></span>
+                                <input id="resRange" type="range" min="25" max="100" step="5" value="70">
+                            </label>
+                        </div>
+
+                        <div class="action-row">
+                            <button class="button button-primary" id="resetViewBtn" type="button">視点をリセット</button>
+                        </div>
+
+                        <div class="stat-grid">
+                            <article class="stat-card">
+                                <span>主量子数 n</span>
+                                <strong id="nQuantValue">3</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>軌道系</span>
+                                <strong id="familyValue">3p 軌道</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>半径方向の節</span>
+                                <strong id="radialNodeValue">1</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>角度節の総数</span>
+                                <strong id="nodeTotalValue">1</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>方位角方向の分割</span>
+                                <strong id="azimuthValue">0</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>全節数</span>
+                                <strong id="totalNodeValue">2</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>対称性</span>
+                                <strong id="symmetryValue">z 軸まわりに回転対称</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>表示の意味</span>
+                                <strong id="modeSummaryValue">R × Y の実部を表示</strong>
+                            </article>
+                        </div>
+
+                        <div class="legend" aria-label="凡例">
+                            <span class="legend-item"><i class="legend-swatch positive"></i>青: 正または位相帯の片側</span>
+                            <span class="legend-item"><i class="legend-swatch negative"></i>赤: 負または位相帯の反対側</span>
+                            <span class="legend-item"><i class="legend-swatch size"></i>ふくらみ: 大きさ</span>
+                        </div>
+                    </div>
+
+                    <div class="canvas-panel">
+                        <canvas id="orbitalCanvas" class="demo-canvas" width="900" height="680" aria-label="水素原子の球面調和関数と全波動関数のローブ形状や殻構造を表示するシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方:</strong>
+                            角度部分モードでは表面のふくらみが Y<sub>l</sub><sup>m</sup> の大きさ、全波動関数モードでは点群の殻構造が R<sub>nl</sub>(r) を表します。
+                            色は実部の符号または位相帯です。実部モードでは節の境目、確率密度モードでは観測されやすい雲の分布が見やすくなります。
+                        </p>
+                        <div class="canvas-meta" aria-hidden="true">
+                            <span>drag / rotate</span>
+                            <span>wheel / zoom</span>
+                            <span>blue / red = sign</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>どこを見ればいいか</h2>
+                    <p>見た目の変化を量子数と対応づけるための観察ポイントです。</p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <span class="card-label">n</span>
+                        <h3>内側と外側の殻を見る</h3>
+                        <p>n を上げると半径方向の節 n - l - 1 が増え、同じ向きのローブが内外に分かれて現れます。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <span class="card-label">l / m</span>
+                        <h3>ローブの向きと節面を見る</h3>
+                        <p>l は角度節の総数、|m| は方位角方向の分割の細かさを決めます。m = 0 では z 軸まわりの回転対称が残ります。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <span class="card-label">Mode</span>
+                        <h3>実部と確率密度は別物</h3>
+                        <p>実部モードは符号反転を示しますが、確率密度 |ψ|² では符号が消え、観測可能な雲の分布だけが残ります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next steps</p>
+                    <h2>関連ページへ</h2>
+                    <p>量子の振幅、複素数、しきい値やモードの見方を別の題材へ広げる。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="quantum.html">
+                        <span class="card-label">Quantum</span>
+                        <h3>量子力学と量子コンピュータ</h3>
+                        <p>波動関数、振幅、観測確率の考え方を、二重スリットや量子回路までつなげて読む。</p>
+                    </a>
+                    <a class="link-card" href="complex-plane.html">
+                        <span class="card-label">Complex Plane</span>
+                        <h3>複素平面の変形</h3>
+                        <p>複素数の位相や回転が、形の変化としてどう見えるかを別の文脈で確かめる。</p>
+                    </a>
+                    <a class="link-card" href="laser.html">
+                        <span class="card-label">Threshold</span>
+                        <h3>レーザー発振のしきい値</h3>
+                        <p>量子の話から、波とモードが巨視的な発振へどうつながるかを見る。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>© Reader's Space — 波動関数の角度方向は、球面調和関数の形として見えてくる。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="index.html">サイトトップ</a>
+                <a class="footer-link" href="simulations.html">シミュレーション一覧</a>
+                <a class="footer-link" href="quantum.html">量子力学ページ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="hydrogen-orbital.js"></script>
+</body>
+</html>
