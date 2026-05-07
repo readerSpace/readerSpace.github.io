@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原子力発電はどう電気になるのか？ | 核分裂・蒸気・タービン</title>
+    <meta name="description" content="核分裂、一次冷却材、蒸気発生器、タービン、発電機、制御棒、格納容器までを、教育用の原子力発電シミュレーションで理解できるページ。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="nuclear-power.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a href="index.html" class="brand">Reader's Space</a>
+            <nav class="site-nav" aria-label="サイト内ナビゲーション">
+                <a href="index.html">トップ</a>
+                <a href="physics.html">物理学トップ</a>
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="stellar-fusion.html">恒星核融合</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero reveal section">
+                <div class="hero-copy">
+                    <p class="eyebrow">Nuclear Power / Reactor Control / Steam Turbine</p>
+                    <h1>原子力発電はどう<br>電気になるのか？</h1>
+                    <p class="hero-lead">
+                        原子力発電は、核分裂で直接タービンを回しているわけではありません。
+                        原子炉内で生まれた熱を冷却材が運び、その熱で蒸気を作り、蒸気タービンと発電機を回しています。
+                        制御棒、冷却系、格納容器は、この熱源を安全に扱うための中心的な仕組みです。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">シミュレーションを見る</a>
+                        <a class="button button-secondary" href="#mechanism">流れを整理する</a>
+                    </div>
+                    <ul class="hero-points">
+                        <li>核分裂は熱源であり、その熱が最終的に蒸気タービンを回す</li>
+                        <li>制御棒は中性子を吸収して反応の速さを調整する</li>
+                        <li>冷却材と格納容器は熱と放射性物質を管理する安全側の仕組み</li>
+                    </ul>
+                </div>
+                <div class="hero-panel" aria-hidden="true">
+                    <div class="reactor-window">
+                        <span class="containment-shell"></span>
+                        <span class="containment-water"></span>
+                        <span class="reactor-core-art"></span>
+                        <span class="control-rod-art rod-a"></span>
+                        <span class="control-rod-art rod-b"></span>
+                        <span class="control-rod-art rod-c"></span>
+                        <span class="primary-loop top"></span>
+                        <span class="primary-loop bottom"></span>
+                        <span class="steam-generator-art"></span>
+                        <span class="turbine-wheel"></span>
+                        <span class="generator-box"></span>
+                        <span class="neutron-dot dot-a"></span>
+                        <span class="neutron-dot dot-b"></span>
+                        <span class="neutron-dot dot-c"></span>
+                        <span class="reactor-label label-core">炉心</span>
+                        <span class="reactor-label label-steam">蒸気発生器</span>
+                        <span class="reactor-label label-turbine">タービン</span>
+                    </div>
+                    <div class="hero-note">
+                        <p class="note-title">教育用の簡略モデル</p>
+                        <p>
+                            実際の原子力発電所には多重の安全系、非常用電源、復水系、圧力容器、配管系の詳細があります。
+                            ここでは「核分裂 → 熱 → 蒸気 → タービン → 発電」と「制御棒・冷却・格納」の骨格だけに絞っています。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal section" aria-label="ハイライト">
+                <p class="signal-kicker">Energy chain</p>
+                <p class="signal-main">核分裂で湯を沸かし、蒸気でタービンを回し、電気へ変える。</p>
+                <p class="signal-sub">
+                    原子炉は、見方を変えれば「巨大で強力な熱源」です。
+                    そこに制御棒で反応度を調整し、冷却材で熱を運び、格納容器で外へ出してはいけないものを閉じ込めます。
+                </p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>電気になるまでの 4 ステップ</h2>
+                    <p>
+                        反応そのものと発電そのものは、原子炉の中で直接つながっているわけではありません。
+                        炉心、熱輸送、蒸気、回転、発電という役割分担に分けると、全体像がつかみやすくなります。
+                    </p>
+                </div>
+                <div class="principle-grid">
+                    <article class="step-card">
+                        <span class="card-label">Step 01</span>
+                        <h3>核分裂で熱を出す</h3>
+                        <p>
+                            燃料棒の中で核分裂が起きると、中性子とともに大量の熱が生まれます。
+                            制御棒はその中性子の一部を吸収し、連鎖反応の速さを調整します。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 02</span>
+                        <h3>一次冷却材が熱を運ぶ</h3>
+                        <p>
+                            炉心で発生した熱は冷却材に移り、一次系のループを通って蒸気発生器へ運ばれます。
+                            熱そのものを運ぶ役が冷却材です。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 03</span>
+                        <h3>蒸気でタービンを回す</h3>
+                        <p>
+                            蒸気発生器で別系統の水が蒸気になり、その蒸気がタービン翼を押して回転させます。
+                            回転運動の入り口は、ここで初めて現れます。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Step 04</span>
+                        <h3>発電機が電気へ変える</h3>
+                        <p>
+                            タービン軸につながった発電機の中でコイルと磁場が相対運動し、電気エネルギーが取り出されます。
+                            熱はここで最終的に電気へ変換されます。
+                        </p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <span class="card-label">Chain</span>
+                        <p class="formula-block">核分裂 → 熱 → 蒸気 → タービン → 発電機</p>
+                        <p>
+                            原子力発電は「核分裂そのものの装置」ではなく、最終的には蒸気タービン発電の一種です。
+                            何が熱源かが違うだけで、電気へ変える最後の部分は火力発電とよく似ています。
+                        </p>
+                    </article>
+                    <article class="formula-card">
+                        <span class="card-label">Control</span>
+                        <p class="formula-block">反応度は制御棒で下げ、温度は冷却材で下げる</p>
+                        <p>
+                            制御棒は反応そのものを弱め、冷却材は生まれた熱を運び去ります。
+                            反応の制御と熱の除去は役割の違う二本柱です。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="safety">
+                <div class="section-heading">
+                    <p class="eyebrow">Safety</p>
+                    <h2>安全側の仕組みも同時に見る</h2>
+                    <p>
+                        発電の流れだけを追うと、原子力発電の本質を見落とします。
+                        制御棒、冷却材、格納容器がそれぞれ何を防いでいるのかを見ることが重要です。
+                    </p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <span class="card-label">Control rod</span>
+                        <h3>制御棒</h3>
+                        <p>
+                            中性子を吸収し、連鎖反応の強さを下げます。深く入れるほど核分裂は起きにくくなり、
+                            炉心温度の上昇も抑えられます。
+                        </p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <span class="card-label">Coolant</span>
+                        <h3>冷却材・冷却ポンプ</h3>
+                        <p>
+                            炉心から熱を取り出して運び去る役目です。制御棒が反応を弱める仕組みなのに対し、
+                            冷却材はすでに生まれた熱を減らす仕組みです。
+                        </p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <span class="card-label">Containment</span>
+                        <h3>格納容器</h3>
+                        <p>
+                            炉心や一次系を包み込み、万一のときにも放射性物質が外へ出にくいようにする最後の壁です。
+                            発電設備というより、安全設備としての性格が強い部分です。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>制御棒と冷却で運転状態を変え、事故進行も追う</h2>
+                    <p>
+                        制御棒の挿入量と冷却水ポンプを動かして、炉心温度、中性子数、蒸気量、電気出力がどう変わるかを見てください。
+                        ここでは加圧水型原子炉を意識した、教育用の簡略モデルを使っています。
+                        下の事故イベントでは、SCRAM 後も残る崩壊熱と、冷却喪失から炉心融解へ向かう流れも追えます。
+                    </p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="preset-row" id="presetRow">
+                            <button class="preset-chip" data-preset="low" type="button">低出力</button>
+                            <button class="preset-chip is-active" data-preset="stable" type="button">安定運転</button>
+                            <button class="preset-chip" data-preset="hot" type="button">高出力寄り</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control">
+                                <span>制御棒の挿入量 <strong id="rodVal">0.35</strong></span>
+                                <input id="rodRange" type="range" min="0" max="1" step="0.01" value="0.35">
+                            </label>
+                            <label class="control">
+                                <span>冷却水ポンプ <strong id="coolantVal">0.90</strong></span>
+                                <input id="coolantRange" type="range" min="0.2" max="1.5" step="0.01" value="0.90">
+                            </label>
+                        </div>
+                        <div class="scenario-box">
+                            <p class="scenario-title">Accident scenario</p>
+                            <div class="preset-row event-row" id="eventRow">
+                                <button class="preset-chip event-chip" data-event="scram" type="button">SCRAM停止</button>
+                                <button class="preset-chip event-chip" data-event="loca" type="button">冷却喪失</button>
+                                <button class="preset-chip event-chip" data-event="eccs" type="button">ECCS注水</button>
+                                <button class="preset-chip event-chip" data-event="reset" type="button">事故リセット</button>
+                            </div>
+                            <p class="event-note" id="eventNarration">
+                                連鎖反応を止めても、崩壊熱はすぐには消えません。冷却喪失が続くと水位低下から炉心損傷、炉心融解へ進みます。
+                            </p>
+                        </div>
+                        <p class="demo-note" id="demoNarration">
+                            制御棒と冷却のバランスがとれていると、炉心温度と蒸気量が安定し、タービンの回転も落ち着きます。
+                        </p>
+                        <div class="stat-grid nuclear-stat-grid">
+                            <article>
+                                <span>炉心温度</span>
+                                <strong id="statTemp">260 ℃</strong>
+                            </article>
+                            <article>
+                                <span>中性子数</span>
+                                <strong id="statNeutrons">25</strong>
+                            </article>
+                            <article>
+                                <span>電気出力</span>
+                                <strong id="statPower">0 %</strong>
+                            </article>
+                            <article>
+                                <span>反応度</span>
+                                <strong id="statReactivity">0.64</strong>
+                            </article>
+                            <article>
+                                <span>蒸気流量</span>
+                                <strong id="statSteam">0</strong>
+                            </article>
+                            <article>
+                                <span>崩壊熱</span>
+                                <strong id="statDecay">0.0 %</strong>
+                            </article>
+                            <article>
+                                <span>炉心水位</span>
+                                <strong id="statWater">100 %</strong>
+                            </article>
+                            <article>
+                                <span>燃料損傷</span>
+                                <strong id="statDamage">0 %</strong>
+                            </article>
+                            <article>
+                                <span>水素蓄積</span>
+                                <strong id="statHydrogen">0 %</strong>
+                            </article>
+                            <article>
+                                <span>状態</span>
+                                <strong id="statStatus" data-state="stable">安定運転中</strong>
+                            </article>
+                        </div>
+                        <div class="legend" aria-label="凡例">
+                            <span class="legend-item"><i class="legend-swatch neutron"></i>中性子</span>
+                            <span class="legend-item"><i class="legend-swatch fission"></i>核分裂の光</span>
+                            <span class="legend-item"><i class="legend-swatch rod"></i>制御棒</span>
+                            <span class="legend-item"><i class="legend-swatch steam"></i>蒸気</span>
+                            <span class="legend-item"><i class="legend-swatch coolant-hot"></i>高温の冷却材</span>
+                            <span class="legend-item"><i class="legend-swatch coolant-cold"></i>冷えて戻る冷却材</span>
+                            <span class="legend-item"><i class="legend-swatch hydrogen"></i>水素蓄積</span>
+                            <span class="legend-item"><i class="legend-swatch corium"></i>溶融炉心</span>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="nuclearCanvas" class="demo-canvas" width="900" height="560"
+                            aria-label="原子炉の炉心、中性子、制御棒、蒸気発生器、タービン、発電機、冷却系を示す原子力発電シミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>
+                            左が原子炉格納容器と炉心、中央が蒸気発生器、右がタービンと発電機です。
+                            水色の粒が中性子、黄色い光が核分裂、黒い棒が制御棒、白い粒が蒸気です。
+                            事故イベントでは、SCRAM 後の崩壊熱、水位低下、水素蓄積、溶融炉心も表示されます。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Interpretation</p>
+                    <h2>スライダーは何を動かしているのか</h2>
+                    <p>
+                        このモデルは、原子炉の全てを再現しているわけではありません。
+                        ただし、どの操作が「反応そのもの」に効き、どの操作が「熱の除去」に効くかは、十分に追えるようにしています。
+                    </p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <span class="card-label">Rod insertion</span>
+                        <h3>制御棒を深く入れる</h3>
+                        <p>
+                            中性子が吸収されるので、核分裂イベントが減り、中性子数と反応度が下がります。
+                            その結果として温度上昇も穏やかになります。
+                        </p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <span class="card-label">Cooling</span>
+                        <h3>冷却ポンプを強くする</h3>
+                        <p>
+                            炉心から熱を取り去る量が増え、温度が下がります。反応度そのものを下げるわけではありませんが、
+                            蒸気量とタービン出力には直接効いてきます。
+                        </p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <span class="card-label">Simplification</span>
+                        <h3>教育用モデルとして省略しているもの</h3>
+                        <p>
+                            実際には圧力制御、非常用炉心冷却、ポンプ冗長性、復水器、送電系、複数ループなど多くの要素があります。
+                            ここでは理解の軸になる部分だけを残しています。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next steps</p>
+                    <h2>関連ページへ</h2>
+                    <p>熱源、熱機関、モデル化のつながりを別の題材でも見る。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="stellar-fusion.html">
+                        <span class="card-label">Nuclear</span>
+                        <h3>星内部の核融合</h3>
+                        <p>核分裂ではなく核融合が熱源になると、どんな条件で反応が進むかを比較できます。</p>
+                    </a>
+                    <a class="link-card" href="engine.html">
+                        <span class="card-label">Heat engine</span>
+                        <h3>エンジンの仕組み</h3>
+                        <p>熱を回転へ変え、その回転を仕事へつなぐという点では、タービンも熱機関の一種です。</p>
+                    </a>
+                    <a class="link-card" href="simulation.html">
+                        <span class="card-label">Method</span>
+                        <h3>シミュレーションとは</h3>
+                        <p>このページが何を残し、何を省略しているかを、モデル化と近似の観点から整理します。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>© Reader's Space — 核分裂は熱源、蒸気は仕事の運び手、安全系はその前提。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理学トップ</a>
+                <a class="footer-link" href="simulations.html">シミュレーション一覧</a>
+                <a class="footer-link" href="index.html">サイトトップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="nuclear-power.js"></script>
+</body>
+</html>
