@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>力鎖はどこにできるのか？ | 粒子に加わる力</title>
+    <meta name="description" content="粒子を上から押したとき、どの粒が強く押され、どこに力鎖ができるのかを、粒状体の簡易シミュレーションで観察できるページ。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="force-chain.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a href="index.html" class="brand">Reader's Space</a>
+            <nav class="site-nav" aria-label="サイト内ナビゲーション">
+                <a href="index.html">トップ</a>
+                <a href="physics.html">物理学トップ</a>
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="sand.html">砂の物理</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero section reveal">
+                <div class="hero-copy">
+                    <p class="eyebrow">Granular Matter / Force Chain / Contact Network</p>
+                    <h1>力は粒のどこを<br>通って伝わるのか？</h1>
+                    <p class="hero-lead">
+                        砂や粉の山を上から押しても、力は全体へ均一には広がりません。
+                        一部の粒どうしに強い接触が集まり、明るい枝のような経路が現れます。
+                        これが力鎖で、粒状体が固体のように支えるときの骨格です。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">力鎖を動かして見る</a>
+                        <a class="button button-secondary" href="#mechanism">仕組みを読む</a>
+                    </div>
+                    <ul class="hero-points">
+                        <li>強い力は少数の接触へ集中し、枝分かれした経路を作る</li>
+                        <li>押す幅が細いほど、深いところまで細い鎖として伝わりやすい</li>
+                        <li>摩擦が大きいほど再配列しにくく、接触ネットワークが固定されやすい</li>
+                    </ul>
+                </div>
+                <div class="hero-panel" aria-hidden="true">
+                    <div class="force-window">
+                        <span class="press-bar"></span>
+                        <span class="arrow arrow-a"></span>
+                        <span class="arrow arrow-b"></span>
+                        <span class="grain grain-a"></span>
+                        <span class="grain grain-b"></span>
+                        <span class="grain grain-c"></span>
+                        <span class="grain grain-d"></span>
+                        <span class="grain grain-e"></span>
+                        <span class="grain grain-f"></span>
+                        <span class="grain grain-g"></span>
+                        <span class="grain grain-h"></span>
+                        <span class="chain chain-a"></span>
+                        <span class="chain chain-b"></span>
+                        <span class="chain chain-c"></span>
+                        <span class="chain chain-d"></span>
+                        <span class="window-label label-top">Load</span>
+                        <span class="window-label label-middle">Force chain</span>
+                        <span class="window-label label-base">Support</span>
+                    </div>
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-card">
+                            <p class="card-label">Contact</p>
+                            <h2>近傍リンクの縮みをみる</h2>
+                            <p>ここでは粒を近傍どうしのリンクで結び、そのリンクがどれだけ縮んだかを荷重の近似に使います。粒子を衝突で散らさず、伝達経路に集中できます。</p>
+                        </article>
+                        <article class="hero-note warm-card">
+                            <p class="card-label">Path</p>
+                            <h2>力は枝状に伝わる</h2>
+                            <p>均一な圧力分布ではなく、数本の経路へ集中して下まで届きます。見えている明るい線が、その道筋です。</p>
+                        </article>
+                        <article class="hero-note night-card">
+                            <p class="card-label">Width</p>
+                            <h2>圧子の幅で模様が変わる</h2>
+                            <p>細い圧子では集中した深い鎖に、広い圧子では面状に分散したネットワークになりやすくなります。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal section">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">粒状体では、力は「全部に少しずつ」ではなく、「少数の接触に強く」流れる。</p>
+                <p class="signal-sub">
+                    だから砂山や粉体は、見た目よりも局所的に硬かったり、突然崩れたりします。
+                    力鎖は、粒の接触ネットワークがどこで荷重を受け止めているかを可視化したものです。
+                </p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>力鎖はどうやって現れるのか</h2>
+                    <p>
+                        連続体なら圧力はなめらかに広がると考えますが、粒状体では個々の接触点が離散的です。
+                        そのため、どの粒とどの粒が押し合うかで、力の通り道そのものが変わります。
+                    </p>
+                </div>
+                <div class="principle-grid">
+                    <article class="step-card">
+                        <span class="card-label">Step 01</span>
+                        <h3>上から圧子で押す</h3>
+                        <p>まず荷重は圧子の下にいる粒へ入ります。ここが力の入口です。</p>
+                    </article>
+                    <article class="step-card strong-card">
+                        <span class="card-label">Step 02</span>
+                        <h3>近傍リンクが縮む</h3>
+                        <p>粒子を格子状の近傍ネットワークとして見て、押されるとリンク長が少し縮むと考えます。</p>
+                    </article>
+                    <article class="step-card warm-card">
+                        <span class="card-label">Step 03</span>
+                        <h3>強い接触が選ばれる</h3>
+                        <p>全ての接触が同じ強さになるわけではなく、一部の接触だけが強くなります。</p>
+                    </article>
+                    <article class="step-card night-card">
+                        <span class="card-label">Step 04</span>
+                        <h3>下の支持点へ枝状に流れる</h3>
+                        <p>強い接触がつながると、荷重は枝分かれしながら床や側壁へ抜けていきます。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <span class="card-label">Approximation</span>
+                        <p class="formula-block">F ≈ k × max(0, l0 - l)</p>
+                        <p>このページでは、近傍粒子を結ぶリンクの基準長 l0 と現在長 l の差から伝達力を近似しています。衝突シミュレーションではなく、準静的な荷重伝達モデルです。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <span class="card-label">Interpretation</span>
+                        <p class="formula-block">明るい粒子 = 大きい接触力<br>太い線 = 強い力鎖</p>
+                        <p>粒が明るいほど、その粒に入っている接触力の総量が大きいことを意味します。線の太さは粒子間の接触の強さです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>押す力、幅、摩擦で力鎖を変える</h2>
+                    <p>
+                        圧子の幅を狭くすると細い鎖が深く伸び、広くすると多くの粒へ分散します。
+                        摩擦を弱めると粒が再配列しやすくなり、力の経路も揺れやすくなります。
+                    </p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="preset-row" id="presetRow">
+                            <button class="preset-chip" data-preset="narrow" type="button">集中荷重</button>
+                            <button class="preset-chip is-active" data-preset="balanced" type="button">標準</button>
+                            <button class="preset-chip" data-preset="wide" type="button">広い荷重</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control">
+                                <span>押す力 <strong id="forceVal">0.52</strong></span>
+                                <input id="forceRange" type="range" min="0" max="1" step="0.01" value="0.52">
+                            </label>
+                            <label class="control">
+                                <span>押す領域の幅 <strong id="widthVal">220 px</strong></span>
+                                <input id="widthRange" type="range" min="0.16" max="0.86" step="0.01" value="0.32">
+                            </label>
+                            <label class="control">
+                                <span>粒子の摩擦 <strong id="dampingVal">0.965</strong></span>
+                                <input id="dampingRange" type="range" min="0.900" max="0.995" step="0.001" value="0.965">
+                            </label>
+                        </div>
+                        <p class="demo-note" id="demoNarration">
+                            標準状態では、中央から扇状に数本の力鎖が分かれ、下の支持点へ荷重が流れます。
+                        </p>
+                        <div class="stat-grid force-stat-grid">
+                            <article>
+                                <span>最大接触力</span>
+                                <strong id="statPeak">0.00</strong>
+                            </article>
+                            <article>
+                                <span>強く押される粒</span>
+                                <strong id="statLoaded">0 粒</strong>
+                            </article>
+                            <article>
+                                <span>強い力鎖</span>
+                                <strong id="statChains">0</strong>
+                            </article>
+                            <article>
+                                <span>圧縮の深さ</span>
+                                <strong id="statDepth">0.0 px</strong>
+                            </article>
+                            <article>
+                                <span>支持の広がり</span>
+                                <strong id="statSupport">0 %</strong>
+                            </article>
+                            <article>
+                                <span>分布モード</span>
+                                <strong id="statMode">待機中</strong>
+                            </article>
+                        </div>
+                        <div class="legend" aria-label="凡例">
+                            <span class="legend-item"><i class="legend-swatch chain-strong"></i>強い力鎖</span>
+                            <span class="legend-item"><i class="legend-swatch chain-weak"></i>弱い接触</span>
+                            <span class="legend-item"><i class="legend-swatch plate"></i>圧子</span>
+                            <span class="legend-item"><i class="legend-swatch base"></i>固定された底面</span>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="forceChainCanvas" class="demo-canvas" width="920" height="620"
+                            aria-label="粒子を上から押したときの接触力と力鎖のシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>
+                            粒が明るいほど、その粒に集まる接触力が大きくなっています。太く明るい線は、力が集中して流れている経路です。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>このモデルで何が見えているのか</h2>
+                    <p>
+                        ここで見えているのは「粒状体がどこで支え合っているか」です。
+                        近傍リンクの縮みとして荷重を追うだけでも、力の分配が均一でないことはかなり直感的に見えてきます。
+                    </p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <span class="card-label">Narrow load</span>
+                        <h3>細い圧子</h3>
+                        <p>力が少数の粒へ集中するので、深いところまで細い力鎖が落ちやすくなります。</p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <span class="card-label">Wide load</span>
+                        <h3>広い圧子</h3>
+                        <p>上面全体へ近い形で荷重が入るため、一本の鎖ではなく面状のネットワークに分散します。</p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <span class="card-label">Low friction</span>
+                        <h3>摩擦が弱い場合</h3>
+                        <p>粒がずれやすいので、ネットワークが固定されず、力鎖の枝が揺れながら組み替わります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next steps</p>
+                    <h2>関連ページへ</h2>
+                    <p>粒状体、摩擦、モデル化のつながりを別の視点でも見る。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="sand.html">
+                        <span class="card-label">Granular</span>
+                        <h3>砂の物理</h3>
+                        <p>安息角、ジャミング、ブラジルナッツ効果まで、粒状体のマクロな振る舞いを整理したページです。</p>
+                    </a>
+                    <a class="link-card" href="friction.html">
+                        <span class="card-label">Contact</span>
+                        <h3>摩擦力</h3>
+                        <p>接触面で何が起きているかを、静止摩擦と動摩擦の切り替わりとともに見直せます。</p>
+                    </a>
+                    <a class="link-card" href="simulation.html">
+                        <span class="card-label">Method</span>
+                        <h3>シミュレーションとは</h3>
+                        <p>このページで省略している回転、履歴依存、3 次元効果を、モデル化の観点から整理します。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>© Reader's Space — 粒状体では、力は少数の接触ネットワークに集中して流れる。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理学トップ</a>
+                <a class="footer-link" href="simulations.html">シミュレーション一覧</a>
+                <a class="footer-link" href="index.html">サイトトップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="force-chain.js"></script>
+</body>
+</html>
