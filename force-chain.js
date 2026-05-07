@@ -56,6 +56,7 @@
 
     const tau = Math.PI * 2;
     const gravity = 0.018;
+    const gravityVisualK = 5.6;
     const linkK = 0.095;
     const lateralHomeK = 0.03;
     const verticalHomeK = 0.012;
@@ -140,6 +141,8 @@
                     fx: 0,
                     fy: 0,
                     forceMag: 0,
+                    pressureMag: 0,
+                    weightMag: 0,
                     r: particleRadius * (0.96 + Math.random() * 0.08),
                     fixed: false,
                     row: rowIndex
@@ -244,6 +247,41 @@
             return '摩擦が弱く、粒子が滑りながら再配列しています。力鎖の枝も固定されず、時間とともに組み替わります。';
         }
         return '標準状態では、中央から扇状に数本の力鎖が分かれ、下の支持点へ荷重が流れます。';
+    }
+
+    function getForceMix(pressureMag, weightMag) {
+        const total = pressureMag + weightMag;
+        if (total <= 0.0001) {
+            return {
+                pressureRatio: 0.5,
+                weightRatio: 0.5,
+                total: 0
+            };
+        }
+
+        return {
+            pressureRatio: pressureMag / total,
+            weightRatio: weightMag / total,
+            total
+        };
+    }
+
+    function mixForceColor(pressureMag, weightMag, alpha, brighten = 0) {
+        const visualPressure = pressureMag * 1.32;
+        const visualWeight = weightMag * 0.6;
+        const { pressureRatio, weightRatio } = getForceMix(visualPressure, visualWeight);
+        const pressureColor = { r: 255, g: 148, b: 72 };
+        const weightColor = { r: 86, g: 196, b: 255 };
+
+        let r = pressureColor.r * pressureRatio + weightColor.r * weightRatio;
+        let g = pressureColor.g * pressureRatio + weightColor.g * weightRatio;
+        let b = pressureColor.b * pressureRatio + weightColor.b * weightRatio;
+
+        r += (255 - r) * brighten;
+        g += (255 - g) * brighten;
+        b += (255 - b) * brighten;
+
+        return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${alpha})`;
     }
 
     function samplePathSeeds(candidates, desiredCount) {
@@ -404,12 +442,16 @@
                     {
                         x: particles[seed.index].x,
                         y: plate.pressY,
-                        force: seed.forceMag
+                        force: seed.forceMag,
+                        pressure: particles[seed.index].pressureMag,
+                        weight: particles[seed.index].weightMag
                     },
                     ...chain.map((index) => ({
                         x: particles[index].x,
                         y: particles[index].y,
-                        force: particles[index].forceMag
+                        force: particles[index].forceMag,
+                        pressure: particles[index].pressureMag,
+                        weight: particles[index].weightMag
                     }))
                 ]
             });
@@ -429,6 +471,8 @@
             particle.fx = (particle.homeX - particle.x) * lateralHomeK;
             particle.fy = gravity + (particle.homeY - particle.y) * verticalHomeK;
             particle.forceMag = 0;
+            particle.pressureMag = 0;
+            particle.weightMag = gravity * gravityVisualK;
         }
 
         const plateCenter = (plate.left + plate.right) * 0.5;
@@ -443,6 +487,7 @@
                 const load = pressureScale * horizontal * horizontal * clamp(vertical, 0, 1);
                 particle.fy += load;
                 particle.forceMag += load * 0.18;
+                particle.pressureMag += load * 0.18;
             }
         }
 
@@ -464,8 +509,18 @@
 
             const axialLoad = Math.abs(springForce) * (1 + Math.abs(ny) * 0.35);
             const transmitted = axialLoad * 12;
+            const sourcePressure = a.pressureMag + b.pressureMag;
+            const sourceWeight = a.weightMag + b.weightMag;
+            const sourceMix = getForceMix(sourcePressure, sourceWeight);
+            const pressureTransmit = transmitted * sourceMix.pressureRatio;
+            const weightTransmit = transmitted * sourceMix.weightRatio;
+
             a.forceMag += transmitted * 0.5;
             b.forceMag += transmitted * 0.5;
+            a.pressureMag += pressureTransmit * 0.5;
+            b.pressureMag += pressureTransmit * 0.5;
+            a.weightMag += weightTransmit * 0.5;
+            b.weightMag += weightTransmit * 0.5;
 
             if (axialLoad > 0.0012) {
                 contacts.push({
@@ -475,7 +530,9 @@
                     ay: a.y,
                     bx: b.x,
                     by: b.y,
-                    strength: axialLoad
+                    strength: axialLoad,
+                    pressureMag: axialLoad * sourceMix.pressureRatio,
+                    weightMag: axialLoad * sourceMix.weightRatio
                 });
             }
         }
@@ -632,7 +689,7 @@
         for (const contact of contacts) {
             const strength = clamp(contact.strength / (peak * 0.8), 0, 1);
             if (strength < 0.05) continue;
-            ctx.strokeStyle = `rgba(255, ${140 + strength * 90}, 72, ${0.12 + strength * 0.78})`;
+            ctx.strokeStyle = mixForceColor(contact.pressureMag, contact.weightMag, 0.12 + strength * 0.78, 0.06 + strength * 0.08);
             ctx.lineWidth = 0.5 + strength * 5.6;
             ctx.beginPath();
             ctx.moveTo(contact.ax, contact.ay);
@@ -645,7 +702,7 @@
             if (glow > 0.05) {
                 ctx.beginPath();
                 ctx.arc(particle.x, particle.y, particle.r + glow * 6.5, 0, tau);
-                ctx.fillStyle = `rgba(255, ${94 + glow * 150}, 38, ${0.14 + glow * 0.5})`;
+                ctx.fillStyle = mixForceColor(particle.pressureMag, particle.weightMag, 0.14 + glow * 0.5, 0.16 + glow * 0.12);
                 ctx.fill();
             }
 
@@ -653,7 +710,7 @@
             ctx.arc(particle.x, particle.y, particle.r, 0, tau);
             ctx.fillStyle = particle.fixed ? '#6c665f' : '#23303a';
             ctx.fill();
-            ctx.strokeStyle = `rgba(255, 220, 156, ${0.18 + glow * 0.74})`;
+            ctx.strokeStyle = mixForceColor(particle.pressureMag, particle.weightMag, 0.22 + glow * 0.7, 0.24 + glow * 0.16);
             ctx.lineWidth = 1 + glow * 2.2;
             ctx.stroke();
         }
@@ -671,19 +728,19 @@
                     const start = path.points[index];
                     const end = path.points[index + 1];
                     const segmentForce = Math.max(start.force || 0, end.force || 0);
+                    const segmentPressure = (start.pressure || 0) + (end.pressure || 0);
+                    const segmentWeight = (start.weight || 0) + (end.weight || 0);
                     const emphasis = clamp(segmentForce / pathPeak, 0.14, 1);
-                    const glowLightness = 82 - emphasis * 24;
-                    const coreLightness = 88 - emphasis * 42;
 
                     ctx.setLineDash([]);
-                    ctx.strokeStyle = `hsla(194, 92%, ${glowLightness}%, ${0.12 + emphasis * 0.2})`;
+                    ctx.strokeStyle = mixForceColor(segmentPressure, segmentWeight, 0.14 + emphasis * 0.2, 0.18 + emphasis * 0.14);
                     ctx.lineWidth = 5.8 + emphasis * 2.8;
                     ctx.beginPath();
                     ctx.moveTo(start.x, start.y);
                     ctx.lineTo(end.x, end.y);
                     ctx.stroke();
 
-                    ctx.strokeStyle = `hsla(193, 88%, ${coreLightness}%, ${0.54 + emphasis * 0.28})`;
+                    ctx.strokeStyle = mixForceColor(segmentPressure, segmentWeight, 0.56 + emphasis * 0.28, 0.02 + emphasis * 0.06);
                     ctx.lineWidth = 2.2 + emphasis * 1.3;
                     ctx.beginPath();
                     ctx.moveTo(start.x, start.y);
@@ -692,11 +749,13 @@
                 }
 
                 const entryForce = path.points[1]?.force || path.strength;
+                const entryPressure = path.points[1]?.pressure || 0;
+                const entryWeight = path.points[1]?.weight || 0;
                 const entryEmphasis = clamp(entryForce / pathPeak, 0.2, 1);
                 ctx.setLineDash([]);
                 ctx.beginPath();
                 ctx.arc(path.points[0].x, path.points[0].y - 12, 8.4, 0, tau);
-                ctx.fillStyle = `hsla(192, 92%, ${78 - entryEmphasis * 28}%, ${0.74 + entryEmphasis * 0.18})`;
+                ctx.fillStyle = mixForceColor(entryPressure, entryWeight, 0.74 + entryEmphasis * 0.18, 0.12 + entryEmphasis * 0.12);
                 ctx.fill();
                 ctx.fillStyle = '#082530';
                 ctx.font = '700 11px IBM Plex Sans JP';
