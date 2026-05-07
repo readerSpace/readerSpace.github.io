@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エンジンはどう動くのか？ | 4ストロークとスターリング</title>
+    <meta name="description" content="4ストロークエンジンの吸気、圧縮、燃焼・膨張、排気と、スターリングエンジンの高温側・低温側・ディスプレーサ・再生器の働きを、JSシミュレーションで学べる教育ページ。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="engine.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a href="index.html" class="brand">Reader's Space</a>
+            <nav class="site-nav" aria-label="サイト内ナビゲーション">
+                <a href="index.html">トップ</a>
+                <a href="physics.html">物理学トップ</a>
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="friction.html">摩擦力</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero reveal section">
+                <div class="hero-copy">
+                    <p class="eyebrow">Engine Mechanics / Thermodynamics</p>
+                    <h1>4ストローク<br>エンジンはどう動く？</h1>
+                    <p class="hero-lead">
+                        エンジンは、空気と燃料を吸い込み、圧縮し、燃やして膨張させ、最後に排気するという
+                        4 つの工程をくり返しながら、ピストンの上下運動をクランク軸の回転へ変えています。
+                        1 回の燃焼だけで連続回転しているのではなく、720 度の周期を何度もつないで回り続けています。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#demo">シミュレーションを見る</a>
+                        <a class="button button-secondary" href="#principle">4 工程を整理する</a>
+                    </div>
+                    <ul class="hero-points">
+                        <li>吸気と排気ではバルブがガスの出入りを切り替える</li>
+                        <li>圧縮後の点火で高温高圧ガスがピストンを押し下げる</li>
+                        <li>コンロッドとクランクが往復運動を回転運動に変換する</li>
+                    </ul>
+                </div>
+                <div class="hero-panel" aria-hidden="true">
+                    <div class="engine-window">
+                        <span class="engine-cylinder"></span>
+                        <span class="engine-piston"></span>
+                        <span class="engine-rod"></span>
+                        <span class="engine-crank"></span>
+                        <span class="engine-flywheel"></span>
+                        <span class="engine-valve intake"></span>
+                        <span class="engine-valve exhaust"></span>
+                        <span class="engine-spark"></span>
+                        <span class="engine-label label-intake">吸気</span>
+                        <span class="engine-label label-exhaust">排気</span>
+                        <span class="engine-label label-cycle">720°で 1 サイクル</span>
+                    </div>
+                    <div class="hero-note">
+                        <p class="note-title">見るポイント</p>
+                        <p>
+                            「燃焼だけ」を追うとエンジンは理解しにくくなります。
+                            バルブの開閉、ピストン位置、点火のタイミング、クランクの角度を同時に見るのが近道です。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal section" aria-label="ハイライト">
+                <p class="signal-kicker">Cycle</p>
+                <p class="signal-main">吸気で入れ、圧縮で整え、燃焼で押し、排気で空ける。</p>
+                <p class="signal-sub">
+                    4 ストロークエンジンでは、クランク軸が 2 回転する間に 1 回だけ燃焼・膨張が起きます。
+                    それでもフライホイールの慣性と複数気筒のずれによって、実機では回転がなめらかに保たれます。
+                </p>
+            </section>
+
+            <section class="section reveal" id="principle">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>4 工程を一周で捉える</h2>
+                    <p>
+                        エンジンの心臓部は、シリンダーの中で起きる気体の出入りと、
+                        それを回転へ変える機械要素の組み合わせです。どの工程で何が開き、何が閉じるかを追うと、
+                        ピストン運動の意味がはっきり見えてきます。
+                    </p>
+                </div>
+                <div class="principle-grid">
+                    <article class="step-card">
+                        <span class="card-label">Stroke 01</span>
+                        <h3>吸気</h3>
+                        <p>
+                            ピストンが下がるとシリンダー内の圧力が下がり、吸気バルブが開いて混合気が流れ込みます。
+                            シリンダーを次の燃焼のために満たす工程です。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Stroke 02</span>
+                        <h3>圧縮</h3>
+                        <p>
+                            バルブを閉じたままピストンを上げると、混合気は体積を失って圧縮されます。
+                            点火前に密度と温度を上げることで、燃焼の押す力を大きくします。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Stroke 03</span>
+                        <h3>燃焼・膨張</h3>
+                        <p>
+                            上死点付近で点火プラグが火花を飛ばし、急速に燃えた高温高圧ガスがピストンを押し下げます。
+                            正味の仕事を取り出せる主役の工程です。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Stroke 04</span>
+                        <h3>排気</h3>
+                        <p>
+                            排気バルブを開き、ピストンが上がりながら燃焼後のガスを押し出します。
+                            シリンダーを空に戻して、次の吸気へつなぎます。
+                        </p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <span class="card-label">Cycle length</span>
+                        <p class="formula-block">1 サイクル = 4 工程 = クランク軸 720° = 2 回転</p>
+                        <p>
+                            4 ストロークでは、各工程が 180° ずつを受け持ちます。
+                            燃焼は 1 サイクル中 1 回ですが、機械系はその間ずっと回り続けます。
+                        </p>
+                    </article>
+                    <article class="formula-card">
+                        <span class="card-label">Motion conversion</span>
+                        <p class="formula-block">ピストンの往復運動 → コンロッド → クランク軸の回転</p>
+                        <p>
+                            クランクとコンロッドが、直線運動と回転運動の橋渡しをしています。
+                            シミュレーションではこの変換が最も見えやすい部分です。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>吸気から排気までを追う</h2>
+                    <p>
+                        回転速度を変えながら、バルブの開閉、点火の瞬間、ピストンの上下、クランク角の進み方を見比べてください。
+                        下の色バーは 4 工程全体の中で、今どこにいるかを示します。
+                    </p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="preset-row" id="presetRow">
+                            <button class="preset-chip is-active" data-preset="study" type="button">観察向け</button>
+                            <button class="preset-chip" data-preset="normal" type="button">標準</button>
+                            <button class="preset-chip" data-preset="fast" type="button">高速</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control">
+                                <span>回転速度 <strong id="speedVal">1.0</strong></span>
+                                <input id="speedRange" type="range" min="0.3" max="3.0" step="0.1" value="1.0">
+                            </label>
+                        </div>
+                        <p class="demo-note" id="demoNarration">
+                            まずは遅めにして、吸気と排気でどちらのバルブが開くか、燃焼でどこに火花が出るかを追ってください。
+                        </p>
+                        <div class="stat-grid">
+                            <article>
+                                <span>現在の工程</span>
+                                <strong id="statPhase">吸気</strong>
+                            </article>
+                            <article>
+                                <span>クランク角</span>
+                                <strong id="statAngle">0° / 720°</strong>
+                            </article>
+                            <article>
+                                <span>ピストン位置</span>
+                                <strong id="statPiston">上死点寄り</strong>
+                            </article>
+                            <article>
+                                <span>バルブ状態</span>
+                                <strong id="statValve">吸気 開 / 排気 閉</strong>
+                            </article>
+                        </div>
+                        <div class="legend" aria-label="凡例">
+                            <span class="legend-item"><i class="legend-swatch intake"></i>吸気</span>
+                            <span class="legend-item"><i class="legend-swatch compression"></i>圧縮</span>
+                            <span class="legend-item"><i class="legend-swatch power"></i>燃焼・膨張</span>
+                            <span class="legend-item"><i class="legend-swatch exhaust"></i>排気</span>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="engineCanvas" class="demo-canvas" width="820" height="560"
+                            aria-label="4ストロークエンジンのピストン、バルブ、点火、クランク運動を示すシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>
+                            シリンダー内の色が気体の状態、左上の工程名が現在の段階、下のバーが 720° 周期の位置です。
+                            燃焼・膨張の区間だけ、点火プラグの火花と押し下げる力が強く現れます。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="reading">
+                <div class="section-heading">
+                    <p class="eyebrow">Interpretation</p>
+                    <h2>どこを見ると理解しやすいか</h2>
+                    <p>
+                        4 ストロークは、各工程を個別に覚えるだけではつながりにくい題材です。
+                        同じピストン運動でも、バルブの開閉と気体の状態が違うだけで役割が変わる点が核心です。
+                    </p>
+                </div>
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <span class="card-label">Valve control</span>
+                        <h3>出入りを決めるのはバルブ</h3>
+                        <p>
+                            ピストンが下がるだけでは吸気にはなりません。吸気バルブが開いて初めて混合気が入り、
+                            排気バルブが開けば同じ上昇運動が排気になります。
+                        </p>
+                    </article>
+                    <article class="comparison-card strong-card">
+                        <span class="card-label">Pressure rise</span>
+                        <h3>押す力を作るのは圧縮後の燃焼</h3>
+                        <p>
+                            圧縮工程は直接仕事を生みませんが、燃焼を強くするための準備です。
+                            点火が上死点付近で起きる理由も、最も効率よく押し下げるためです。
+                        </p>
+                    </article>
+                    <article class="comparison-card warm-card">
+                        <span class="card-label">Rotation</span>
+                        <h3>回り続けるのは慣性があるから</h3>
+                        <p>
+                            4 工程のうち正味の仕事を出すのは燃焼・膨張だけです。それでもエンジンが止まらず回るのは、
+                            フライホイールや他気筒が回転をつないでいるからです。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal section" aria-label="スターリングエンジンの要点">
+                <p class="signal-kicker">External combustion</p>
+                <p class="signal-main">同じ気体を、熱い側と冷たい側へ行き来させて回す。</p>
+                <p class="signal-sub">
+                    スターリングエンジンは、内部の気体を外へ出さず、温めると膨張し、冷やすと収縮するという
+                    基本的な熱力学を利用する外燃機関です。燃焼を内部で起こす 4 ストロークとは、押し方の作り方が根本的に違います。
+                </p>
+            </section>
+
+            <section class="section reveal" id="stirling-principle">
+                <div class="section-heading">
+                    <p class="eyebrow">Stirling Engine</p>
+                    <h2>スターリングエンジンは熱で空気を呼吸させる</h2>
+                    <p>
+                        スターリングエンジンでは、空気やヘリウムなどの気体が内部に閉じ込められたまま動きます。
+                        ディスプレーサがその気体を高温側と低温側へ運び、パワーピストンが圧力差から仕事を受け取ります。
+                        焼いて押すのではなく、温度差で膨張・収縮させる点が核心です。
+                    </p>
+                </div>
+                <div class="principle-grid">
+                    <article class="step-card">
+                        <span class="card-label">Part 01</span>
+                        <h3>高温部と低温部</h3>
+                        <p>
+                            熱い側にある気体は膨張しやすく、冷たい側では収縮しやすくなります。
+                            スターリングはこの温度差そのものを駆動源にします。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Part 02</span>
+                        <h3>ディスプレーサが気体を移す</h3>
+                        <p>
+                            ディスプレーサは気体を押しつぶすためのピストンではなく、
+                            熱い側と冷たい側へ「送り分ける」ための部品です。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Part 03</span>
+                        <h3>パワーピストンが仕事を受ける</h3>
+                        <p>
+                            気体が熱い側へ寄って圧力が上がると、パワーピストンが押されます。
+                            冷えると圧力が下がり、フライホイール慣性で戻ることができます。
+                        </p>
+                    </article>
+                    <article class="step-card">
+                        <span class="card-label">Part 04</span>
+                        <h3>レジェネレータが熱を再利用する</h3>
+                        <p>
+                            気体が行き来するときに熱を一時的に受け取り、戻るときに返す部品がレジェネレータです。
+                            これがあると、内部熱のリサイクルが進み、効率が上がります。
+                        </p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <span class="card-label">Ideal gas</span>
+                        <p class="formula-block">PV = nRT</p>
+                        <p>
+                            温度 T が上がれば、圧力 P または体積 V が増えます。
+                            スターリングエンジンは、この関係を熱い側と冷たい側の移動で周期的に使います。
+                        </p>
+                    </article>
+                    <article class="formula-card">
+                        <span class="card-label">Efficiency limit</span>
+                        <p class="formula-block">η = 1 - Tc / Th</p>
+                        <p>
+                            理論的にはカルノー効率に近づけます。高温側 Th と低温側 Tc の差が大きいほど、
+                            取り出せる仕事の割合は高くなります。
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="stirling-demo">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>熱い側と冷たい側を行き来させる</h2>
+                    <p>
+                        温度差とレジェネレータの効きを変えながら、ディスプレーサが気体をどちらへ送るか、
+                        パワーピストンがどのタイミングで押されるかを見比べてください。右下のフライホイールには約 90° の位相差も描いています。
+                    </p>
+                </div>
+                <div class="demo-grid">
+                    <div class="demo-panel">
+                        <div class="preset-row" id="stirlingPresetRow">
+                            <button class="preset-chip is-active" data-stirling-preset="observe" type="button">観察向け</button>
+                            <button class="preset-chip" data-stirling-preset="efficient" type="button">高効率</button>
+                            <button class="preset-chip" data-stirling-preset="small-gap" type="button">温度差小</button>
+                        </div>
+                        <div class="control-grid">
+                            <label class="control">
+                                <span>回転速度 <strong id="stirlingSpeedVal">0.8</strong></span>
+                                <input id="stirlingSpeedRange" type="range" min="0.4" max="2.4" step="0.1" value="0.8">
+                            </label>
+                            <label class="control">
+                                <span>温度差 ΔT <strong id="stirlingTempGapVal">260 K</strong></span>
+                                <input id="stirlingTempGapRange" type="range" min="120" max="520" step="10" value="260">
+                            </label>
+                            <label class="control">
+                                <span>レジェネレータ <strong id="stirlingRegenVal">76 %</strong></span>
+                                <input id="stirlingRegenRange" type="range" min="0" max="100" step="1" value="76">
+                            </label>
+                        </div>
+                        <p class="demo-note" id="stirlingNarration">
+                            ディスプレーサが気体を熱い側へ寄せ始めると、有効温度と圧力が上がり、膨張の準備が進みます。
+                        </p>
+                        <div class="stat-grid stirling-stat-grid">
+                            <article>
+                                <span>工程</span>
+                                <strong id="stirlingPhase">熱い側へ移動</strong>
+                            </article>
+                            <article>
+                                <span>有効温度</span>
+                                <strong id="stirlingTemp">460 K</strong>
+                            </article>
+                            <article>
+                                <span>圧力</span>
+                                <strong id="stirlingPressure">1.18 ×</strong>
+                            </article>
+                            <article>
+                                <span>高温側の気体割合</span>
+                                <strong id="stirlingGasShift">高温側 61 %</strong>
+                            </article>
+                            <article>
+                                <span>位相差</span>
+                                <strong id="stirlingPhaseOffset">90°</strong>
+                            </article>
+                            <article>
+                                <span>近似効率</span>
+                                <strong id="stirlingEfficiency">33 %</strong>
+                            </article>
+                        </div>
+                        <div class="legend" aria-label="スターリングエンジンの凡例">
+                            <span class="legend-item"><i class="legend-swatch stirling-hot"></i>高温側</span>
+                            <span class="legend-item"><i class="legend-swatch stirling-cold"></i>低温側</span>
+                            <span class="legend-item"><i class="legend-swatch stirling-displacer"></i>ディスプレーサ</span>
+                            <span class="legend-item"><i class="legend-swatch stirling-regen"></i>レジェネレータ</span>
+                        </div>
+                    </div>
+                    <div class="canvas-panel">
+                        <canvas id="stirlingCanvas" class="demo-canvas" width="820" height="540"
+                            aria-label="スターリングエンジンの高温部、低温部、ディスプレーサ、パワーピストン、フライホイールを示すシミュレーション"></canvas>
+                        <p class="canvas-caption">
+                            <strong>読み方：</strong>
+                            上の横長の室が高温側と低温側、中央の帯がレジェネレータ、灰色の部品がディスプレーサ、
+                            右の縦シリンダーがパワーピストンです。熱い側へ気体が寄ると圧力が上がり、少し遅れて仕事ピストンが押されます。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next steps</p>
+                    <h2>関連ページへ</h2>
+                    <p>力学、損失、流れの見方を周辺テーマへ広げる。</p>
+                </div>
+                <div class="link-grid">
+                    <a class="link-card" href="friction.html">
+                        <span class="card-label">Loss</span>
+                        <h3>摩擦力</h3>
+                        <p>実際のエンジンで失われる仕事を考えるには、接触と散逸の見方が欠かせません。</p>
+                    </a>
+                    <a class="link-card" href="fire-smoke.html">
+                        <span class="card-label">Flow</span>
+                        <h3>火と煙</h3>
+                        <p>燃焼後の高温ガスがどう流れるかを、浮力と流れ場の可視化で別の角度から見る。</p>
+                    </a>
+                    <a class="link-card" href="simulation.html">
+                        <span class="card-label">Method</span>
+                        <h3>シミュレーションとは</h3>
+                        <p>このページで何を単純化し、何を残しているのかを、モデル化の観点から整理する。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>© Reader's Space — 気体の変化を、機械の回転へつなぐ。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">物理学トップ</a>
+                <a class="footer-link" href="simulations.html">シミュレーション一覧</a>
+                <a class="footer-link" href="index.html">サイトトップ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="engine.js"></script>
+</body>
+</html>
