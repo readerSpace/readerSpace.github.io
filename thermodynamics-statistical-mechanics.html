@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>熱力学と統計力学のエントロピーはなぜ一致するのか | 平衡系統計力学のページ</title>
+    <meta name="description" content="熱力学と統計力学のエントロピーが一致する理由を、平衡系統計力学が熱力学をミクロ自由度から再現する理論だという結論を中心にページ形式で整理したページです。補足として、ミクロ自由度の統計だけでは熱力学が導出できない理由もまとめています。">
+    <meta name="theme-color" content="#1d344a">
+    <link rel="canonical" href="https://readerspace.github.io/thermodynamics-statistical-mechanics.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="thermodynamics-statistical-mechanics.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false});"></script>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="physics.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#abstract">要旨</a>
+                <a href="#question">問い</a>
+                <a href="#conclusion">結論</a>
+                <a href="#main-body">本論</a>
+                <a href="#supplement">補足</a>
+                <a href="#next">関連項目</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Report / Equilibrium Statistical Mechanics / Entropy</p>
+                    <h1>ページ:<br>熱力学と統計力学のエントロピーはなぜ一致するのか</h1>
+                    <p class="hero-lead">
+                        本ページでは、熱力学で導入されるエントロピー $S$ と、統計力学で現れる $S = k_B \ln \Omega$ や
+                        $S = -k_B \sum_i p_i \ln p_i$ が、なぜ同じ量として読めるのかを整理します。
+                        主張は明確で、<strong>平衡系統計力学が熱力学をミクロ自由度から再現する理論だから</strong>、両者のエントロピーは一致します。
+                        そのうえで、なぜミクロ自由度の統計だけでは熱力学が自動的に導かれないのかも補足としてまとめます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#abstract">要旨へ</a>
+                        <a class="button button-secondary" href="#conclusion">結論へ</a>
+                        <a class="button button-secondary" href="#supplement">補足へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="要点">
+                        <li>問いは、熱力学の $S$ と統計力学の $S$ がなぜ同じ量として現れるのかという点にある</li>
+                        <li>結論は、平衡系統計力学が熱力学をミクロ自由度から再現する理論だから、ということ</li>
+                        <li>補足として、粗視化、熱力学極限、典型性などがなければ熱力学は導出できないことを示す</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="bridge-map">
+                        <article class="bridge-step strong-card">
+                            <p class="card-label">Question</p>
+                            <h2>問い</h2>
+                            <p>熱力学で定義されたエントロピーと、統計力学で数えるエントロピーは、なぜ同じ量になるのか。</p>
+                        </article>
+                        <article class="bridge-step warm-card">
+                            <p class="card-label">Conclusion</p>
+                            <h2>結論</h2>
+                            <p>平衡系統計力学が熱力学をミクロ自由度から再現する理論だから、両者は同じ $S$ を指している。</p>
+                        </article>
+                        <article class="bridge-step night-card">
+                            <p class="card-label">Supplement</p>
+                            <h2>補足</h2>
+                            <p>ただし導出には、ミクロ統計に加えて粗視化、熱力学極限、典型性などの物理的仮定が要る。</p>
+                        </article>
+                    </div>
+
+                    <div class="formula-stack">
+                        <article class="formula-pill">
+                            <p class="card-label">Clausius</p>
+                            <div class="formula-block">$$ dS = \frac{\delta Q_{\mathrm{rev}}}{T} $$</div>
+                        </article>
+                        <article class="formula-pill">
+                            <p class="card-label">Boltzmann</p>
+                            <div class="formula-block">$$ S = k_B \ln \Omega $$</div>
+                        </article>
+                        <article class="formula-pill">
+                            <p class="card-label">Gibbs</p>
+                            <div class="formula-block">$$ S = -k_B \sum_i p_i \ln p_i $$</div>
+                        </article>
+                        <article class="formula-pill">
+                            <p class="card-label">Landauer</p>
+                            <div class="formula-block">$$ Q \ge k_B T \ln 2 $$</div>
+                        </article>
+                    </div>
+
+                    <div class="hero-quote">
+                        <p class="card-label">Main Claim</p>
+                        <p>本ページの主張は、熱力学のエントロピーと統計力学のエントロピーが一致する理由は、平衡系統計力学が熱力学をミクロ自由度から再現する理論だから、という一点に尽きるというものです。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal" id="abstract">
+                <p class="signal-kicker">Abstract</p>
+                <p class="signal-main">要旨</p>
+                <p class="signal-sub">熱力学のエントロピーは $dS = \frac{\delta Q_{\mathrm{rev}}}{T}$ として巨視的に導入される。一方、平衡系統計力学では同じ量が $S = k_B \ln \Omega$ や $S = -k_B \sum_i p_i \ln p_i$ としてミクロ自由度から再現される。したがって、両者のエントロピーが一致する理由は、平衡系統計力学が熱力学をミクロ自由度から再現する理論だからである。ただしその導出には、ミクロ自由度の統計だけでなく、粗視化、熱力学極限、分布選択、典型性といった物理的仮定が必要である。</p>
+            </section>
+
+            <section class="section reveal" id="question">
+                <div class="section-heading">
+                    <p class="eyebrow">Question</p>
+                    <h2>問題設定: 熱力学の $S$ と統計力学の $S$ はなぜ一致するのか</h2>
+                    <p>熱力学はまず巨視的理論として作られ、統計力学は後からミクロ自由度を使ってそれを説明しました。そこで本ページの問いは、熱力学で導入されたエントロピーと、統計力学で状態数や確率分布から定義されるエントロピーが、なぜ同じ量として理解できるのかという点です。</p>
+                </div>
+                <div class="card-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Thermodynamics</p>
+                        <h3>熱力学は巨視的法則として先に立てられた</h3>
+                        <p>Clausius の段階では、エントロピーは可逆熱量を温度で割った量として導入されました。ここではまだ微視的状態数の議論はありません。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Statistical Mechanics</p>
+                        <h3>統計力学はその法則をミクロ自由度から説明しようとした</h3>
+                        <p>Boltzmann や Gibbs は、粒子配置や確率分布から温度、圧力、エントロピーを再構成しようとしました。問いはこの再構成が本当に熱力学を再現しているかです。</p>
+                    </article>
+                    <article class="info-card night-card">
+                        <p class="card-label">Target</p>
+                        <h3>一致の意味は「同じ現象を別の記述で説明している」こと</h3>
+                        <p>熱力学の $S$ と統計力学の $S$ が一致するとは、別々の量が偶然似ているのではなく、同じ巨視的状態量を別の水準で書き表しているということです。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Definition</p>
+                        <div class="formula-block">$$ dS = \frac{\delta Q_{\mathrm{rev}}}{T} $$</div>
+                        <p>これは熱力学でのエントロピーの出発点です。熱がどれだけ「状態数の増えやすさ」に変わるかを表します。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Integrated Form</p>
+                        <div class="formula-block">$$ \Delta S = \int \frac{\delta Q_{\mathrm{rev}}}{T} $$</div>
+                        <p>可逆経路をたどれば、初期状態と終状態だけからエントロピー差が定まります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Thermodynamic Identity</p>
+                        <div class="formula-block">$$ dE = T dS - P dV + \mu dN $$</div>
+                        <p>温度、圧力、粒子数などの巨視的変数が、エネルギーとどう結びつくかをまとめた基本式です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="conclusion">
+                <div class="section-heading">
+                    <p class="eyebrow">Conclusion</p>
+                    <h2>結論: 平衡系統計力学が熱力学をミクロ自由度から再現するから</h2>
+                    <p>本ページの結論はここです。平衡系統計力学は、巨視的状態の背後にある微視的配置の集合を使って、熱力学の温度、圧力、エントロピー、状態方程式を再現します。したがって、熱力学のエントロピーと統計力学のエントロピーは、同じ巨視的状態量を別の視点から書いたものとして一致します。</p>
+                </div>
+                <div class="card-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Macrostate</p>
+                        <h3>巨視的状態は、微視的状態の束として実現される</h3>
+                        <p>温度や圧力で指定される巨視的状態の背後には、粒子の位置と運動量の膨大な組み合わせがあります。統計力学はこの束を扱う理論です。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Reproduction</p>
+                        <h3>再現できるから、同じ $S$ だと分かる</h3>
+                        <p>$S = k_B \ln \Omega$ や $S = -k_B \sum_i p_i \ln p_i$ から、温度の定義や状態方程式が熱力学と整合して出てくるなら、それは熱力学の $S$ を再現していることを意味します。</p>
+                    </article>
+                    <article class="info-card night-card">
+                        <p class="card-label">Consistency</p>
+                        <h3>足し算の性質と温度の定義まで一致する</h3>
+                        <p>独立系での加法性や $\frac{1}{T} = \left( \frac{\partial S}{\partial E} \right)_{V,N}$ の関係が整うことで、統計力学の $S$ は熱力学の $S$ と同じ役割を果たします。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Boltzmann</p>
+                        <div class="formula-block">$$ S = k_B \ln \Omega $$</div>
+                        <p>$\Omega$ は許される微視的状態数です。エントロピーは「あり得る細部の数」の対数になります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Additivity</p>
+                        <div class="formula-block">$$ \Omega_{AB} = \Omega_A \Omega_B \Rightarrow S_{AB} = S_A + S_B $$</div>
+                        <p>log を取ることで、独立な 2 系を合わせたときのエントロピーが自然に足し算になります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Temperature</p>
+                        <div class="formula-block">$$ \frac{1}{T} = \left( \frac{\partial S}{\partial E} \right)_{V,N} $$</div>
+                        <p>温度は統計力学では基本量ではなく、エネルギーを少し足したときに状態数がどれだけ増えるかを表す勾配として出てきます。</p>
+                    </article>
+                </div>
+                <div class="callout-panel">
+                    <p class="card-label">Conclusion</p>
+                    <h3>熱力学と統計力学のエントロピーが同じになる結論</h3>
+                    <p>熱力学のエントロピーと統計力学のエントロピーが同じになるのは、平衡統計力学が熱力学をミクロな自由度から再現する理論だからです。巨視的な $S$ が、微視的には「状態数」や「確率分布の不確定性」として同じ量に見えてきます。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="main-body">
+                <div class="section-heading">
+                    <p class="eyebrow">Main Body</p>
+                    <h2>本論: Clausius から Boltzmann と Gibbs へ</h2>
+                    <p>本論では、熱力学の巨視的定義が、平衡系統計力学でどのように状態数や確率分布の言葉へ移るかを追います。</p>
+                </div>
+                <div class="card-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Boltzmann</p>
+                        <h3>平衡系では、状態数の対数として $S$ が現れる</h3>
+                        <p>ミクロカノニカルな平衡系では、許される微視的状態数を $\Omega$ と書くと、$S = k_B \ln \Omega$ が熱力学のエントロピーを再現します。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Gibbs</p>
+                        <h3>一般化すると、確率分布の不確定性として $S$ が現れる</h3>
+                        <p>Gibbs の形 $S = -k_B \sum_i p_i \ln p_i$ は、Boltzmann の式を含む一般形です。全状態が等確率なら Boltzmann へ戻ります。</p>
+                    </article>
+                    
+                </div>
+                <div class="formula-strip">
+                    
+                    <article class="formula-card">
+                        <p class="card-label">Gibbs Entropy</p>
+                        <div class="formula-block">$$ S = -k_B \sum_i p_i \ln p_i $$</div>
+                        <p>確率分布の不確実さを測る形で、情報理論のシャノンエントロピーと同型です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Special Case</p>
+                        <div class="formula-block">$$ p_i = \frac{1}{\Omega} \Rightarrow S = k_B \ln \Omega $$</div>
+                        <p>Boltzmann の式は、Gibbs エントロピーの特殊場合として回収できます。</p>
+                    </article>
+                </div>
+                <div class="callout-panel">
+                    <p class="card-label">Meaning</p>
+                    <h3>本論のポイントは「同じ $S$ が文脈を変えて現れている」こと</h3>
+                    <p>熱力学では熱と温度の比として、平衡系統計力学では状態数や確率分布として、情報理論では消去コストや不確定性として同じエントロピーが現れます。これは別々の概念が偶然似たのではなく、同じ量を別の記述で表しているからです。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="supplement">
+                <div class="section-heading">
+                    <p class="eyebrow">Supplement</p>
+                    <h2>補足: ミクロ自由度の統計だけでは、熱力学は導出できない</h2>
+                    <p>ここは補足です。確率変数の平均を取るだけでは、温度、相転移、不可逆性、時間の矢は出ません。熱力学を成立させるには、ミクロ自由度の統計に加えて、粗視化、熱力学極限、分布選択、典型性のような物理的仮定が必要です。</p>
+                </div>
+                <div class="timeline-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Coarse-Graining</p>
+                        <h3>粗視化なしでは、エントロピー増大は出ない</h3>
+                        <p>fine-grained な位相空間分布は Liouville 定理で保存されます。熱力学的な増大を得るには、観測不能な自由度を捨てる coarse-graining が要ります。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Thermodynamic Limit</p>
+                        <h3>熱力学極限がないと、相転移も鋭い法則も立たない</h3>
+                        <p>有限系では再帰や揺らぎが残り、自由エネルギーの真の特異性も現れません。熱力学は $N \to \infty$ という極限に支えられています。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Measure And Constraints</p>
+                        <h3>どの分布を採用するかは、確率論だけでは決まらない</h3>
+                        <p>等確率や $e^{-\beta H}$ のような分布は、保存則、熱浴、最大エントロピー原理などの物理条件を入れて初めて自然なものになります。</p>
+                    </article>
+                    <article class="info-card night-card">
+                        <p class="card-label">Typicality</p>
+                        <h3>典型性や時間の矢には、追加の物理的見方が要る</h3>
+                        <p>「ほとんどの状態は平衡に見える」ことや、低エントロピー初期条件から未来へ向かう時間の矢は、単なる確率計算ではなく物理的解釈を必要とします。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Liouville</p>
+                        <div class="formula-block">$$ \frac{d\rho}{dt} = 0 $$</div>
+                        <p>fine-grained な分布は保存されるので、確率論だけでは熱力学的な不可逆性はそのまま出てきません。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Limit</p>
+                        <div class="formula-block">$$ N \to \infty $$</div>
+                        <p>相転移や安定なマクロ法則は、巨大自由度極限を取ることで初めて鮮明になります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Time / Ensemble</p>
+                        <div class="formula-block">$$ \bar{A} = \langle A \rangle $$</div>
+                        <p>時間平均と集団平均を結びつけるには、エルゴード性や典型性のような追加仮定が必要で、自明ではありません。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="beyond">
+                <div class="section-heading">
+                    <p class="eyebrow">Beyond</p>
+                    <h2>量子情報とブラックホールまで行くと、問いはさらに深くなる</h2>
+                    <p>現代では、エントロピーは単なる熱の補助変数ではありません。量子情報、可逆計算、ブラックホール、さらには重力の起源にまでつながる中心概念になっています。</p>
+                </div>
+                <div class="card-grid">
+                    <article class="info-card strong-card">
+                        <p class="card-label">Quantum</p>
+                        <h3>量子計算の基本操作は可逆だが、測定と誤り訂正は熱を伴う</h3>
+                        <p>ユニタリ操作そのものは情報を捨てません。しかし測定で古典情報へ落とし、不要な補助自由度を捨てるときには、やはり散逸が顔を出します。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Black Hole</p>
+                        <h3>ブラックホールは「情報を本当に消すのか」を突きつける</h3>
+                        <p>もし情報が本当に消えるならユニタリ性が破れます。だから現代では、情報はどこかに保存される方向が有力です。</p>
+                    </article>
+                    <article class="info-card night-card">
+                        <p class="card-label">Open Question</p>
+                        <h3>熱力学は統計力学から導かれるが、同時にもっと根源的かもしれない</h3>
+                        <p>教科書的には「ミクロ力学 $\to$ 統計力学 $\to$ 熱力学」です。しかし近年は、情報・量子・重力が共通の根を持つという見方も強くなっています。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">von Neumann</p>
+                        <div class="formula-block">$$ S_{\mathrm{vN}} = -k_B \mathrm{Tr}(\rho \ln \rho) $$</div>
+                        <p>量子系では確率分布の代わりに密度行列 $\rho$ を使います。形は Gibbs エントロピーの量子版です。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Black Hole</p>
+                        <div class="formula-block">$$ S_{\mathrm{BH}} \propto A $$</div>
+                        <p>ブラックホールエントロピーは体積でなく地平線面積に比例します。情報が境界に刻まれているように見える理由です。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Standard Arrow</p>
+                        <div class="formula-block">$$ \text{micro} \rightarrow \text{statistics} \rightarrow \text{thermodynamics} $$</div>
+                        <p>基本の見取り図はこの矢印です。ただし最前線では、この矢印自体をどう理解するかが研究対象になっています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Reads</p>
+                    <h2>次に読むとつながるページ</h2>
+                    <p>このページは橋渡しの役割が強いので、気になった方向へそのまま進むと理解が深まります。</p>
+                </div>
+                <div class="link-grid">
+                    <article class="link-card strong-card">
+                        <p class="card-label">Entropy</p>
+                        <h3>エントロピー</h3>
+                        <p>状態数、情報量、第二法則、ブラックホール面積則を、もう少し図解寄りにたどれます。</p>
+                        <a class="button button-primary" href="entropy.html">エントロピーへ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Statistics</p>
+                        <h3>統計と誤差解析</h3>
+                        <p>確率分布やゆらぎを、実験データを読む視点へ接続したいときの次の 1 枚です。</p>
+                        <a class="button button-primary" href="statistics.html">統計へ</a>
+                    </article>
+                    <article class="link-card night-card">
+                        <p class="card-label">Quantum</p>
+                        <h3>量子力学と量子コンピュータ</h3>
+                        <p>可逆なユニタリ発展と測定の非可逆性がどう切り替わるかを、量子側から見直せます。</p>
+                        <a class="button button-primary" href="quantum.html">量子へ</a>
+                    </article>
+                    <article class="link-card">
+                        <p class="card-label">Black Hole</p>
+                        <h3>ブラックホール</h3>
+                        <p>エントロピー面積則や情報問題が、重力の文脈でどう現れるかを読み進められます。</p>
+                        <a class="button button-secondary" href="blackhole.html">ブラックホールへ</a>
+                    </article>
+                    <article class="link-card strong-card">
+                        <p class="card-label">Inside</p>
+                        <h3>ブラックホールの中</h3>
+                        <p>ユニタリ性、地平線、内部構造、情報の行方をさらに踏み込みたいときの発展先です。</p>
+                        <a class="button button-secondary" href="blackhole-inside.html">内部へ</a>
+                    </article>
+                    <article class="link-card warm-card">
+                        <p class="card-label">Hub</p>
+                        <h3>物理解説トップ</h3>
+                        <p>他のテーマとのつながりや読み順を一覧で見直したいときは、物理解説の一覧へ戻れます。</p>
+                        <a class="button button-secondary" href="physics.html">一覧へ戻る</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>エントロピーは、熱だけの言葉ではなく、状態数と情報の言葉でもあります。</p>
+            <div class="footer-links">
+                <a href="entropy.html">エントロピーへ</a>
+                <a href="statistics.html">統計へ</a>
+                <a href="quantum.html">量子へ</a>
+                <a href="blackhole.html">ブラックホールへ</a>
+                <a href="blackhole-inside.html">ブラックホールの中へ</a>
+                <a href="physics.html">物理解説トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="thermodynamics-statistical-mechanics.js"></script>
+</body>
+</html>
