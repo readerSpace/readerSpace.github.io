@@ -463,7 +463,7 @@ function drawBike(currentModel) {
         : clamp((-currentModel.marginN / Math.max(currentModel.totalWeightN, 1)) * 140 + 34, 34, 128);
     const bob = Math.sin(time * 2.8) * 4 + Math.sin(time * 1.1) * 2;
     const bikeY = waterY - 110 + sink + bob;
-    const tilt = clamp(currentModel.pitchBalance * 0.34, -0.22, 0.22);
+    const tilt = clamp(-currentModel.pitchBalance * 0.34, -0.22, 0.22);
     const rollShift = clamp(currentModel.rollBalance * 34, -40, 40);
 
     drawWake(waterY);
