@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "G-G6WJJGWBCG");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アンテナの送受信シミュレーション | ダイポールアンテナで電波を見る</title>
+    <meta name="description" content="ダイポールアンテナを使って、電荷の振動、電場と磁場の放射、受信アンテナでの誘導電流、偏波と半波長整合を同じ画面で観察できる教材ページです。">
+    <meta name="theme-color" content="#09111d">
+    <link rel="canonical" href="https://readerspace.github.io/antenna.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="アンテナの送受信シミュレーション | ダイポールアンテナで電波を見る">
+    <meta property="og:description" content="送信アンテナと受信アンテナを同時に表示し、電磁波、偏波、共振の考え方を一画面で動かして理解できます。">
+    <meta property="og:url" content="https://readerspace.github.io/antenna.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="アンテナの送受信シミュレーション | ダイポールアンテナで電波を見る">
+    <meta name="twitter:description" content="周波数、出力、アンテナ長、受信角度、表示モードを変えながら、アンテナの送受信をその場で観察できます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="antenna.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Antenna / Electromagnetic Wave / Polarization</p>
+                    <h1>アンテナは、どうやって<br>電波を送り、受けるのか。</h1>
+                    <p class="stage-lead">
+                        ダイポールアンテナでは、導体中の電荷が交流で上下に振動します。<br>
+                        加速する電荷は時間変化する電場と磁場を作り、その揺れが空間へ広がって電磁波になります。受信側では、その到来した電場が電子を揺らし、微小な交流電流が生じます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページで見られること">
+                        <span>送信アンテナと受信アンテナを同時表示</span>
+                        <span>電場 E と磁場 B を切替表示</span>
+                        <span>偏波の向きと半波長整合を比較</span>
+                    </div>
+                </div>
+
+                <div class="playground-grid">
+                    <div class="simulation-shell" id="antennaShell">
+                        <canvas id="antennaCanvas" aria-label="アンテナの送受信シミュレーション"></canvas>
+
+                        <div class="stage-stats" aria-label="現在の状態">
+                            <article>
+                                <span>表示モード</span>
+                                <strong id="quickMode">電場 E と磁場 B</strong>
+                            </article>
+                            <article>
+                                <span>受信振幅</span>
+                                <strong id="quickSignal">0.00</strong>
+                            </article>
+                            <article>
+                                <span>整合度</span>
+                                <strong id="quickMatch">0 %</strong>
+                            </article>
+                        </div>
+
+                        <div class="floating-hint" id="hintText">
+                            青は電場 E、桃は磁場 B、緑は電流またはエネルギーの向きを表します。受信アンテナを横向きにすると偏波がずれて信号が弱くなります。
+                        </div>
+                    </div>
+
+                    <aside class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>送信と受信を同時に動かす</h2>
+                            <p>周波数、送信出力、アンテナ長、受信アンテナの向き、表示モードを変えながら、送受信の効率がどこで決まるかを見比べてください。</p>
+                        </div>
+
+                        <div class="formula-block">電荷の振動 → 変化する電場 E → 変化する磁場 B → 電磁波</div>
+
+                        <div class="control-grid">
+                            <label class="control" for="freq">
+                                <span>周波数</span>
+                                <strong id="freqVal">1.00</strong>
+                                <input id="freq" type="range" min="0.25" max="3.00" step="0.05" value="1.00">
+                            </label>
+                            <label class="control" for="power">
+                                <span>送信出力</span>
+                                <strong id="powerVal">1.00</strong>
+                                <input id="power" type="range" min="0.10" max="2.20" step="0.05" value="1.00">
+                            </label>
+                            <label class="control" for="length">
+                                <span>アンテナ長</span>
+                                <strong id="lenVal">1.00</strong>
+                                <input id="length" type="range" min="0.45" max="1.65" step="0.05" value="1.00">
+                            </label>
+                            <label class="control" for="angle">
+                                <span>受信アンテナの向き</span>
+                                <strong id="angleVal">0°</strong>
+                                <input id="angle" type="range" min="-90" max="90" step="1" value="0">
+                            </label>
+                            <label class="control wide-control" for="mode">
+                                <span>表示モード</span>
+                                <strong id="modeLabel">電場 E と磁場 B</strong>
+                                <select id="mode">
+                                    <option value="both">電場 E と磁場 B</option>
+                                    <option value="electric">電場 E だけ</option>
+                                    <option value="magnetic">磁場 B だけ</option>
+                                    <option value="energy">エネルギーの流れ</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="button-row">
+                            <button class="button button-primary" id="pauseBtn" type="button">一時停止</button>
+                            <button class="button button-secondary" id="resetBtn" type="button">リセット</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>波長スケール</span>
+                                <strong id="waveStat">0 px</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>半波長目安</span>
+                                <strong id="halfWaveStat">0 px</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>共振度</span>
+                                <strong id="resonanceStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>偏波一致</span>
+                                <strong id="polarizationStat">0 %</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>受信信号</span>
+                                <strong id="signalStat">0.00</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>送受信効率</span>
+                                <strong id="couplingStat">0 %</strong>
+                            </article>
+                        </div>
+
+                        <div class="legend-grid" aria-label="色の意味">
+                            <div><span class="swatch electric"></span>電場 E</div>
+                            <div><span class="swatch magnetic"></span>磁場 B</div>
+                            <div><span class="swatch positive"></span>正電荷側</div>
+                            <div><span class="swatch negative"></span>負電荷側</div>
+                            <div><span class="swatch energy"></span>電流・エネルギー</div>
+                            <div><span class="swatch receiver"></span>受信応答</div>
+                        </div>
+
+                        <p class="note">このページはダイポールアンテナの教材用モデルです。厳密なマクスウェル方程式の解ではなく、送信、放射、受信、偏波、半波長整合の関係が直感的に見えるように単純化しています。</p>
+                        <p class="panel-status" id="panelStatus" aria-live="polite">受信アンテナを電場の向きに合わせると強く受信します。横向きにすると偏波が合わず、信号が弱くなります。</p>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">加速する電荷が電磁波を放射し、到来した電場が受信側の電流を生む。</p>
+                <p class="signal-sub">送信と受信は別現象ではなく、同じ電磁場の揺れを逆向きに見ているだけです。アンテナの向きと長さが合うほど、その揺れをうまく出し入れできます。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで計算していること</h2>
+                    <p>送受信の本質を見やすくするために、ダイポールアンテナを単純化した模式モデルを使っています。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card electric-card">
+                        <p class="card-label">01</p>
+                        <h3>交流電流で電荷が上下に振動する</h3>
+                        <p>送信アンテナでは電流が正負に反転し、電荷分布も周期的に入れ替わります。加速度を持つ電荷が時間変化する電場を作ります。</p>
+                    </article>
+                    <article class="model-card magnetic-card">
+                        <p class="card-label">02</p>
+                        <h3>電場と磁場の揺れが右へ進む</h3>
+                        <p>青の波を電場 E、桃の波を磁場 B として表示し、互いに直交する成分が空間へ進んでいく様子を模式化しています。</p>
+                    </article>
+                    <article class="model-card energy-card">
+                        <p class="card-label">03</p>
+                        <h3>受信側では到来電場が電子を揺らす</h3>
+                        <p>受信アンテナの交流信号は、到来した電場の向きとアンテナ軸の一致度に応じて強くなったり弱くなったりします。</p>
+                    </article>
+                    <article class="model-card resonance-card">
+                        <p class="card-label">04</p>
+                        <h3>半波長に近い長さで効率が上がる</h3>
+                        <p>このページでは、アンテナ長が半波長に近いほど共振度が高くなるガウス型の簡易モデルを使って、送受信効率の変化を示しています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>動かすと見えやすい観察ポイント</h2>
+                    <p>同じアンテナでも、周波数、長さ、向きのどれをずらすかで、受信の強さが別の理由で落ちます。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card electric-card">
+                        <h3>偏波が合うと強く受信する</h3>
+                        <p>受信アンテナを電場と平行にすると、到来した電場が電子を最も大きく揺らせます。横向きに近づくほど信号は弱くなります。</p>
+                    </article>
+                    <article class="observation-card resonance-card">
+                        <h3>長さが半波長から外れると効率が落ちる</h3>
+                        <p>アンテナ長が波長の半分に近いと、電流分布がうまく立ちやすくなります。長すぎても短すぎても共振度が下がります。</p>
+                    </article>
+                    <article class="observation-card magnetic-card">
+                        <h3>周波数を上げると波長は短くなる</h3>
+                        <p>周波数を上げると波の間隔が詰まり、同じアンテナ長でも半波長条件とのずれ方が変わります。周波数と長さはセットで見ないと判断できません。</p>
+                    </article>
+                    <article class="observation-card energy-card">
+                        <h3>出力は波の振幅を押し上げる</h3>
+                        <p>送信出力を上げると、空間へ出ていく電場・磁場の振幅が増え、受信側の誘導電流も大きくなります。ただし向きや長さの不一致は別問題として残ります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるなら</h2>
+                    <p>アンテナの送受信を入口にすると、場、波、通信、加熱のページが自然につながります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>今ある動くページを、波、場、物質、創発、カオスの入口ごとにまとめた一覧です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Field</p>
+                        <h3>電場と磁場の可視化</h3>
+                        <p>アンテナの前提になる「場」そのものを、力線とベクトル場で見直せます。</p>
+                        <a class="button button-secondary" href="electric-magnetic.html">場のページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Communication</p>
+                        <h3>スマホ通信の仕組み</h3>
+                        <p>電磁波にどう情報を載せるのか、変調や MIMO の側から通信へ広げられます。</p>
+                        <a class="button button-secondary" href="communication.html">通信のページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Microwave</p>
+                        <h3>電磁波が熱になる例へ</h3>
+                        <p>同じ電磁波でも、物質側の応答が変わると何が起こるかを電子レンジの例で見られます。</p>
+                        <a class="button button-secondary" href="microwave.html">電子レンジへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>見えない場、波、情報、熱のつながりを、動くモデルでたどれるページを増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="communication.html">通信のページ</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="antenna.js"></script>
+</body>
+</html>
