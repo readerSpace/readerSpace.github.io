@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "G-G6WJJGWBCG");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ペットボトル自転車は水の上を走れるか？ | 浮力と推進の簡易シミュレーション</title>
+    <meta name="description" content="人と自転車の重さ、ペットボトルの本数と配置、こぐ力、水の抵抗を変えながら、水上を走れる条件を考える簡易シミュレーションです。">
+    <meta name="theme-color" content="#0f5a78">
+    <link rel="canonical" href="https://readerspace.github.io/pet-bottle-bike.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="ペットボトル自転車は水の上を走れるか？ | 浮力と推進の簡易シミュレーション">
+    <meta property="og:description" content="総浮力と総重量、推進力と水の抵抗、前後左右のバランスをまとめて見られる教育用ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/pet-bottle-bike.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ペットボトル自転車は水の上を走れるか？ | 浮力と推進の簡易シミュレーション">
+    <meta name="twitter:description" content="ボトル数と配置で浮力と安定性がどう変わるかを、その場で動かして確かめられます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="pet-bottle-bike.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#model">モデル</a>
+                <a href="#observations">観察</a>
+                <a href="#limits">限界</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Buoyancy / Drag / Balance</p>
+                    <h1>ペットボトル自転車は、<br>本当に水面を走れるか。</h1>
+                    <p class="stage-lead">
+                        2 L ペットボトル 1 本は、およそ 2 kg 分の水を押しのけられます。<br>
+                        ただし、浮けば終わりではありません。前後左右の配置が悪いと姿勢が崩れ、余裕浮力が少ないと少しの波で沈みやすくなり、前へ進もうとすると水の抵抗が急に効いてきます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページで見られること">
+                        <span>総浮力と総重量を比較</span>
+                        <span>前後左右バランスを可視化</span>
+                        <span>推進力と水抵抗で速度を更新</span>
+                    </div>
+                </div>
+
+                <div class="playground-grid">
+                    <div class="simulation-shell" id="simShell">
+                        <canvas id="simCanvas" aria-label="ペットボトル自転車の水上走行シミュレーション"></canvas>
+
+                        <div class="stage-stats" aria-label="現在の状態">
+                            <article>
+                                <span>ボトル本数</span>
+                                <strong id="quickCount">0 本</strong>
+                            </article>
+                            <article>
+                                <span>速度</span>
+                                <strong id="quickSpeed">0.00 m/s</strong>
+                            </article>
+                            <article>
+                                <span>状態</span>
+                                <strong id="quickState">判定待ち</strong>
+                            </article>
+                        </div>
+
+                        <div class="floating-hint" id="hintText">
+                            浮く条件は「総浮力 &gt; 総重量」です。走れるかどうかは、その上に配置バランスと推進効率が重なります。
+                        </div>
+                    </div>
+
+                    <aside class="panel" aria-label="シミュレーション操作">
+                        <div class="panel-header">
+                            <h2>水上走行の条件を変える</h2>
+                            <p>人と自転車の重さ、ボトル容量、本数、配置、こぐ力、水の抵抗を変えながら、浮力の余裕と安定性を見比べてください。</p>
+                        </div>
+
+                        <div class="control-grid">
+                            <label class="control" for="riderMass">
+                                <span>人の質量</span>
+                                <strong id="riderMassLabel">55 kg</strong>
+                                <input id="riderMass" type="range" min="20" max="100" step="1" value="55">
+                            </label>
+                            <label class="control" for="bikeMass">
+                                <span>自転車の質量</span>
+                                <strong id="bikeMassLabel">16 kg</strong>
+                                <input id="bikeMass" type="range" min="8" max="30" step="1" value="16">
+                            </label>
+                            <label class="control" for="bottleVolume">
+                                <span>ペットボトル容量</span>
+                                <strong id="bottleVolumeLabel">2.0 L</strong>
+                                <input id="bottleVolume" type="range" min="0.5" max="2.0" step="0.1" value="2.0">
+                            </label>
+                            <label class="control" for="bottleMass">
+                                <span>空ボトル質量</span>
+                                <strong id="bottleMassLabel">0.040 kg</strong>
+                                <input id="bottleMass" type="range" min="0.02" max="0.08" step="0.005" value="0.04">
+                            </label>
+                            <label class="control" for="pedalForce">
+                                <span>こぐ力</span>
+                                <strong id="pedalForceLabel">90 N</strong>
+                                <input id="pedalForce" type="range" min="0" max="250" step="5" value="90">
+                            </label>
+                            <label class="control" for="drag">
+                                <span>水の抵抗係数</span>
+                                <strong id="dragLabel">70</strong>
+                                <input id="drag" type="range" min="10" max="180" step="5" value="70">
+                            </label>
+                        </div>
+
+                        <div class="slot-header">
+                            <div>
+                                <p class="subheading">取り付け位置と本数</p>
+                                <p class="slot-copy">同じ本数でも配置で安定性が変わります。前後差はピッチ、左右差はロールとして判定します。</p>
+                            </div>
+                            <button class="ghost-button" id="balance" type="button">必要本数を自動配置</button>
+                        </div>
+
+                        <div class="slot-grid">
+                            <label class="slot" for="frontLeft">
+                                <span>前・左</span>
+                                <input id="frontLeft" type="number" min="0" max="80" value="10">
+                            </label>
+                            <label class="slot" for="frontRight">
+                                <span>前・右</span>
+                                <input id="frontRight" type="number" min="0" max="80" value="10">
+                            </label>
+                            <label class="slot" for="midLeft">
+                                <span>中央・左</span>
+                                <input id="midLeft" type="number" min="0" max="80" value="8">
+                            </label>
+                            <label class="slot" for="midRight">
+                                <span>中央・右</span>
+                                <input id="midRight" type="number" min="0" max="80" value="8">
+                            </label>
+                            <label class="slot" for="rearLeft">
+                                <span>後・左</span>
+                                <input id="rearLeft" type="number" min="0" max="80" value="12">
+                            </label>
+                            <label class="slot" for="rearRight">
+                                <span>後・右</span>
+                                <input id="rearRight" type="number" min="0" max="80" value="12">
+                            </label>
+                        </div>
+
+                        <div class="button-row">
+                            <button class="button button-primary" id="reset" type="button">速度リセット</button>
+                            <button class="button button-secondary" id="trimSymmetry" type="button">左右をそろえる</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <article class="stat-card">
+                                <span>総重量</span>
+                                <strong id="weightStat">0 kg</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>最大浮力</span>
+                                <strong id="buoyStat">0 kg</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>余裕浮力</span>
+                                <strong id="marginStat">0 kg</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>速度</span>
+                                <strong id="speedStat">0.00 m/s</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>前後バランス</span>
+                                <strong id="pitchStat">0.00</strong>
+                            </article>
+                            <article class="stat-card">
+                                <span>左右バランス</span>
+                                <strong id="rollStat">0.00</strong>
+                            </article>
+                        </div>
+
+                        <p class="note">簡易モデル: 浮くかどうかは「押しのけた水の重さ」と「全重量」の比較で判定し、前進は「こぐ力 - 速度二乗に比例する水抵抗」で近似します。波、剛性、ペダルから推進器への変換損失、実際の船体形状は扱っていません。</p>
+                        <p class="panel-status" id="statusMessage" aria-live="polite">2 L ボトル 1 本で約 2 kg 分の浮力です。55 kg の人と 16 kg の自転車なら、最低でも約 36 本以上が必要になります。</p>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">浮く条件と、走れる条件は別物です。</p>
+                <p class="signal-sub">ペットボトルを増やせば静止状態では浮きやすくなりますが、速度が上がるほど水抵抗は急増し、配置が崩れるほどこぐ力はまっすぐ前へ使えなくなります。</p>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model</p>
+                    <h2>このページで計算していること</h2>
+                    <p>細かい流体力学ではなく、高校生向けに「何が条件を決めるか」が見えるように最小限へ単純化しています。</p>
+                </div>
+                <div class="model-grid">
+                    <article class="model-card buoyancy-card">
+                        <p class="card-label">01</p>
+                        <h3>浮力は押しのけた水の重さ</h3>
+                        <p>ボトル 1 本の最大支持質量は、ボトル容量 L を立方メートルへ直した体積 V に対して 1000 × V kg として計算しています。</p>
+                    </article>
+                    <article class="model-card balance-card">
+                        <p class="card-label">02</p>
+                        <h3>前後左右の偏りは安定性を下げる</h3>
+                        <p>前後の本数差はピッチ、左右差はロールとして正規化し、偏りが大きいほど有効な推進力が落ちるようにしています。</p>
+                    </article>
+                    <article class="model-card drive-card">
+                        <p class="card-label">03</p>
+                        <h3>前進は推進力と抵抗の差</h3>
+                        <p>速度更新は a = (推進力 - 抵抗) / 質量 で計算し、抵抗は speed × |speed| に比例させています。速度が倍になると抵抗はおよそ 4 倍です。</p>
+                    </article>
+                    <article class="model-card margin-card">
+                        <p class="card-label">04</p>
+                        <h3>余裕浮力が小さいと厳しい</h3>
+                        <p>浮いていても、浮力と重量の差が小さい状態では実物はすぐ不安定になります。このページでは余裕浮力が小さいほど沈み込みと推進効率が悪化します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="observations">
+                <div class="section-heading">
+                    <p class="eyebrow">Observations</p>
+                    <h2>動かすと見えやすい観察ポイント</h2>
+                    <p>本数だけでなく、どこへ付けるかと、どれだけ余裕を持たせるかで結果が変わります。</p>
+                </div>
+                <div class="observation-grid">
+                    <article class="observation-card buoyancy-card">
+                        <h3>必要本数は思ったより多い</h3>
+                        <p>2 L ボトルでも 1 本で支えられるのは約 2 kg 分です。人と自転車だけで 70 kg を超えると、必要本数はすぐ数十本になります。</p>
+                    </article>
+                    <article class="observation-card balance-card">
+                        <h3>後輪側を厚くすると落ち着きやすい</h3>
+                        <p>人の重心はやや後ろ寄りなので、前後を完全に等分するより後ろを少し厚くしたほうが姿勢が安定しやすくなります。</p>
+                    </article>
+                    <article class="observation-card drive-card">
+                        <h3>抵抗は速度と一緒に急増する</h3>
+                        <p>浮くようにしても、こぐ力を増やしたときの速度の伸びは比例しません。ある程度で抵抗が勝ち始め、頭打ちになります。</p>
+                    </article>
+                    <article class="observation-card margin-card">
+                        <h3>左右差は横転リスクに直結する</h3>
+                        <p>左右の本数差は、そのまま横方向の傾きとして効きます。特に余裕浮力が小さい条件では、少しの差でも挙動が悪化します。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="limits">
+                <div class="section-heading">
+                    <p class="eyebrow">Limits</p>
+                    <h2>実物でさらに難しくなる理由</h2>
+                    <p>このページで浮く判定が出ても、そのまま実現できるとは限りません。現実では次の要素が強く効きます。</p>
+                </div>
+                <div class="limit-grid">
+                    <article class="limit-card">
+                        <h3>固定強度</h3>
+                        <p>ペットボトルは浮いても、結束部が曲げやねじりに耐えられるとは限りません。荷重が一点へ集まると簡単に壊れます。</p>
+                    </article>
+                    <article class="limit-card">
+                        <h3>波と揺れ</h3>
+                        <p>静かな水面でも、自転車をこぐ動作自体が揺れを作ります。余裕浮力が少ない状態では、その揺れだけで水をかぶります。</p>
+                    </article>
+                    <article class="limit-card">
+                        <h3>推進の変換効率</h3>
+                        <p>自転車の車輪は地面用です。水の上で前へ進むには、車輪が水をどう押すか、あるいは別の推進器をどう付けるかが別問題になります。</p>
+                    </article>
+                    <article class="limit-card">
+                        <h3>船体形状</h3>
+                        <p>同じ浮力でも、細長いフロートか、ばらばらなボトル束かで抵抗は大きく変わります。実用化では形状設計がほぼ本体です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるなら</h2>
+                    <p>浮力だけで終わらせず、流体・推進・モデル化の考え方へつなげられます。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>動かして理解できるページをまとめてたどりたいときの入口です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Flow</p>
+                        <h3>火と煙</h3>
+                        <p>浮力で上がる流れと、障害物や風で崩れる流れ場を別の角度から見られます。</p>
+                        <a class="button button-secondary" href="fire-smoke.html">関連ページへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Mechanics</p>
+                        <h3>4 ストロークエンジン</h3>
+                        <p>推進を生む側の機械構造を見直したいときのページです。</p>
+                        <a class="button button-secondary" href="engine.html">エンジンを見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Method</p>
+                        <h3>シミュレーションとは何か</h3>
+                        <p>何を残し、何を切り捨てた近似なのかを整理し直したいときの解説です。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>浮力、抵抗、安定性のように同時に考える必要がある要素を、手で動かせるモデルへまとめています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="fire-smoke.html">火と煙</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="pet-bottle-bike.js"></script>
+</body>
+</html>
