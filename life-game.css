@@ -238,6 +238,7 @@ h1 {
 }
 
 .simulation-shell {
+    order: -1;
     position: relative;
     min-height: clamp(680px, 80vh, 860px);
     border-radius: 38px;

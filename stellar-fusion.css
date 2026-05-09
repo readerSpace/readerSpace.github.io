@@ -35,6 +35,15 @@ body {
         linear-gradient(180deg, #03050b 0%, #09101b 30%, #111a2f 62%, #08111f 100%);
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+main > #viewer {
+    order: -1;
+}
+
 a {
     color: inherit;
     text-decoration: none;

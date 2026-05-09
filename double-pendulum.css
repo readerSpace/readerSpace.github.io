@@ -32,6 +32,15 @@ body {
     min-height: 100vh;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+main > #demo {
+    order: -1;
+}
+
 body::before {
     content: "";
     position: fixed;

@@ -42,6 +42,15 @@ body {
         linear-gradient(180deg, #081522 0%, #123247 18%, #e8ded0 18.1%, #f7f0e8 100%);
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+main > #viewer {
+    order: -1;
+}
+
 body::before {
     content: "";
     position: fixed;

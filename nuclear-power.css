@@ -38,6 +38,15 @@ body {
     min-height: 100vh;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+main > #demo {
+    order: -1;
+}
+
 body::before {
     content: "";
     position: fixed;
@@ -522,6 +531,27 @@ h1 {
 .section-heading p {
     margin: 14px 0 0;
     line-height: 1.82;
+}
+
+#demo .section-heading {
+    padding: 26px 28px;
+    border-radius: 30px;
+    background: rgba(7, 17, 29, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 44px rgba(2, 8, 16, 0.22);
+    backdrop-filter: blur(14px);
+}
+
+#demo .section-heading .eyebrow {
+    color: rgba(245, 250, 255, 0.72);
+}
+
+#demo .section-heading h2 {
+    color: #f5faff;
+}
+
+#demo .section-heading p {
+    color: rgba(232, 240, 248, 0.84);
 }
 
 .principle-grid,

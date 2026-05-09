@@ -250,6 +250,7 @@ h3 {
 }
 
 .playground-grid {
+    order: -1;
     display: grid;
     grid-template-columns: minmax(0, 1.24fr) minmax(360px, 0.92fr);
     gap: 22px;

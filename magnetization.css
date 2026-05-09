@@ -248,6 +248,7 @@ h3 {
 }
 
 .simulation-shell {
+    order: -1;
     min-width: 0;
     padding: 18px;
     border-radius: 38px;

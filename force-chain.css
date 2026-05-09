@@ -35,6 +35,15 @@ body {
         linear-gradient(180deg, #120d0a 0%, #352219 17%, #f3ece4 17.1%, #fbf7f2 100%);
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+main > #demo {
+    order: -1;
+}
+
 body::before {
     content: "";
     position: fixed;
