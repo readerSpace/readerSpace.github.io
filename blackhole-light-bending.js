@@ -29,6 +29,8 @@ const dom = {
 
 const ctx = dom.canvas.getContext("2d");
 const observerCtx = dom.observerCanvas.getContext("2d");
+const staticCanvas = document.createElement("canvas");
+const staticCtx = staticCanvas.getContext("2d");
 
 const state = {
     mass: 1.4,
@@ -38,11 +40,17 @@ const state = {
     maxSteps: 1000,
     paused: false,
     drawProgress: 0,
+    maxRayPoints: 0,
     animationId: null,
+    lastFrameTime: 0,
     rays: [],
     spread: 10,
+    scene: null,
     stars: [],
     observerStars: [],
+    needsStaticRedraw: true,
+    needsObserverRedraw: true,
+    needsCompositeRedraw: true,
     stats: {
         captured: 0,
         escaped: 0,
@@ -104,6 +112,12 @@ function resizeCanvasElement(canvas, context, cssWidth, cssHeight) {
     };
 }
 
+function resizeBufferCanvas(viewport) {
+    staticCanvas.width = Math.round(viewport.width * viewport.dpr);
+    staticCanvas.height = Math.round(viewport.height * viewport.dpr);
+    staticCtx.setTransform(viewport.dpr, 0, 0, viewport.dpr, 0, 0);
+}
+
 function buildStarField(width, height, count, xStep, yStep) {
     const stars = [];
 
@@ -136,27 +150,6 @@ function getKerrLikeMetrics(mass, spin) {
         progradeCritical: baseCritical * (1 - (0.18 * spinAbs)),
         retrogradeCritical: baseCritical * (1 + (0.18 * spinAbs))
     };
-}
-
-function resizeCanvas() {
-    const mainShell = dom.canvas.parentElement;
-    const mainBounds = mainShell.getBoundingClientRect();
-    const mainWidth = Math.max(320, Math.round(mainBounds.width || mainShell.clientWidth || 960));
-    const mainHeight = window.innerWidth <= 780
-        ? Math.round(clamp(mainWidth * 0.82, 340, 500))
-        : Math.round(clamp(mainWidth * 0.62, 420, 640));
-
-    const observerShell = dom.observerCanvas.parentElement;
-    const observerBounds = observerShell.getBoundingClientRect();
-    const observerWidth = Math.max(320, Math.round(observerBounds.width || observerShell.clientWidth || mainWidth));
-    const observerHeight = window.innerWidth <= 780
-        ? Math.round(clamp(observerWidth * 0.42, 150, 240))
-        : Math.round(clamp(observerWidth * 0.26, 160, 220));
-
-    state.viewport = resizeCanvasElement(dom.canvas, ctx, mainWidth, mainHeight);
-    state.observerViewport = resizeCanvasElement(dom.observerCanvas, observerCtx, observerWidth, observerHeight);
-    state.stars = buildStarField(mainWidth, mainHeight, 140, 163, 97);
-    state.observerStars = buildStarField(observerWidth, observerHeight, 110, 211, 149);
 }
 
 function getSceneMetrics() {
@@ -195,6 +188,18 @@ function worldToObserverY(value, spread, height) {
     const clamped = clamp(value, -(safeSpread * 1.3), safeSpread * 1.3);
     const normalized = 0.5 - (clamped / (safeSpread * 2.6));
     return normalized * height;
+}
+
+function markAllLayersDirty() {
+    state.needsStaticRedraw = true;
+    state.needsObserverRedraw = true;
+    state.needsCompositeRedraw = true;
+}
+
+function requestRender() {
+    if (state.animationId === null) {
+        state.animationId = window.requestAnimationFrame(renderLoop);
+    }
 }
 
 function updateControls() {
@@ -263,6 +268,30 @@ function syncStateFromControls() {
     state.rayCount = Number(dom.rayRange.value);
     state.lensStrength = Number(dom.lensRange.value);
     state.maxSteps = Number(dom.stepRange.value);
+}
+
+function resizeCanvas() {
+    const mainShell = dom.canvas.parentElement;
+    const mainBounds = mainShell.getBoundingClientRect();
+    const mainWidth = Math.max(320, Math.round(mainBounds.width || mainShell.clientWidth || 960));
+    const mainHeight = window.innerWidth <= 780
+        ? Math.round(clamp(mainWidth * 0.82, 340, 500))
+        : Math.round(clamp(mainWidth * 0.62, 420, 640));
+
+    const observerShell = dom.observerCanvas.parentElement;
+    const observerBounds = observerShell.getBoundingClientRect();
+    const observerWidth = Math.max(320, Math.round(observerBounds.width || observerShell.clientWidth || mainWidth));
+    const observerHeight = window.innerWidth <= 780
+        ? Math.round(clamp(observerWidth * 0.42, 150, 240))
+        : Math.round(clamp(observerWidth * 0.26, 160, 220));
+
+    state.viewport = resizeCanvasElement(dom.canvas, ctx, mainWidth, mainHeight);
+    state.observerViewport = resizeCanvasElement(dom.observerCanvas, observerCtx, observerWidth, observerHeight);
+    resizeBufferCanvas(state.viewport);
+
+    state.stars = buildStarField(mainWidth, mainHeight, 96, 163, 97);
+    state.observerStars = buildStarField(observerWidth, observerHeight, 72, 211, 149);
+    markAllLayersDirty();
 }
 
 function tracePhoton(impact, mass, spin, lensStrength, maxSteps) {
@@ -335,18 +364,21 @@ function tracePhoton(impact, mass, spin, lensStrength, maxSteps) {
         closest,
         exitAngle,
         screenY,
-        sideLens
+        sideLens,
+        canvasPoints: []
     };
 }
 
 function generateRays(resetProgress = true) {
     syncStateFromControls();
+    state.scene = getSceneMetrics();
 
     const spread = 6.4 + (state.mass * 2.1);
     const rays = [];
     let closest = Number.POSITIVE_INFINITY;
     let captured = 0;
     let escaped = 0;
+    let maxRayPoints = 0;
 
     state.spread = spread;
 
@@ -359,6 +391,8 @@ function generateRays(resetProgress = true) {
         }
 
         const ray = tracePhoton(impact, state.mass, state.spin, state.lensStrength, state.maxSteps);
+        ray.canvasPoints = ray.points.map((point) => toCanvasPoint(state.scene, point));
+        maxRayPoints = Math.max(maxRayPoints, ray.canvasPoints.length);
         closest = Math.min(closest, ray.closest);
 
         if (ray.captured) {
@@ -371,6 +405,7 @@ function generateRays(resetProgress = true) {
     }
 
     state.rays = rays;
+    state.maxRayPoints = maxRayPoints;
     state.stats = {
         captured,
         escaped,
@@ -378,82 +413,87 @@ function generateRays(resetProgress = true) {
         shadowShift: clamp(state.spin * (0.09 + ((captured / Math.max(captured + escaped, 1)) * 0.05)), -0.18, 0.18)
     };
 
-    if (resetProgress) {
+    if (state.paused) {
+        state.drawProgress = state.maxRayPoints + 70;
+    } else if (resetProgress) {
         state.drawProgress = 0;
+    } else {
+        state.drawProgress = Math.min(state.drawProgress, state.maxRayPoints + 70);
     }
 
+    markAllLayersDirty();
     updateControls();
-    drawFrame();
+    requestRender();
 }
 
-function drawBackground(scene) {
-    const gradient = ctx.createRadialGradient(scene.centerX, scene.centerY, 0, scene.centerX, scene.centerY, Math.max(scene.width, scene.height) * 0.75);
+function drawBackground(targetCtx, scene, stars) {
+    const gradient = targetCtx.createRadialGradient(scene.centerX, scene.centerY, 0, scene.centerX, scene.centerY, Math.max(scene.width, scene.height) * 0.75);
     gradient.addColorStop(0, "#121a2e");
     gradient.addColorStop(0.45, "#091120");
     gradient.addColorStop(1, "#03060c");
 
-    ctx.clearRect(0, 0, scene.width, scene.height);
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, scene.width, scene.height);
+    targetCtx.clearRect(0, 0, scene.width, scene.height);
+    targetCtx.fillStyle = gradient;
+    targetCtx.fillRect(0, 0, scene.width, scene.height);
 
-    state.stars.forEach((star) => {
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-        ctx.fillRect(star.x, star.y, star.size, star.size);
+    stars.forEach((star) => {
+        targetCtx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+        targetCtx.fillRect(star.x, star.y, star.size, star.size);
     });
 
-    ctx.strokeStyle = "rgba(130, 162, 220, 0.08)";
-    ctx.lineWidth = 1;
+    targetCtx.strokeStyle = "rgba(130, 162, 220, 0.08)";
+    targetCtx.lineWidth = 1;
     for (let index = 0; index < 4; index += 1) {
         const y = scene.height * (0.18 + (index * 0.18));
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(scene.width, y);
-        ctx.stroke();
+        targetCtx.beginPath();
+        targetCtx.moveTo(0, y);
+        targetCtx.lineTo(scene.width, y);
+        targetCtx.stroke();
     }
 }
 
-function drawEmitter(scene) {
-    const glow = ctx.createLinearGradient(0, 0, scene.width * 0.18, 0);
+function drawEmitter(targetCtx, scene) {
+    const glow = targetCtx.createLinearGradient(0, 0, scene.width * 0.18, 0);
     glow.addColorStop(0, "rgba(120, 229, 255, 0.14)");
     glow.addColorStop(1, "rgba(120, 229, 255, 0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, scene.height * 0.08, scene.width * 0.2, scene.height * 0.78);
+    targetCtx.fillStyle = glow;
+    targetCtx.fillRect(0, scene.height * 0.08, scene.width * 0.2, scene.height * 0.78);
 
-    ctx.fillStyle = "rgba(199, 235, 255, 0.82)";
-    ctx.font = "700 15px IBM Plex Sans JP";
-    ctx.fillText("incoming light", 20, 28);
+    targetCtx.fillStyle = "rgba(199, 235, 255, 0.82)";
+    targetCtx.font = "700 15px IBM Plex Sans JP";
+    targetCtx.fillText("incoming light", 20, 28);
 }
 
-function drawBlackHole(scene) {
+function drawBlackHole(targetCtx, scene) {
     const horizon = scene.horizon * scene.unit;
     const photonSphere = scene.basePhoton * scene.unit;
     const progradePhoton = scene.progradePhoton * scene.unit;
     const retrogradePhoton = scene.retrogradePhoton * scene.unit;
     const progradeIsUpper = state.spin >= 0;
 
-    ctx.save();
-    ctx.translate(scene.centerX, scene.centerY);
-    ctx.rotate(-0.18);
-    ctx.globalAlpha = 0.58;
-    ctx.strokeStyle = "rgba(255, 153, 76, 0.72)";
-    ctx.lineWidth = 9;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, horizon * 2.35, horizon * 0.66, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.strokeStyle = "rgba(255, 222, 148, 0.3)";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, horizon * 2.84, horizon * 0.9, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.restore();
+    targetCtx.save();
+    targetCtx.translate(scene.centerX, scene.centerY);
+    targetCtx.rotate(-0.18);
+    targetCtx.globalAlpha = 0.58;
+    targetCtx.strokeStyle = "rgba(255, 153, 76, 0.72)";
+    targetCtx.lineWidth = 9;
+    targetCtx.beginPath();
+    targetCtx.ellipse(0, 0, horizon * 2.35, horizon * 0.66, 0, 0, Math.PI * 2);
+    targetCtx.stroke();
+    targetCtx.strokeStyle = "rgba(255, 222, 148, 0.3)";
+    targetCtx.lineWidth = 3;
+    targetCtx.beginPath();
+    targetCtx.ellipse(0, 0, horizon * 2.84, horizon * 0.9, 0, 0, Math.PI * 2);
+    targetCtx.stroke();
+    targetCtx.restore();
 
-    ctx.save();
-    ctx.setLineDash([8, 8]);
-    ctx.strokeStyle = "rgba(164, 205, 255, 0.34)";
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.arc(scene.centerX, scene.centerY, photonSphere, 0, Math.PI * 2);
-    ctx.stroke();
+    targetCtx.save();
+    targetCtx.setLineDash([8, 8]);
+    targetCtx.strokeStyle = "rgba(164, 205, 255, 0.34)";
+    targetCtx.lineWidth = 1.2;
+    targetCtx.beginPath();
+    targetCtx.arc(scene.centerX, scene.centerY, photonSphere, 0, Math.PI * 2);
+    targetCtx.stroke();
 
     if (Math.abs(state.spin) > 0.03) {
         const upperStart = Math.PI * 1.08;
@@ -461,40 +501,40 @@ function drawBlackHole(scene) {
         const lowerStart = Math.PI * 0.08;
         const lowerEnd = Math.PI * 0.92;
 
-        ctx.strokeStyle = "rgba(255, 207, 98, 0.72)";
-        ctx.beginPath();
-        ctx.arc(scene.centerX, scene.centerY, progradeIsUpper ? progradePhoton : retrogradePhoton, progradeIsUpper ? upperStart : lowerStart, progradeIsUpper ? upperEnd : lowerEnd);
-        ctx.stroke();
+        targetCtx.strokeStyle = "rgba(255, 207, 98, 0.72)";
+        targetCtx.beginPath();
+        targetCtx.arc(scene.centerX, scene.centerY, progradeIsUpper ? progradePhoton : retrogradePhoton, progradeIsUpper ? upperStart : lowerStart, progradeIsUpper ? upperEnd : lowerEnd);
+        targetCtx.stroke();
 
-        ctx.strokeStyle = "rgba(118, 219, 255, 0.66)";
-        ctx.beginPath();
-        ctx.arc(scene.centerX, scene.centerY, progradeIsUpper ? retrogradePhoton : progradePhoton, progradeIsUpper ? lowerStart : upperStart, progradeIsUpper ? lowerEnd : upperEnd);
-        ctx.stroke();
+        targetCtx.strokeStyle = "rgba(118, 219, 255, 0.66)";
+        targetCtx.beginPath();
+        targetCtx.arc(scene.centerX, scene.centerY, progradeIsUpper ? retrogradePhoton : progradePhoton, progradeIsUpper ? lowerStart : upperStart, progradeIsUpper ? lowerEnd : upperEnd);
+        targetCtx.stroke();
     }
-    ctx.restore();
+    targetCtx.restore();
 
-    const coreGradient = ctx.createRadialGradient(scene.centerX - (horizon * 0.2), scene.centerY - (horizon * 0.24), 2, scene.centerX, scene.centerY, horizon);
+    const coreGradient = targetCtx.createRadialGradient(scene.centerX - (horizon * 0.2), scene.centerY - (horizon * 0.24), 2, scene.centerX, scene.centerY, horizon);
     coreGradient.addColorStop(0, "#000000");
     coreGradient.addColorStop(0.7, "#030303");
     coreGradient.addColorStop(1, "#151515");
-    ctx.fillStyle = coreGradient;
-    ctx.beginPath();
-    ctx.arc(scene.centerX, scene.centerY, horizon, 0, Math.PI * 2);
-    ctx.fill();
+    targetCtx.fillStyle = coreGradient;
+    targetCtx.beginPath();
+    targetCtx.arc(scene.centerX, scene.centerY, horizon, 0, Math.PI * 2);
+    targetCtx.fill();
 
-    ctx.strokeStyle = "rgba(115, 154, 255, 0.34)";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(scene.centerX, scene.centerY, horizon * 1.08, 0, Math.PI * 2);
-    ctx.stroke();
+    targetCtx.strokeStyle = "rgba(115, 154, 255, 0.34)";
+    targetCtx.lineWidth = 2;
+    targetCtx.beginPath();
+    targetCtx.arc(scene.centerX, scene.centerY, horizon * 1.08, 0, Math.PI * 2);
+    targetCtx.stroke();
 
-    ctx.fillStyle = "rgba(255, 255, 255, 0.62)";
-    ctx.font = "600 13px IBM Plex Sans JP";
-    ctx.fillText("r = 3M", scene.centerX + photonSphere + 10, scene.centerY - 10);
-    ctx.fillText(`r+ = ${formatNumber(scene.horizon, 2)} M`, scene.centerX + horizon + 10, scene.centerY + 20);
+    targetCtx.fillStyle = "rgba(255, 255, 255, 0.62)";
+    targetCtx.font = "600 13px IBM Plex Sans JP";
+    targetCtx.fillText("r = 3M", scene.centerX + photonSphere + 10, scene.centerY - 10);
+    targetCtx.fillText(`r+ = ${formatNumber(scene.horizon, 2)} M`, scene.centerX + horizon + 10, scene.centerY + 20);
 }
 
-function drawObserverMarker(scene) {
+function drawObserverMarker(targetCtx, scene) {
     const planePoint = toCanvasPoint(scene, { x: scene.worldRadius * 0.96, y: 0 });
     const planeX = planePoint.x;
     const lineTop = scene.height * 0.12;
@@ -502,66 +542,87 @@ function drawObserverMarker(scene) {
     const iconX = Math.min(scene.width - 26, planeX + 18);
     const iconY = scene.centerY;
 
-    ctx.save();
+    targetCtx.save();
 
-    const planeGlow = ctx.createLinearGradient(planeX - 18, 0, planeX + 18, 0);
+    const planeGlow = targetCtx.createLinearGradient(planeX - 18, 0, planeX + 18, 0);
     planeGlow.addColorStop(0, "rgba(118, 219, 255, 0)");
     planeGlow.addColorStop(0.45, "rgba(118, 219, 255, 0.16)");
     planeGlow.addColorStop(1, "rgba(118, 219, 255, 0.02)");
-    ctx.fillStyle = planeGlow;
-    ctx.fillRect(planeX - 11, lineTop, 22, lineBottom - lineTop);
+    targetCtx.fillStyle = planeGlow;
+    targetCtx.fillRect(planeX - 11, lineTop, 22, lineBottom - lineTop);
 
-    ctx.setLineDash([8, 6]);
-    ctx.strokeStyle = "rgba(182, 222, 255, 0.52)";
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(planeX, lineTop);
-    ctx.lineTo(planeX, lineBottom);
-    ctx.stroke();
-    ctx.setLineDash([]);
+    targetCtx.setLineDash([8, 6]);
+    targetCtx.strokeStyle = "rgba(182, 222, 255, 0.52)";
+    targetCtx.lineWidth = 1.2;
+    targetCtx.beginPath();
+    targetCtx.moveTo(planeX, lineTop);
+    targetCtx.lineTo(planeX, lineBottom);
+    targetCtx.stroke();
+    targetCtx.setLineDash([]);
 
-    ctx.strokeStyle = "rgba(182, 222, 255, 0.44)";
-    ctx.lineWidth = 1.1;
-    ctx.beginPath();
-    ctx.moveTo(planeX, iconY);
-    ctx.lineTo(iconX - 10, iconY);
-    ctx.stroke();
+    targetCtx.strokeStyle = "rgba(182, 222, 255, 0.44)";
+    targetCtx.lineWidth = 1.1;
+    targetCtx.beginPath();
+    targetCtx.moveTo(planeX, iconY);
+    targetCtx.lineTo(iconX - 10, iconY);
+    targetCtx.stroke();
 
-    ctx.fillStyle = "rgba(3, 11, 22, 0.96)";
-    ctx.beginPath();
-    ctx.arc(iconX, iconY, 9, 0, Math.PI * 2);
-    ctx.fill();
+    targetCtx.fillStyle = "rgba(3, 11, 22, 0.96)";
+    targetCtx.beginPath();
+    targetCtx.arc(iconX, iconY, 9, 0, Math.PI * 2);
+    targetCtx.fill();
 
-    ctx.strokeStyle = "rgba(118, 219, 255, 0.88)";
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.ellipse(iconX, iconY, 11, 8, 0, 0, Math.PI * 2);
-    ctx.stroke();
+    targetCtx.strokeStyle = "rgba(118, 219, 255, 0.88)";
+    targetCtx.lineWidth = 1.5;
+    targetCtx.beginPath();
+    targetCtx.ellipse(iconX, iconY, 11, 8, 0, 0, Math.PI * 2);
+    targetCtx.stroke();
 
-    ctx.fillStyle = "rgba(118, 219, 255, 0.9)";
-    ctx.beginPath();
-    ctx.arc(iconX, iconY, 2.8, 0, Math.PI * 2);
-    ctx.fill();
+    targetCtx.fillStyle = "rgba(118, 219, 255, 0.9)";
+    targetCtx.beginPath();
+    targetCtx.arc(iconX, iconY, 2.8, 0, Math.PI * 2);
+    targetCtx.fill();
 
-    ctx.fillStyle = "rgba(220, 238, 255, 0.82)";
-    ctx.font = "700 12px IBM Plex Sans JP";
-    ctx.fillText("観測者", planeX - 28, lineTop - 8);
-    ctx.font = "600 11px IBM Plex Sans JP";
-    ctx.fillStyle = "rgba(182, 222, 255, 0.68)";
-    ctx.fillText("observer plane", planeX - 42, lineBottom + 18);
+    targetCtx.fillStyle = "rgba(220, 238, 255, 0.82)";
+    targetCtx.font = "700 12px IBM Plex Sans JP";
+    targetCtx.fillText("観測者", planeX - 28, lineTop - 8);
+    targetCtx.font = "600 11px IBM Plex Sans JP";
+    targetCtx.fillStyle = "rgba(182, 222, 255, 0.68)";
+    targetCtx.fillText("observer plane", planeX - 42, lineBottom + 18);
 
-    ctx.restore();
+    targetCtx.restore();
+}
+
+function drawOverlay(targetCtx, scene) {
+    const spinLabel = Math.abs(state.spin) < 0.03 ? "a/M = 0" : `a/M = ${formatNumber(state.spin, 2)}`;
+    targetCtx.fillStyle = "rgba(255, 255, 255, 0.72)";
+    targetCtx.font = "13px IBM Plex Sans JP";
+    targetCtx.fillText(`近似式: d²u/dφ² + u ≈ 3M_eff u² + drag(a, sign b) / M = ${formatNumber(state.mass, 1)} / ${spinLabel}`, 18, scene.height - 18);
+}
+
+function renderStaticLayer() {
+    if (!state.scene) {
+        return;
+    }
+
+    drawBackground(staticCtx, state.scene, state.stars);
+    drawEmitter(staticCtx, state.scene);
+    drawBlackHole(staticCtx, state.scene);
+    drawObserverMarker(staticCtx, state.scene);
+    drawOverlay(staticCtx, state.scene);
+    state.needsStaticRedraw = false;
+    state.needsCompositeRedraw = true;
 }
 
 function drawRays(scene) {
     const visibleLength = Math.floor(state.drawProgress);
 
     state.rays.forEach((ray) => {
-        if (ray.points.length < 2) {
+        if (ray.canvasPoints.length < 2) {
             return;
         }
 
-        const visibleCount = Math.min(ray.points.length, visibleLength);
+        const visibleCount = Math.min(ray.canvasPoints.length, visibleLength);
         if (visibleCount < 2) {
             return;
         }
@@ -570,25 +631,15 @@ function drawRays(scene) {
         ctx.lineWidth = ray.captured ? 1.65 : 1.25;
         ctx.strokeStyle = ray.captured ? "rgba(255, 212, 105, 0.92)" : getColorForImpact(ray.impact, state.spread, 0.78);
         ctx.beginPath();
-
-        const first = toCanvasPoint(scene, ray.points[0]);
-        ctx.moveTo(first.x, first.y);
+        ctx.moveTo(ray.canvasPoints[0].x, ray.canvasPoints[0].y);
 
         for (let index = 1; index < visibleCount; index += 1) {
-            const point = toCanvasPoint(scene, ray.points[index]);
-            ctx.lineTo(point.x, point.y);
+            ctx.lineTo(ray.canvasPoints[index].x, ray.canvasPoints[index].y);
         }
 
         ctx.stroke();
         ctx.restore();
     });
-}
-
-function drawOverlay(scene) {
-    const spinLabel = Math.abs(state.spin) < 0.03 ? "a/M = 0" : `a/M = ${formatNumber(state.spin, 2)}`;
-    ctx.fillStyle = "rgba(255, 255, 255, 0.72)";
-    ctx.font = "13px IBM Plex Sans JP";
-    ctx.fillText(`近似式: d²u/dφ² + u ≈ 3M_eff u² + drag(a, sign b) / M = ${formatNumber(state.mass, 1)} / ${spinLabel}`, 18, scene.height - 18);
 }
 
 function drawObserverScreen() {
@@ -621,10 +672,10 @@ function drawObserverScreen() {
         observerCtx.fillRect(0, y - (bandHeight * 0.5), width, bandHeight);
 
         const starSeed = Math.round((ray.impact + state.spread) * 1000) + index;
-        for (let starIndex = 0; starIndex < 3; starIndex += 1) {
+        for (let starIndex = 0; starIndex < 2; starIndex += 1) {
             const x = ((starSeed * (starIndex + 3) * 73) % Math.round(width * 0.82)) + (width * 0.08);
             const offset = (((starSeed * (starIndex + 5) * 19) % 5) - 2) * 1.2;
-            const size = 1 + (((starSeed + starIndex) % 3) * 0.35);
+            const size = 1 + (((starSeed + starIndex) % 3) * 0.25);
             observerCtx.fillStyle = `rgba(255, 255, 255, ${0.45 + (starIndex * 0.15)})`;
             observerCtx.fillRect(x, y + offset, size, size);
         }
@@ -669,31 +720,65 @@ function drawObserverScreen() {
     observerCtx.fillStyle = "rgba(255, 255, 255, 0.7)";
     observerCtx.font = "600 12px IBM Plex Sans JP";
     observerCtx.fillText("observer screen (approx.)", 14, 18);
+    state.needsObserverRedraw = false;
 }
 
-function drawFrame() {
-    const scene = getSceneMetrics();
-    drawBackground(scene);
-    drawEmitter(scene);
-    drawRays(scene);
-    drawBlackHole(scene);
-    drawObserverMarker(scene);
-    drawOverlay(scene);
-    drawObserverScreen();
-}
-
-function animate() {
-    drawFrame();
-
-    if (!state.paused) {
-        const maxLength = state.rays.reduce((maxValue, ray) => Math.max(maxValue, ray.points.length), 0);
-        state.drawProgress += 8;
-        if (state.drawProgress > maxLength + 70) {
-            state.drawProgress = 0;
-        }
+function renderCompositeFrame() {
+    if (!state.scene) {
+        return;
     }
 
-    state.animationId = window.requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, state.viewport.width, state.viewport.height);
+    ctx.drawImage(staticCanvas, 0, 0, state.viewport.width, state.viewport.height);
+    drawRays(state.scene);
+    state.needsCompositeRedraw = false;
+}
+
+function renderLoop(timestamp) {
+    state.animationId = null;
+    const frameInterval = 1000 / 30;
+    let keepAnimating = false;
+
+    if (state.needsStaticRedraw) {
+        renderStaticLayer();
+    }
+
+    if (state.needsObserverRedraw) {
+        drawObserverScreen();
+    }
+
+    if (!state.paused && state.maxRayPoints > 0) {
+        if (!state.lastFrameTime) {
+            state.lastFrameTime = timestamp;
+            state.needsCompositeRedraw = true;
+        }
+
+        const elapsed = timestamp - state.lastFrameTime;
+        if (elapsed >= frameInterval) {
+            const frameSteps = Math.max(1, Math.floor(elapsed / frameInterval));
+            state.lastFrameTime = timestamp;
+            state.drawProgress = Math.min(state.drawProgress + (8 * frameSteps), state.maxRayPoints + 70);
+            state.needsCompositeRedraw = true;
+
+            if (state.drawProgress >= state.maxRayPoints + 70) {
+                state.paused = true;
+                state.lastFrameTime = 0;
+                updateControls();
+            }
+        }
+
+        keepAnimating = !state.paused;
+    } else {
+        state.lastFrameTime = 0;
+    }
+
+    if (state.needsCompositeRedraw) {
+        renderCompositeFrame();
+    }
+
+    if (keepAnimating || state.needsStaticRedraw || state.needsObserverRedraw || state.needsCompositeRedraw) {
+        requestRender();
+    }
 }
 
 dom.resetBtn.addEventListener("click", () => {
@@ -701,8 +786,15 @@ dom.resetBtn.addEventListener("click", () => {
 });
 
 dom.animateBtn.addEventListener("click", () => {
+    if (state.paused && state.drawProgress >= state.maxRayPoints + 70) {
+        state.drawProgress = 0;
+    }
+
     state.paused = !state.paused;
+    state.lastFrameTime = 0;
+    state.needsCompositeRedraw = true;
     updateControls();
+    requestRender();
 });
 
 [dom.massRange, dom.spinRange, dom.rayRange, dom.lensRange, dom.stepRange].forEach((element) => {
@@ -718,4 +810,3 @@ window.addEventListener("resize", () => {
 
 resizeCanvas();
 generateRays(true);
-animate();
