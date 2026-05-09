@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渦電流とは？ | 磁石を動かしてレンツの法則と磁気ブレーキを見るシミュレーション</title>
+    <meta name="description" content="磁石を導体板の上でドラッグしながら、渦電流、磁束変化、レンツの法則、磁気ブレーキを一画面で観察できる教育用シミュレーションです。">
+    <meta name="theme-color" content="#16313e">
+    <link rel="canonical" href="https://readerspace.github.io/eddy-current.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="渦電流とは？ | 磁石を動かしてレンツの法則と磁気ブレーキを見るシミュレーション">
+    <meta property="og:description" content="磁石を動かすと導体板に渦電流が流れ、変化を打ち消す向きの抵抗力が生まれるようすをドラッグ操作で確かめられます。">
+    <meta property="og:url" content="https://readerspace.github.io/eddy-current.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="渦電流とは？ | 磁石を動かしてレンツの法則と磁気ブレーキを見るシミュレーション">
+    <meta name="twitter:description" content="磁石を速く動かすほど渦電流が強まり、レンツの法則で逆向きの磁気ブレーキが大きくなる教材ページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="eddy-current.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#principle">見方</a>
+                <a href="#model">モデル</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Eddy Current / Induction / Lenz Law</p>
+                    <h1>なぜ磁石を動かすと、<br>見えないブレーキが生まれるのか</h1>
+                    <p class="stage-lead">
+                        磁石を導体板の上で動かすと、導体を貫く磁束が時間変化します。すると誘導起電力が生まれ、円を巻くような渦電流が立ち上がります。<br>
+                        その電流が作る磁場は変化を打ち消す向きになり、磁石には進行方向と逆向きの抵抗力が現れます。ここでは、その一連の流れをドラッグ操作で確かめられます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>磁石をドラッグ</span>
+                        <span>渦電流の向きを表示</span>
+                        <span>磁束変化を比較</span>
+                        <span>磁気ブレーキを観察</span>
+                    </div>
+                </div>
+
+                <div class="playground-grid">
+                    <section class="control-panel" aria-label="渦電流シミュレーションの操作">
+                        <div class="panel-header">
+                            <h2>渦電流シミュレーション</h2>
+                            <p>キャンバス上の磁石をそのままドラッグしてください。速く動かすほど磁束変化が大きくなり、導体板に立つ渦電流と逆向きの抵抗力も強まります。</p>
+                        </div>
+
+                        <div class="control-group">
+                            <h3>操作</h3>
+                            <div class="hint-box">
+                                <p>磁石は導体板の中を自由に動かせます。</p>
+                                <p>自動運動を使うと、周期的な磁束変化と渦電流の反転を連続で観察できます。</p>
+                            </div>
+                            <div class="button-grid dual-buttons">
+                                <button id="autoBtn" type="button">自動で動かす</button>
+                                <button id="resetBtn" class="secondary" type="button">リセット</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <h3>物理パラメータ</h3>
+                            <label for="magnetStrength">磁石の強さ <span id="magnetValue" class="range-value">1.4</span></label>
+                            <input id="magnetStrength" type="range" min="0.2" max="3" step="0.1" value="1.4">
+
+                            <label for="conductivity">導体の電気伝導率 <span id="sigmaValue" class="range-value">1.4</span></label>
+                            <input id="conductivity" type="range" min="0" max="3" step="0.1" value="1.4">
+
+                            <label for="spread">磁場の広がり <span id="spreadValue" class="range-value">75</span></label>
+                            <input id="spread" type="range" min="35" max="130" step="1" value="75">
+
+                            <label for="dragStrength">減衰の強さ <span id="dragValue" class="range-value">0.70</span></label>
+                            <input id="dragStrength" type="range" min="0" max="2" step="0.05" value="0.7">
+                        </div>
+
+                        <div class="control-group">
+                            <h3>表示</h3>
+                            <label for="displayMode">表示モード</label>
+                            <select id="displayMode">
+                                <option value="current">渦電流を表示</option>
+                                <option value="field">磁場の強さを表示</option>
+                                <option value="both">両方表示</option>
+                            </select>
+
+                            <label for="density">ベクトル密度 <span id="densityValue" class="range-value">35</span></label>
+                            <input id="density" type="range" min="20" max="60" step="5" value="35">
+                        </div>
+
+                        <div class="formula-box">
+                            <p class="card-label">Formula</p>
+                            <p class="formula-line">誘導起電力: <span>E ∝ −∂B / ∂t</span></p>
+                            <p class="formula-line">渦電流: <span>J = σE</span></p>
+                            <p class="formula-line">抵抗力: <span>Fdrag ∝ −v</span></p>
+                            <p>ここでは厳密な数値解ではなく、磁束変化から渦電流と磁気ブレーキの向きを読む教育用近似を使っています。</p>
+                        </div>
+
+                        <div class="legend-box">
+                            <p class="card-label">Legend</p>
+                            <div class="legend-list">
+                                <div><span class="dot red"></span>磁石</div>
+                                <div><span class="dot green"></span>導体板</div>
+                                <div><span class="dot orange"></span>渦電流</div>
+                                <div><span class="dot purple"></span>磁気ブレーキ</div>
+                                <div><span class="dot blue"></span>速度</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="display-column">
+                        <div class="canvas-card">
+                            <div class="canvas-stage">
+                                <canvas id="eddyCurrentCanvas" aria-label="渦電流のシミュレーション"></canvas>
+                            </div>
+
+                            <div class="metric-grid" aria-label="現在の状態">
+                                <article class="metric-card">
+                                    <span>磁石の速さ</span>
+                                    <strong id="speedMetric">0.0 px/s</strong>
+                                </article>
+                                <article class="metric-card">
+                                    <span>磁束変化の目安</span>
+                                    <strong id="fluxMetric">0.00</strong>
+                                </article>
+                                <article class="metric-card">
+                                    <span>渦電流の強さ目安</span>
+                                    <strong id="currentMetric">0.00</strong>
+                                </article>
+                                <article class="metric-card">
+                                    <span>磁気ブレーキの目安</span>
+                                    <strong id="brakeMetric">0.00</strong>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div class="status-grid">
+                            <article class="status-card">
+                                <p class="card-label">Motion</p>
+                                <h2 id="motionTitle">磁石が止まっているので渦電流は弱い</h2>
+                                <p id="motionSummary">磁束の時間変化が小さいと、誘導起電力も小さくなります。まずは磁石を左右に素早くドラッグして反応の違いを見てください。</p>
+                            </article>
+                            <article class="status-card strong-card">
+                                <p class="card-label">Lenz Law</p>
+                                <h2 id="ruleTitle">渦電流は変化を打ち消す向きに流れる</h2>
+                                <p id="ruleSummary">磁石が近づいて磁束が増えるなら、それを弱める向きに。遠ざかって磁束が減るなら、それを補う向きに電流が生じます。</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">渦電流は、磁束の変化をそのまま通さず、逆らう向きに立ち上がる。</p>
+                <p class="signal-sub">ファラデーの誘導が電流を生み、その向きはレンツの法則で決まります。だから磁石を動かすと、導体板はまるで見えないブレーキを返してくるように見えます。</p>
+            </section>
+
+            <section class="section reveal" id="principle">
+                <div class="section-heading">
+                    <p class="eyebrow">How To Read</p>
+                    <h2>渦電流とレンツの法則の見方</h2>
+                    <p>このページでは、磁束変化、誘導起電力、渦電流、抵抗力の順につながるように描いています。最初は「何が変化したか」と「その変化に逆らう向きはどちらか」を追うと読みやすくなります。</p>
+                </div>
+
+                <div class="principle-grid">
+                    <article class="principle-card strong-card">
+                        <p class="card-label">Faraday</p>
+                        <h3>磁束が変化すると、導体に起電力が生まれる</h3>
+                        <p>磁石を動かすと、導体板の各点を貫く磁場が時間的に変わります。その変化が誘導起電力の源になります。</p>
+                    </article>
+                    <article class="principle-card warm-card">
+                        <p class="card-label">Lenz</p>
+                        <h3>電流の向きは、その変化を打ち消す側に決まる</h3>
+                        <p>磁束が増えるなら減らす向き、減るなら補う向きです。これがレンツの法則で、渦電流の回る向きを決めています。</p>
+                    </article>
+                    <article class="principle-card">
+                        <p class="card-label">Speed</p>
+                        <h3>速く動かすほど、渦電流もブレーキも強くなる</h3>
+                        <p>磁束の変化率が大きいほど誘導起電力が強まり、導体に流れる電流も大きくなります。ドラッグ速度を変えて比べてみてください。</p>
+                    </article>
+                    <article class="principle-card night-card">
+                        <p class="card-label">Conductivity</p>
+                        <h3>よく電流が流れる導体ほど、抵抗力が大きく見える</h3>
+                        <p>同じ起電力でも、電気伝導率が高いほど大きな渦電流が流れます。結果として磁石へ返る磁気ブレーキも強まります。</p>
+                    </article>
+                </div>
+
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Flux Change</p>
+                        <div class="formula-line">E ∝ −∂B / ∂t</div>
+                        <p>時間変化があるときだけ誘導起電力が立ちます。止めた磁石では渦電流も弱くなります。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Current</p>
+                        <div class="formula-line">J = σE</div>
+                        <p>導体がよく流すほど、同じ起電力でも大きな渦電流になります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Magnetic Brake</p>
+                        <div class="formula-line">Fdrag ∝ −v</div>
+                        <p>見かけ上は、動きに逆らう磁気ブレーキとして読めます。向きは常に速度へ逆向きです。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model Note</p>
+                    <h2>このページで使っている近似</h2>
+                    <p>狙いは、渦電流とレンツの法則を直感的に読むことです。厳密なマクスウェル方程式の数値解ではなく、何が原因でどの向きの応答が出るかが見えるモデルに絞っています。</p>
+                </div>
+
+                <div class="model-grid">
+                    <article class="model-card">
+                        <p class="card-label">Approximation 1</p>
+                        <h3>磁石の磁場はガウス型の広がりで近似する</h3>
+                        <p>実在の磁石の詳細形状は省き、中心からなめらかに弱まる磁場分布として扱っています。</p>
+                    </article>
+                    <article class="model-card strong-card">
+                        <p class="card-label">Approximation 2</p>
+                        <h3>渦電流は磁石まわりの接線方向ベクトルで表す</h3>
+                        <p>磁束変化の符号に応じて、磁石の周りを回る方向を反転させる教育用モデルを使っています。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Approximation 3</p>
+                        <h3>磁気ブレーキは速度に逆向きの減衰でまとめる</h3>
+                        <p>磁石へ返る力の詳細分布は省き、速度・導電率・減衰係数に比例する見かけの抵抗として表現しています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるならこのページ</h2>
+                    <p>電磁誘導の入口として渦電流を見たあと、場そのもの、粒子への力、電磁波へと進むとつながります。</p>
+                </div>
+
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>創発、力学、電磁気、熱など、動かして試せるページをまとめた入口に戻れます。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Field</p>
+                        <h3>電場と磁場の可視化へ</h3>
+                        <p>電荷や棒磁石を動かしながら、力線とベクトル場そのものを比較できます。</p>
+                        <a class="button button-secondary" href="electric-magnetic.html">電場と磁場へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Force</p>
+                        <h3>ローレンツ力のページへ</h3>
+                        <p>粒子 1 個が磁場でどう曲がるかを、速度ベクトルと外積の向きから読めます。</p>
+                        <a class="button button-secondary" href="lorentz-force.html">ローレンツ力へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Wave</p>
+                        <h3>アンテナと電磁波へ</h3>
+                        <p>時間変化する電場と磁場が、送信から受信までどう伝わるかを見られます。</p>
+                        <a class="button button-secondary" href="antenna.html">アンテナへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>見えない場と応答を、操作しながら読める物理ページを増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="electric-magnetic.html">電場と磁場</a>
+                <a href="lorentz-force.html">ローレンツ力</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="eddy-current.js"></script>
+</body>
+</html>

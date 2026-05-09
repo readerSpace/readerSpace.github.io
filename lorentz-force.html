@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ローレンツ力とは？ | 速度・磁場・右ねじを動かして見るシミュレーション</title>
+    <meta name="description" content="荷電粒子の速度ベクトルと磁場ベクトルを動かしながら、ローレンツ力 q v × B、曲がる向き、右ねじの関係、円運動とらせん運動の x-y 投影を観察できる教育用シミュレーションです。">
+    <meta name="theme-color" content="#10243b">
+    <link rel="canonical" href="https://readerspace.github.io/lorentz-force.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="ローレンツ力とは？ | 速度・磁場・右ねじを動かして見るシミュレーション">
+    <meta property="og:description" content="速度 v と磁場 B を変えながら、荷電粒子がなぜ横向きに曲がるのかを、軌道と力の矢印で確かめられます。">
+    <meta property="og:url" content="https://readerspace.github.io/lorentz-force.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ローレンツ力とは？ | 速度・磁場・右ねじを動かして見るシミュレーション">
+    <meta name="twitter:description" content="速度ベクトル、磁場ベクトル、電荷の正負を切り替えながら、q v × B の向きと軌道の変化を学べます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lorentz-force.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#principle">見方</a>
+                <a href="#model">モデル</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Lorentz Force / Magnetism / Cross Product</p>
+                    <h1>磁場は、<br>なぜ進行方向を横へ曲げるのか</h1>
+                    <p class="stage-lead">
+                        ローレンツ力は <strong>F = q v × B</strong> で決まり、力は速度にも磁場にも垂直に働きます。<br>
+                        このページでは、速度ベクトル v と磁場ベクトル B を自分で動かしながら、荷電粒子の軌道、力の向き、右ねじの関係を一画面で確かめられます。
+                    </p>
+                    <div class="stage-tags" aria-label="このページでできること">
+                        <span>速度ベクトルを操作</span>
+                        <span>磁場ベクトルを操作</span>
+                        <span>右ねじの向きを確認</span>
+                        <span>円運動 / らせん運動の投影</span>
+                    </div>
+                </div>
+
+                <div class="playground-grid">
+                    <section class="control-panel" aria-label="ローレンツ力シミュレーションの操作">
+                        <div class="panel-header">
+                            <h2>ローレンツ力シミュレーション</h2>
+                            <p>画面は x-y 平面、z 方向は画面の奥・手前として扱います。B の z 成分は背景の × / • でも確認できます。</p>
+                        </div>
+
+                        <div class="control-group">
+                            <h3>教材向けの典型ケース</h3>
+                            <p class="preset-note">正負の反転、平行で力 0、らせん運動、半径の大小など、授業でよく使う条件をまとめて呼び出せます。</p>
+                            <div class="preset-chip-grid" aria-label="教材向けの典型ケース">
+                                <button class="preset-chip" data-lesson-preset="circlePositive" type="button">正電荷の円運動</button>
+                                <button class="preset-chip" data-lesson-preset="circleNegative" type="button">負電荷で逆向き</button>
+                                <button class="preset-chip" data-lesson-preset="parallelNoForce" type="button">v ∥ B で力 0</button>
+                                <button class="preset-chip" data-lesson-preset="helicalMotion" type="button">らせん運動</button>
+                                <button class="preset-chip" data-lesson-preset="tightRadius" type="button">強磁場で半径小</button>
+                                <button class="preset-chip" data-lesson-preset="wideRadius" type="button">高速で半径大</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <h3>粒子設定</h3>
+                            <label for="charge">電荷 q <span id="qValue" class="range-value">+1</span></label>
+                            <select id="charge">
+                                <option value="1">正電荷 q &gt; 0</option>
+                                <option value="-1">負電荷 q &lt; 0</option>
+                            </select>
+
+                            <label for="speedPreset">速さプリセット</label>
+                            <select id="speedPreset">
+                                <option value="slow">ゆっくり 1.2</option>
+                                <option value="standard" selected>標準 2.2</option>
+                                <option value="fast">速い 3.4</option>
+                                <option value="veryFast">かなり速い 4.6</option>
+                                <option value="custom">カスタム</option>
+                            </select>
+
+                            <label for="speed">速さ |v| <span id="speedValue" class="range-value">2.2</span></label>
+                            <input id="speed" type="range" min="0.2" max="5" step="0.1" value="2.2">
+                        </div>
+
+                        <div class="control-group">
+                            <h3>速度ベクトル v</h3>
+                            <label for="presetV">プリセット</label>
+                            <select id="presetV">
+                                <option value="xplus" selected>右向き +x</option>
+                                <option value="yplus">上向き +y</option>
+                                <option value="xydiagonal">斜め x + y</option>
+                                <option value="xzhelical">x と z を両立</option>
+                                <option value="zplus">画面の奥向き +z</option>
+                                <option value="custom">カスタム</option>
+                            </select>
+
+                            <label for="vx">v の x 成分 <span id="vxValue" class="range-value">1.00</span></label>
+                            <input id="vx" type="range" min="-1" max="1" step="0.01" value="1">
+
+                            <label for="vy">v の y 成分 <span id="vyValue" class="range-value">0.00</span></label>
+                            <input id="vy" type="range" min="-1" max="1" step="0.01" value="0">
+
+                            <label for="vz">v の z 成分 <span id="vzValue" class="range-value">0.00</span></label>
+                            <input id="vz" type="range" min="-1" max="1" step="0.01" value="0">
+                        </div>
+
+                        <div class="control-group">
+                            <h3>磁場ベクトル B</h3>
+                            <label for="presetB">プリセット</label>
+                            <select id="presetB">
+                                <option value="zplus">画面の奥向き +z</option>
+                                <option value="zminus">画面の手前向き -z</option>
+                                <option value="xplus">右向き +x</option>
+                                <option value="xminus">左向き -x</option>
+                                <option value="yplus">上向き +y</option>
+                                <option value="yminus">下向き -y</option>
+                                <option value="xydiagonal">斜め x + y</option>
+                                <option value="custom">カスタム</option>
+                            </select>
+
+                            <label for="bx">B の x 成分 <span id="bxValue" class="range-value">0.00</span></label>
+                            <input id="bx" type="range" min="-1" max="1" step="0.01" value="0">
+
+                            <label for="by">B の y 成分 <span id="byValue" class="range-value">0.00</span></label>
+                            <input id="by" type="range" min="-1" max="1" step="0.01" value="0">
+
+                            <label for="bz">B の z 成分 <span id="bzValue" class="range-value">1.00</span></label>
+                            <input id="bz" type="range" min="-1" max="1" step="0.01" value="1">
+
+                            <label for="bStrength">磁場の強さ |B| <span id="bStrengthValue" class="range-value">1.00</span></label>
+                            <input id="bStrength" type="range" min="0" max="2.5" step="0.05" value="1">
+                        </div>
+
+                        <div class="control-group">
+                            <h3>表示・操作</h3>
+                            <label for="timeScale">時間の速さ <span id="timeScaleValue" class="range-value">1.0</span></label>
+                            <input id="timeScale" type="range" min="0.1" max="3" step="0.1" value="1">
+
+                            <div class="button-grid">
+                                <button id="pauseBtn" type="button">一時停止</button>
+                                <button id="resetBtn" class="secondary" type="button">初期位置に戻す</button>
+                                <button id="clearBtn" class="secondary" type="button">軌跡を消す</button>
+                            </div>
+                        </div>
+
+                        <div class="formula-box">
+                            <p class="card-label">Formula</p>
+                            <p>F = q v × B</p>
+                            <p>|F| = |q| |v| |B| sin θ</p>
+                            <p>磁場だけなら、速さはほぼ一定のまま向きだけが曲がります。</p>
+                        </div>
+
+                        <div class="legend-box">
+                            <p class="card-label">Legend</p>
+                            <div class="legend-list">
+                                <div><span class="dot red"></span>粒子</div>
+                                <div><span class="dot blue"></span>速度 v</div>
+                                <div><span class="dot green"></span>磁場 B</div>
+                                <div><span class="dot purple"></span>ローレンツ力 F</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="display-column">
+                        <div class="canvas-card">
+                            <div class="canvas-stage">
+                                <canvas id="lorentzCanvas" aria-label="ローレンツ力のシミュレーション"></canvas>
+                            </div>
+
+                            <div class="metric-grid" aria-label="現在の状態">
+                                <article class="metric-card">
+                                    <span>現在の電荷</span>
+                                    <strong id="chargeMetric">正電荷 (+q)</strong>
+                                </article>
+                                <article class="metric-card">
+                                    <span>v と B の角度</span>
+                                    <strong id="angleMetric">90.0°</strong>
+                                </article>
+                                <article class="metric-card">
+                                    <span>|F| の大きさ</span>
+                                    <strong id="forceMetric">2.20</strong>
+                                </article>
+                                <article class="metric-card">
+                                    <span>半径の目安 r</span>
+                                    <strong id="radiusMetric">2.20</strong>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div class="status-grid">
+                            <article class="status-card">
+                                <p class="card-label">Motion</p>
+                                <h2 id="motionTitle">円運動の x-y 投影</h2>
+                                <p id="motionSummary">速度が磁場に垂直なら、力は常に横向きになり、速さを保ったまま円運動します。</p>
+                            </article>
+                            <article class="status-card strong-card">
+                                <p class="card-label">Right-Hand Rule</p>
+                                <h2 id="ruleTitle">正電荷では右手の向きがそのまま力になる</h2>
+                                <p id="ruleSummary">右手で v から B へ回した外積の向きが F です。負電荷ではその向きが反転します。</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">磁場は、速さを変えずに進行方向だけを曲げる。</p>
+                <p class="signal-sub">ローレンツ力は速度にも磁場にも垂直なので、磁場だけがある理想化では仕事をせず、粒子の速さではなく向きだけを変えます。だから円やらせんが生まれます。</p>
+            </section>
+
+            <section class="section reveal" id="principle">
+                <div class="section-heading">
+                    <p class="eyebrow">How To Read</p>
+                    <h2>右ねじと軌道の見方</h2>
+                    <p>ローレンツ力は外積なので、速度と磁場の関係で力の向きが決まり、電荷の正負でその向きが反転します。ここではまず、典型的な読み方を 4 つに分けて整理します。</p>
+                </div>
+
+                <div class="principle-grid">
+                    <article class="principle-card strong-card">
+                        <p class="card-label">Perpendicular</p>
+                        <h3>v が B に垂直なら、曲がり方が最大になる</h3>
+                        <p>角度 θ が 90° のとき sin θ が最大になるので、ローレンツ力も最大です。力は横向きに働き続け、円運動になります。</p>
+                    </article>
+                    <article class="principle-card warm-card">
+                        <p class="card-label">Parallel</p>
+                        <h3>v が B に平行なら、力は 0 になる</h3>
+                        <p>θ が 0° や 180° なら sin θ = 0 です。磁場はその速度成分を曲げないので、粒子はその向きにまっすぐ進みます。</p>
+                    </article>
+                    <article class="principle-card">
+                        <p class="card-label">Helix</p>
+                        <h3>平行成分と垂直成分が両方あると、実際にはらせん運動になる</h3>
+                        <p>磁場に平行な成分はそのまま進み、垂直成分だけが回転します。このページではその 3 次元運動の x-y 投影を表示しています。</p>
+                    </article>
+                    <article class="principle-card night-card">
+                        <p class="card-label">Charge Sign</p>
+                        <h3>負電荷では、正電荷と曲がる向きが逆になる</h3>
+                        <p>外積 v × B は同じでも、q が負なら力 q(v × B) は逆向きです。正負を切り替えると、同じ設定でも回り込みの向きが反転します。</p>
+                    </article>
+                </div>
+
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Force</p>
+                        <div class="formula-line">F = q v × B</div>
+                        <p>力の向きは外積で決まり、速度にも磁場にも垂直です。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Magnitude</p>
+                        <div class="formula-line">|F| = |q| |v| |B| sin θ</div>
+                        <p>角度 θ が大きいほどよく曲がり、平行に近いほど曲がりにくくなります。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Radius</p>
+                        <div class="formula-line">r = m v<sub>&perp;</sub> / (|q| |B|)</div>
+                        <p>磁場が強いほど半径は小さく、速いほど半径は大きくなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Model Note</p>
+                    <h2>このページで使っている近似</h2>
+                    <p>見通しをよくするため、あえて単純化しています。ここでは「一様磁場中での荷電粒子の曲がり方」を直感的に理解するためのモデルに絞っています。</p>
+                </div>
+
+                <div class="model-grid">
+                    <article class="model-card">
+                        <p class="card-label">Approximation 1</p>
+                        <h3>磁場は空間全体で一様だとみなす</h3>
+                        <p>現実の磁場は位置で変わることがありますが、このページでは B ベクトルを空間全体で一定として扱います。</p>
+                    </article>
+                    <article class="model-card strong-card">
+                        <p class="card-label">Approximation 2</p>
+                        <h3>電場・放射・相対論効果は入れていない</h3>
+                        <p>ローレンツ力のうち磁場による曲がり方だけに集中するため、電場やエネルギー損失、相対論的補正は省いています。</p>
+                    </article>
+                    <article class="model-card warm-card">
+                        <p class="card-label">Approximation 3</p>
+                        <h3>表示は 3 次元軌道の x-y 平面への投影</h3>
+                        <p>z 方向は画面の奥・手前として背景記号で示し、実際の軌道は x-y 平面への投影として描いています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるならこのページ</h2>
+                    <p>ローレンツ力で「場が粒子をどう曲げるか」を見たあと、場そのものの可視化や電磁波の話へ進むとつながります。</p>
+                </div>
+
+                <div class="related-grid">
+                    <article class="related-card feature-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>創発、カオス、波、場、熱など、動かして試せるページを入口ごとにまとめた一覧です。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Field</p>
+                        <h3>電場と磁場の可視化へ</h3>
+                        <p>電荷や棒磁石をドラッグしながら、力線とベクトル場そのものを比較できます。</p>
+                        <a class="button button-secondary" href="electric-magnetic.html">電場と磁場へ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Antenna</p>
+                        <h3>電磁波の送受信へ</h3>
+                        <p>電場と磁場の時間変化が、送信アンテナから受信アンテナへどう伝わるかを見られます。</p>
+                        <a class="button button-secondary" href="antenna.html">アンテナへ</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Guide</p>
+                        <h3>シミュレーションとは何かへ</h3>
+                        <p>このページで入れた近似やモデル化の意味を、理論側から整理し直せます。</p>
+                        <a class="button button-secondary" href="simulation.html">解説ページへ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>見えない力や場の向きを、操作して理解する物理ページを増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="electric-magnetic.html">電場と磁場</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="lorentz-force.js"></script>
+</body>
+</html>
