@@ -62,6 +62,7 @@ const easyToHardCatalogOrder = [
     "classical-quantum.html",
     "hydrogen-orbital.html",
     "stellar-fusion.html",
+    "blackhole-light-bending.html",
     "simulation.html",
     "statistics.html"
 ];

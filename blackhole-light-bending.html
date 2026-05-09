@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブラックホールで光はどう曲がるのか | 光子球と捕獲のシミュレーション</title>
+    <meta name="description" content="ブラックホールの近くを通る光が、少し曲がる・大きく巻く・事象の地平面へ落ちる様子を、光子球と衝突パラメータの観点から見られる教育用シミュレーションページです。">
+    <meta name="theme-color" content="#0a1020">
+    <link rel="canonical" href="https://readerspace.github.io/blackhole-light-bending.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="ブラックホールで光はどう曲がるのか | 光子球と捕獲のシミュレーション">
+    <meta property="og:description" content="左から来る光線を多数飛ばし、ブラックホール近傍で曲がる・巻き込まれる・逃げるの違いを見比べられるページです。">
+    <meta property="og:url" content="https://readerspace.github.io/blackhole-light-bending.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ブラックホールで光はどう曲がるのか | 光子球と捕獲のシミュレーション">
+    <meta name="twitter:description" content="光子球 r = 3M、事象の地平面 r = 2M を見ながら、衝突パラメータで光の運命が変わる様子を動かして観察できます。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="blackhole-light-bending.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#viewer">光線を見る</a>
+                <a href="#intuition">見方</a>
+                <a href="#model">近似モデル</a>
+                <a href="#next">関連ページ</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="section reveal is-visible" id="viewer">
+                <div class="section-heading">
+                    <p class="eyebrow">Interactive</p>
+                    <h2>左から来る光が、どこまで曲がり、どこから落ちるかを見る</h2>
+                    <p>質量と回転を変えながら、ブラックホール近傍での光の軌道を 2D 近似で描きます。上の大きなキャンバスは軌道図、下の observer screen は右端の観測者が受け取る見え方の近似です。水色は曲がって逃げた光、金色は巻き込まれて事象の地平面へ落ちた光です。</p>
+                </div>
+
+                <div class="viewer-grid">
+                    <article class="panel controls-panel">
+                        <div class="control-stack">
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="massRange">ブラックホール質量 M</label>
+                                    <span class="control-value" id="massValue">1.4</span>
+                                </div>
+                                <input id="massRange" class="range-input" type="range" min="0.4" max="3.0" step="0.1" value="1.4">
+                                <p class="control-copy">M を大きくすると、事象の地平面と光子球が広がり、近くを通る光がより強く巻かれます。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="spinRange">回転パラメータ a/M</label>
+                                    <span class="control-value" id="spinValue">0.35</span>
+                                </div>
+                                <input id="spinRange" class="range-input" type="range" min="-0.95" max="0.95" step="0.05" value="0.35">
+                                <p class="control-copy">0 は非回転です。正なら上側の光がより巻きやすい Kerr 風のフレームドラッグ近似、負ならその逆です。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="rayRange">光線の本数</label>
+                                    <span class="control-value" id="rayValue">65</span>
+                                </div>
+                                <input id="rayRange" class="range-input" type="range" min="15" max="120" step="1" value="65">
+                                <p class="control-copy">本数を増やすと、どの衝突パラメータで捕獲に切り替わるかが見やすくなります。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="lensRange">レンズ強度</label>
+                                    <span class="control-value" id="lensValue">1.0</span>
+                                </div>
+                                <input id="lensRange" class="range-input" type="range" min="0.3" max="2.4" step="0.1" value="1.0">
+                                <p class="control-copy">教材用の調整ノブです。1.0 が基準で、高いほど曲がりを強調します。</p>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="control-top">
+                                    <label class="control-title" for="stepRange">計算ステップ</label>
+                                    <span class="control-value" id="stepValue">1000</span>
+                                </div>
+                                <input id="stepRange" class="range-input" type="range" min="300" max="2200" step="50" value="1000">
+                                <p class="control-copy">大きいほど遠くまで軌跡を追えますが、描画に時間がかかります。</p>
+                            </div>
+
+                            <div class="button-row">
+                                <button class="button button-primary" id="resetBtn" type="button">再計算</button>
+                                <button class="button button-secondary" id="animateBtn" type="button">一時停止</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <p class="control-label">現在の見どころ</p>
+                            <p class="summary-text" id="summaryText" aria-live="polite"></p>
+                        </div>
+
+                        <article class="hint-card">
+                            <p class="control-label">凡例</p>
+                            <ul class="hint-list">
+                                <li>黒い円は事象の地平面 r = 2M</li>
+                                <li>点線の円は光子球 r = 3M</li>
+                                <li>水色の線は曲がって逃げた光</li>
+                                <li>金色の線は捕獲された光</li>
+                                <li>observer screen は「右端の観測者のスクリーン切片」を近似表示したもの</li>
+                            </ul>
+                        </article>
+                    </article>
+
+                    <article class="panel canvas-panel">
+                        <div class="canvas-top">
+                            <div>
+                                <p class="control-label">Simulation</p>
+                                <h3>ブラックホール近傍の光線</h3>
+                            </div>
+                            <div class="canvas-chip" id="statusChip">再生中</div>
+                        </div>
+                        <div class="canvas-shell">
+                            <canvas id="canvas" aria-label="ブラックホールの近くで曲がる光線のシミュレーション"></canvas>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-chip">左端から平行に入る光</span>
+                            <span class="legend-chip warm">光子球付近で大きく曲がる</span>
+                            <span class="legend-chip neutral">近すぎる光は地平面へ落ちる</span>
+                        </div>
+
+                        <div class="observer-block">
+                            <div class="canvas-top observer-top">
+                                <div>
+                                    <p class="control-label">Observer Screen</p>
+                                    <h3>右端の観測者が見る空の切片</h3>
+                                </div>
+                                <div class="canvas-chip" id="observerModeChip">observer / 非回転</div>
+                            </div>
+                            <div class="observer-shell">
+                                <canvas id="observerCanvas" aria-label="ブラックホール近傍を通った光を右端の観測者スクリーンへ写した近似表示"></canvas>
+                            </div>
+                            <p class="observer-copy">逃げてきた光だけをスクリーンへ写し、中央の影と回転による偏りを教材用に強調した近似表示です。厳密な Kerr 画像生成ではなく、上の軌道図から作った observer view です。</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">事象の地平面</p>
+                        <p class="stat-value" id="horizonText">2.80 M</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">光子球</p>
+                        <p class="stat-value" id="photonSphereText">4.20 M</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">順行側の光子軌道</p>
+                        <p class="stat-value" id="progradeText">4.20 M</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">逆行側の光子軌道</p>
+                        <p class="stat-value" id="retrogradeText">4.20 M</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">捕獲された光</p>
+                        <p class="stat-value" id="capturedText">0 本</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">逃げた光</p>
+                        <p class="stat-value" id="escapedText">0 本</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">最小接近距離</p>
+                        <p class="stat-value" id="closestText">--</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">臨界衝突パラメータ</p>
+                        <p class="stat-value" id="criticalText">--</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-label">影のずれ</p>
+                        <p class="stat-value" id="shadowShiftText">ほぼ対称</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="hero section reveal">
+                <div class="hero-copy">
+                    <p class="eyebrow">Black Hole / Null Geodesic / Photon Sphere</p>
+                    <h1>光は、<br>重力でどこまで曲がるのか。</h1>
+                    <p class="hero-lead">
+                        ブラックホールの周りでは、物体だけでなく光の進む向きも大きく変わります。<br>
+                        このページでは、左から平行に入る多数の光線を飛ばし、<strong>少し曲がって抜ける</strong>、<strong>光子球の近くで大きく巻く</strong>、<strong>事象の地平面へ捕獲される</strong>という 3 つの振る舞いを見比べます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#intuition">どこを見るべきか読む</a>
+                        <a class="button button-secondary" href="blackhole.html">ブラックホール解説へ</a>
+                        <a class="button button-secondary" href="simulations.html">シミュレーション一覧へ</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの要点">
+                        <li>光子球 r = 3M の近くでは、光が何周もしそうなほど強く曲がる</li>
+                        <li>衝突パラメータが小さすぎる光は、事象の地平面 r = 2M を越えて戻れない</li>
+                        <li>回転ノブを上げると、順行側と逆行側で巻きやすさがずれ、observer screen の影も左右非対称になる</li>
+                        <li>一般相対論の厳密解をすべて再現せず、光の有効ポテンシャルと Kerr 風の偏りを使った教材近似で可視化している</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="gravity-stage" aria-hidden="true">
+                        <span class="gravity-ring ring-outer"></span>
+                        <span class="gravity-ring ring-mid"></span>
+                        <span class="gravity-ring ring-inner"></span>
+                        <span class="gravity-ray ray-a"></span>
+                        <span class="gravity-ray ray-b"></span>
+                        <span class="gravity-ray ray-c"></span>
+                        <span class="gravity-ray ray-d"></span>
+                        <span class="gravity-ray ray-e"></span>
+                        <div class="gravity-core"></div>
+                        <div class="stage-pill pill-a">r = 2M</div>
+                        <div class="stage-pill pill-b">r = 3M</div>
+                        <div class="stage-pill pill-c">capture / escape</div>
+                    </div>
+
+                    <div class="hero-note-grid">
+                        <article class="hero-note strong-card">
+                            <p class="card-label">Photon Sphere</p>
+                            <h2>大きく曲がる境目は r = 3M 付近</h2>
+                            <p>光子球そのものは不安定ですが、この近くを通る光は長く滞在し、わずかな違いで逃げるか落ちるかが分かれます。</p>
+                        </article>
+                        <article class="hero-note warm-card">
+                            <p class="card-label">Impact Parameter</p>
+                            <h2>入射位置の差が、光の運命を変える</h2>
+                            <p>遠くを通る光は少しだけ曲がって抜け、近すぎる光はブラックホールへ巻き込まれます。境目はとても鋭敏です。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">ブラックホールは「ものを吸い込む穴」というより、光の進める未来の地図そのものを曲げる領域として見ると理解しやすい。</p>
+                <p class="signal-sub">このシミュレーションは、光の有効ポテンシャルで残る部分だけを使って、逃げる・巻く・落ちるの切り替わりを見やすくしています。</p>
+            </section>
+
+            <section class="section reveal" id="intuition">
+                <div class="section-heading">
+                    <p class="eyebrow">Reading</p>
+                    <h2>まずは 4 つの視点で見る</h2>
+                    <p>式の前に、どの差を見ればよいかを押さえると、このページの狙いがかなり分かりやすくなります。</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">View 1</p>
+                        <h3>遠い光は、少しだけ曲がる</h3>
+                        <p>ブラックホールから十分離れた光線は、進行方向が少しだけ曲がるだけで右へ抜けます。重力レンズの直感はここから始まります。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">View 2</p>
+                        <h3>光子球付近では、大きく巻く</h3>
+                        <p>r = 3M 付近をかすめる光は、ブラックホールのまわりを巻くように進み、軌道の曲がりが一気に強くなります。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">View 3</p>
+                        <h3>近すぎる光は、事象の地平面を越える</h3>
+                        <p>軌道が内側へ入りすぎると、光でも外へ戻れません。シミュレーションでは金色の線がそこへ落ちていく光です。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">View 4</p>
+                        <h3>境目はなめらかではなく鋭い</h3>
+                        <p>入射位置を少し変えただけで、逃げる軌道から捕獲軌道へ切り替わります。これが不安定な光子球の特徴です。</p>
+                    </article>
+                </div>
+
+                <div class="bridge-panel">
+                    <p class="card-label">Observation Tip</p>
+                    <h3>質量 M を上げてから、光線の本数を増やし、金色へ変わる境目を探すと見やすい</h3>
+                    <p>まず M を少し大きくして曲がりを見やすくし、その後で光線の本数を増やすと、捕獲と逃走の境目が光子球付近に集まっていることが見えてきます。</p>
+                </div>
+            </section>
+
+            <section class="section reveal" id="model">
+                <div class="section-heading">
+                    <p class="eyebrow">Approximation</p>
+                    <h2>このページで使っている近似モデル</h2>
+                    <p>ここでは、シュワルツシルト時空でのヌル測地線を基礎にしつつ、回転ブラックホールらしい非対称性を Kerr 風の有効項で足しています。observer screen も、上の軌道から到達光だけを写して作る教育用近似です。</p>
+                </div>
+
+                <div class="formula-strip">
+                    <article class="formula-card">
+                        <p class="card-label">Orbit Equation</p>
+                        <div class="formula-block">d<sup>2</sup>u / dφ<sup>2</sup> + u = 3Mu<sup>2</sup></div>
+                        <p>u = 1 / r とおくと、光線の平面軌道はこの形で表せます。このページでは Runge-Kutta 法で数値積分しています。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Key Radii</p>
+                        <div class="formula-block multiline">
+                            <span>事象の地平面: r = 2M</span>
+                            <span>光子球: r = 3M</span>
+                            <span>臨界衝突パラメータの目安: b ≈ 3√3 M</span>
+                        </div>
+                        <p>光子球は「ちょうど回り続ける」理想的な半径ですが、不安定なので少しずれるだけで逃げるか落ちるかが分かれます。</p>
+                    </article>
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Kerr-like Extension</p>
+                        <div class="formula-block multiline">
+                            <span>r<sub>+</sub> ≈ M (1 + √(1 - a<sub>*</sub><sup>2</sup>))</span>
+                            <span>r<sub>ph</sub><sup>pro / retro</sup> ≈ 2M [1 + cos{(2/3) arccos(∓|a<sub>*</sub>|)}]</span>
+                        </div>
+                        <p>a<sub>*</sub> = a / M を回転パラメータとして、順行側の光はより内側、逆行側の光はより外側までしか安定に回れない、という Kerr の特徴だけを取り入れています。</p>
+                    </article>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <p class="card-label">Kept</p>
+                        <h3>残しているもの</h3>
+                        <p>光子球、事象の地平面、衝突パラメータによる軌道差、近くを通るほど曲がりが強くなるという一般相対論の核心です。</p>
+                    </article>
+                    <article class="info-card strong-card">
+                        <p class="card-label">Simplified</p>
+                        <h3>単純化しているもの</h3>
+                        <p>完全な Kerr 測地線、偏光、周波数シフト、降着円盤の流体計算、厳密な観測画像生成は入れていません。回転による非対称性と observer 視点の差だけを教材として取り出しています。</p>
+                    </article>
+                    <article class="info-card warm-card">
+                        <p class="card-label">Lens Strength</p>
+                        <h3>レンズ強度ノブの意味</h3>
+                        <p>レンズ強度は教材用の強調パラメータです。1.0 で標準的な見え方にしつつ、強めると境目の切り替わりを見やすくできます。</p>
+                    </article>
+                    <article class="info-card">
+                        <p class="card-label">Reading</p>
+                        <h3>何を比較すると良いか</h3>
+                        <p>遠くを通る光、光子球ぎりぎりを通る光、捕獲される光の 3 本を比べると、ブラックホール周りの幾何の違いがつかみやすくなります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Step</p>
+                    <h2>ブラックホールの他の見方へつなげる</h2>
+                    <p>このページは「光の進路」側から見た入口です。因果構造、内部、図解の読み方へ進むと、同じブラックホールでも違う見え方になります。</p>
+                </div>
+
+                <div class="link-grid">
+                    <a class="link-card night-card" href="blackhole.html">
+                        <p class="card-label">Guide</p>
+                        <h3>ブラックホールの解説ページへ</h3>
+                        <p>事象の地平線、未来の向き、情報パラドックスまで、概念の全体像を文章で整理できます。</p>
+                    </a>
+                    <a class="link-card" href="penrose.html">
+                        <p class="card-label">Diagram</p>
+                        <h3>ペンローズ図で因果構造を読む</h3>
+                        <p>光を常に 45 度に保つ図で読むと、ブラックホールの内外で「行ける未来」がどう変わるかを俯瞰できます。</p>
+                    </a>
+                    <a class="link-card strong-card" href="simulations.html">
+                        <p class="card-label">Catalog</p>
+                        <h3>他のシミュレーションも見る</h3>
+                        <p>雷、天体、核融合、量子軌道など、似たように「見えない構造を可視化する」ページを横断できます。</p>
+                    </a>
+                    <a class="link-card warm-card" href="physics.html">
+                        <p class="card-label">Guide Hub</p>
+                        <h3>物理解説トップへ戻る</h3>
+                        <p>時空、波動、統計、量子の各テーマから、ブラックホールの話題を他の解説へつなげられます。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <p>ブラックホールの周りでは、光さえ「まっすぐ進む自由」を失い始めます。光子球の近くは、その切り替わりが最も鋭く見える場所です。</p>
+            <div class="footer-links">
+                <a href="blackhole.html">ブラックホール解説へ</a>
+                <a href="simulations.html">シミュレーション一覧へ</a>
+                <a href="physics.html">物理解説トップへ</a>
+                <a href="index.html">トップへ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="blackhole-light-bending.js"></script>
+</body>
+</html>
