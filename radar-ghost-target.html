@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レーダーはなぜ存在しない目標まで映すのか | ゴースト目標シミュレーション</title>
+    <meta name="description" content="レーダーが反射波の時間差から距離を推定する仕組みと、海面反射・多重反射・ノイズ・大気ダクト風の効果でゴースト目標が見える様子を動かして学べるページです。">
+    <meta name="theme-color" content="#0d3b36">
+    <link rel="canonical" href="https://readerspace.github.io/radar-ghost-target.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="レーダーはなぜ存在しない目標まで映すのか | ゴースト目標シミュレーション">
+    <meta property="og:description" content="実在目標の反射に加えて、海面反射・多重反射・ノイズ・大気ダクト風の誤検出がどう現れるかを、走査式レーダーで観察できます。">
+    <meta property="og:url" content="https://readerspace.github.io/radar-ghost-target.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="レーダーはなぜ存在しない目標まで映すのか | ゴースト目標シミュレーション">
+    <meta name="twitter:description" content="距離推定と誤検出の仕組みを、海面反射・多重反射・追跡残りまで含めて触りながら学べるレーダーシミュレーションです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="radar-ghost-target.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="simulations.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="主要セクション">
+                <a href="#playground">実演</a>
+                <a href="#mechanism">仕組み</a>
+                <a href="#experiments">試し方</a>
+                <a href="#next">次に見る</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="stage section reveal is-visible" id="playground">
+                <div class="stage-copy">
+                    <p class="eyebrow">Radar / Multipath / Tracking / False Alarm</p>
+                    <h1>レーダーは、<br>存在しない目標まで映すことがある。</h1>
+                    <p class="stage-lead">
+                        レーダーは、返ってきた反射波の時間から距離を推定します。<br>
+                        ところが現実には、海面で一度跳ねた反射、多重反射で余分に長くなった経路、しきい値を超えたノイズ、
+                        そして大気ダクトのような遠距離の回り込みが混ざり、実在しない目標が画面に残ることがあります。
+                    </p>
+                    <div class="stage-tags" aria-label="このページで見られること">
+                        <span>反射時間から距離推定</span>
+                        <span>海面反射の鏡像ゴースト</span>
+                        <span>多重反射による距離ずれ</span>
+                        <span>ノイズと追跡残り</span>
+                    </div>
+                </div>
+
+                <div class="simulation-shell">
+                    <canvas id="radarCanvas" aria-label="レーダーのゴースト目標シミュレーション"></canvas>
+
+                    <div class="panel" id="simulationPanel" aria-label="レーダー条件の操作パネル">
+                        <div class="panel-header">
+                            <div class="panel-heading-row">
+                                <h2>レーダー走査</h2>
+                                <button id="togglePanel" class="panel-toggle" type="button" aria-controls="simulationPanel" aria-expanded="true">パネルを隠す</button>
+                            </div>
+                            <p>白い走査線が一周するたびに、実在反射、水面反射のゴースト、多重反射、ノイズが点として残ります。</p>
+                        </div>
+
+                        <div class="buttons">
+                            <button id="playPause" class="green" type="button">一時停止</button>
+                            <button id="reset" class="red" type="button">リセット</button>
+                            <button id="calmSea" type="button">静かな海</button>
+                            <button id="roughSea" class="yellow" type="button">荒れた海</button>
+                        </div>
+
+                        <div class="control">
+                            <label for="noiseRange">ノイズ量 <span id="noiseValue"></span></label>
+                            <input id="noiseRange" type="range" min="0" max="1" step="0.01" value="0.18">
+                        </div>
+
+                        <div class="control">
+                            <label for="seaRange">海面反射の強さ <span id="seaValue"></span></label>
+                            <input id="seaRange" type="range" min="0" max="1" step="0.01" value="0.45">
+                        </div>
+
+                        <div class="control">
+                            <label for="persistenceRange">追跡の残りやすさ <span id="persistenceValue"></span></label>
+                            <input id="persistenceRange" type="range" min="0.80" max="0.99" step="0.01" value="0.93">
+                        </div>
+
+                        <div class="control">
+                            <label for="sweepRange">走査速度 <span id="sweepRateValue"></span></label>
+                            <input id="sweepRange" type="range" min="0.60" max="1.80" step="0.05" value="1.00">
+                        </div>
+
+                        <div class="checks" aria-label="表示切り替え">
+                            <label class="check"><input id="multipathToggle" type="checkbox" checked> 多重反射を有効</label>
+                            <label class="check"><input id="ductingToggle" type="checkbox" checked> 大気ダクト風の遠距離誤検出</label>
+                            <label class="check"><input id="showTrueToggle" type="checkbox" checked> 実在目標を表示</label>
+                            <label class="check"><input id="showGuidesToggle" type="checkbox" checked> 補助線と海面モデルを表示</label>
+                        </div>
+
+                        <div class="legend" aria-label="凡例">
+                            <div><span class="dot dot-real"></span>正しいレーダー反射</div>
+                            <div><span class="dot dot-ghost"></span>ゴースト目標</div>
+                            <div><span class="dot dot-noise"></span>ノイズ誤検出</div>
+                            <div><span class="dot dot-target"></span>実在する航空機</div>
+                        </div>
+
+                        <div class="stats" aria-label="現在の検出数">
+                            <div class="stat-box">実反射 <span id="realCountValue">0</span></div>
+                            <div class="stat-box">ゴースト <span id="ghostCountValue">0</span></div>
+                            <div class="stat-box">ノイズ <span id="noiseCountValue">0</span></div>
+                            <div class="stat-box">状態 <span id="runningValue">再生中</span></div>
+                        </div>
+
+                        <p class="panel-status" id="panelStatus" aria-live="polite">最初はそのまま 1 周させて、水色の本物の反射の周りにオレンジのゴーストがどのくらい混ざるかを見てください。</p>
+                    </div>
+
+                    <button id="showPanel" class="panel-reveal" type="button" aria-controls="simulationPanel" aria-expanded="false">パラメータを表示</button>
+
+                    <div class="floating-hint">
+                        観察: 海面反射を上げると鏡像ゴーストが増え、追跡を残りやすくすると「消えにくい目標」に見えます。多重反射を切ると、何が鏡像で何が余分な経路長かを分けて見られます。
+                    </div>
+
+                    <div class="stage-stats" aria-label="走査の要約">
+                        <article>
+                            <span>走査角</span>
+                            <strong id="sweepValue">0°</strong>
+                        </article>
+                        <article>
+                            <span>誤検出モード</span>
+                            <strong id="ghostModeValue">鏡像 + 多重 + ダクト</strong>
+                        </article>
+                        <article>
+                            <span>追跡残り</span>
+                            <strong id="persistenceSummary">0.93</strong>
+                        </article>
+                        <article>
+                            <span>判定</span>
+                            <strong id="summaryValue">本物が優勢</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Idea</p>
+                <p class="signal-main">レーダー像は「物体そのもの」ではなく、戻ってきた経路を距離へ変換した推定結果です。</p>
+                <p class="signal-sub">だから経路が変われば、存在しない位置に目標が現れます。レーダーの誤検出はセンサーの壊れではなく、波の伝わり方と判定アルゴリズムの副作用として理解できます。</p>
+            </section>
+
+            <section class="section reveal" id="mechanism">
+                <div class="section-heading">
+                    <p class="eyebrow">Mechanism</p>
+                    <h2>どこでゴーストが生まれるのか</h2>
+                    <p>このページは電磁波そのものを厳密に解くモデルではありません。代わりに、送信、反射、距離推定、しきい値判定、追跡残りという流れに注目し、どの段で嘘の目標が混ざるかを見えるようにしています。</p>
+                </div>
+                <div class="mechanism-grid">
+                    <article class="mechanism-card strong-card">
+                        <p class="card-label">Time Of Flight</p>
+                        <h3>距離は往復時間から推定する</h3>
+                        <p>レーダーは反射波が戻るまでの時間を測り、そこから距離を計算します。つまり見えている点は「戻り時間の解釈」です。</p>
+                    </article>
+                    <article class="mechanism-card warm-card">
+                        <p class="card-label">Sea Reflection</p>
+                        <h3>海面で一度反射すると鏡像っぽく見える</h3>
+                        <p>海面が鏡のように働くと、実在目標とは別の経路を通った信号が戻り、上下が反転したような位置にゴーストが出ます。</p>
+                    </article>
+                    <article class="mechanism-card accent-card">
+                        <p class="card-label">Multipath</p>
+                        <h3>余分な経路長は遠い目標に見える</h3>
+                        <p>多重反射で少し長く回り道した信号は、より遠い距離から返ってきたように解釈されます。これが距離方向のゴーストです。</p>
+                    </article>
+                    <article class="mechanism-card night-card">
+                        <p class="card-label">Tracking</p>
+                        <h3>追跡フィルタは誤検出も残してしまう</h3>
+                        <p>実機では一瞬の点を消すために平滑化や追跡を入れますが、そのおかげでノイズやゴーストも「それらしい目標」として残ることがあります。</p>
+                    </article>
+                </div>
+                <div class="formula-strip">
+                    <article class="formula-card strong-card">
+                        <p class="card-label">Range</p>
+                        <div class="formula-block">distance ≈ c × Δt / 2</div>
+                        <p>往復時間 Δt を光速 c で距離へ変換するのがレーダーの基本です。途中で経路が変わると、距離推定もずれます。</p>
+                    </article>
+                    <article class="formula-card">
+                        <p class="card-label">Ghost</p>
+                        <div class="formula-block">extra path length → farther target</div>
+                        <p>余分に長い経路を通った反射波は、本来より遠くの物体から返ってきたように見えます。</p>
+                    </article>
+                    <article class="formula-card warm-card">
+                        <p class="card-label">Threshold</p>
+                        <div class="formula-block">noise + threshold + persistence</div>
+                        <p>しきい値を越えたノイズが、そのままではなく追跡残りと組み合わさることで、目標らしい筋に見えます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="experiments">
+                <div class="section-heading">
+                    <p class="eyebrow">Experiments</p>
+                    <h2>まず試すと違いが見えやすい操作</h2>
+                    <p>ゴースト目標は種類ごとに出方が違います。何を切ると何が消えるかを見ると、本物と偽物の見分け方がかなり整理されます。</p>
+                </div>
+                <div class="experiment-grid">
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">1</p>
+                        <h3>海面反射だけ上げる</h3>
+                        <p>多重反射を入れたまま海面反射を強くすると、本物の反射の近くに鏡像っぽいオレンジ点が増えます。</p>
+                    </article>
+                    <article class="experiment-card warm-card">
+                        <p class="card-label">2</p>
+                        <h3>多重反射だけ切る</h3>
+                        <p>鏡像ゴーストだけが残るので、上下反転系と距離ずれ系の違いが分かりやすくなります。</p>
+                    </article>
+                    <article class="experiment-card accent-card">
+                        <p class="card-label">3</p>
+                        <h3>ノイズと追跡残りを上げる</h3>
+                        <p>本物に見えない単発の点が、画面上に長く残るようになります。誤報がトラック化する感覚を見られます。</p>
+                    </article>
+                    <article class="experiment-card night-card">
+                        <p class="card-label">4</p>
+                        <h3>実在目標を隠す</h3>
+                        <p>実目標の緑点を消すと、レーダー画面だけから本物と偽物を見分ける難しさが直感的になります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="next">
+                <div class="section-heading">
+                    <p class="eyebrow">Next Steps</p>
+                    <h2>次に広げるならこのページ</h2>
+                    <p>レーダーのゴーストは、電磁波、反射、ノイズ、信号処理が一度に現れる題材です。アンテナや通信、測位のページとつなぐと、波の見方がさらに立体的になります。</p>
+                </div>
+                <div class="related-grid">
+                    <article class="related-card strong-card">
+                        <p class="card-label">Hub</p>
+                        <h3>シミュレーション一覧へ</h3>
+                        <p>創発、波、粒状体、数理モデルまで、動かして理解するページを入口別にまとめています。</p>
+                        <a class="button button-primary" href="simulations.html">一覧を見る</a>
+                    </article>
+                    <article class="related-card">
+                        <p class="card-label">Wave</p>
+                        <h3>アンテナの仕組みへ</h3>
+                        <p>電磁波をどう放射して方向性を作るかを見ると、レーダーの送受信側の直感がつながります。</p>
+                        <a class="button button-secondary" href="antenna.html">アンテナへ</a>
+                    </article>
+                    <article class="related-card warm-card">
+                        <p class="card-label">Signal</p>
+                        <h3>スマホ通信の仕組みへ</h3>
+                        <p>反射や多重経路が邪魔にも資源にもなることを、通信側の視点から読み直せます。</p>
+                        <a class="button button-secondary" href="communication.html">通信のページへ</a>
+                    </article>
+                    <article class="related-card night-card">
+                        <p class="card-label">Measurement</p>
+                        <h3>GPS の仕組みへ</h3>
+                        <p>こちらは反射ではなく時刻差から距離を読む話です。同じく「時間を距離へ変える」計測の例として並べて読めます。</p>
+                        <a class="button button-secondary" href="gps.html">GPS へ</a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="footer-title">readerSpace</p>
+                <p>波、ノイズ、計測、近似モデルまで、動かして理解するページを少しずつ増やしています。</p>
+            </div>
+            <div class="footer-links">
+                <a href="simulations.html">シミュレーション一覧</a>
+                <a href="physics.html">物理解説トップ</a>
+                <a href="simulation.html">シミュレーションとは</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="radar-ghost-target.js"></script>
+</body>
+</html>

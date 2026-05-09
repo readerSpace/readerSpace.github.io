@@ -40,6 +40,7 @@ const easyToHardCatalogOrder = [
     "electric-magnetic.html",
     "magnetization.html",
     "antenna.html",
+    "radar-ghost-target.html",
     "eddy-current.html",
     "lorentz-force.html",
     "laser.html",
