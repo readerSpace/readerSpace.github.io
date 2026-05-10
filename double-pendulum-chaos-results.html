@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二重振り子のカオス性はどう測れるか | 数値実験で読む複雑性・エントロピー・情報流</title>
+    <meta name="description" content="二重振り子のカオス性を、Lyapunov 指数、KS エントロピー、圧縮複雑性、Permutation entropy、entropy production、mutual information、transfer entropy、shuffle surrogate test で読み解く解説ページです。">
+    <meta name="theme-color" content="#183247">
+    <link rel="canonical" href="https://readerspace.github.io/double-pendulum-chaos-results.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="二重振り子のカオス性はどう測れるか | 数値実験で読む複雑性・エントロピー・情報流">
+    <meta property="og:description" content="49 個の初期条件から、weak chaos と strong chaos を比較しながら、複雑性と情報流を数値実験でつないで読むページです。">
+    <meta property="og:url" content="https://readerspace.github.io/double-pendulum-chaos-results.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="二重振り子のカオス性はどう測れるか | 数値実験で読む複雑性・エントロピー・情報流">
+    <meta name="twitter:description" content="複雑性、KS エントロピー、ノイズ分離、情報流、shuffle surrogate まで、二重振り子のカオスを数値実験でまとめて解説します。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="double-pendulum-chaos-results.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="このページの目次">
+                <a href="#overview">設定</a>
+                <a href="#findings">結論</a>
+                <a href="#metrics">複雑性</a>
+                <a href="#structure">ノイズと粗視化</a>
+                <a href="#entropy">エントロピー</a>
+                <a href="#flow">情報流</a>
+                <a href="#surrogate">surrogate</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Double Pendulum / Numerical Study / Chaos</p>
+                    <h1>二重振り子のカオスは、<br>何を測ると見えてくるのか。</h1>
+                    <p class="hero-lead">
+                        同じ二重振り子でも、どの初期条件では弱く、どこでは強くカオスになるのか。<br>
+                        このページでは、49 個の初期条件に対する数値実験をまとめ、複雑性、情報生成率、
+                        粗視化エントロピー、部分系情報流までを 1 本のストーリーとして読み解きます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#findings">先に結論を見る</a>
+                        <a class="button button-secondary" href="#surrogate">surrogate test へ進む</a>
+                    </div>
+                    <ul class="hero-points" aria-label="ページの見どころ">
+                        <li>強カオスほど複雑性は高いが、方向付き情報流は逆に弱くなる</li>
+                        <li>白色ノイズとカオスは、Permutation entropy で明確に分離できる</li>
+                        <li>shuffle surrogate test によって、本物の coupling と見かけの相関を切り分けられる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="spotlight-card strong-card">
+                        <p class="card-label">Key Thesis</p>
+                        <h2>カオスは「情報を消す」のではなく、<br>情報の形を変える。</h2>
+                        <p>
+                            強カオスでは Lyapunov 指数、KS エントロピー、圧縮複雑性、粗視化エントロピー生成が増えます。<br>
+                            ただし局所的で方向付きの情報流は弱まり、情報はより広く scramble された形で残ります。
+                        </p>
+                    </article>
+
+                    <div class="stat-grid" aria-label="ハイライト指標">
+                        <article>
+                            <span>初期条件</span>
+                            <strong>49 点</strong>
+                            <p>7 × 7 グリッド</p>
+                        </article>
+                        <article>
+                            <span>実験本数</span>
+                            <strong>8 本</strong>
+                            <p>複雑性から surrogate まで</p>
+                        </article>
+                        <article>
+                            <span>KS vs λ₁</span>
+                            <strong>r = 0.9986</strong>
+                            <p>Pesin relation に近い</p>
+                        </article>
+                        <article>
+                            <span>entropy growth</span>
+                            <strong>10.58×</strong>
+                            <p>strong / weak slope 比</p>
+                        </article>
+                    </div>
+
+                    <div class="summary-grid">
+                        <article class="summary-card">
+                            <p class="card-label">Weak chaos</p>
+                            <h3>秩序化した結合が残る</h3>
+                            <p>情報共有も transfer entropy も、時間順序を壊した surrogate よりかなり大きい。</p>
+                        </article>
+                        <article class="summary-card warm-card">
+                            <p class="card-label">Strong chaos</p>
+                            <h3>共有は速いが、方向は見えにくい</h3>
+                            <p>mutual information は残る一方、transfer entropy は surrogate に近づく。</p>
+                        </article>
+                        <article class="summary-card">
+                            <p class="card-label">Big Picture</p>
+                            <h3>複雑性、エントロピー、情報流がつながる</h3>
+                            <p>カオス性を 1 つの指標でなく、複数の窓から同時に見ると構造がはっきりする。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Message</p>
+                <p class="signal-main">強カオスほど「複雑で混ざる」。ただし「向きのある予測可能情報」はむしろ弱くなる。</p>
+                <p class="signal-sub">このページは、Lyapunov 指数だけでは見えない二重振り子のカオス性を、複雑性と情報流の観点からまとめ直した結果ページです。</p>
+            </section>
+
+            <section class="section reveal" id="overview">
+                <div class="section-heading">
+                    <p class="eyebrow">Overview</p>
+                    <h2>まず、どんな数値実験をしたのか</h2>
+                    <p>対象は等質量・等長の二重振り子です。時間発展は RK4 で追い、最大 Lyapunov 指数の tertile で weak chaos と strong chaos を切り分けました。</p>
+                </div>
+
+                <div class="overview-grid">
+                    <article class="setup-card">
+                        <p class="card-label">Experiment Setup</p>
+                        <h3>基本設定</h3>
+                        <dl class="definition-list">
+                            <div>
+                                <dt>状態変数</dt>
+                                <dd>[θ₁, ω₁, θ₂, ω₂]</dd>
+                            </div>
+                            <div>
+                                <dt>時間刻み</dt>
+                                <dd>dt = 0.01</dd>
+                            </div>
+                            <div>
+                                <dt>総ステップ数</dt>
+                                <dd>18,000</dd>
+                            </div>
+                            <div>
+                                <dt>捨てステップ</dt>
+                                <dd>3,000</dd>
+                            </div>
+                            <div>
+                                <dt>初期条件</dt>
+                                <dd>θ₁(0), θ₂(0) を 7 × 7 で走査</dd>
+                            </div>
+                            <div>
+                                <dt>分類</dt>
+                                <dd>Lyapunov 指数の tertile で weak / strong に分割</dd>
+                            </div>
+                        </dl>
+                    </article>
+
+                    <article class="setup-card strong-card">
+                        <p class="card-label">Region Summary</p>
+                        <h3>weak chaos と strong chaos の平均像</h3>
+                        <div class="region-grid">
+                            <div>
+                                <h4>Weak chaos</h4>
+                                <ul class="result-list compact">
+                                    <li>λ₁ = 0.4167 ± 0.3799</li>
+                                    <li>h<sub>KS</sub> = 0.4418 ± 0.3912</li>
+                                    <li>LZMA ratio = 0.6663 ± 0.0433</li>
+                                    <li>Permutation entropy = 0.2554 ± 0.0180</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>Strong chaos</h4>
+                                <ul class="result-list compact">
+                                    <li>λ₁ = 1.3840 ± 0.0410</li>
+                                    <li>h<sub>KS</sub> = 1.4256 ± 0.0471</li>
+                                    <li>LZMA ratio = 0.7206 ± 0.0071</li>
+                                    <li>Permutation entropy = 0.2785 ± 0.0143</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="section-note">同じ二重振り子でも、初期条件に応じてカオスの強さがかなり変わることが出発点です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="findings">
+                <div class="section-heading">
+                    <p class="eyebrow">Findings</p>
+                    <h2>この資料で押さえたい 4 つの結論</h2>
+                    <p>8 本の実験は別々に見えて、実は 4 つの大きなテーマに収束します。まずはそこを先に読むと、各図の意味がつながります。</p>
+                </div>
+
+                <div class="finding-grid">
+                    <article class="finding-card strong-card">
+                        <p class="card-label">1</p>
+                        <h3>強カオスほど複雑性は高い</h3>
+                        <p>LZMA ratio、Lempel-Ziv complexity、Permutation entropy はすべて strong chaos 側で増え、Lyapunov 指数と正相関を示した。</p>
+                    </article>
+                    <article class="finding-card">
+                        <p class="card-label">2</p>
+                        <h3>情報生成率は λ とほぼ同じものを見ている</h3>
+                        <p>KS エントロピー近似と最大 Lyapunov 指数は r = 0.9986 でほぼ一致し、軌道不安定性と情報生成がつながった。</p>
+                    </article>
+                    <article class="finding-card warm-card">
+                        <p class="card-label">3</p>
+                        <h3>カオスはノイズではない</h3>
+                        <p>Permutation entropy では白色ノイズがほぼ最大値 1 を取り、カオスとは 100% 分離できた。粗視化を変えても相対序列は保たれた。</p>
+                    </article>
+                    <article class="finding-card">
+                        <p class="card-label">4</p>
+                        <h3>強カオスでは情報が速く広がり、向きは消える</h3>
+                        <p>mutual information peak は strong chaos で早いが、transfer entropy は surrogate に近づき、局所的な方向付き情報流は弱くなる。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="metrics">
+                <div class="section-heading">
+                    <p class="eyebrow">Experiments 1-2</p>
+                    <h2>複雑性と情報生成率は、どこまでカオスを追えるか</h2>
+                    <p>最初の 2 本の実験では、まず複雑性指標が chaos strength と整合するかを見て、その背後にある情報生成率の指標として KS エントロピーを重ねています。</p>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card">
+                        <p class="card-label">Experiment 1</p>
+                        <h3>カオス強度と複雑性の比較</h3>
+                        <p>strong chaos の方が weak chaos よりも、圧縮困難性、新規パターン生成率、局所順序複雑性のすべてで高い値を示しました。</p>
+                        <ul class="result-list">
+                            <li>Lyapunov vs LZMA ratio: r = 0.7158</li>
+                            <li>Lyapunov vs Lempel-Ziv complexity: r = 0.6739</li>
+                            <li>Lyapunov vs Permutation entropy: r = 0.3479</li>
+                            <li>LZ 系は長距離の情報生成に強く、Permutation entropy は局所構造の乱れを見ている</li>
+                        </ul>
+                    </article>
+
+                    <div class="figure-grid two-up">
+                        <figure class="figure-card">
+                            <img src="chaos_complexity_compare/double_pendulum_chaos_complexity.png" alt="二重振り子の初期条件マップと weak chaos / strong chaos 比較" decoding="async" loading="lazy">
+                            <figcaption>初期条件空間の chaos landscape と、weak / strong chaos の複雑性比較。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="chaos_complexity_compare/double_pendulum_lyapunov_scatter.png" alt="Lyapunov 指数と複雑性指標の相関図" decoding="async" loading="lazy">
+                            <figcaption>LZMA と Lempel-Ziv は Lyapunov 指数と強く相関し、Permutation entropy はより局所的な違いを見ている。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">Experiment 2</p>
+                        <h3>KS エントロピー近似と Pesin relation</h3>
+                        <p>Benettin 法で Lyapunov spectrum を推定し、正の指数和を KS エントロピー近似として比べると、最大 Lyapunov 指数とほぼ同じ形になりました。</p>
+                        <div class="equation-chip">h<sub>KS</sub> ≈ Σ λ<sub>i</sub><sup>+</sup></div>
+                        <ul class="result-list">
+                            <li>Lyapunov vs KS entropy: r = 0.9986</li>
+                            <li>weak chaos: h<sub>KS</sub> - λ₁ ≈ 2.5 × 10<sup>-2</sup></li>
+                            <li>strong chaos: h<sub>KS</sub> - λ₁ ≈ 4.2 × 10<sup>-2</sup></li>
+                            <li>二重振り子では、軌道分離率と情報生成率がほぼ同じ軸に乗っている</li>
+                        </ul>
+                    </article>
+
+                    <figure class="figure-card wide">
+                        <img src="chaos_complexity_compare/double_pendulum_ks_pesin.png" alt="KS エントロピー近似の初期条件依存と Pesin relation 比較" decoding="async" loading="lazy">
+                        <figcaption>KS エントロピー近似は最大 Lyapunov 指数とほぼ重なり、二重振り子の chaos strength を情報生成率として読み直せることを示す。</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="section reveal" id="structure">
+                <div class="section-heading">
+                    <p class="eyebrow">Experiments 3-4</p>
+                    <h2>ノイズとの差と、粗視化に対する頑健性</h2>
+                    <p>カオスが本当に「力学的な複雑さ」なら、白色ノイズとは違うはずで、粗視化の取り方を変えても相対順序はある程度保たれるはずです。ここではそこを点検します。</p>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card">
+                        <p class="card-label">Experiment 3</p>
+                        <h3>ランダムノイズ比較</h3>
+                        <p>同じ平均・標準偏差・長さを持つ白色ガウスノイズと比べると、Permutation entropy はノイズ側でほぼ最大になり、カオスと完全分離できました。</p>
+                        <ul class="result-list">
+                            <li>Noise permutation entropy = 0.9980 ± 0.0003</li>
+                            <li>weak chaos = 0.2554 ± 0.0180</li>
+                            <li>strong chaos = 0.2785 ± 0.0143</li>
+                            <li>noise &gt; chaos の share = 100.0%</li>
+                        </ul>
+                    </article>
+
+                    <article class="experiment-card warm-card">
+                        <p class="card-label">Experiment 4</p>
+                        <h3>coarse-graining 依存性</h3>
+                        <p>LZMA ratio の絶対値はビン数に依存しますが、strong chaos &gt; weak chaos、noise &gt; chaos の序列は 4 から 256 bins まで維持されました。</p>
+                        <ul class="result-list">
+                            <li>strong chaos &gt; weak chaos は全ビンで成立</li>
+                            <li>noise &gt; chaos も全ビンで 100%</li>
+                            <li>差が最も見えやすいのは 64 から 128 bins 付近</li>
+                            <li>絶対値よりも相対的な序列の方が物理的に意味がある</li>
+                        </ul>
+                    </article>
+
+                    <div class="figure-grid two-up">
+                        <figure class="figure-card">
+                            <img src="chaos_complexity_compare/double_pendulum_noise_comparison.png" alt="カオスと白色ノイズの Permutation entropy 比較" decoding="async" loading="lazy">
+                            <figcaption>カオスはランダムに見えても、局所順序構造をかなり残している。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="chaos_complexity_compare/double_pendulum_coarse_graining.png" alt="粗視化ビン数に対する LZMA 比の依存性" decoding="async" loading="lazy">
+                            <figcaption>粗視化を変えても相対序列は残り、複雑性差がスケール横断的に観測される。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="entropy">
+                <div class="section-heading">
+                    <p class="eyebrow">Experiment 5</p>
+                    <h2>coarse-grained entropy production を直接測る</h2>
+                    <p>位相空間に小さな初期分布を置き、セル占有確率から Shannon entropy S(t) を測ると、strong chaos の方が明らかに速く coarse-grained entropy を生成しました。</p>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">Entropy Growth</p>
+                        <h3>stretching and folding が熱力学的な見え方へ変わる</h3>
+                        <p>fine-grained では Liouville 的に保存される分布でも、粗視化すると強カオス側で急速にセルを埋め、観測可能な entropy が増えます。</p>
+                        <ul class="result-list">
+                            <li>weak chaos: dS/dt = 0.0563</li>
+                            <li>strong chaos: dS/dt = 0.5955</li>
+                            <li>slope ratio strong / weak = 10.58</li>
+                            <li>occupied cells: 8 / 4096 → 308 / 4096</li>
+                        </ul>
+                    </article>
+
+                    <figure class="figure-card wide">
+                        <img src="chaos_complexity_compare/double_pendulum_entropy_production.png" alt="二重振り子の coarse-grained entropy production" decoding="async" loading="lazy">
+                        <figcaption>強カオスでは、局在した雲がより速く位相空間へ広がり、entropy growth rate が local λ₁ や h<sub>KS</sub> と同じ序列を示す。</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="section reveal" id="flow">
+                <div class="section-heading">
+                    <p class="eyebrow">Experiments 6-7</p>
+                    <h2>部分系の情報流は、速さと方向で別の顔を見せる</h2>
+                    <p>θ₁ と θ₂ を部分系とみなし、まず excess mutual information で共有情報の立ち上がりと tail を見て、次に transfer entropy で方向付き情報流を見ます。</p>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card">
+                        <p class="card-label">Experiment 6</p>
+                        <h3>mutual information decay</h3>
+                        <p>single-orbit の比較では、strong chaos の方が MI peak へ早く到達しました。ただし peak 後の tail はむしろ長く、単純な「情報が速く消える」という像にはなりませんでした。</p>
+                        <ul class="result-list">
+                            <li>weak chaos peak lag = 1.60, normalized area = 7.8962</li>
+                            <li>strong chaos peak lag = 0.80, normalized area = 11.3314</li>
+                            <li>strong chaos は早く届くが、必ずしも早く消えない</li>
+                        </ul>
+                    </article>
+
+                    <article class="experiment-card warm-card">
+                        <p class="card-label">Experiment 7</p>
+                        <h3>代表軌道平均と transfer entropy</h3>
+                        <p>5 本ずつの代表軌道で平均すると、strong chaos の MI peak が早い傾向は残ります。一方で transfer entropy の方向性は weak chaos の方が強く、strong chaos ではかなり弱い。</p>
+                        <ul class="result-list">
+                            <li>weak chaos MI peak = 5.02 ± 6.39</li>
+                            <li>strong chaos MI peak = 0.40 ± 0.25</li>
+                            <li>directionality strength: weak 0.0017 ± 0.0007 / strong 0.0004 ± 0.0001</li>
+                            <li>強カオスは fast propagation だが、局所方向性は弱い</li>
+                        </ul>
+                    </article>
+
+                    <div class="figure-grid two-up">
+                        <figure class="figure-card">
+                            <img src="chaos_complexity_compare/double_pendulum_mutual_information_decay.png" alt="lagged mutual information の減衰比較" decoding="async" loading="lazy">
+                            <figcaption>共有情報の立ち上がりは strong chaos で早いが、tail は単純には短くならない。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="chaos_complexity_compare/double_pendulum_information_flow.png" alt="平均化した information flow と transfer entropy の比較" decoding="async" loading="lazy">
+                            <figcaption>平均すると、strong chaos では情報共有は速い一方、方向付き情報流はむしろ弱くなる。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="surrogate">
+                <div class="section-heading">
+                    <p class="eyebrow">Experiment 8</p>
+                    <h2>shuffle surrogate test で「本物の構造」を残す</h2>
+                    <p>最後に時間順序を壊した shuffled surrogate を actual trajectory と比べることで、見えていた MI / TE が本当に力学構造に由来するのか、それとも有限標本バイアスや見かけの相関なのかを切り分けます。</p>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">Surrogate Test</p>
+                        <h3>MI は残る。TE は strong chaos でかなり消える。</h3>
+                        <p>weak chaos では MI も TE も surrogate を大きく上回り、強い決定論的時間構造が残ります。strong chaos でも MI は本物ですが、TE は surrogate にかなり近づきます。</p>
+                        <ul class="result-list">
+                            <li>weak MI peak: 0.7401 vs surrogate 0.0207</li>
+                            <li>strong MI peak: 0.1919 vs surrogate 0.0398</li>
+                            <li>weak TE excess area: 0.1351 vs surrogate 0.0029</li>
+                            <li>strong TE excess area: 0.0072 vs surrogate 0.0046</li>
+                            <li>TE empirical p: weak ≈ 0.077 / strong ≈ 0.262</li>
+                        </ul>
+                    </article>
+
+                    <figure class="figure-card wide">
+                        <img src="chaos_complexity_compare/double_pendulum_shuffle_surrogate_test.png" alt="shuffle surrogate test による mutual information と transfer entropy の比較" decoding="async" loading="lazy">
+                        <figcaption>Weak chaos では coherent information transport が残る一方、strong chaos では global scrambled correlation は残っても、局所的で方向付きの情報流はかなり弱くなる。</figcaption>
+                    </figure>
+
+                    <article class="experiment-card">
+                        <p class="card-label">What It Means</p>
+                        <h3>強カオスは、情報を壊すより scramble する</h3>
+                        <p>相関そのものは残ります。しかし時間順序を持ち、局所 subsystem からアクセスできる形の情報は薄れます。つまり strong chaos は fast scrambling and delocalization の像に近い。</p>
+                        <ul class="result-list">
+                            <li>MI lag share &gt; q95 は weak / strong ともに 100%</li>
+                            <li>TE lag share &gt; q95 は weak 69.5%、strong 8.0%</li>
+                            <li>weak chaos は coherent information transport</li>
+                            <li>strong chaos は fast scrambling and delocalization</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="takeaways">
+                <div class="section-heading">
+                    <p class="eyebrow">Takeaways</p>
+                    <h2>このページの読み終わりに残したいこと</h2>
+                    <p>二重振り子のカオス性は「未来が読めない」の一言では足りません。複雑性、情報生成率、混合、情報流を分けて見ると、何が増え、何が消えるのかがはっきりします。</p>
+                </div>
+
+                <div class="takeaway-grid">
+                    <article class="finding-card">
+                        <p class="card-label">A</p>
+                        <h3>カオスは情報生成として見える</h3>
+                        <p>Lyapunov 指数と KS エントロピー近似の一致は、軌道分離がそのまま情報生成率として見えていることを示す。</p>
+                    </article>
+                    <article class="finding-card strong-card">
+                        <p class="card-label">B</p>
+                        <h3>カオスはノイズではない</h3>
+                        <p>局所順序構造と coarse-graining を通しても、白色ノイズとカオスはきれいに分離される。</p>
+                    </article>
+                    <article class="finding-card warm-card">
+                        <p class="card-label">C</p>
+                        <h3>強カオスでは方向が消える</h3>
+                        <p>情報共有は速くなるのに、局所的で方向付きの予測可能情報はむしろ見えにくくなる。そこに scrambling の本質がある。</p>
+                    </article>
+                </div>
+
+                <div class="link-board">
+                    <a class="link-card" href="double-pendulum.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>二重振り子の基礎へ戻る</h3>
+                        <p>装置の仕組み、初期値敏感性、Lyapunov 推定の直感を先に押さえたいときはこちら。</p>
+                    </a>
+                    <a class="link-card" href="chaos.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>カオスの一般論へ広げる</h3>
+                        <p>なぜ単純な法則でも未来が読めなくなるのかを、もう少し広い視点でつなげられます。</p>
+                    </a>
+                    <a class="link-card" href="lyapunov.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>Lyapunov 指数を単独で理解する</h3>
+                        <p>このページで何度も出てきた λ の意味を、予測可能時間とともに整理できます。</p>
+                    </a>
+                    <a class="link-card" href="simulations.html">
+                        <p class="card-label">Catalog</p>
+                        <h3>他のシミュレーションへ移る</h3>
+                        <p>カオス、模様、創発、量子まで、このサイトの他の教材ページへ移動できます。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>二重振り子のカオスは、複雑性、情報生成率、粗視化エントロピー、情報流を並べると、単なる「ランダムっぽさ」ではない構造として見えてきます。</p>
+            <div class="footer-links">
+                <a class="footer-link" href="physics.html">トップページへ戻る</a>
+                <a class="footer-link" href="double-pendulum.html">二重振り子の基礎を見る</a>
+                <a class="footer-link" href="simulations.html">シミュレーション一覧を見る</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="double-pendulum-chaos-results.js"></script>
+</body>
+</html>

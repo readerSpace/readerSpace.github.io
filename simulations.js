@@ -59,6 +59,7 @@ const easyToHardCatalogOrder = [
     "chaos.html",
     "lyapunov.html",
     "poincare.html",
+    "double-pendulum-chaos-results.html",
     "complex-plane.html",
     "classical-quantum.html",
     "hydrogen-orbital.html",
