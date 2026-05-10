@@ -39,6 +39,7 @@
                 <a href="#transport">burst と輸送</a>
                 <a href="#network">因果ネットワーク</a>
                 <a href="#phases">相の整理</a>
+                <a href="#gravity-appendix">重力系補論</a>
             </nav>
         </header>
 
@@ -503,6 +504,97 @@
                         <a class="button button-secondary" href="double-pendulum-chaos-results.html">二重振り子の結果ページも見る</a>
                     </div>
                 </article>
+            </section>
+
+            <section class="section reveal" id="gravity-appendix">
+                <div class="section-heading">
+                    <p class="eyebrow">Gravitational Transport Appendix</p>
+                    <h2>重力系として読むと、avalanche と transport の意味が少し変わる</h2>
+                    <p>ここからは実験メモの追記に対応する補論です。N 体重力系では local front をそのまま SOC 的に読むより、escape・energy exchange・resonant corridor を含む nonlocal transport として再定義した方が、今回の結果とよく整合します。</p>
+                </div>
+
+                <div class="metric-grid">
+                    <article class="setup-card metric-card">
+                        <p class="card-label">01 / Why Gravity Is Different</p>
+                        <h3>重力系では local propagation の直観が壊れやすい</h3>
+                        <div class="equation-stack">
+                            <p class="equation-line">V(r) &sim; - 1 / r</p>
+                        </div>
+                        <ul class="bullet-list compact">
+                            <li>long-range で finite interaction radius を持たない</li>
+                            <li>non-extensive なので局所 front だけでは輸送を捉えにくい</li>
+                            <li>escape particle が出ると density support と geometry が時間依存で変わる</li>
+                        </ul>
+                        <p>したがって、front velocity や cluster geometry は格子系と同じ意味では読めません。bounded phase と escape phase を分けて考える必要があります。</p>
+                    </article>
+
+                    <article class="setup-card metric-card strong-card">
+                        <p class="card-label">02 / Redefining Activity</p>
+                        <h3>何を avalanche seed と呼ぶかを設計し直す</h3>
+                        <div class="equation-stack">
+                            <p class="equation-line">|&Delta;E<sub>i</sub>| &gt; &theta;, |&Delta;r<sub>i</sub>| &gt; &theta;<sub>r</sub>, |&Delta;L<sub>i</sub>| &gt; &theta;<sub>L</sub>, E<sub>i</sub> &gt; 0</p>
+                        </div>
+                        <p>重力系では close encounter、slingshot、evaporation、escape、core collapse が直接 transport event になります。したがって avalanche の seed は finite-time Lyapunov burst だけでなく、energy jump、radial transport、angular-momentum exchange、escape event でも定義できます。</p>
+                    </article>
+
+                    <article class="setup-card metric-card warm-card">
+                        <p class="card-label">03 / Geometry</p>
+                        <h3>D<sub>box</sub> ≈ 1 や front velocity ≈ 0 は、むしろ重力系らしい</h3>
+                        <ul class="bullet-list compact">
+                            <li>filamentary avalanche は resonant escape corridor と読める</li>
+                            <li>D<sub>box</sub> ≈ 1 は compact blob でなく radial jet や corridor transport を示す</li>
+                            <li>front velocity ≈ 0 は nearest-neighbor 不在ではなく network-mediated coupling を示す</li>
+                        </ul>
+                        <p>今回見えた filament geometry や zero-front-like redistribution は、local wave の不在というより global resonance coupling の表れとみなす方が自然です。</p>
+                    </article>
+
+                    <article class="setup-card metric-card">
+                        <p class="card-label">04 / Adaptive Network</p>
+                        <h3>TE network は重力輸送の方が本質を捉えやすい</h3>
+                        <div class="equation-stack">
+                            <p class="equation-line">w<sub>ij</sub> &sim; 1 / r<sub>ij</sub><sup>&alpha;</sup></p>
+                            <p class="equation-line">t &lt; t<sub>evap</sub>, N<sub>bound</sub>(t), f<sub>esc</sub>(t)</p>
+                        </div>
+                        <p>重力相互作用は nonlocal で dynamically rewiring されるため、固定格子 front より TE network の方が transport physics に近い記述になります。実装上は co-moving core frame、adaptive graph、interaction-weighted graph のいずれかで再定義するのが適切です。</p>
+                    </article>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card">
+                        <p class="card-label">Escape Cascade</p>
+                        <h3>escape は単なる loss ではなく、gravitational evaporation cascade になりうる</h3>
+                        <ul class="result-list">
+                            <li>1 粒子の escape が energy redistribution、binary formation、further escape を誘発しうる</li>
+                            <li>long-range coupling、marginal stability、negative specific heat は criticality を生みやすい</li>
+                            <li>core-collapse 近傍では bursty relaxation と intermittent escape が特に出やすい</li>
+                        </ul>
+                        <p>したがって、escape active な相では avalanche は open-system transport として読むべきです。bounded only な解析と混ぜると、front や network の意味が崩れます。</p>
+                    </article>
+
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">Mapping Back</p>
+                        <h3>今回の結果を重力輸送として読むと、対応はかなり明瞭になる</h3>
+                        <ul class="result-list compact">
+                            <li>filamentary avalanche → resonant escape corridor</li>
+                            <li>front velocity ≈ 0 → nonlocal gravitational coupling</li>
+                            <li>bottleneck backbone → dominant resonant transport channel</li>
+                            <li>strong chaos finite front → collective ejection burst</li>
+                        </ul>
+                        <p>この読み替えに立つと、current page の weak / intermediate / strong chaos は「chaos 強度」以上に「transport geometry の違い」としてよく整理できます。</p>
+                    </article>
+
+                    <article class="closing-card">
+                        <p class="card-label">Next Analysis</p>
+                        <h3>次にやるべきなのは、bounded transport と escape transport を分けた再計測</h3>
+                        <ul class="bullet-list compact">
+                            <li>escape avalanche distribution と escape cluster size の測定</li>
+                            <li>position ではなく energy exchange で組んだ energy-flow network</li>
+                            <li>近接 encounter をもとにした resonant transport graph</li>
+                            <li>f<sub>esc</sub>(t) と avalanche の対応を見る bound / unbound phase transition 解析</li>
+                        </ul>
+                        <p>要点は、重力系では transport 自体が structure formation だということです。filament、core、halo、escape jet そのものが transport geometry なので、今回の結果はむしろ重力系 transport physics として自然に読めます。</p>
+                    </article>
+                </div>
             </section>
         </main>
 

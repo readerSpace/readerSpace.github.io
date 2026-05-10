@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N体重力系のカオスと二重振り子のカオスは何が違うのか | instability と transport phase の比較</title>
+    <meta name="description" content="二重振り子のカオスと N 体重力系のカオスを、Lyapunov 指数、KS エントロピー、エントロピー生成、情報流、TE network、avalanche の観点から比較し、scrambling と transport phase の違いを整理するページです。">
+    <meta name="theme-color" content="#17344a">
+    <link rel="canonical" href="https://readerspace.github.io/double-pendulum-vs-n-body-chaos.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="N体重力系のカオスと二重振り子のカオスは何が違うのか | instability と transport phase の比較">
+    <meta property="og:description" content="二重振り子は fast scrambling の教材、N体重力系は情報輸送相の教材として読むと違いがはっきりする。2 つの結果ページを横断して比較したまとめです。">
+    <meta property="og:url" content="https://readerspace.github.io/double-pendulum-vs-n-body-chaos.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="N体重力系のカオスと二重振り子のカオスは何が違うのか | instability と transport phase の比較">
+    <meta name="twitter:description" content="Lyapunov、entropy、information flow、transport geometry を軸に、二重振り子と N 体重力系のカオスを比較するページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="double-pendulum-vs-n-body-chaos.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="このページの目次">
+                <a href="#overview">設定</a>
+                <a href="#shared">共通点</a>
+                <a href="#differences">違い</a>
+                <a href="#formulas">式</a>
+                <a href="#metrics">指標ごとの比較</a>
+                <a href="#figures">図で比較</a>
+                <a href="#takeaways">まとめ</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy split-copy">
+                    <p class="eyebrow">Chaos Comparison / Double Pendulum / Planar 3-Body Gravity</p>
+                    <h1>同じ「カオス」でも、<br>二重振り子と N 体重力系では何が違うのか。</h1>
+                    <p class="hero-lead">
+                        二重振り子では chaos は主に single system の instability, complexity, scrambling として見えます。<br>
+                        一方、N 体重力系では同じ chaos が transport geometry、bottleneck、avalanche、network-mediated propagation を持つ phase として現れます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#differences">決定的な違いを見る</a>
+                        <a class="button button-secondary" href="#figures">図で見比べる</a>
+                        <a class="button button-secondary" href="simulations.html">一覧へ戻る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="比較の焦点">
+                        <li>二重振り子は fast scrambling と local directionality loss を見せる</li>
+                        <li>N 体重力系は transport phase と resonant route の違いを見せる</li>
+                        <li>同じ Lyapunov 指数でも、物理的な意味は系ごとにかなり違う</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="spotlight-card dual-card">
+                        <p class="card-label">Key Thesis</p>
+                        <h2>二重振り子は「scrambling の比較教材」、<br>N 体重力系は「transport phase の比較教材」。</h2>
+                        <p>
+                            両者とも Pesin relation 的な instability を持ち、noise とは分離できます。<br>
+                            しかし二重振り子では chaos の主役は subsystem information の崩れ方であり、
+                            N 体重力系では chaos の主役は route, burst, geometry がどう組み替わるかに移ります。
+                        </p>
+                    </article>
+
+                    <div class="stat-grid" aria-label="比較ハイライト">
+                        <article>
+                            <span>二重振り子</span>
+                            <strong>2 相</strong>
+                            <p>weak / strong chaos</p>
+                        </article>
+                        <article>
+                            <span>N 体重力系</span>
+                            <strong>3 相</strong>
+                            <p>weak / intermediate / strong</p>
+                        </article>
+                        <article>
+                            <span>二重振り子の核</span>
+                            <strong>r = 0.9986</strong>
+                            <p>KS と λ のほぼ一致</p>
+                        </article>
+                        <article>
+                            <span>N 体の核</span>
+                            <strong>v<sub>B</sub> = 0.1485</strong>
+                            <p>strong chaos の最速 front</p>
+                        </article>
+                    </div>
+
+                    <div class="summary-grid compare-summary-grid">
+                        <article class="summary-card pendulum-card">
+                            <p class="card-label">Double Pendulum</p>
+                            <h3>fast scrambling and delocalization</h3>
+                            <p>強カオスでは情報共有が速まり、局所的で方向付きの情報流が見えにくくなる。</p>
+                        </article>
+                        <article class="summary-card gravity-card">
+                            <p class="card-label">N-Body Gravity</p>
+                            <h3>organized to distributed transport</h3>
+                            <p>intermediate で backbone、strong で multi-route へ移り、輸送相の差が前景に出る。</p>
+                        </article>
+                        <article class="summary-card neutral-card">
+                            <p class="card-label">Shared Lesson</p>
+                            <h3>カオスはノイズではなく構造化された乱れ</h3>
+                            <p>どちらも「ただランダムになる」のではなく、測る窓ごとに異なる秩序の崩れ方を見せる。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Comparison Lens</p>
+                <p class="signal-main">二重振り子は「時間方向の可読性」が消える系、N 体重力系は「空間的・因果的な輸送様式」が分岐する系。</p>
+                <p class="signal-sub">同じ chaos でも、どの指標が主役になるかは系の自由度、相互作用の非局所性、観測窓によって変わります。</p>
+            </section>
+
+            <section class="section reveal" id="overview">
+                <div class="section-heading">
+                    <p class="eyebrow">Overview</p>
+                    <h2>比較の前提をそろえる</h2>
+                    <p>両ページとも 49 サンプルを基準に chaos strength を比較していますが、系の性格はかなり異なります。二重振り子は 1 つの装置の内部自由度、N 体重力系は複数体の相互作用と輸送を含む系です。</p>
+                </div>
+
+                <div class="system-grid">
+                    <article class="setup-card pendulum-card">
+                        <p class="card-label">System A</p>
+                        <h3>二重振り子</h3>
+                        <dl class="definition-list">
+                            <div>
+                                <dt>自由度</dt>
+                                <dd>単一装置の 2 連結回転</dd>
+                            </div>
+                            <div>
+                                <dt>サンプル</dt>
+                                <dd>49 initial conditions</dd>
+                            </div>
+                            <div>
+                                <dt>分類</dt>
+                                <dd>weak / strong chaos</dd>
+                            </div>
+                            <div>
+                                <dt>主役の観測量</dt>
+                                <dd>complexity, KS entropy, MI, TE, surrogate</dd>
+                            </div>
+                            <div>
+                                <dt>見えてくる像</dt>
+                                <dd>fast scrambling and delocalization</dd>
+                            </div>
+                        </dl>
+                    </article>
+
+                    <article class="setup-card gravity-card strong-card">
+                        <p class="card-label">System B</p>
+                        <h3>N 体重力系</h3>
+                        <dl class="definition-list">
+                            <div>
+                                <dt>自由度</dt>
+                                <dd>planar 3-body interaction</dd>
+                            </div>
+                            <div>
+                                <dt>サンプル</dt>
+                                <dd>49 orbit</dd>
+                            </div>
+                            <div>
+                                <dt>分類</dt>
+                                <dd>weak / intermediate / strong chaos</dd>
+                            </div>
+                            <div>
+                                <dt>主役の観測量</dt>
+                                <dd>OTOC, burst, TE network, avalanche, edge-of-chaos</dd>
+                            </div>
+                            <div>
+                                <dt>見えてくる像</dt>
+                                <dd>transport phase and route reorganization</dd>
+                            </div>
+                        </dl>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="shared">
+                <div class="section-heading">
+                    <p class="eyebrow">Shared Structure</p>
+                    <h2>まず、両者に共通していること</h2>
+                    <p>違いに入る前に、両系が同じ「カオス研究の言葉」で語れる部分を先にそろえます。ここは比較の土台です。</p>
+                </div>
+
+                <div class="finding-grid shared-grid">
+                    <article class="finding-card">
+                        <p class="card-label">A</p>
+                        <h3>どちらも noise ではない</h3>
+                        <p>二重振り子では Permutation entropy が noise 0.9980 に対して chaos 0.2554-0.2785 に留まり、N 体でも noise surrogate と chaos が分離される。</p>
+                    </article>
+                    <article class="finding-card strong-card">
+                        <p class="card-label">B</p>
+                        <h3>Lyapunov と情報生成率は整合する</h3>
+                        <p>二重振り子では KS vs λ が r = 0.9986、N 体では h<sub>KS</sub> と正の Lyapunov 指数和が r ≈ 0.986。instability と information generation は両系で対応する。</p>
+                    </article>
+                    <article class="finding-card warm-card">
+                        <p class="card-label">C</p>
+                        <h3>strong chaos では entropy production が増える</h3>
+                        <p>二重振り子では slope ratio 10.58、N 体では 43.29。どちらも強カオスは粗視化 entropy を速く作るが、N 体の方が burst 性が強い。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="differences">
+                <div class="section-heading">
+                    <p class="eyebrow">Main Difference</p>
+                    <h2>決定的な違いは、カオスが何を壊し、何を作るかにある</h2>
+                    <p>二重振り子では chaos は「読める方向の情報」を薄める働きとしてまず見えます。N 体重力系では chaos は「輸送経路そのもの」を作り替える働きとして見えます。</p>
+                </div>
+
+                <div class="difference-grid">
+                    <article class="difference-card pendulum-card">
+                        <p class="card-label">Double Pendulum</p>
+                        <h3>単体系の可読性が崩れる</h3>
+                        <ul class="result-list compact">
+                            <li>MI peak は strong chaos で早い</li>
+                            <li>TE directionality は weak 0.0017 / strong 0.0004</li>
+                            <li>surrogate test では strong TE が baseline に近づく</li>
+                            <li>主題は scrambling と local directionality loss</li>
+                        </ul>
+                    </article>
+
+                    <article class="difference-card gravity-card strong-card">
+                        <p class="card-label">N-Body Gravity</p>
+                        <h3>多体系の route と geometry が組み替わる</h3>
+                        <ul class="result-list compact">
+                            <li>intermediate で bottleneck backbone が最も明瞭</li>
+                            <li>strong chaos で v<sub>B</sub> = 0.1485, front propagation が最速</li>
+                            <li>D<sub>box</sub> ≈ 1 と broad-tail avalanche が filamentary transport を示す</li>
+                            <li>主題は transport phase, burst, network reorganization</li>
+                        </ul>
+                    </article>
+
+                    <article class="difference-card neutral-card">
+                        <p class="card-label">In One Sentence</p>
+                        <h3>二重振り子では chaos は「情報の向き」を失わせ、N 体では「輸送の相」を分ける。</h3>
+                        <p>前者は single-object dynamics の内部比較として明快で、後者は nonlocal interaction が route, front, avalanche を伴って collective transport へ広がる点が決定的に異なります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="formulas">
+                <div class="section-heading">
+                    <p class="eyebrow">Formula Notebook</p>
+                    <h2>指標を式で並べると、違いの位置がもっとはっきりする</h2>
+                    <p>ここでは比較ページの中心になる指標を研究ノート風に並列表でまとめます。式は厳密導出ではなく、各図が何の proxy になっているかを読み取るための最小限の骨格です。</p>
+                </div>
+
+                <article class="pair-intro-card formula-legend-card">
+                    <p class="card-label">How To Read</p>
+                    <p>左から順に二重振り子、N 体重力系、比較上の意味、実験で実際に出た数値例を並べています。数式そのものは似ていても、観測対象が subsystem なのか transport route なのかで読み方が変わります。</p>
+                </article>
+
+                <div class="formula-table-shell">
+                    <div class="formula-table-wrapper">
+                        <table class="formula-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">指標</th>
+                                    <th scope="col">二重振り子</th>
+                                    <th scope="col">N 体重力系</th>
+                                    <th scope="col">比較上の意味</th>
+                                    <th scope="col">実験で使った数値例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Lyapunov / KS</th>
+                                    <td>
+                                        <p class="equation-inline">&lambda;<sub>T</sub> = (1 / T) log ( ||&delta;x(T)|| / ||&delta;x(0)|| )</p>
+                                        <p class="equation-inline">h<sub>KS</sub> &asymp; &Sigma;<sub>i</sub> &lambda;<sub>i</sub><sup>+</sup></p>
+                                        <p class="table-note">KS と &lambda; がほぼ同一軸に乗り、instability そのものが主役になる。</p>
+                                    </td>
+                                    <td>
+                                        <p class="equation-inline">&lambda;<sub>T</sub> = (1 / T) log ( ||&delta;x(T)|| / ||&delta;x(0)|| )</p>
+                                        <p class="equation-inline">h<sub>KS</sub> &asymp; &Sigma;<sub>i</sub> max(&lambda;<sub>i</sub>, 0)</p>
+                                        <p class="table-note">同じ入口式だが、ここから front・burst・route の差を見る必要がある。</p>
+                                    </td>
+                                    <td>二重振り子では主役、N 体では transport phase への入口。</td>
+                                    <td>
+                                        <ul class="table-number-list">
+                                            <li>二重振り子: KS vs &lambda; は r = 0.9986</li>
+                                            <li>二重振り子: weak で h<sub>KS</sub> - &lambda;<sub>1</sub> &asymp; 2.5 &times; 10<sup>-2</sup></li>
+                                            <li>N 体: h<sub>KS</sub> と正の Lyapunov 指数和は r &asymp; 0.986</li>
+                                            <li>N 体: weak は &lambda;<sub>1</sub> &le; 0.0682, strong は &lambda;<sub>1</sub> &ge; 0.0745</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Symbolic / Noise Separation</th>
+                                    <td>
+                                        <p class="equation-inline">H<sub>perm</sub> = - (1 / log m!) &Sigma;<sub>&pi;</sub> p(&pi;) log p(&pi;)</p>
+                                        <p class="equation-inline">C<sub>LZ</sub> = c(n) log n / n</p>
+                                        <p class="table-note">Permutation entropy が noise とほぼ完全分離し、教材的に非常に明快。</p>
+                                    </td>
+                                    <td>
+                                        <p class="equation-inline">H<sub>perm</sub> = - (1 / log m!) &Sigma;<sub>&pi;</sub> p(&pi;) log p(&pi;)</p>
+                                        <p class="equation-inline">LZMA ratio = compressed / raw</p>
+                                        <p class="table-note">noise 分離には効くが、transport geometry の影響も強く単独では不十分。</p>
+                                    </td>
+                                    <td>どちらも noise ではないが、N 体では symbolic 指標の意味がより文脈依存になる。</td>
+                                    <td>
+                                        <ul class="table-number-list">
+                                            <li>二重振り子: noise の permutation entropy = 0.9980 &plusmn; 0.0003</li>
+                                            <li>二重振り子: weak = 0.2554 &plusmn; 0.0180, strong = 0.2785 &plusmn; 0.0143</li>
+                                            <li>N 体: LZMA ratio は weak 0.3117, strong 0.3431</li>
+                                            <li>N 体: permutation entropy は chaos &asymp; 0.16, noise surrogate は 0.998 近傍</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Coarse-Grained Entropy</th>
+                                    <td>
+                                        <p class="equation-inline">S<sub>cg</sub>(t) = - &Sigma;<sub>k</sub> p<sub>k</sub>(t) log p<sub>k</sub>(t)</p>
+                                        <p class="equation-inline">dS<sub>cg</sub> / dt</p>
+                                        <p class="table-note">stretching and folding の見え方が smooth spreading として現れる。</p>
+                                    </td>
+                                    <td>
+                                        <p class="equation-inline">S<sub>cg</sub>(t) = - &Sigma;<sub>k</sub> p<sub>k</sub>(t) log p<sub>k</sub>(t)</p>
+                                        <p class="equation-inline">burst fraction, peak, duration</p>
+                                        <p class="table-note">同じ entropy でも、event-driven burst concentration として読む方が自然。</p>
+                                    </td>
+                                    <td>式は同じでも、二重振り子は混合率、N 体は intermittent transport の proxy になる。</td>
+                                    <td>
+                                        <ul class="table-number-list">
+                                            <li>二重振り子: weak dS/dt = 0.0563, strong dS/dt = 0.5955</li>
+                                            <li>二重振り子: slope ratio strong / weak = 10.58</li>
+                                            <li>N 体: weak slope = 0.0017, strong slope = 0.0747</li>
+                                            <li>N 体: strong / weak slope ratio = 43.29</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Information Flow</th>
+                                    <td>
+                                        <p class="equation-inline">I(&theta;<sub>1</sub>(t); &theta;<sub>2</sub>(t + &tau;))</p>
+                                        <p class="equation-inline">TE<sub>2&rarr;1</sub>(&tau;) = I(X<sub>1</sub>(t+&tau;); X<sub>2</sub>(t) | X<sub>1</sub>(t))</p>
+                                        <p class="equation-inline">&Delta;TE<sub>surr</sub> = TE<sub>actual</sub> - TE<sub>shuffle</sub></p>
+                                        <p class="table-note">strong chaos では MI は残るが TE は surrogate に近づく。</p>
+                                    </td>
+                                    <td>
+                                        <p class="equation-inline">TE<sub>j&rarr;i</sub>(&tau;) = I(X<sub>i</sub>(t+&tau;); X<sub>j</sub>(t) | X<sub>i</sub>(t))</p>
+                                        <p class="equation-inline">PI(T) = I(X<sub>t-T:t</sub>; X<sub>t:t+T</sub>)</p>
+                                        <p class="equation-inline">H<sub>graph</sub> = - &Sigma;<sub>ij</sub> p<sub>ij</sub> log p<sub>ij</sub></p>
+                                        <p class="table-note">TE adjacency と centrality がそのまま transport geometry を表す。</p>
+                                    </td>
+                                    <td>二重振り子は local directionality loss、N 体は causal route organization が主題。</td>
+                                    <td>
+                                        <ul class="table-number-list">
+                                            <li>二重振り子: directionality strength は weak 0.0017 &plusmn; 0.0007 / strong 0.0004 &plusmn; 0.0001</li>
+                                            <li>二重振り子: strong TE excess area は 0.0072、surrogate は 0.0046</li>
+                                            <li>N 体: MI peak excess は weak 0.6311, strong 0.7500</li>
+                                            <li>N 体: TE total area は weak 0.0026, strong 0.0009、intermediate の betweenness は 0.5</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Spatial Front / Geometry</th>
+                                    <td>
+                                        <p class="equation-inline">natural spatial front is not primary</p>
+                                        <p class="equation-inline">subsystem lag and surrogate are primary</p>
+                                        <p class="table-note">空間 front を入れなくても chaos の比較が完結する。</p>
+                                    </td>
+                                    <td>
+                                        <p class="equation-inline">C(r, t) &sim; &lang; |&delta;x<sub>r</sub>(t)|<sup>2</sup> &rang;</p>
+                                        <p class="equation-inline">t<sub>*</sub>(r) &asymp; t<sub>0</sub> + r / v<sub>B</sub></p>
+                                        <p class="equation-inline">N<sub>box</sub>(&ell;) &sim; &ell;<sup>-D<sub>box</sub></sup></p>
+                                        <p class="table-note">front, avalanche, geometry が phase の差を直接可視化する。</p>
+                                    </td>
+                                    <td>ここが最大の差。N 体だけが spatial transport observables を主役に持つ。</td>
+                                    <td>
+                                        <ul class="table-number-list">
+                                            <li>二重振り子: MI peak lag は weak 1.60, strong 0.80</li>
+                                            <li>二重振り子: 空間 front や route observable は導入しなくても比較が完結する</li>
+                                            <li>N 体: v<sub>B</sub> は weak 0.0969, intermediate 0.0919, strong 0.1485</li>
+                                            <li>N 体: D<sub>box</sub> は weak 0.9937, intermediate 0.9965, strong 0.9561</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="metrics">
+                <div class="section-heading">
+                    <p class="eyebrow">Metric By Metric</p>
+                    <h2>同じ指標でも、意味の置き場所は違う</h2>
+                    <p>比較するときは数値の大小だけでは足りません。各指標がその系で何の proxy になっているかを見ないと、同じ chaos でも全く違う読みになります。</p>
+                </div>
+
+                <div class="metric-compare-grid">
+                    <article class="metric-compare-card">
+                        <p class="card-label">Lyapunov / KS</p>
+                        <h3>二重振り子では主役、N 体では入口</h3>
+                        <div class="equation-split">
+                            <div class="equation-block pendulum-block">
+                                <span>二重振り子</span>
+                                <p class="equation-line">h<sub>KS</sub> &asymp; &Sigma; &lambda;<sub>i</sub><sup>+</sup></p>
+                            </div>
+                            <div class="equation-block gravity-block">
+                                <span>N 体</span>
+                                <p class="equation-line">h<sub>KS</sub> + front + burst + TE network</p>
+                            </div>
+                        </div>
+                        <div class="compare-columns">
+                            <div>
+                                <h4>二重振り子</h4>
+                                <p>λ と h<sub>KS</sub> がほぼ同じ軸に乗るので、instability を測るだけで chaos の主要像がかなり見える。</p>
+                            </div>
+                            <div>
+                                <h4>N 体重力系</h4>
+                                <p>λ や h<sub>KS</sub> は必要だが、それだけでは不足で、front, burst, TE network を見て初めて相の違いが見える。</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="metric-compare-card">
+                        <p class="card-label">Noise Separation</p>
+                        <h3>二重振り子の方が教科書的、N 体はより文脈依存</h3>
+                        <div class="equation-split">
+                            <div class="equation-block pendulum-block">
+                                <span>二重振り子</span>
+                                <p class="equation-line">H<sub>perm</sub> = - (1 / log m!) &Sigma; p(&pi;) log p(&pi;)</p>
+                            </div>
+                            <div class="equation-block gravity-block">
+                                <span>N 体</span>
+                                <p class="equation-line">H<sub>perm</sub> + LZMA ratio + coarse-graining dependence</p>
+                            </div>
+                        </div>
+                        <div class="compare-columns">
+                            <div>
+                                <h4>二重振り子</h4>
+                                <p>Permutation entropy が noise と完全分離し、粗視化を変えても序列が保たれる。教材として非常に明快です。</p>
+                            </div>
+                            <div>
+                                <h4>N 体重力系</h4>
+                                <p>noise ではないことは明瞭だが、Permutation entropy 自体は transport geometry の影響も受けるので、単独では chaos strength を言い切れない。</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="metric-compare-card">
+                        <p class="card-label">Entropy Production</p>
+                        <h3>二重振り子は smooth spreading、N 体は burst concentration</h3>
+                        <div class="equation-split">
+                            <div class="equation-block pendulum-block">
+                                <span>二重振り子</span>
+                                <p class="equation-line">S<sub>cg</sub>(t) = - &Sigma;<sub>k</sub> p<sub>k</sub>(t) log p<sub>k</sub>(t)</p>
+                            </div>
+                            <div class="equation-block gravity-block">
+                                <span>N 体</span>
+                                <p class="equation-line">burst count, duration, peak, waiting time</p>
+                            </div>
+                        </div>
+                        <div class="compare-columns">
+                            <div>
+                                <h4>二重振り子</h4>
+                                <p>強カオス側で位相空間の雲がより速く埋まり、stretching and folding の見え方が熱化的になる。</p>
+                            </div>
+                            <div>
+                                <h4>N 体重力系</h4>
+                                <p>entropy production が event-driven burst に集中し、uniform diffusion より intermittent transport として読む方が整合する。</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="metric-compare-card strong-card">
+                        <p class="card-label">Information Flow</p>
+                        <h3>二重振り子は TE が消え、N 体は TE network が相を分ける</h3>
+                        <div class="equation-split">
+                            <div class="equation-block pendulum-block">
+                                <span>二重振り子</span>
+                                <p class="equation-line">&Delta;TE<sub>surr</sub> = TE<sub>actual</sub> - TE<sub>shuffle</sub></p>
+                            </div>
+                            <div class="equation-block gravity-block">
+                                <span>N 体</span>
+                                <p class="equation-line">TE<sub>j&rarr;i</sub>(&tau;), PI(T), H<sub>graph</sub>, centrality</p>
+                            </div>
+                        </div>
+                        <div class="compare-columns">
+                            <div>
+                                <h4>二重振り子</h4>
+                                <p>strong chaos では MI は残るが TE は surrogate に近づき、局所 subsystem から見える方向性が失われる。</p>
+                            </div>
+                            <div>
+                                <h4>N 体重力系</h4>
+                                <p>TE adjacency と centrality 自体が物理情報を持ち、intermediate の backbone と strong の multi-route を区別する主役になる。</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="figures">
+                <div class="section-heading">
+                    <p class="eyebrow">Figure Pairs</p>
+                    <h2>図を横に置くと、違いはもっとはっきりする</h2>
+                    <p>同じ種類の図を並べると、二重振り子は「1 つの系の chaos strength 比較」、N 体は「輸送相の違い」を描いていることが視覚的に見えてきます。</p>
+                </div>
+
+                <div class="pair-stack">
+                    <article class="pair-intro-card">
+                        <p class="card-label">Pair 1</p>
+                        <h3>複雑性 map の意味がまず違う</h3>
+                        <p>二重振り子では初期条件ごとの複雑性と Lyapunov がほぼ同じ物語を語ります。N 体では同じ map が、その先の burst や transport phase の入口になります。</p>
+                    </article>
+
+                    <div class="pair-grid two-up">
+                        <figure class="figure-card compare-figure pendulum-card">
+                            <img src="chaos_complexity_compare/double_pendulum_chaos_complexity.png" alt="二重振り子の chaos complexity map" decoding="async" loading="lazy">
+                            <figcaption>二重振り子: complexity map はほぼそのまま chaos strength map と読める。</figcaption>
+                        </figure>
+                        <figure class="figure-card compare-figure gravity-card">
+                            <img src="N_body_complexity/n_body_chaos_complexity.png" alt="N体重力系の chaos complexity map" decoding="async" loading="lazy">
+                            <figcaption>N 体重力系: complexity map はその先の transport mode を分ける前段の情報になる。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="pair-stack">
+                    <article class="pair-intro-card">
+                        <p class="card-label">Pair 2</p>
+                        <h3>entropy production は、二重振り子では混合、N 体では burst を語る</h3>
+                        <p>どちらも strong chaos 側で entropy growth が増えますが、二重振り子では smooth spreading、N 体では event-concentrated production が主題です。</p>
+                    </article>
+
+                    <div class="pair-grid two-up">
+                        <figure class="figure-card compare-figure pendulum-card">
+                            <img src="chaos_complexity_compare/double_pendulum_entropy_production.png" alt="二重振り子の entropy production" decoding="async" loading="lazy">
+                            <figcaption>二重振り子: coarse-grained cloud が速く広がることが主役で、混合率の比較が直感的。</figcaption>
+                        </figure>
+                        <figure class="figure-card compare-figure gravity-card">
+                            <img src="N_body_complexity/n_body_entropy_production.png" alt="N体重力系の entropy production" decoding="async" loading="lazy">
+                            <figcaption>N 体: occupied cells の増加が burst に偏り、輸送イベントの集中として見える。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="pair-stack">
+                    <article class="pair-intro-card">
+                        <p class="card-label">Pair 3</p>
+                        <h3>情報流の比較では、二重振り子は TE の消失、N 体は TE network の分岐</h3>
+                        <p>二重振り子では subsystem 間の方向性が薄れることが重要で、N 体では network topology と centrality がそのまま物理意味を持ちます。</p>
+                    </article>
+
+                    <div class="pair-grid two-up">
+                        <figure class="figure-card compare-figure pendulum-card">
+                            <img src="chaos_complexity_compare/double_pendulum_shuffle_surrogate_test.png" alt="二重振り子の surrogate test" decoding="async" loading="lazy">
+                            <figcaption>二重振り子: strong chaos では TE が surrogate に近づき、局所 directionality loss が主題になる。</figcaption>
+                        </figure>
+                        <figure class="figure-card compare-figure gravity-card">
+                            <img src="N_body_complexity/chaos_transport_outputs/chaos_transport_te_networks.png" alt="N体重力系の TE network" decoding="async" loading="lazy">
+                            <figcaption>N 体: TE adjacency の分散や route の偏り自体が transport geometry を語る。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="pair-stack">
+                    <article class="pair-intro-card">
+                        <p class="card-label">Pair 4</p>
+                        <h3>N 体だけが front, avalanche, geometry を phase として持つ</h3>
+                        <p>ここが最大の差です。二重振り子は 1 つの系の内部で information shape を比較するページで、N 体は system-wide transport mode を比較するページになっています。</p>
+                    </article>
+
+                    <div class="pair-grid split-pair-grid">
+                        <article class="note-card pendulum-card">
+                            <p class="card-label">Double Pendulum Verdict</p>
+                            <h3>front や network は主役ではない</h3>
+                            <p>二重振り子の比較は subsystem information の lag と surrogate でほぼ完結します。空間 front や route organization を導入しなくても、chaos の本質がかなり見える系です。</p>
+                        </article>
+                        <figure class="figure-card compare-figure gravity-card">
+                            <img src="N_body_complexity/chaos_te_network_avalanche_outputs/chaos_avalanche_ccdf_intermediate.png" alt="N体重力系の avalanche CCDF" decoding="async" loading="lazy">
+                            <figcaption>N 体: intermediate chaos では broad-tail avalanche が見え、critical filamentary transport が前景化する。</figcaption>
+                        </figure>
+                        <figure class="figure-card compare-figure gravity-card">
+                            <img src="N_body_complexity/chaos_te_network_avalanche_outputs/chaos_te_network_centrality_intermediate.png" alt="N体重力系の centrality" decoding="async" loading="lazy">
+                            <figcaption>N 体: centrality が bottleneck backbone を可視化し、transport phase の違いを決定づける。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="takeaways">
+                <div class="section-heading">
+                    <p class="eyebrow">Takeaways</p>
+                    <h2>読み終わりに残したい比較結論</h2>
+                    <p>どちらも chaos の教材ですが、向いている問いは違います。何を知りたいかで、見るべき系も変わります。</p>
+                </div>
+
+                <div class="takeaway-grid">
+                    <article class="finding-card pendulum-card">
+                        <p class="card-label">1</p>
+                        <h3>二重振り子は「chaos の入口」に向く</h3>
+                        <p>Lyapunov、KS、complexity、surrogate を通して、chaos が noise ではなく fast scrambling だと学ぶには非常に明快です。</p>
+                    </article>
+                    <article class="finding-card gravity-card strong-card">
+                        <p class="card-label">2</p>
+                        <h3>N 体重力系は「chaos の集団相」に向く</h3>
+                        <p>front, burst, TE network, avalanche, route reorganization を含めて、chaos が transport phase を作る様子を追えます。</p>
+                    </article>
+                    <article class="finding-card neutral-card warm-card">
+                        <p class="card-label">3</p>
+                        <h3>共通する教訓は 1 つ</h3>
+                        <p>カオスは均一な乱雑さではなく、観測窓ごとに異なる構造を持つ。違うのは、その構造が「情報の形」中心か「輸送の形」中心かです。</p>
+                    </article>
+                </div>
+
+                <div class="link-board">
+                    <a class="link-card" href="double-pendulum-chaos-results.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>二重振り子の結果ページへ</h3>
+                        <p>single-system scrambling と surrogate test の詳細を戻って確認できます。</p>
+                    </a>
+                    <a class="link-card" href="n-body-chaos-results.html">
+                        <p class="card-label">Related Page</p>
+                        <h3>N 体重力系の結果ページへ</h3>
+                        <p>transport phase、TE network、avalanche geometry の詳細へ戻れます。</p>
+                    </a>
+                    <a class="link-card" href="double-pendulum.html">
+                        <p class="card-label">Base Simulation</p>
+                        <h3>二重振り子の基礎を見る</h3>
+                        <p>装置としての二重振り子の動きを触りながら chaos の入口に戻れます。</p>
+                    </a>
+                    <a class="link-card" href="simulations.html">
+                        <p class="card-label">Catalog</p>
+                        <h3>他のページへ移る</h3>
+                        <p>このサイト内の他の物理シミュレーションや結果ページへ移動できます。</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="card-label">Comparison Summary</p>
+                <p>二重振り子の chaos は subsystem information の見え方を変え、N 体重力系の chaos は transport geometry を変える。共通語彙は似ていても、主役の物理はかなり違います。</p>
+            </div>
+            <div class="footer-links">
+                <a class="footer-link" href="double-pendulum-chaos-results.html">二重振り子の結果</a>
+                <a class="footer-link" href="n-body-chaos-results.html">N 体重力系の結果</a>
+                <a class="footer-link" href="#top">ページ上部へ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="double-pendulum-vs-n-body-chaos.js"></script>
+</body>
+</html>
