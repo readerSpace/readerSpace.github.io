@@ -1,0 +1,9 @@
+{
+  "device": "cpu",
+  "te_network_metrics": {},
+  "avalanche_scaling": {},
+  "warnings": [
+    "No TE matrices found. Provide --pt with te_matrices or --json with te_network/te_networks.",
+    "No raw node-level activity found. Avalanche spatial structure requires activity [R,T,N]."
+  ]
+}

@@ -1,0 +1,10 @@
+Chaos TE network and avalanche validation
+- sources: json:C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\chaos_transport_outputs\analysis_results.json, repo:trajectories.pt
+- output_dir: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\chaos_te_network_avalanche_outputs
+
+te_network weak_chaos: bottleneck=1, hub=1, gap=0.4719, tau=1.5663, modularity=1.1102230246251565e-16
+te_network intermediate: bottleneck=0, hub=0, gap=0.4925, tau=1.4743, modularity=1.1102230246251565e-16
+te_network strong_chaos: bottleneck=0, hub=0, gap=0.4196, tau=1.8379, modularity=0.0
+avalanche weak_chaos: events=200, size_alpha=1.7936, duration_alpha=8.7550, mean_front_velocity=0.0000, mean_Dbox=0.9937
+avalanche intermediate: events=181, size_alpha=1.7947, duration_alpha=8.6590, mean_front_velocity=0.0000, mean_Dbox=0.9965
+avalanche strong_chaos: events=221, size_alpha=2.2275, duration_alpha=13.5605, mean_front_velocity=0.0104, mean_Dbox=0.9561

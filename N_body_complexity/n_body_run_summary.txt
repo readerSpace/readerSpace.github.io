@@ -1,0 +1,125 @@
+=== Planar 3-body gravitational system: chaos and complexity ===
+device                   : cuda:0 (NVIDIA GeForce RTX 4080 Laptop GPU)
+samples                  : 49
+integration dt           : 0.01
+Lyapunov steps/discard   : 9000/1400
+Benettin renorm steps    : 18
+weak-chaos threshold     : <= 0.0682
+strong-chaos threshold   : >= 0.0745
+classification strategy  : positive_tertiles
+mean Lyapunov spectrum   : 0.0876, 0.0682, 0.0610, 0.0545, 0.0098, -0.0006, -0.0064, -0.0213, -0.0492, -0.0552, -0.0609, -0.0876
+mean KS entropy (Pesin)  : 0.2830 +/- 0.0799
+mean h_KS - lambda_1     : 1.9534e-01 +/- 3.2392e-02
+
+[weak_chaos] n = 17
+Lyapunov exponent        : 0.0646 +/- 0.0020
+KS entropy (Pesin)       : 0.2433 +/- 0.0118
+LZMA ratio               : 0.3117 +/- 0.0227
+Lempel-Ziv complexity    : 0.3549 +/- 0.0019
+Permutation entropy      : 0.1638 +/- 0.0003
+
+[strong_chaos] n = 17
+Lyapunov exponent        : 0.1246 +/- 0.0698
+KS entropy (Pesin)       : 0.3451 +/- 0.1106
+LZMA ratio               : 0.3431 +/- 0.0182
+Lempel-Ziv complexity    : 0.3547 +/- 0.0045
+Permutation entropy      : 0.1633 +/- 0.0027
+
+=== Correlation: Lyapunov exponent vs complexity ===
+Lyapunov vs LZMA ratio            : r = 0.2769
+Lyapunov vs Lempel-Ziv complexity : r = -0.5080
+Lyapunov vs Permutation entropy   : r = -0.5551
+Lyapunov vs KS entropy (Pesin)    : r = 0.9861
+
+=== Random noise comparison ===
+noise trials per orbit    : 10
+all noise permutation H   : 0.9980 +/- 0.0003
+all noise - chaos delta H : 0.8344 +/- 0.0020
+noise > chaos share       : 100.0%
+weak noise permutation H  : 0.9980 +/- 0.0003
+strong noise permutation H: 0.9980 +/- 0.0003
+weak minimum delta        : 0.8331
+strong minimum delta      : 0.8304
+
+=== Coarse-graining dependence ===
+tested bins               : 4, 8, 16, 32, 64, 128, 256
+bins =   4 | weak 0.0242 | strong 0.0281 | noise|weak 0.1868 | noise|strong 0.1875
+bins =   8 | weak 0.0354 | strong 0.0407 | noise|weak 0.3339 | noise|strong 0.3350
+bins =  16 | weak 0.0489 | strong 0.0581 | noise|weak 0.4270 | noise|strong 0.4275
+bins =  32 | weak 0.0768 | strong 0.0851 | noise|weak 0.5501 | noise|strong 0.5511
+bins =  64 | weak 0.1188 | strong 0.1309 | noise|weak 0.6772 | noise|strong 0.6780
+bins = 128 | weak 0.1950 | strong 0.2126 | noise|weak 0.8026 | noise|strong 0.8035
+bins = 256 | weak 0.3117 | strong 0.3431 | noise|weak 0.9261 | noise|strong 0.9269
+verdict                   : relative ordering is robust, but absolute compression values remain coarse-graining dependent
+
+=== Coarse-grained entropy production ===
+reduced phase partition   : 6^4 (1296 cells)
+ensemble size             : 768
+weak_chaos: r2=2.047, v2=0.927, lambda_1=0.0641, dS/dt=0.0017, gain=0.0000
+strong_chaos: r2=1.707, v2=0.883, lambda_1=0.0993, dS/dt=0.0747, gain=1.0677
+strong / weak slope ratio : 43.29
+
+=== Classical OTOC scrambling ===
+representatives / region  : 5
+settle steps              : 1600
+OTOC steps/sample         : 4000 / 10
+finite-difference eps     : 1.0e-06
+weak_chaos: (r2=2.160, v2=1.100), (r2=1.820, v2=0.970), (r2=2.047, v2=0.927), (r2=2.160, v2=0.927), (r2=1.820, v2=1.100)
+  peak cross OTOC         : 1.1578e+03 +/- 4.3381e+01
+  lambda_OTOC             : 0.1299 +/- 0.0021
+  scrambling time         : 27.8200 +/- 0.2713
+  late cross OTOC         : 1.1578e+03 +/- 4.3381e+01
+  distance-bin finals     : r in [0.48, 1.02) -> 3.1637e+03; r in [1.02, 2.07) -> 3.4522e+02; r in [2.07, 3.46] -> 6.9386e+01
+strong_chaos: (r2=1.707, v2=0.970), (r2=1.593, v2=0.927), (r2=1.707, v2=0.883), (r2=1.707, v2=0.840), (r2=1.480, v2=0.970)
+  peak cross OTOC         : 9.3086e+04 +/- 1.6586e+05
+  lambda_OTOC             : 0.2181 +/- 0.1672
+  scrambling time         : 28.0200 +/- 1.6534
+  late cross OTOC         : 8.1223e+04 +/- 1.5938e+05
+  distance-bin finals     : r in [0.48, 1.02) -> 1.7858e+05; r in [1.02, 2.07) -> 2.8022e+04; r in [2.07, 3.46] -> 1.8790e+03
+strong faster OTOC growth : True
+strong earlier scrambling : False
+
+=== Information flow across representative orbits ===
+representatives / region  : 5
+weak_chaos: (r2=2.160, v2=1.100), (r2=1.820, v2=0.970), (r2=2.047, v2=0.927), (r2=2.160, v2=0.927), (r2=1.820, v2=1.100)
+  MI peak lag             : 11.2800 +/- 1.0577
+  MI peak excess          : 0.6311 +/- 0.1389
+  MI area                 : 10.9592 +/- 0.5375
+  TE total area           : 0.0026 +/- 0.0032
+  TE net directional area : 0.0053 +/- 0.0065
+  dominant direction      : inner->outer
+strong_chaos: (r2=1.707, v2=0.970), (r2=1.593, v2=0.927), (r2=1.707, v2=0.883), (r2=1.707, v2=0.840), (r2=1.480, v2=0.970)
+  MI peak lag             : 11.2000 +/- 1.4427
+  MI peak excess          : 0.7500 +/- 0.1606
+  MI area                 : 10.5435 +/- 0.8634
+  TE total area           : 0.0009 +/- 0.0016
+  TE net directional area : 0.0017 +/- 0.0033
+  dominant direction      : inner->outer
+strong earlier MI peak    : True
+strong smaller MI area    : True
+strong more directional   : False
+
+=== Shuffle surrogate test ===
+surrogates / orbit        : 8
+weak_chaos: MI peak actual/shuffle = 0.6316/0.0031, TE area actual/shuffle = 0.0026/0.0087
+strong_chaos: MI peak actual/shuffle = 0.7498/0.0035, TE area actual/shuffle = 0.0009/0.0095
+strong MI more significant: True
+strong TE more significant: False
+
+Saved figure: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_chaos_complexity.png
+Saved scatter: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_lyapunov_scatter.png
+Saved KS plot: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_ks_pesin.png
+Saved noise plot: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_noise_comparison.png
+Saved coarse plot: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_coarse_graining.png
+Saved entropy plot: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_entropy_production.png
+Saved OTOC plot: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_otoc.png
+Saved information-flow plot: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_information_flow.png
+Saved surrogate plot: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_shuffle_surrogate_test.png
+Saved table: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_chaos_complexity.csv
+Saved noise table: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_noise_comparison.csv
+Saved coarse table: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_coarse_graining.csv
+Saved entropy table: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_entropy_production.csv
+Saved OTOC table: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_otoc.csv
+Saved information-flow table: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_information_flow.csv
+Saved surrogate table: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_shuffle_surrogate_test.csv
+Saved summary: C:\Users\neko5\Documents\productspage\readerSpace.github.io\N_body_complexity\n_body_run_summary.txt

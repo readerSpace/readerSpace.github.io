@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6WJJGWBCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-G6WJJGWBCG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N体重力系のカオスはどう「情報輸送相」を作るのか | 3体重力の数値実験まとめ</title>
+    <meta name="description" content="planar 3-body gravitational system の 49 軌道を weak・intermediate・strong chaos に分け、OTOC、エントロピー生成、transfer operator、avalanche、TE network、edge-of-chaos を 1 ページで読み解く結果ページです。">
+    <meta name="theme-color" content="#153847">
+    <link rel="canonical" href="https://readerspace.github.io/n-body-chaos-results.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="N体重力系のカオスはどう『情報輸送相』を作るのか | 3体重力の数値実験まとめ">
+    <meta property="og:description" content="Lyapunov 指数、OTOC、entropy production、TE network、avalanche までをつないで、3体重力系のカオスを『情報輸送相』として整理した解説ページです。">
+    <meta property="og:url" content="https://readerspace.github.io/n-body-chaos-results.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="N体重力系のカオスはどう『情報輸送相』を作るのか | 3体重力の数値実験まとめ">
+    <meta name="twitter:description" content="weak・intermediate・strong chaos を比較しながら、スクランブリング、burst、TE network、edge-of-chaos をひとつの相図として読むページです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="n-body-chaos-results.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">り～だ～物理学</a>
+            <nav class="site-nav" aria-label="このページの目次">
+                <a href="#overview">設定</a>
+                <a href="#metrics">指標</a>
+                <a href="#findings">結論</a>
+                <a href="#instability">不安定性</a>
+                <a href="#transport">burst と輸送</a>
+                <a href="#network">因果ネットワーク</a>
+                <a href="#phases">相の整理</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero section reveal is-visible">
+                <div class="hero-copy">
+                    <p class="eyebrow">Planar 3-Body Gravity / Numerical Study / Chaos</p>
+                    <h1>N体重力系のカオスは、<br>なぜ「情報輸送相」として読むと見えやすいのか。</h1>
+                    <p class="hero-lead">
+                        3体重力の 49 軌道を weak・intermediate・strong chaos に分け、<br>
+                        Lyapunov 指数、OTOC、entropy production、transfer operator、avalanche、TE network を横断して整理すると、
+                        カオスは単なる乱雑さではなく、輸送の幾何と因果構造を持つ相として見えてきます。
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#findings">先に結論を見る</a>
+                        <a class="button button-secondary" href="#phases">相の整理へ進む</a>
+                        <a class="button button-secondary" href="simulations.html">一覧へ戻る</a>
+                    </div>
+                    <ul class="hero-points" aria-label="このページの見どころ">
+                        <li>strong chaos は最速の butterfly front を持つが、輸送の向きは単純にならない</li>
+                        <li>intermediate chaos は bottleneck backbone と broad-tail avalanche が最も明瞭に出る</li>
+                        <li>edge-of-chaos は単一点ではなく、記憶・幾何・因果流がずれて極大化する帯として現れる</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <article class="spotlight-card strong-card">
+                        <p class="card-label">Key Thesis</p>
+                        <h2>カオスは「ノイズ」ではなく、<br>情報の運ばれ方そのものを変える。</h2>
+                        <p>
+                            strong chaos ではスクランブリングと burst front が強まり、
+                            intermediate chaos では bottleneck backbone と filamentary transport が際立ちます。<br>
+                            つまりこの系では、chaos strength の違いがそのまま transport phase の違いとして読めます。
+                        </p>
+                    </article>
+
+                    <div class="stat-grid" aria-label="ハイライト指標">
+                        <article>
+                            <span>軌道本数</span>
+                            <strong>49</strong>
+                            <p>planar 3-body orbit</p>
+                        </article>
+                        <article>
+                            <span>分類</span>
+                            <strong>3 相</strong>
+                            <p>weak / intermediate / strong</p>
+                        </article>
+                        <article>
+                            <span>strong v<sub>B</sub></span>
+                            <strong>0.1485</strong>
+                            <p>最速の butterfly front</p>
+                        </article>
+                        <article>
+                            <span>PI peak</span>
+                            <strong>&lambda;<sub>1</sub> ≈ 0.0762</strong>
+                            <p>記憶保持は弱カオス端で最大</p>
+                        </article>
+                    </div>
+
+                    <div class="phase-summary-grid">
+                        <article class="summary-card weak-card">
+                            <p class="card-label">Weak chaos</p>
+                            <h3>localized transport</h3>
+                            <p>front は遅く、局所的な構造と記憶が比較的保たれる。</p>
+                        </article>
+                        <article class="summary-card warm-card">
+                            <p class="card-label">Intermediate chaos</p>
+                            <h3>critical filamentary transport</h3>
+                            <p>bottleneck backbone と broad-tail avalanche が最もはっきり見える。</p>
+                        </article>
+                        <article class="summary-card strong-card soft-strong">
+                            <p class="card-label">Strong chaos</p>
+                            <h3>distributed intermittent transport</h3>
+                            <p>burst front と multi-route spreading が現れ、輸送はより分散的になる。</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="signal-strip reveal">
+                <p class="signal-kicker">Core Message</p>
+                <p class="signal-main">この 3 体重力系では、chaos の強さがそのまま「どう運ばれ、どう混ざるか」の違いとして現れる。</p>
+                <p class="signal-sub">Lyapunov 指数、OTOC、burst、TE network をひとつにつなぐと、weak・intermediate・strong chaos は別々の輸送様式として整理できる。</p>
+            </section>
+
+            <section class="section reveal" id="overview">
+                <div class="section-heading">
+                    <p class="eyebrow">Overview</p>
+                    <h2>まず、どんな数値実験だったのか</h2>
+                    <p>対象は planar 3-body gravitational system です。49 個の軌道を追跡し、Lyapunov 指数の tertile で weak・intermediate・strong chaos に分けて比較しています。</p>
+                </div>
+
+                <div class="overview-grid">
+                    <article class="setup-card">
+                        <p class="card-label">Experiment Setup</p>
+                        <h3>基本設定</h3>
+                        <dl class="definition-list">
+                            <div>
+                                <dt>対象系</dt>
+                                <dd>planar 3-body gravitational system</dd>
+                            </div>
+                            <div>
+                                <dt>サンプル数</dt>
+                                <dd>49 orbit</dd>
+                            </div>
+                            <div>
+                                <dt>積分刻み</dt>
+                                <dd>dt = 0.01</dd>
+                            </div>
+                            <div>
+                                <dt>解析刻み</dt>
+                                <dd>sample_dt = 0.04</dd>
+                            </div>
+                            <div>
+                                <dt>weak threshold</dt>
+                                <dd>&lambda;<sub>1</sub> &le; 0.0682</dd>
+                            </div>
+                            <div>
+                                <dt>strong threshold</dt>
+                                <dd>&lambda;<sub>1</sub> &ge; 0.0745</dd>
+                            </div>
+                        </dl>
+                    </article>
+
+                    <article class="setup-card strong-card">
+                        <p class="card-label">What Was Measured</p>
+                        <h3>見ている量</h3>
+                        <ul class="bullet-list compact">
+                            <li>Lyapunov 指数 &lambda;<sub>1</sub> と KS entropy h<sub>KS</sub></li>
+                            <li>OTOC proxy C(r, t) と butterfly front v<sub>B</sub></li>
+                            <li>粗視化 entropy S<sub>cg</sub>(t) と mixing</li>
+                            <li>predictive information PI(T) と statistical complexity</li>
+                            <li>TE<sub>j&rarr;i</sub>(&tau;)、centrality、spectral gap</li>
+                            <li>avalanche CCDF、D<sub>box</sub>、front velocity</li>
+                        </ul>
+                        <p class="section-note">単に「カオスがあるか」を問うのではなく、カオスがどのような情報輸送と熱化様式を作るかを見ています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="metrics">
+                <div class="section-heading">
+                    <p class="eyebrow">Metric Primer</p>
+                    <h2>このページで使う式と指標の読み方</h2>
+                    <p>研究ノートとして読むときに必要な最小限の定義だけを先にまとめます。ここでの式は厳密導出よりも、「図が何を測り、どの軸が何を意味するか」を追うための読み替えです。</p>
+                </div>
+
+                <div class="metric-grid">
+                    <article class="setup-card metric-card">
+                        <p class="card-label">01 / Instability</p>
+                        <h3>Lyapunov 指数と KS entropy</h3>
+                        <div class="equation-stack">
+                            <p class="equation-line">&lambda;<sub>T</sub> = (1 / T) log ( ||&delta;x(T)|| / ||&delta;x(0)|| )</p>
+                            <p class="equation-line">h<sub>KS</sub> &asymp; &Sigma;<sub>i</sub> max(&lambda;<sub>i</sub>, 0)</p>
+                        </div>
+                        <p>&lambda;<sub>1</sub> は「微小摂動がどれだけ速く離れるか」、h<sub>KS</sub> は「軌道がどれだけ情報を生成するか」の proxy です。両者がそろって増えるなら、不安定性と複雑化が同じ方向に進んでいると読めます。</p>
+                    </article>
+
+                    <article class="setup-card metric-card strong-card">
+                        <p class="card-label">02 / Scrambling</p>
+                        <h3>OTOC と butterfly front</h3>
+                        <div class="equation-stack">
+                            <p class="equation-line">C(r, t) &sim; &lang; |&delta;x<sub>r</sub>(t)|<sup>2</sup> &rang;</p>
+                            <p class="equation-line">t<sub>*</sub>(r) &asymp; t<sub>0</sub> + r / v<sub>B</sub></p>
+                        </div>
+                        <p>このページの OTOC は center-of-mass-relative position coordinates で評価した距離分解 proxy と考えるとよいです。front の傾きから v<sub>B</sub> を読み、立ち上がりの速さと伝播速度を分けて見ています。</p>
+                    </article>
+
+                    <article class="setup-card metric-card warm-card">
+                        <p class="card-label">03 / Mixing / Burst</p>
+                        <h3>entropy production と avalanche geometry</h3>
+                        <div class="equation-stack">
+                            <p class="equation-line">S<sub>cg</sub>(t) = - &Sigma;<sub>k</sub> p<sub>k</sub>(t) log p<sub>k</sub>(t)</p>
+                            <p class="equation-line">P(S &ge; s) &prop; s<sup>1-&tau;</sup></p>
+                            <p class="equation-line">N<sub>box</sub>(&ell;) &sim; &ell;<sup>-D<sub>box</sub></sup></p>
+                        </div>
+                        <p>粗視化 entropy の傾きは mixing speed、CCDF の tail は rare large events の多さ、D<sub>box</sub> は cluster の細長さを示します。strong chaos の burst と intermediate の filamentary transport を切り分けるのに効く指標です。</p>
+                    </article>
+
+                    <article class="setup-card metric-card">
+                        <p class="card-label">04 / Causal Flow</p>
+                        <h3>TE network と edge-of-chaos</h3>
+                        <div class="equation-stack">
+                            <p class="equation-line">TE<sub>j&rarr;i</sub>(&tau;) = I(X<sub>i</sub>(t+&tau;); X<sub>j</sub>(t) | X<sub>i</sub>(t))</p>
+                            <p class="equation-line">PI(T) = I(X<sub>t-T:t</sub>; X<sub>t:t+T</sub>)</p>
+                            <p class="equation-line">p<sub>ij</sub> = w<sub>ij</sub> / &Sigma;<sub>ab</sub> w<sub>ab</sub>, H<sub>graph</sub> = - &Sigma;<sub>ij</sub> p<sub>ij</sub> log p<sub>ij</sub></p>
+                        </div>
+                        <p>TE は向きのある情報流、PI は過去が未来をどれだけ予測できるか、graph entropy は flow weight の分散度を見ています。peak がずれて現れるなら、記憶・因果流・混ざり方が別々の点で最大になるという意味です。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="findings">
+                <div class="section-heading">
+                    <p class="eyebrow">Findings</p>
+                    <h2>このページで押さえたい 5 つの結論</h2>
+                    <p>全部の図を個別に読む前に、先に大きな結論を置くと全体がつながります。</p>
+                </div>
+
+                <div class="finding-grid">
+                    <article class="finding-card strong-card">
+                        <p class="card-label">1</p>
+                        <h3>カオスはノイズではない</h3>
+                        <p>Permutation entropy ではノイズがほぼ 1 に張り付く一方、カオス軌道は強い構造を保ち続ける。</p>
+                    </article>
+                    <article class="finding-card">
+                        <p class="card-label">2</p>
+                        <h3>スクランブリングの速さと輸送の形は別物</h3>
+                        <p>strong chaos は最速の front を持つが、輸送は単純な拡散ではなく burst 的で経路依存になる。</p>
+                    </article>
+                    <article class="finding-card warm-card">
+                        <p class="card-label">3</p>
+                        <h3>intermediate chaos が最も構造化される</h3>
+                        <p>broad-tail avalanche、bottleneck backbone、front velocity ≈ 0 が同時にそろい、critical filamentary transport に近い。</p>
+                    </article>
+                    <article class="finding-card">
+                        <p class="card-label">4</p>
+                        <h3>strong chaos は分散的な輸送へ移る</h3>
+                        <p>bottleneck collapse と multi-route spreading が現れ、distributed intermittent transport の相になる。</p>
+                    </article>
+                    <article class="finding-card">
+                        <p class="card-label">5</p>
+                        <h3>edge-of-chaos は一点ではなく帯</h3>
+                        <p>predictive information、graph entropy、statistical complexity の極大は少しずつずれ、役割の違う peak を作る。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="instability">
+                <div class="section-heading">
+                    <p class="eyebrow">Instability / Scrambling</p>
+                    <h2>まず見えるのは、不安定性とスクランブリングの骨格</h2>
+                    <p>Lyapunov 指数、KS エントロピー、OTOC を並べると、この系の chaos strength は確かに 3 相へ分かれます。ここで &lambda;<sub>1</sub> は &lambda;<sub>T</sub> = (1 / T) log ( ||&delta;x(T)|| / ||&delta;x(0)|| ) の長時間指標、h<sub>KS</sub> は情報生成率、v<sub>B</sub> は t<sub>*</sub>(r) &asymp; t<sub>0</sub> + r / v<sub>B</sub> の傾きとして読む量です。ただし、その差は「乱れの量」より「どんな front を作るか」に強く現れます。</p>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card">
+                        <p class="card-label">Chaos Landscape</p>
+                        <h3>複雑性と不安定性は整合するが、意味はそれぞれ違う</h3>
+                        <ul class="result-list">
+                            <li>KS entropy と Lyapunov 指数和は r ≈ 0.986 で整合し、Pesin relation 的な対応が成り立つ</li>
+                            <li>LZ 系と permutation entropy は chaos と noise を分けるが、「完全ランダム化」を示しているわけではない</li>
+                            <li>強い不安定性は r<sub>2</sub>(0) ≈ 1.5, v<sub>2</sub> / v<sub>circ</sub> ≈ 0.95–0.98 近傍で出る</li>
+                        </ul>
+                    </article>
+
+                    <div class="figure-grid two-up">
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/n_body_chaos_complexity.png" alt="3体重力系の chaos landscape と複雑性比較" decoding="async" loading="lazy">
+                            <figcaption>Lyapunov map と複雑性比較。強カオスでは圧縮困難性が上がるが、ノイズ化そのものではない。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/n_body_ks_pesin.png" alt="3体重力系の KS エントロピーと Pesin 対応" decoding="async" loading="lazy">
+                            <figcaption>KS エントロピーは Lyapunov 指数和と強く整合し、不安定性と情報生成率がつながる。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">Butterfly Front</p>
+                        <h3>strong chaos は最速の front を持つが、front 自体は消えない</h3>
+                        <ul class="result-list compact">
+                            <li>weak chaos: v<sub>B</sub> ≈ 0.0969</li>
+                            <li>intermediate: v<sub>B</sub> ≈ 0.0919</li>
+                            <li>strong chaos: v<sub>B</sub> ≈ 0.1485</li>
+                        </ul>
+                        <p>strong chaos では OTOC の立ち上がりも butterfly front も速くなる。ただし front が壊れて均一化するのではなく、coherent front がより急峻に歪みながら進む。</p>
+                    </article>
+
+                    <div class="figure-grid two-up">
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/n_body_otoc.png" alt="3体重力系の OTOC と距離分解スクランブリング" decoding="async" loading="lazy">
+                            <figcaption>OTOC では strong chaos の立ち上がりが速い一方、距離依存 front は依然として読み取れる。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_transport_outputs/chaos_transport_butterfly_front.png" alt="3体重力系の butterfly front 比較" decoding="async" loading="lazy">
+                            <figcaption>class-wise に再推定した butterfly front。strong chaos が最速、intermediate は最も遅い。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="transport">
+                <div class="section-heading">
+                    <p class="eyebrow">Burst / Avalanche / Geometry</p>
+                    <h2>burst は広い tail を持つが、長くは続かない</h2>
+                    <p>entropy production と finite-time Lyapunov burst を見ていくと、strong chaos では大きく長い burst が増えます。ここでは S<sub>cg</sub>(t) = - &Sigma;<sub>k</sub> p<sub>k</sub>(t) log p<sub>k</sub>(t) の傾きで mixing を、P(S &ge; s) と N<sub>box</sub>(&ell;) &sim; &ell;<sup>-D<sub>box</sub></sup> で rare event の tail と cluster geometry を読んでいます。一方、空間的な avalanche として見直すと、intermediate chaos に最も broad-tail で filamentary な輸送が現れます。</p>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card">
+                        <p class="card-label">Entropy Production</p>
+                        <h3>強カオスの entropy 生成は一様ではなく、局在した burst に集まる</h3>
+                        <ul class="result-list">
+                            <li>coarse-grained entropy slope は strong / weak で 43.29 倍</li>
+                            <li>strong chaos の burst は少数だが長く、大きな peak に集中する</li>
+                            <li>したがって transport は uniform diffusion ではなく event-driven process と読むべき</li>
+                        </ul>
+                    </article>
+
+                    <div class="figure-grid two-up">
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/n_body_entropy_production.png" alt="3体重力系の粗視化エントロピー生成" decoding="async" loading="lazy">
+                            <figcaption>strong chaos では occupied cells が burst 的に増え、entropy 生成も大きく偏る。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_transport_outputs/chaos_transport_avalanche_scaling.png" alt="3体重力系の avalanche scaling" decoding="async" loading="lazy">
+                            <figcaption>finite-time Lyapunov activity を burst とみなすと、strong chaos だけが明瞭に heavy-tail 寄りになる。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card warm-card">
+                        <p class="card-label">Spatial Avalanche</p>
+                        <h3>intermediate chaos は critical filamentary transport に最も近い</h3>
+                        <ul class="result-list compact">
+                            <li>intermediate の size exponent は 1.79 で broad tail が見えやすい</li>
+                            <li>duration exponent は 8.66 と急で、large avalanche は長寿命ではない</li>
+                            <li>D<sub>box</sub> は全クラスほぼ 1 で、cluster は compact blob ではなく path-like</li>
+                            <li>strong chaos だけ front velocity に有限 tail が現れ、propagating burst mode が混ざる</li>
+                        </ul>
+                    </article>
+
+                    <div class="figure-grid four-up">
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_te_network_avalanche_outputs/chaos_avalanche_ccdf_intermediate.png" alt="intermediate chaos の avalanche CCDF" decoding="async" loading="lazy">
+                            <figcaption>intermediate の CCDF。size は broad tail、duration は急減衰で rapid redistribution を示す。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_te_network_avalanche_outputs/chaos_avalanche_cluster_shape_intermediate.png" alt="intermediate chaos の avalanche cluster shape" decoding="async" loading="lazy">
+                            <figcaption>cluster area と gyration radius はスケーリングを保ち、filamentary transport を示唆する。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_te_network_avalanche_outputs/chaos_avalanche_fractal_dimension_intermediate.png" alt="intermediate chaos の fractal dimension 分布" decoding="async" loading="lazy">
+                            <figcaption>D<sub>box</sub> は 1 近傍に集中し、transport corridor 的な幾何が支配的になる。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_te_network_avalanche_outputs/chaos_avalanche_front_velocity_strong_chaos.png" alt="strong chaos の avalanche front velocity 分布" decoding="async" loading="lazy">
+                            <figcaption>strong chaos では front velocity の有限 tail が現れ、burst front の伝播が部分的に始まる。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="network">
+                <div class="section-heading">
+                    <p class="eyebrow">Information Flow / TE Network</p>
+                    <h2>情報流は「速いほど単純」ではなく、backbone と route の形に分かれる</h2>
+                    <p>mutual information と transfer entropy の lag 構造を見ると、strong chaos は共有の立ち上がりが速いが、方向付きの因果流はむしろ拡散して読みづらくなります。ここで TE<sub>j&rarr;i</sub>(&tau;) = I(X<sub>i</sub>(t+&tau;); X<sub>j</sub>(t) | X<sub>i</sub>(t)) は「j から i へどれだけ新しい予測情報が渡るか」を表し、network では weighted adjacency と spectral gap から backbone の有無を見ています。TE network へ落とすと、この差が bottleneck と hub の違いとして見えます。</p>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card">
+                        <p class="card-label">Lag-Resolved Flow</p>
+                        <h3>strong chaos は共有を速めるが、向きのある流れは薄める</h3>
+                        <ul class="result-list">
+                            <li>MI peak excess は strong の方が大きいが、MI area は weak の方がやや広い</li>
+                            <li>TE total area は weak の方が大きく、strong では局所的な方向付き flow が見えにくくなる</li>
+                            <li>情報は消えるのではなく、より distributed に scramble された形へ変わる</li>
+                        </ul>
+                    </article>
+
+                    <div class="figure-grid two-up">
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/n_body_information_flow.png" alt="3体重力系の相互情報量と transfer entropy" decoding="async" loading="lazy">
+                            <figcaption>strong chaos では MI peak は高いが、TE の方向性は長く残らない。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_transport_outputs/chaos_transport_te_networks.png" alt="3体重力系の TE networks" decoding="async" loading="lazy">
+                            <figcaption>平均 TE adjacency。3 クラスとも単一 community だが、weight の分散と route の分布が違う。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="experiment-stack">
+                    <article class="experiment-card strong-card">
+                        <p class="card-label">Centrality</p>
+                        <h3>intermediate は backbone、strong は multi-route に寄る</h3>
+                        <ul class="result-list compact">
+                            <li>weak chaos: bottleneck / hub は node 1</li>
+                            <li>intermediate: node 0 の betweenness = 0.5 で backbone が最も明瞭</li>
+                            <li>strong: betweenness はほぼ 0 に潰れ、eigenvector centrality は複数ノードへ分散</li>
+                            <li>spectral gap は intermediate が最大で、最も早く混ざる backbone transport を示す</li>
+                        </ul>
+                    </article>
+
+                    <div class="figure-grid two-up">
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_te_network_avalanche_outputs/chaos_te_network_centrality_intermediate.png" alt="intermediate chaos の TE network centrality" decoding="async" loading="lazy">
+                            <figcaption>intermediate では bottleneck と hub が同じ node へ集中し、single backbone transport が最もはっきり見える。</figcaption>
+                        </figure>
+                        <figure class="figure-card">
+                            <img src="N_body_complexity/chaos_te_network_avalanche_outputs/chaos_te_network_centrality_strong_chaos.png" alt="strong chaos の TE network centrality" decoding="async" loading="lazy">
+                            <figcaption>strong では bottleneck が潰れ、influential node が複数に割れて distributed propagation に寄る。</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="phases">
+                <div class="section-heading">
+                    <p class="eyebrow">Edge Of Chaos / Phase Picture</p>
+                    <h2>edge-of-chaos は、記憶・幾何・因果流の peak が並ぶ帯として現れる</h2>
+                    <p>predictive information、graph entropy、statistical complexity の極大は少しずつずれています。ここで PI(T) = I(X<sub>t-T:t</sub>; X<sub>t:t+T</sub>) は記憶、H<sub>graph</sub> = - &Sigma;<sub>ij</sub> p<sub>ij</sub> log p<sub>ij</sub> は flow weight の分散、complexity は秩序と乱雑さの折衷として読んでいます。つまり、この系の edge-of-chaos は一点でなく、違う機能が別々に最大化される帯状の領域です。</p>
+                </div>
+
+                <div class="figure-grid two-up">
+                    <figure class="figure-card">
+                        <img src="N_body_complexity/chaos_transport_outputs/chaos_transport_transfer_operator.png" alt="3体重力系の transfer operator と mixing" decoding="async" loading="lazy">
+                        <figcaption>transfer operator では strong chaos が最短 mixing timescale を持つが、intermediate も gap が大きく backbone 的な mixing を示す。</figcaption>
+                    </figure>
+                    <figure class="figure-card">
+                        <img src="N_body_complexity/chaos_transport_outputs/chaos_transport_edge_scan.png" alt="3体重力系の edge-of-chaos 指標" decoding="async" loading="lazy">
+                        <figcaption>predictive information は弱カオス端、graph entropy は中間、statistical complexity と TE はやや強い側で peak を持つ。</figcaption>
+                    </figure>
+                </div>
+
+                <div class="phase-grid">
+                    <article class="phase-card weak-card">
+                        <p class="card-label">Weak chaos</p>
+                        <h3>localized transport</h3>
+                        <ul class="bullet-list compact">
+                            <li>slow front</li>
+                            <li>short avalanche</li>
+                            <li>比較的保たれた記憶</li>
+                            <li>局所的な instability</li>
+                        </ul>
+                    </article>
+                    <article class="phase-card warm-card">
+                        <p class="card-label">Intermediate chaos</p>
+                        <h3>organized critical transport phase</h3>
+                        <ul class="bullet-list compact">
+                            <li>broad-tail avalanche</li>
+                            <li>filament geometry</li>
+                            <li>bottleneck backbone</li>
+                            <li>front velocity ≈ 0</li>
+                        </ul>
+                    </article>
+                    <article class="phase-card strong-card">
+                        <p class="card-label">Strong chaos</p>
+                        <h3>intermittent turbulent transport phase</h3>
+                        <ul class="bullet-list compact">
+                            <li>fastest butterfly front</li>
+                            <li>burst propagation</li>
+                            <li>multi-route spreading</li>
+                            <li>distributed thermalization</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <article class="closing-card">
+                    <p class="card-label">Big Picture</p>
+                    <h3>この系で起きているのは、chaos の量の違いではなく、transport phase の違いかもしれない</h3>
+                    <p>
+                        intermediate chaos は organized critical transport、strong chaos は distributed intermittent transport として整理できる。<br>
+                        つまり、N体重力系のカオスは「どれだけ乱れるか」よりも、「どんな route で情報が伝わり、どこで bottleneck が崩れるか」を見るとよく分かる。
+                    </p>
+                    <div class="hero-actions compact-actions">
+                        <a class="button button-primary" href="simulations.html">シミュレーション一覧へ</a>
+                        <a class="button button-secondary" href="double-pendulum-chaos-results.html">二重振り子の結果ページも見る</a>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <footer class="site-footer reveal">
+            <div>
+                <p class="card-label">Source</p>
+                <p>N_body_complexity/実験メモ.md, chaos_transport_outputs/, chaos_te_network_avalanche_outputs/ をもとに再構成した結果ページです。</p>
+            </div>
+            <div class="footer-links">
+                <a class="footer-link" href="simulations.html">シミュレーション一覧</a>
+                <a class="footer-link" href="physics.html">物理解説トップ</a>
+                <a class="footer-link" href="#top">ページ上部へ</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="n-body-chaos-results.js"></script>
+</body>
+</html>

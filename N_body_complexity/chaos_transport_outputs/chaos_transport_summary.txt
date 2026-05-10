@@ -1,0 +1,29 @@
+Chaos transport analysis
+- class-wise butterfly front from cached N-body OTOC bins
+- class-wise transfer operators and mixing timescales
+- avalanche scaling from finite-time Lyapunov activity
+- epsilon-machine / predictive information / TE-network diagnostics
+- sample_dt: 0.0400
+
+butterfly_front weak_chaos: mean_t*=26.9733, slope=10.3178, v_B=0.0969
+butterfly_front intermediate: mean_t*=25.7833, slope=10.8828, v_B=0.0919
+butterfly_front strong_chaos: mean_t*=23.2683, slope=6.7327, v_B=0.1485
+mixing weak_chaos: lambda2=0.9914, gap=0.0086, tau=4.6531, n_states=36
+mixing intermediate: lambda2=0.9918, gap=0.0082, tau=4.8764, n_states=36
+mixing strong_chaos: lambda2=0.9905, gap=0.0095, tau=4.1998, n_states=36
+persistent_homology weak_chaos: available=False, mean_H1_lifetime=nan
+persistent_homology intermediate: available=False, mean_H1_lifetime=nan
+persistent_homology strong_chaos: available=False, mean_H1_lifetime=nan
+avalanche weak_chaos: n=17, size_alpha=9.8038, duration_alpha=20.8600, size_r2=0.4852
+avalanche intermediate: n=15, size_alpha=14.1098, duration_alpha=41.0185, size_r2=0.0005
+avalanche strong_chaos: n=16, size_alpha=1.6886, duration_alpha=2.6551, size_r2=0.2605
+complexity weak_chaos: PI=1.2760, Cmu=1.4032, TE=0.0342, graph_H=0.5005
+te_network weak_chaos: H_node=1.0586, H_edge=1.6279, communities=1
+complexity intermediate: PI=1.2795, Cmu=1.3875, TE=0.0434, graph_H=0.6676
+te_network intermediate: H_node=1.0568, H_edge=1.7079, communities=1
+complexity strong_chaos: PI=1.2607, Cmu=1.4398, TE=0.0373, graph_H=0.6668
+te_network strong_chaos: H_node=1.0587, H_edge=1.6966, communities=1
+edge_of_chaos predictive_information: peak near lambda=0.0762, mean=1.2750
+edge_of_chaos statistical_complexity: peak near lambda=0.2232, mean=1.5306
+edge_of_chaos te_total: peak near lambda=0.2232, mean=0.0626
+edge_of_chaos graph_entropy_node: peak near lambda=0.1644, mean=0.6912

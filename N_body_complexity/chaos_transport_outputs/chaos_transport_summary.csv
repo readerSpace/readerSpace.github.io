@@ -1,0 +1,23 @@
+experiment,class,threshold,front_slope,front_intercept,butterfly_velocity,mean_scrambling_time,n_states,lambda2_abs,spectral_gap,mixing_timescale,available,h1_count,h1_lifetime_mean,note,n_avalanches,size_alpha_mle,duration_alpha_mle,size_powerlaw_r2,duration_powerlaw_r2,predictive_information_mean,statistical_complexity_mean,te_total_mean,graph_entropy_node_mean,n_causal_states_mean,graph_entropy_node,graph_entropy_edge,graph_entropy_vn,n_communities,metric,peak_lambda_bin_center,peak_metric_mean
+butterfly_front,weak_chaos,1000.0,10.317829132080078,16.335342407226562,0.09691961109638214,26.973334312438965,,,,,,,,,,,,,,,,,,,,,,,,,
+butterfly_front,intermediate,1000.0,10.882766723632812,14.562873840332031,0.09188839793205261,25.783334732055664,,,,,,,,,,,,,,,,,,,,,,,,,
+butterfly_front,strong_chaos,1000.0,6.732674598693848,12.742803573608398,0.14852938055992126,23.268334070841473,,,,,,,,,,,,,,,,,,,,,,,,,
+mixing,weak_chaos,,,,,,36.0,0.9914404153823853,0.008559584617614746,4.65309476852417,,,,,,,,,,,,,,,,,,,,,
+mixing,intermediate,,,,,,36.0,0.9918308258056641,0.008169174194335938,4.876428127288818,,,,,,,,,,,,,,,,,,,,,
+mixing,strong_chaos,,,,,,36.0,0.9905209541320801,0.009479045867919922,4.199801921844482,,,,,,,,,,,,,,,,,,,,,
+persistent_homology,weak_chaos,,,,,,,,,,False,0.0,,ripser not installed; run `pip install ripser`.,,,,,,,,,,,,,,,,,
+persistent_homology,intermediate,,,,,,,,,,False,0.0,,ripser not installed; run `pip install ripser`.,,,,,,,,,,,,,,,,,
+persistent_homology,strong_chaos,,,,,,,,,,False,0.0,,ripser not installed; run `pip install ripser`.,,,,,,,,,,,,,,,,,
+avalanche,weak_chaos,0.2769162654876709,,,,,,,,,,,,,17.0,9.80383586883545,20.859975814819336,0.485245943069458,0.5304068326950073,,,,,,,,,,,,
+avalanche,intermediate,0.2760368883609772,,,,,,,,,,,,,15.0,14.109821319580078,41.01854705810547,0.0005092024803161621,0.8802722096443176,,,,,,,,,,,,
+avalanche,strong_chaos,0.33656662702560425,,,,,,,,,,,,,16.0,1.6885900497436523,2.655095338821411,0.26045024394989014,0.3508700728416443,,,,,,,,,,,,
+complexity,weak_chaos,,,,,,,,,,,,,,,,,,,1.2760065618801502,1.403238860566382,0.03421734862187056,0.5004750244757709,4.235294117647059,,,,,,,
+te_network,weak_chaos,,,,,,,,,,,,,,,,,,,,,,,,1.0586090087890625,1.6278984546661377,0.637748122215271,1.0,,,
+complexity,intermediate,,,,,,,,,,,,,,,,,,,1.2795077135511208,1.3874722808881546,0.043413515724629786,0.6676306287447612,4.066666666666666,,,,,,,
+te_network,intermediate,,,,,,,,,,,,,,,,,,,,,,,,1.0568004846572876,1.7079404592514038,0.6516484022140503,1.0,,,
+complexity,strong_chaos,,,,,,,,,,,,,,,,,,,1.260688900833195,1.4397645306381848,0.037268331678419864,0.6668073885581073,4.764705882352941,,,,,,,
+te_network,strong_chaos,,,,,,,,,,,,,,,,,,,,,,,,1.0586615800857544,1.6965547800064087,0.6754677295684814,1.0,,,
+edge_of_chaos,,,,,,,,,,,,,,,,,,,,,,,,,,,,,predictive_information,0.07618652228266001,1.2750193522445383
+edge_of_chaos,,,,,,,,,,,,,,,,,,,,,,,,,,,,,statistical_complexity,0.2231598360463977,1.5305518559177194
+edge_of_chaos,,,,,,,,,,,,,,,,,,,,,,,,,,,,,te_total,0.2231598360463977,0.0625705374404788
+edge_of_chaos,,,,,,,,,,,,,,,,,,,,,,,,,,,,,graph_entropy_node,0.16437051054090263,0.6912062168121338

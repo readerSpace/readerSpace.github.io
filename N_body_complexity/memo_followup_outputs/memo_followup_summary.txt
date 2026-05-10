@@ -1,0 +1,20 @@
+Memo follow-up experiments
+- butterfly front: weak/strong separated scrambling front
+- diffusion coefficient follow-up: MSD log-log and anomalous exponent alpha
+- edge-of-chaos follow-up: predictive information / statistical complexity / TE vs lambda
+- burst follow-up: finite-time Lyapunov bursts and entropy-production bursts
+
+butterfly_front weak_chaos: mean_t*=24.7000, slope=10.3178, v_B=0.0969
+butterfly_front strong_chaos: mean_t*=21.2600, slope=6.7327, v_B=0.1485
+diffusion_alpha weak_chaos: alpha=0.0938 +/- 0.1972, majority=subdiffusion
+diffusion_alpha intermediate: alpha=0.2029 +/- 0.1948, majority=subdiffusion
+diffusion_alpha strong_chaos: alpha=-0.0007 +/- 0.1249, majority=subdiffusion
+lambda_burst weak_chaos: count=1.0000, duration=1.2941, waiting=nan, peak=0.3581, fraction=0.0809
+lambda_burst intermediate: count=1.0000, duration=1.3013, waiting=nan, peak=0.3585, fraction=0.0813
+lambda_burst strong_chaos: count=1.0588, duration=1.9859, waiting=0.5200, peak=0.4447, fraction=0.1356
+entropy_burst weak_chaos: count=20.5882, waiting=0.0400, burst_distance=1.0006, baseline_distance=0.9871, corr(inv_r,dS)=-0.0521
+entropy_burst intermediate: count=18.9333, waiting=0.0400, burst_distance=1.0040, baseline_distance=0.9982, corr(inv_r,dS)=-0.0391
+entropy_burst strong_chaos: count=9.9412, waiting=0.0402, burst_distance=0.8835, baseline_distance=0.8840, corr(inv_r,dS)=0.0753
+edge_of_chaos predictive_information_peak: peak near lambda=0.0659, mean=3.7093
+edge_of_chaos statistical_complexity: peak near lambda=0.1644, mean=10.3895
+edge_of_chaos te_total_score: peak near lambda=0.0629, mean=0.0793
